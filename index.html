@@ -27,7 +27,7 @@ a{color:inherit}
 #app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg);padding-bottom:calc(var(--nav-h) + 90px + env(safe-area-inset-bottom,0px))}
 #app.view-admin,#app.view-who,#app.view-pin{padding-bottom:40px}
 #app.view-map{padding-bottom:0}
-#app.enter>*:not(.nav):not(.cartbar){animation:enter .2s ease-out both}
+#app.enter>*:not(.nav):not(.cartbar):not(.share-bar){animation:enter .2s ease-out both}
 @keyframes enter{from{opacity:0;transform:translateY(6px)}}
 h1,h2,h3{margin:0;text-wrap:balance}
 h2{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
@@ -40,7 +40,7 @@ h2 small{font-size:.95rem;color:var(--mint-d);font-weight:800;margin-left:2px}
 
 /* 위 막대 */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--top-h);background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:0 60px 0 12px;display:flex;align-items:center;gap:6px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--top-h);background:#fff;padding:0 60px 0 12px;display:flex;align-items:center;gap:6px}
 .top h1{font-size:1.08rem;font-weight:800;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top .back{border:0;background:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--ink);padding:0;flex:0 0 38px}
 .chip-who{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px 5px 6px;font-weight:700;font-size:.82rem;white-space:nowrap}
@@ -362,33 +362,93 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .sketch .pin.off{opacity:.28;cursor:default}
 
 /* 담당자 */
-.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none;position:sticky;top:calc(var(--top-h) + env(safe-area-inset-top,0px));background:var(--bg);z-index:4;border-bottom:1px solid var(--line);margin-bottom:12px}
-.tab{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-weight:700;color:var(--sub)}
-.tab.on{background:var(--ink);color:#fff}
-.bar{height:12px;background:#e3eaec;border-radius:999px;overflow:hidden;margin:8px 0}
-.bar i{display:block;height:100%;background:var(--mint)}
+.admin-tabs{position:sticky;top:calc(var(--top-h) + env(safe-area-inset-top,0px));background:#fff;z-index:4}
+.admin-tabs button small{font-size:.72rem;color:var(--mint-d);font-weight:800}
+.admin{padding-top:18px;padding-bottom:120px}
+.ap-intro h2{margin-bottom:4px}
+.search{margin:14px 0 0;padding:11px 14px;background:var(--band);border-color:transparent}
+.filter-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:10px -16px 4px;padding:0 16px}
+.filter-chips::-webkit-scrollbar{display:none}
+.filter-chips button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-weight:700;font-size:.84rem;color:var(--sub)}
+.filter-chips button small{color:var(--mute);font-weight:700}
+.filter-chips button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.filter-chips button.on small{color:#9ee6df}
+.prow{padding:14px 0;border-bottom:1px solid var(--line)}
+.prow-main{display:flex;gap:12px;align-items:center}
+.prow-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.prow-txt b{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow-txt .menu-line{font-size:.78rem;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow:not(.on) .thumb{opacity:.75}
+.switch{position:relative;flex:0 0 auto;width:52px;height:32px;cursor:pointer}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;width:100%;height:100%;z-index:1}
+.switch i{position:absolute;inset:0;border-radius:999px;background:#d9dde0;transition:background .15s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.switch input:checked+i{background:var(--mint)}
+.switch input:checked+i::after{transform:translateX(20px)}
+.switch input:focus-visible+i{outline:3px solid var(--mint);outline-offset:2px}
+.prow-acts{display:flex;gap:6px;margin:10px 0 0 76px;flex-wrap:wrap}
+.prow-acts button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:.78rem;font-weight:700;color:var(--ink)}
+.add-store{display:block;width:100%;margin:16px 0 0;padding:14px;border:1px dashed #cfd4d7;border-radius:12px;background:none;font-weight:700;color:var(--sub)}
+.share-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);z-index:25;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px rgba(0,0,0,.06)}
+.sb-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.sb-txt b{font-size:1rem;font-weight:800}
+.sb-txt span{font-size:.78rem;color:var(--sub)}
+.share-bar.todo .sb-txt span{color:#d1490f;font-weight:700}
+.share-bar .btn{padding:13px 20px}
+.share-bar .btn:disabled{background:#cfd4d7}
+.link-box{margin-top:16px}
+.empty-line{text-align:center;padding:28px 0}
+.a-sec{margin:0 -16px 20px;padding:0 16px 20px;border-bottom:8px solid var(--band)}
+.a-sec:last-child{border-bottom:0;margin-bottom:0}
+.a-sec h3{font-size:1.02rem;font-weight:800;margin:0 0 4px}
+.a-sec h3 small{color:var(--mint-d);font-weight:800;font-size:.9rem}
+.a-sec .code-box{margin:8px 0 10px;min-height:110px}
+.a-sec .notice{margin:10px 0}
+.a-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.a-head h3{margin:0}
+.text-btn{border:0;background:none;color:var(--mint-d);font-weight:700;font-size:.86rem;padding:8px 0}
+.text-btn.red{color:#c22a31}
+.prog{display:flex;gap:16px;align-items:center}
+.prog-num{font-size:1rem;color:var(--sub);font-weight:700;font-variant-numeric:tabular-nums}
+.prog-num b{font-size:2.4rem;color:var(--ink);font-weight:800;letter-spacing:-.03em}
+.prog-txt{flex:1;display:flex;flex-direction:column;gap:2px}
+.prog-txt span{font-size:.82rem;color:var(--sub)}
+.bar{height:8px;background:var(--band);border-radius:999px;overflow:hidden;margin:6px 0 0}
+.bar i{display:block;height:100%;background:var(--mint);border-radius:999px}
 .pills{display:flex;flex-wrap:wrap;gap:6px}
-.pill{border-radius:999px;padding:5px 10px;font-size:.85rem;font-weight:700;background:#e9eef0}
+.pill{border-radius:999px;padding:5px 11px;font-size:.84rem;font-weight:700;background:var(--band)}
 .pill.ok{background:var(--mint-l);color:var(--mint-d)}
-.pill.no{background:var(--red-l);color:#b4232a}
-.big-num{font-family:var(--display);font-size:2.2rem;font-variant-numeric:tabular-nums}
-.toggle{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;margin:8px 0}
-.pick{margin-bottom:10px}
-.pick.on{border-color:var(--mint)}
-.pick-head{cursor:pointer}
-.pick-head input{width:22px;height:22px;accent-color:var(--mint)}
-.pic-s{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:1.6rem;flex:0 0 44px}
-.field{display:block;font-size:.85rem;font-weight:700;color:var(--sub);margin-top:8px}
-.field .input{margin-top:4px;padding:9px 10px}
-.edit-row{display:grid;grid-template-columns:44px 1fr 86px 34px;gap:6px;margin-top:6px}
-.edit-row .input{padding:8px;min-width:0}
-.edit-box{background:var(--bg);border-radius:12px;padding:10px;margin-top:10px}
+.pill.no{background:#fff;color:var(--sub);box-shadow:inset 0 0 0 1px var(--line)}
+.seg.wide{display:flex;width:100%;box-shadow:none;background:var(--band);margin-bottom:14px;border-radius:12px}
+.seg.wide button{flex:1;justify-content:center;padding:11px 6px;border-radius:10px}
+.seg.wide button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.sum-head{display:flex;gap:10px;align-items:center;margin-bottom:4px}
+.sum-head>div:not(.thumb){flex:1;min-width:0;display:flex;flex-direction:column}
+.sum-head>div:not(.thumb) b{font-weight:800}
+.sum-head>div:not(.thumb) span{font-size:.8rem;color:var(--sub)}
+.sum-won{font-size:1.05rem;font-variant-numeric:tabular-nums}
+.who-ava{font-style:normal;width:40px;height:40px;border-radius:50%;background:var(--band);display:grid;place-items:center;font-size:1.3rem;flex:0 0 40px}
+.sum-card .row{margin-top:12px}
+.sum-card>.muted{margin:8px 0 0}
+.req-line{background:var(--band);border-radius:10px;padding:9px 11px;font-size:.86rem;margin:10px 0 0}
+.toggle{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;margin:0 0 12px}
+.toggle input{width:20px;height:20px;accent-color:var(--mint)}
+.field{display:block;font-size:.82rem;font-weight:700;color:var(--sub);margin-top:10px}
+.field .input{margin-top:4px;padding:10px 11px}
+.edit-box{background:var(--band);border-radius:12px;padding:12px;margin:12px 0 0}
+.edit-box .field:first-child{margin-top:0}
+.edit-row{display:grid;grid-template-columns:1fr 96px 38px;gap:6px;margin-top:6px}
+.edit-row .input{padding:9px;min-width:0}
+.x-btn{border:0;background:#fff;border-radius:10px;color:var(--sub);font-weight:800}
+.more-fields{margin-top:6px;border-top:1px solid #e3e6e8;padding-top:4px}
+.more-fields summary{cursor:pointer;font-weight:700;font-size:.86rem;color:var(--sub);padding:8px 0}
+.big-num{font-size:2.2rem;font-weight:800;font-variant-numeric:tabular-nums}
 .info{font-size:.82rem;color:var(--sub);margin-top:4px;line-height:1.45}
 
 #toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%) translateY(-20px);opacity:0;transition:.25s;background:rgba(22,35,42,.95);color:#fff;padding:12px 18px;border-radius:999px;font-weight:800;font-size:.92rem;z-index:90;box-shadow:0 8px 20px rgba(0,0,0,.2);pointer-events:none;width:max-content;max-width:min(92vw,420px);text-align:center;word-break:keep-all}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media print{.top,.tabs,.nav,.no-print,#toast,.cartbar{display:none!important}#app{padding:0;max-width:none}.card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}}
+@media print{.top,.tabs-line,.share-bar,.nav,.no-print,#toast,.cartbar{display:none!important}#app{padding:0;max-width:none}.card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}}
 
 .mpin.look span{width:30px;height:30px;font-size:.95rem;border-color:#c4cdd0;opacity:.85;box-shadow:0 1px 4px rgba(0,0,0,.16)}
 .mpin.cluster.look span{background:#a3adb1;box-shadow:0 0 0 4px rgba(163,173,177,.25),0 2px 6px rgba(0,0,0,.2)}
@@ -5532,7 +5592,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </script>
 <script id="dn-main">
 // 저녁에 뭐 먹을래? — 가족이 메뉴를 고르면 주문서(주문 코드)를 만들고, 담당자가 모아서 가게별로 주문해요.
-// 설정(가게·메뉴·시간·위치)은 위의 dn-config 에 있어요. 담당자 화면 → 🍽 가게 고르기에서 고치고, 앱 코드를 복사해 다시 올리면 돼요.
+// 설정(가게·메뉴·시간·위치)은 위의 dn-config 에 있어요. 담당자 화면 → 가게 고르기에서 고르고, 링크를 복사해 단톡방에 보내면 돼요.
 
 const STAFF = '강사님';
 const CAT_EMOJI = {분식: '🍢', 돈가스: '🍱', 치킨: '🍗', 중식: '🥟', 한식: '🍚', 찜닭: '🍲', 피자: '🍕', 양식: '🍝', 일식: '🍣', 버거: '🍔', 국밥: '🥣', 도시락: '🍱', 카페: '🥤'};
@@ -5582,12 +5642,57 @@ function tidy(c) {
 }
 const BASE = tidy((() => { try { return JSON.parse(document.getElementById('dn-config').textContent); } catch { return null; } })());
 let CFG = BASE;
-{ // 담당자가 이 기기에서 고친 메뉴판(아직 다시 올리기 전)
-  const draft = load('dn-draft', null);
-  if (draft) { const d = tidy(draft); if (JSON.stringify(d) === JSON.stringify(BASE)) drop('dn-draft'); else CFG = d; }
+// ---------- 가족에게 보낼 링크 ----------
+// 담당자가 고른 가게·고친 메뉴는 앱을 다시 올리지 않고 링크(#s=…)에 담아 단톡방으로 보내요.
+// 링크를 연 기기는 그 내용을 기억해서, 다음에 주소만 열어도 같은 메뉴판이 보여요. 더 새 링크가 오면 그걸로 바뀌어요.
+const PAGE_URL = 'https://hichoni.github.io/dinner-order/';
+const SHARE_KEYS = ['title', 'camp', 'place', 'deadline', 'mealTime', 'manager', 'campPos', 'picked'];
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+// 올라간 앱(BASE)과 다른 것만 담아요: 바뀐 칸, 바뀐 가게의 바뀐 칸, 새 가게, 지운 가게
+function diffCfg(c) {
+  const d = {}, base = new Map(BASE.stores.map(s => [s.id, s])), st = {};
+  for (const k of SHARE_KEYS) if (!same(c[k], BASE[k])) d[k] = c[k];
+  for (const s of c.stores) {
+    const b = base.get(s.id);
+    if (!b) { st[s.id] = s; continue; }
+    const ch = {};
+    for (const k of Object.keys(s)) if (!same(s[k], b[k])) ch[k] = s[k];
+    if (Object.keys(ch).length) st[s.id] = ch;
+  }
+  if (Object.keys(st).length) d.stores = st;
+  const gone = BASE.stores.filter(b => !c.stores.some(s => s.id === b.id)).map(b => b.id);
+  if (gone.length) d.gone = gone;
+  return d;
 }
-const isDraft = () => JSON.stringify(CFG) !== JSON.stringify(BASE);
-function saveDraft() { if (isDraft()) save('dn-draft', CFG); else drop('dn-draft'); reindex(); }
+function applyDiff(d) {
+  const c = clone(BASE), st = d.stores && typeof d.stores === 'object' ? d.stores : {}, gone = Array.isArray(d.gone) ? d.gone : [];
+  for (const k of SHARE_KEYS) if (k in d) c[k] = d[k];
+  c.stores = c.stores.filter(s => !gone.includes(s.id)).map(s => (st[s.id] ? {...s, ...st[s.id], id: s.id} : s));
+  for (const [id, s] of Object.entries(st)) if (!c.stores.some(x => x.id === id)) c.stores.push({...s, id});
+  return tidy(c);
+}
+function readLink() {
+  const m = /(?:^#|&)s=([A-Za-z0-9_-]+)/.exec(location.hash || '');
+  if (!m) return null;
+  try { const o = JSON.parse(b64d(m[1])); return o && typeof o.t === 'number' && o.d && typeof o.d === 'object' ? o : null; } catch { return null; }
+}
+function shareLink() {
+  const here = /^https?:$/.test(location.protocol) && location.origin !== 'null' ? location.origin + location.pathname : PAGE_URL;
+  return `${here}#s=${b64e(JSON.stringify({t: Date.now(), d: diffCfg(CFG)}))}`;
+}
+{
+  const fresh = readLink();
+  if (fresh) { const old = load('dn-link', null); if (!old || fresh.t >= old.t) save('dn-link', fresh); }
+  const link = load('dn-link', null);
+  let draft = load('dn-draft', null);
+  if (draft && !('cfg' in draft)) draft = {t: 0, cfg: draft}; // 예전 모양(메뉴판만 저장)
+  if (draft && link && link.t > draft.t) { drop('dn-draft'); draft = null; }
+  if (draft) CFG = tidy(draft.cfg);
+  else if (link) { CFG = applyDiff(link.d); save('dn-sent', JSON.stringify(diffCfg(CFG))); }
+}
+const isDraft = () => !same(CFG, BASE); // 갤러리에 올라간 앱과 다른지
+const unsent = () => JSON.stringify(diffCfg(CFG)) !== load('dn-sent', '{}'); // 단톡방에 보낸 링크와 다른지
+function saveDraft() { save('dn-draft', {t: Date.now(), cfg: CFG}); reindex(); }
 
 const ITEMS = new Map();
 function reindex() { ITEMS.clear(); for (const s of CFG.stores) for (const m of s.menu) ITEMS.set(m.id, {...m, store: s}); }
@@ -5599,7 +5704,7 @@ const storeById = id => CFG.stores.find(s => s.id === id);
 // ---------- 상태 ----------
 const S = {
   who: load('dn-who', null), cart: load('dn-cart', {}), req: load('dn-req', ''), last: load('dn-last', null), orders: load('dn-orders', {}),
-  view: 'home', store: null, cat: '전체', sort: load('dn-sort', 'near'), mfilter: 'all', radius: load('dn-radius', -1), pick: null, rolling: false, lookAll: false,
+  view: 'home', store: null, cat: '전체', sort: load('dn-sort', 'near'), mfilter: 'all', radius: load('dn-radius', -1), pick: null, rolling: false, lookAll: false, pickFilter: 'all', pickQuery: '', sumBy: 'store',
   admin: false, adminSession: false, tab: 'get', byFamily: true, editing: null, mapFailed: '',
 };
 const persist = () => { save('dn-who', S.who); save('dn-cart', S.cart); save('dn-req', S.req); save('dn-last', S.last); save('dn-orders', S.orders); };
@@ -6309,115 +6414,135 @@ function ownerMessage(g) {
   return lines.join('\n');
 }
 function viewAdmin() {
-  const tabs = [['pick', '🍽 가게 고르기'], ['get', '📥 받기'], ['status', '✅ 현황'], ['store', '🏪 가게별'], ['family', '👪 가족별'], ['more', '⚙️ 더보기']];
-  const body = {pick: adminPick, get: adminGet, status: adminStatus, store: adminStore, family: adminFamily, more: adminMore}[S.tab]();
-  return `${topBar('🔐 담당자 · 주문 모으기', 'admin-exit')}
-  <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button class="tab${S.tab === k ? ' on' : ''}" data-act="tab" data-tab="${k}" role="tab" aria-selected="${S.tab === k}">${l}</button>`).join('')}</div>
-  <div class="wrap">${body}</div>`;
+  const tabs = [['pick', '가게 고르기'], ['get', '주문 받기'], ['sum', '주문 정리'], ['more', '설정']];
+  if (!tabs.some(([k]) => k === S.tab)) S.tab = 'pick';
+  const n = Object.keys(S.orders).length;
+  const body = {pick: adminPick, get: adminGet, sum: adminSum, more: adminMore}[S.tab]();
+  return `${topBar('담당자', 'admin-exit')}
+  <div class="tabs-line admin-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="tab${S.tab === k ? ' on' : ''}" data-act="tab" data-tab="${k}" role="tab" aria-selected="${S.tab === k}">${l}${k === 'get' && n ? ` <small>${n}</small>` : ''}</button>`).join('')}</div>
+  <div class="wrap admin">${body}</div>${S.tab === 'pick' ? shareBar() : ''}`;
 }
-function draftNote() {
-  return isDraft()
-    ? `<div class="notice">✏️ <b>이 기기에서만 바뀐 메뉴판</b>이에요. 아래 <b>📤 모두에게 보이게 하기</b>로 다시 올려야 가족들에게 보여요. <button class="small-btn" data-act="draft-undo">되돌리기</button></div>`
-    : `<div class="notice mint">✅ 지금 메뉴판은 갤러리에 올라간 그대로예요.</div>`;
+// 가게 고르기: 스위치로 켜고 끄고, 다 고르면 아래 막대의 링크를 단톡방에 보내요.
+function pickFilters() {
+  const areas = [...new Set(CFG.stores.map(s => s.area).filter(Boolean))];
+  return [['all', '전체', CFG.stores.length], ['on', '고른 가게', openStores().length], ...areas.map(a => [a, a, CFG.stores.filter(s => s.area === a).length])];
+}
+function pickMatches(s) {
+  const f = S.pickFilter, q = S.pickQuery.trim();
+  if (f === 'on' && !isOpen(s)) return false;
+  if (f !== 'all' && f !== 'on' && s.area !== f) return false;
+  return !q || [s.name, s.category, s.area, ...s.menu.map(m => m.name)].join(' ').includes(q);
+}
+function pickList() {
+  const list = CFG.stores.filter(pickMatches).sort((a, b) => (isOpen(b) - isOpen(a)) || ((a.minutes || 99) - (b.minutes || 99)));
+  return list.map(pickRow).join('') || '<p class="muted empty-line">맞는 가게가 없어요.</p>';
 }
 function adminPick() {
-  const n = openStores().length, rough = CFG.stores.filter(s => s.lat && !s.posOk).length;
-  return `${draftNote()}
-  <div class="card"><b>⏰ 시간·장소</b>
-    <div class="row"><label class="field" style="flex:1">주문 마감<input class="input" type="time" data-cfg="deadline" value="${esc(CFG.deadline)}"></label>
-    <label class="field" style="flex:1">저녁 시간<input class="input" type="time" data-cfg="mealTime" value="${esc(CFG.mealTime)}"></label></div>
-    <label class="field">받는 곳<input class="input" data-cfg="place" maxlength="60" value="${esc(CFG.place)}"></label>
-    <div class="row" style="margin-top:10px;flex-wrap:wrap">🏕 수련원 위치 ${posLabel(CFG.campPos.ok, !!CFG.campPos.lat)}<button class="small-btn" data-act="locate" data-kind="camp">📍 지도에서 정하기</button></div></div>
-  ${rough ? `<div class="notice">📍 지도 핀 ${rough}곳이 <b>대략 위치</b>예요(동네 기준). 주문 받을 가게는 「📍 위치」로 정확한 자리를 정해 주세요.</div>` : ''}
-  <h2>🏪 오늘 주문 받을 가게 <span class="muted">(${n}곳 고름)</span></h2>
-  <p class="muted" style="margin-top:-4px">체크한 가게만 가족들이 담을 수 있어요. 하나도 안 고르면 가족들에게는 <b>주변 맛집 둘러보기</b>로 보여요.</p>
-  ${CFG.stores.map(pickCard).join('')}
-  <button class="btn ghost block" data-act="store-new">＋ 새 가게 추가</button>
-  <div class="card" style="margin-top:14px"><b>📤 모두에게 보이게 하기</b>
-  <ol class="muted" style="padding-left:20px;margin:8px 0"><li><b>📋 앱 코드 복사</b></li><li>갤러리에서 이 앱 → <b>✏️ 고치기</b> → 올릴 때 정한 PIN</li><li><b>① 코드 붙여넣기</b> 칸을 지우고 붙여넣어 저장</li></ol>
-  <div class="row"><button class="btn" style="flex:1" data-act="export-copy">📋 앱 코드 복사</button><button class="btn ghost" style="flex:1" data-act="export-file">⬇ 파일로 받기</button></div>
-  <p class="muted">파일로 받으면 이름이 <b>download</b> 로 저장될 수 있어요. 이름 끝에 <b>.html</b> 을 붙여 ② HTML 파일로 올려 주세요.</p>
-  <div id="exportBox" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="앱 코드"></textarea></div>
-  <p class="muted" style="margin-bottom:0">받은 주문은 그대로 남아요. 이미 주문을 받기 시작했다면 메뉴를 지우지 말고 이름·가격만 고쳐 주세요.</p></div>`;
+  return `<div class="ap-intro"><h2>오늘 주문 받을 가게</h2><p class="sec-sub">스위치를 켠 가게만 가족들이 메뉴를 담을 수 있어요. 다 고르면 아래 <b>링크 복사</b>를 눌러 단톡방에 보내 주세요. 앱을 다시 올릴 필요 없어요.</p></div>
+  <input class="input search" id="pickSearch" type="search" placeholder="가게·메뉴 찾기" value="${esc(S.pickQuery)}" aria-label="가게·메뉴 찾기">
+  <div class="filter-chips" role="group" aria-label="가게 거르기">${pickFilters().map(([k, l, c]) => `<button class="${S.pickFilter === k ? 'on' : ''}" data-act="pick-filter" data-f="${esc(k)}" aria-pressed="${S.pickFilter === k}">${esc(l)} <small>${c}</small></button>`).join('')}</div>
+  <div class="plist" id="pickList">${pickList()}</div>
+  <button class="add-store" data-act="store-new">＋ 목록에 없는 가게 직접 넣기</button>
+  <div id="linkBox" hidden class="link-box"><p class="sec-sub">복사가 막혔어요. 아래 글을 길게 눌러 복사해 주세요.</p><textarea class="input code-box" readonly aria-label="가족에게 보낼 링크"></textarea></div>`;
 }
-function pickCard(s) {
-  const on = isOpen(s);
-  return `<div class="card pick${on ? ' on' : ''}">
-  <label class="row pick-head"><input type="checkbox" data-act="pick-store" data-id="${esc(s.id)}"${on ? ' checked' : ''}>
-    <span class="pic-s" style="background:${esc(s.color)}">${esc(s.emoji)}</span>
-    <span style="flex:1;min-width:0"><b>${esc(s.name)}</b>${storeChips(s)}</span></label>
-  ${s.address ? `<div class="info">📍 ${esc(s.address)}</div>` : ''}${s.phone ? `<div class="info">📞 ${esc(s.phone)}</div>` : ''}
-  <div class="info">🍽 ${s.menu.map(m => `${esc(m.name)} ${m.price ? won(m.price) : '(가격?)'}`).join(' · ') || '메뉴 없음'}</div>
-  ${s.info ? `<div class="info">ℹ️ ${esc(s.info)}</div>` : ''}${s.source ? `<div class="info">🔎 출처: ${esc(s.source)}</div>` : ''}
-  <div class="info">🗺️ 지도 핀 ${posLabel(s.posOk, !!s.lat)}</div>
-  <div class="acts"><button class="small-btn" data-act="edit-store" data-id="${esc(s.id)}">${S.editing === s.id ? '✅ 다 고쳤어요' : '✏️ 가게·메뉴 고치기'}</button><button class="small-btn" data-act="locate" data-kind="store" data-id="${esc(s.id)}">📍 위치</button>${s.address ? `<button class="small-btn" data-act="copy-addr" data-id="${esc(s.id)}">주소 복사</button>` : ''}</div>
+function pickRow(s) {
+  const on = isOpen(s), low = minPrice(s), top = s.menu.slice(0, 3).map(m => m.name).join(', ');
+  return `<div class="prow pick${on ? ' on' : ''}">
+  <div class="prow-main">${thumb(s, 'md')}
+    <div class="prow-txt"><b>${esc(s.name)}</b><div class="meta">${storeMeta(s)}</div><div class="menu-line">${esc(top)}${Number.isFinite(low) ? ` · ${won(low)}~` : ''}</div></div>
+    <label class="switch"><input type="checkbox" data-act="pick-store" data-id="${esc(s.id)}"${on ? ' checked' : ''} aria-label="${esc(s.name)} 주문 받기"><i aria-hidden="true"></i></label></div>
+  ${on || S.editing === s.id ? `<div class="prow-acts"><button data-act="edit-store" data-id="${esc(s.id)}">${S.editing === s.id ? '다 고쳤어요' : '메뉴·가격 고치기'}</button><button data-act="locate" data-kind="store" data-id="${esc(s.id)}">지도 위치 · ${s.posOk ? '확인함' : '대략'}</button>${s.phone ? `<button data-act="copy-phone" data-id="${esc(s.id)}">${esc(s.phone)}</button>` : ''}</div>` : ''}
   ${S.editing === s.id ? storeEditor(s) : ''}</div>`;
+}
+function shareBar() {
+  const n = openStores().length, todo = unsent();
+  const msg = !n ? '아직 고른 가게가 없어요' : todo ? '아직 안 보낸 변경이 있어요' : '단톡방에 보낸 링크와 같아요';
+  return `<div class="share-bar${todo && n ? ' todo' : ''}"><div class="sb-txt"><b>${n}곳 골랐어요</b><span>${msg}</span></div><button class="btn" data-act="copy-link"${n ? '' : ' disabled'}>${todo || !n ? '링크 복사' : '링크 다시 복사'}</button></div>`;
+}
+function refreshPick() {
+  const list = document.getElementById('pickList'), bar = document.querySelector('.share-bar');
+  if (list) list.innerHTML = pickList();
+  if (bar) bar.outerHTML = shareBar();
+  for (const b of document.querySelectorAll('.filter-chips button')) { const f = pickFilters().find(([k]) => k === b.dataset.f); if (f) b.querySelector('small').textContent = f[2]; }
 }
 function storeEditor(s) {
   const f = (k, label, extra = '') => `<label class="field">${label}<input class="input" data-store="${esc(s.id)}" data-field="${k}" value="${esc(s[k])}" ${extra}></label>`;
   return `<div class="edit-box">
-  <div class="row">${f('emoji', '그림', 'maxlength="4" style="width:64px"')}<div style="flex:1">${f('name', '가게 이름', 'maxlength="30"')}</div></div>
-  <div class="row"><div style="flex:1">${f('category', '종류', 'maxlength="10"')}</div><div style="flex:1">${f('area', '동네', 'maxlength="12"')}</div></div>
+  <div class="field">메뉴 · 가격</div>
+  ${s.menu.map(m => `<div class="edit-row"><input class="input" data-menu="${esc(m.id)}" data-field="name" value="${esc(m.name)}" maxlength="30" aria-label="메뉴 이름"><input class="input" data-menu="${esc(m.id)}" data-field="price" type="number" min="0" step="500" inputmode="numeric" value="${m.price || ''}" placeholder="원" aria-label="가격"><button class="x-btn" data-act="menu-del" data-id="${esc(m.id)}" aria-label="메뉴 지우기">✕</button></div>`).join('')}
+  <button class="text-btn" data-act="menu-add" data-id="${esc(s.id)}">＋ 메뉴 추가</button>
+  <details class="more-fields"><summary>가게 정보 고치기</summary>
+  ${f('name', '가게 이름', 'maxlength="30"')}
+  <div class="row"><div style="flex:1">${f('category', '종류', 'maxlength="10"')}</div><div style="flex:1">${f('area', '동네', 'maxlength="12"')}</div><div style="width:70px">${f('emoji', '그림', 'maxlength="4"')}</div></div>
   <div class="row"><div style="flex:1">${f('minutes', '차로 몇 분', 'type="number" min="0" max="180" inputmode="numeric"')}</div><div style="flex:2">${f('distance', '거리 설명', 'maxlength="30"')}</div></div>
   ${f('phone', '전화', 'maxlength="20" inputmode="tel"')}${f('address', '주소', 'maxlength="80"')}${f('note', '가족에게 보일 안내', 'maxlength="60"')}
-  <div class="field">메뉴 (그림 · 이름 · 가격)</div>
-  ${s.menu.map(m => `<div class="edit-row"><input class="input" data-menu="${esc(m.id)}" data-field="emoji" value="${esc(m.emoji)}" maxlength="4" aria-label="그림"><input class="input" data-menu="${esc(m.id)}" data-field="name" value="${esc(m.name)}" maxlength="30" aria-label="메뉴 이름"><input class="input" data-menu="${esc(m.id)}" data-field="price" type="number" min="0" step="500" inputmode="numeric" value="${m.price || ''}" placeholder="원" aria-label="가격"><button class="small-btn" data-act="menu-del" data-id="${esc(m.id)}" aria-label="메뉴 지우기">✕</button></div>`).join('')}
-  <div class="row" style="margin-top:8px"><button class="small-btn" data-act="menu-add" data-id="${esc(s.id)}">＋ 메뉴 추가</button><span style="flex:1"></span><button class="small-btn" style="color:#b4232a" data-act="store-del" data-id="${esc(s.id)}">가게 지우기</button></div></div>`;
+  <button class="text-btn red" data-act="store-del" data-id="${esc(s.id)}">이 가게 목록에서 지우기</button></details></div>`;
 }
 function adminGet() {
-  const n = Object.keys(S.orders).length, all = everyone().length;
-  return `${openStores().length ? '' : `<div class="notice red">아직 주문 받을 가게를 고르지 않았어요. <button class="small-btn" data-act="tab" data-tab="pick">🍽 가게 고르기</button></div>`}
-  <div class="card"><b>카톡으로 받은 주문서를 붙여넣어 주세요</b>
-  <p class="muted" style="margin:6px 0 10px">여러 개를 한꺼번에, 대화방 내용을 통째로 붙여넣어도 주문 코드만 골라 읽어요. 같은 가족이 다시 보내면 마지막 주문으로 바뀌어요.</p>
-  <textarea class="input code-box" id="paste" placeholder="[DN1.…] 이 들어간 글을 붙여넣기" aria-label="받은 주문서"></textarea>
-  <button class="btn block" data-act="read" style="margin-top:10px">📥 주문서 읽기</button>
-  <div id="readResult"></div></div>
-  <div class="card" style="margin-top:12px;display:flex;align-items:center;gap:14px"><div class="big-num">${n}<span class="muted" style="font-size:1rem"> / ${all}</span></div><div style="flex:1">주문 받음<div class="bar"><i style="width:${all ? Math.round(n / all * 100) : 0}%"></i></div></div></div>`;
-}
-function adminStatus() {
   const all = everyone(), done = all.filter(w => S.orders[w]), todo = all.filter(w => !S.orders[w]);
-  const reminder = `🛵 저녁 주문 아직 안 보낸 분들께!\n${todo.join(', ')}\n\n갤러리에서 「${CFG.title}」 앱을 열고 메뉴를 고른 뒤, 주문서를 복사해서 보내 주세요. (마감 ${CFG.deadline})`;
-  return `<div class="card"><div class="big-num">${done.length}<span class="muted" style="font-size:1rem"> / ${all.length} 주문 완료</span></div>
-  <div class="bar"><i style="width:${all.length ? Math.round(done.length / all.length * 100) : 0}%"></i></div>
-  <p class="muted">⏰ 마감 ${esc(CFG.deadline)} · ${timeLeft()}${CFG.staff.length ? '' : ` · ${STAFF}은 주문서가 오면 목록에 생겨요`}</p></div>
-  <h2>😴 아직이에요 (${todo.length})</h2><div class="pills">${todo.map(w => `<span class="pill no">${esc(w)}</span>`).join('') || '<span class="muted">모두 주문했어요! 🎉</span>'}</div>
-  ${todo.length ? `<button class="btn ghost block" style="margin-top:10px" data-act="copy-remind">📣 안 보낸 분들께 보낼 알림 복사</button><div id="remindBox" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="알림 글"></textarea></div><textarea id="remindText" hidden>${esc(reminder)}</textarea>` : ''}
-  <h2>😋 주문했어요 (${done.length})</h2><div class="pills">${done.map(w => `<span class="pill ok">${esc(w)}</span>`).join('') || '<span class="muted">아직 없어요</span>'}</div>`;
+  const pct = all.length ? Math.round(done.length / all.length * 100) : 0;
+  const reminder = `🛵 저녁 주문 아직 안 보낸 분들께!\n${todo.join(', ')}\n\n아래 링크에서 메뉴를 고른 뒤 주문서를 복사해서 ${CFG.manager}께 카톡으로 보내 주세요. (마감 ${CFG.deadline})\n${shareLink()}`;
+  return `${openStores().length ? '' : `<div class="notice red">아직 주문 받을 가게를 고르지 않았어요. <button class="small-btn" data-act="tab" data-tab="pick">가게 고르기</button></div>`}
+  <section class="a-sec prog"><div class="prog-num"><b>${done.length}</b>/${all.length}</div><div class="prog-txt"><b>주문 받음</b><span>마감 ${esc(CFG.deadline)} · ${timeLeft()}</span><div class="bar"><i style="width:${pct}%"></i></div></div></section>
+  <section class="a-sec"><h3>카톡으로 받은 주문서 붙여넣기</h3>
+  <p class="sec-sub">대화를 통째로 붙여넣어도 주문 코드만 골라 읽어요. 같은 가족이 다시 보내면 마지막 주문으로 바뀌어요.</p>
+  <textarea class="input code-box" id="paste" placeholder="[DN1.…] 이 들어간 글을 붙여넣기" aria-label="받은 주문서"></textarea>
+  <button class="btn block" data-act="read">주문서 읽기</button>
+  <div id="readResult"></div></section>
+  <section class="a-sec"><div class="a-head"><h3>아직이에요 <small>${todo.length}</small></h3>${todo.length ? '<button class="text-btn" data-act="copy-remind">재촉 글 복사</button>' : ''}</div>
+  <div class="pills">${todo.map(w => `<span class="pill no">${esc(w)}</span>`).join('') || '<span class="muted">모두 주문했어요! 🎉</span>'}</div>
+  ${todo.length ? `<div id="remindBox" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="알림 글"></textarea></div><textarea id="remindText" hidden>${esc(reminder)}</textarea>` : ''}
+  <div class="a-head" style="margin-top:18px"><h3>주문했어요 <small>${done.length}</small></h3></div>
+  <div class="pills">${done.map(w => `<span class="pill ok">${esc(w)}</span>`).join('') || '<span class="muted">아직 없어요</span>'}</div></section>`;
+}
+function adminSum() {
+  return `<div class="seg wide no-print" role="group" aria-label="정리 방법"><button class="${S.sumBy === 'store' ? 'on' : ''}" data-act="sum-by" data-by="store" aria-pressed="${S.sumBy === 'store'}">가게별 · 주문 전화</button><button class="${S.sumBy === 'family' ? 'on' : ''}" data-act="sum-by" data-by="family" aria-pressed="${S.sumBy === 'family'}">가족별 · 나눠 주기</button></div>
+  ${S.sumBy === 'store' ? adminStore() : adminFamily()}`;
 }
 function adminStore() {
   const {groups, unknown} = storeTotals();
-  if (!groups.length) return `<p class="muted">아직 받은 주문이 없어요. 📥 받기에서 주문서를 붙여넣어 주세요.</p>`;
+  if (!groups.length) return `<p class="muted empty-line">아직 받은 주문이 없어요. 「주문 받기」에서 주문서를 붙여넣어 주세요.</p>`;
   const total = groups.reduce((a, g) => a + g.sum, 0);
   return `<label class="toggle no-print"><input type="checkbox" data-act="by-family" ${S.byFamily ? 'checked' : ''}> 사장님 메시지에 가족별로 나눠 적기 (포장용)</label>
   ${unknown.length ? `<div class="notice red">메뉴판에 없는 메뉴가 있어요(메뉴를 지웠나요?): ${esc(unknown.join(' / '))}</div>` : ''}
-  <div class="stack">${groups.map((g, i) => `<div class="card"><div class="row" style="justify-content:space-between"><b style="font-size:1.1rem">${esc(g.store.emoji)} ${esc(g.store.name)}</b><b>${won(g.sum)}</b></div>
-    ${g.store.phone ? `<div class="muted">📞 ${esc(g.store.phone)}</div>` : ''}
-    ${[...g.items].map(([id, n]) => `<div class="line"><span>${esc(ITEMS.get(id).emoji || '')} ${esc(ITEMS.get(id).name)}</span><b>${n}개</b></div>`).join('')}
-    <div class="muted" style="margin:6px 0">${g.who.length}팀 주문: ${g.who.map(x => esc(x.w)).join(', ')}</div>
-    <button class="btn block no-print" data-act="copy-owner" data-i="${i}">📋 사장님께 보낼 주문 메시지 복사</button>
-    <div id="ownerBox${i}" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="사장님 메시지"></textarea></div></div>`).join('')}
-  <div class="card"><div class="total"><span>전체 합계</span><span>${won(total)}</span></div></div></div>
-  <button class="btn gray block no-print" style="margin-top:12px" data-act="print">🖨 인쇄하기</button>`;
+  <div class="stack">${groups.map((g, i) => `<section class="card sum-card"><div class="sum-head">${thumb(g.store, 'sm')}<div><b>${esc(g.store.name)}</b>${g.store.phone ? `<span>${esc(g.store.phone)}</span>` : ''}</div><b class="sum-won">${won(g.sum)}</b></div>
+    ${[...g.items].map(([id, n]) => `<div class="line"><span>${esc(ITEMS.get(id).name)}</span><b>${n}개</b></div>`).join('')}
+    <p class="muted">${g.who.length}팀: ${g.who.map(x => esc(x.w)).join(', ')}</p>
+    <div class="row no-print">${g.store.phone ? `<button class="btn gray" data-act="copy-phone" data-id="${esc(g.store.id)}">번호 복사</button>` : ''}<button class="btn" style="flex:1" data-act="copy-owner" data-i="${i}">사장님께 보낼 메시지 복사</button></div>
+    <div id="ownerBox${i}" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="사장님 메시지"></textarea></div></section>`).join('')}
+  <div class="card"><div class="total" style="margin:0;padding:0;border:0"><span>전체 합계</span><span>${won(total)}</span></div></div></div>
+  <button class="btn gray block no-print" style="margin-top:12px" data-act="print">인쇄하기</button>`;
 }
 function adminFamily() {
   const order = everyone();
   const list = Object.values(S.orders).sort((a, b) => order.indexOf(a.w) - order.indexOf(b.w));
-  if (!list.length) return `<p class="muted">아직 받은 주문이 없어요.</p>`;
-  return `<p class="muted">음식이 오면 이 표를 보고 나눠 주세요.</p><div class="stack">
+  if (!list.length) return `<p class="muted empty-line">아직 받은 주문이 없어요.</p>`;
+  return `<p class="sec-sub">음식이 오면 이 표를 보고 나눠 주세요.</p><div class="stack">
   ${list.map(o => { const sum = o.i.reduce((a, [id, n]) => a + (ITEMS.get(id)?.price || 0) * n, 0);
-    return `<div class="card"><div class="row" style="justify-content:space-between"><b>👪 ${esc(o.w)}</b><span><b>${won(sum)}</b> <button class="small-btn no-print" data-act="del" data-who="${esc(o.w)}">지우기</button></span></div>
-    ${o.i.map(([id, n]) => { const it = ITEMS.get(id); return `<div class="line"><span>${it ? `${esc(it.store.emoji)} ${esc(it.name)}` : `❓ ${esc(id)}`}</span><b>${n}개</b></div>`; }).join('')}
-    ${o.r ? `<div class="notice" style="margin-bottom:0">💬 ${esc(o.r)}</div>` : ''}
-    <div class="muted" style="margin-top:6px">받은 시각 ${new Date(o.t).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'})}</div></div>`; }).join('')}</div>
-  <button class="btn gray block no-print" style="margin-top:12px" data-act="print">🖨 인쇄하기</button>`;
+    return `<section class="card sum-card"><div class="sum-head"><i class="who-ava">${avatar(o.w)}</i><div><b>${esc(o.w)}</b><span>받은 시각 ${new Date(o.t).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'})}</span></div><b class="sum-won">${won(sum)}</b></div>
+    ${o.i.map(([id, n]) => { const it = ITEMS.get(id); return `<div class="line"><span>${it ? `${esc(it.name)} <small class="muted">${esc(shortName(it.store))}</small>` : `❓ ${esc(id)}`}</span><b>${n}개</b></div>`; }).join('')}
+    ${o.r ? `<p class="req-line">💬 ${esc(o.r)}</p>` : ''}
+    <button class="text-btn red no-print" data-act="del" data-who="${esc(o.w)}">이 주문 지우기</button></section>`; }).join('')}</div>
+  <button class="btn gray block no-print" style="margin-top:12px" data-act="print">인쇄하기</button>`;
 }
 function adminMore() {
-  return `<div class="stack"><div class="card"><b>💾 다른 기기로 옮기기</b><p class="muted">받은 주문을 모두 주문 코드로 복사해요. 다른 기기의 📥 받기에 붙여넣으면 그대로 옮겨져요.</p>
-  <button class="btn ghost block" data-act="backup">📋 받은 주문 모두 복사</button><div id="backupBox" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="받은 주문"></textarea></div></div>
-  <div class="card"><b>🧾 이 기기에서 대신 주문 받기</b><p class="muted">전화나 말로 받은 주문은 '주문하는 사람'을 그 가족으로 바꿔 메뉴를 고른 뒤, 주문서 화면의 「담당자 목록에 바로 넣기」를 누르면 돼요.</p>
-  <button class="btn ghost block" data-act="proxy">👪 주문 화면으로 가기</button></div>
-  <div class="card"><b>🗑 처음부터 다시</b><p class="muted">받은 주문을 모두 지워요. 되돌릴 수 없어요.</p>
-  <button class="btn red block" data-act="reset">받은 주문 모두 지우기</button></div></div>`;
+  return `<section class="a-sec"><h3>시간 · 장소</h3>
+    <div class="row"><label class="field" style="flex:1">주문 마감<input class="input" type="time" data-cfg="deadline" value="${esc(CFG.deadline)}"></label>
+    <label class="field" style="flex:1">저녁 시간<input class="input" type="time" data-cfg="mealTime" value="${esc(CFG.mealTime)}"></label></div>
+    <label class="field">받는 곳<input class="input" data-cfg="place" maxlength="60" value="${esc(CFG.place)}"></label>
+    <div class="row" style="margin-top:12px;flex-wrap:wrap">수련원 위치 ${posLabel(CFG.campPos.ok, !!CFG.campPos.lat)}<button class="small-btn" data-act="locate" data-kind="camp">지도에서 정하기</button></div>
+    <p class="sec-sub" style="margin-top:10px">바꾼 뒤에는 「가게 고르기」에서 링크를 다시 보내 주세요.</p></section>
+  <section class="a-sec"><h3>전화로 받은 주문 대신 넣기</h3><p class="sec-sub">주문하는 사람을 그 가족으로 바꿔 메뉴를 담고, 주문서 화면의 「담당자 목록에 바로 넣기」를 눌러요.</p>
+    <button class="btn gray block" data-act="proxy">주문 화면으로 가기</button></section>
+  <section class="a-sec"><h3>다른 기기로 옮기기</h3><p class="sec-sub">받은 주문을 모두 주문 코드로 복사해요. 다른 기기의 「주문 받기」에 붙여넣으면 그대로 옮겨져요.</p>
+    <button class="btn gray block" data-act="backup">받은 주문 모두 복사</button><div id="backupBox" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="받은 주문"></textarea></div></section>
+  <section class="a-sec"><h3>갤러리 앱에도 넣기 <small class="muted">(안 해도 돼요)</small></h3>
+    <p class="sec-sub">가족들은 링크로 보면 충분해요. 갤러리에 올린 앱 자체를 바꾸고 싶을 때만: 앱 코드 복사 → 갤러리에서 이 앱 ✏️ 고치기 → 코드 칸에 붙여넣기.</p>
+    ${isDraft() ? '<div class="notice">이 기기에서 고른 가게·메뉴가 갤러리에 올라간 앱과 달라요.</div>' : '<div class="notice mint">갤러리에 올라간 앱과 같아요.</div>'}
+    <div class="row"><button class="btn gray" style="flex:1" data-act="export-copy">앱 코드 복사</button><button class="btn gray" style="flex:1" data-act="export-file">파일로 받기</button></div>
+    <div id="exportBox" hidden style="margin-top:8px"><textarea class="input code-box" readonly aria-label="앱 코드"></textarea></div></section>
+  <section class="a-sec"><h3>처음부터 다시</h3>
+    <div class="row"><button class="btn gray" style="flex:1" data-act="draft-undo">가게·메뉴 처음대로</button><button class="btn red" style="flex:1" data-act="reset">받은 주문 모두 지우기</button></div></section>`;
 }
 function addOrders(list) {
   let added = 0, updated = 0, same = 0;
@@ -6436,7 +6561,7 @@ const FONT = 'https://fonts.googleapis.com/css2?family=Jua&display=swap';
 const GUIDE = [
   '',
   '  ✏️ 저녁에 뭐 먹을래? — 설정은 아래 dn-config 에 있어요.',
-  '  - 쉬운 방법: 앱의 🔐 담당자 화면 → 🍽 가게 고르기에서 고치고 📋 앱 코드 복사 → 갤러리 ✏️ 고치기에 붙여넣기',
+  '  - 쉬운 방법: 앱의 담당자 화면 → 가게 고르기에서 고르고 「링크 복사」로 단톡방에 보내기(앱을 다시 올릴 필요 없어요)',
   '  - picked: 오늘 주문 받을 가게 id. 비어 있으면 가족들에게 "주변 맛집 둘러보기"로 보여요.',
   '  - lat/lng: 지도 핀 위치. posOk 가 false 면 동네 기준 대략 위치예요(담당자 화면 📍 위치로 고치기).',
   '  - 메뉴 id 는 주문 코드에 들어가요. 주문을 받기 시작한 뒤에는 바꾸거나 지우지 마세요.',
@@ -6540,7 +6665,7 @@ document.addEventListener('click', async e => {
       if (!found.length) { document.getElementById('readResult').innerHTML = `<div class="notice red">주문 코드를 찾지 못했어요${broken.length ? ` (깨진 코드 ${broken.length}개 — 글자가 잘렸는지 확인해 주세요)` : ''}.</div>`; return; }
       const r = addOrders(found);
       render();
-      document.getElementById('readResult').innerHTML = `<div class="notice mint">✅ 새 주문 <b>${r.added}</b> · 고친 주문 <b>${r.updated}</b> · 이미 있던 것 ${r.same}${broken.length ? `<br>⚠️ 깨진 코드 ${broken.length}개는 다시 받아 주세요` : ''}<br><button class="small-btn" data-act="tab" data-tab="store">🏪 가게별로 보기</button> <button class="small-btn" data-act="tab" data-tab="status">✅ 현황 보기</button></div>`;
+      document.getElementById('readResult').innerHTML = `<div class="notice mint">✅ 새 주문 <b>${r.added}</b> · 고친 주문 <b>${r.updated}</b> · 이미 있던 것 ${r.same}${broken.length ? `<br>⚠️ 깨진 코드 ${broken.length}개는 다시 받아 주세요` : ''}<br><button class="small-btn" data-act="tab" data-tab="sum">주문 정리 보기</button></div>`;
       break;
     }
     case 'copy-owner': { const g = storeTotals().groups[Number(el.dataset.i)]; copyOrShow(ownerMessage(g), '사장님께 보낼 메시지를 복사했어요 📋', 'ownerBox' + el.dataset.i); break; }
@@ -6560,7 +6685,21 @@ document.addEventListener('click', async e => {
       CFG = clone(CFG);
       CFG.picked = el.checked ? [...new Set([...CFG.picked, id])] : CFG.picked.filter(x => x !== id);
       CFG.picked = CFG.stores.map(s => s.id).filter(x => CFG.picked.includes(x)); // 가게 순서대로
-      saveDraft(); render(); break;
+      saveDraft();
+      // 줄 순서는 그대로 두고(누르자마자 위로 튀지 않게) 그 줄과 아래 막대만 새로 그려요.
+      el.closest('.prow').outerHTML = pickRow(storeById(id));
+      document.querySelector('.share-bar').outerHTML = shareBar();
+      for (const b of document.querySelectorAll('.filter-chips button')) { const f = pickFilters().find(([k]) => k === b.dataset.f); if (f) b.querySelector('small').textContent = f[2]; }
+      break;
+    }
+    case 'pick-filter': S.pickFilter = el.dataset.f; rerender(); break;
+    case 'sum-by': S.sumBy = el.dataset.by; rerender(); break;
+    case 'copy-link': {
+      const text = `🍽 ${CFG.title}\n${CFG.camp ? CFG.camp + ' ' : ''}저녁 메뉴를 골라 주세요! (주문 마감 ${CFG.deadline})\n${shareLink()}`;
+      await copyOrShow(text, '🔗 복사했어요. 단톡방에 붙여넣어 보내 주세요', 'linkBox');
+      save('dn-sent', JSON.stringify(diffCfg(CFG)));
+      document.querySelector('.share-bar').outerHTML = shareBar();
+      break;
     }
     case 'edit-store': S.editing = S.editing === id ? null : id; render(); break;
     case 'locate': openLocator(el.dataset.kind, id); break;
@@ -6600,7 +6739,7 @@ document.addEventListener('click', async e => {
       CFG.stores = CFG.stores.filter(s => s.id !== id); CFG.picked = CFG.picked.filter(x => x !== id);
       S.editing = null; saveDraft(); render(); break;
     }
-    case 'draft-undo': if (confirmTwice(el, '한 번 더 누르면 되돌려요')) { CFG = BASE; S.editing = null; saveDraft(); render(); toast('올라간 메뉴판으로 되돌렸어요'); } break;
+    case 'draft-undo': if (confirmTwice(el, '한 번 더 누르면 되돌려요')) { CFG = BASE; S.editing = null; saveDraft(); render(); toast('처음 메뉴판으로 되돌렸어요. 링크를 다시 보내 주세요'); } break;
     case 'export-file': exportFile(); break;
     case 'export-copy': copyOrShow(rebuild(CFG), '📋 앱 코드를 복사했어요. 갤러리 ✏️ 고치기에 붙여넣어 주세요', 'exportBox'); break;
   }
@@ -6609,6 +6748,7 @@ document.addEventListener('click', async e => {
 document.addEventListener('input', e => {
   const t = e.target;
   if (t.id === 'req') { S.req = t.value.slice(0, 100); persist(); return; }
+  if (t.id === 'pickSearch') { S.pickQuery = t.value; refreshPick(); return; }
   if (!S.adminSession) return;
   const value = ['price', 'minutes'].includes(t.dataset.field) ? Math.max(0, Math.round(Number(t.value) || 0)) : t.value.trim();
   if (t.dataset.cfg) { CFG = clone(CFG); CFG[t.dataset.cfg] = value; }
@@ -6618,7 +6758,7 @@ document.addEventListener('input', e => {
   saveDraft();
 });
 // 다 적고 나면(칸을 벗어나면) 안내 문구·미리보기를 새로 그려요.
-document.addEventListener('change', e => { if (S.view === 'admin' && S.tab === 'pick' && (e.target.dataset.cfg || e.target.dataset.store || e.target.dataset.menu)) { const y = scrollY; render(); scrollTo(0, y); } });
+document.addEventListener('change', e => { if (S.view === 'admin' && (e.target.dataset.cfg || e.target.dataset.store || e.target.dataset.menu)) { const y = scrollY; render(); scrollTo(0, y); } });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && document.getElementById('locator')) { closeLocator(); return; }
   if (e.key === 'Escape' && document.getElementById('sheet')) { closeSheet(); return; }
