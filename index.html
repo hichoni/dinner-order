@@ -5,8 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>메뉴 모으기</title>
 <meta name="description" content="방을 만들고 링크를 보내면, 다들 이름을 고르고 메뉴를 담아 보내요. 방장은 모인 주문을 가게별로 바로 봐요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hichoni.github.io/dinner-order/">
 <meta property="og:title" content="메뉴 모으기 — 링크 열고 메뉴 고르기">
 <meta property="og:description" content="방을 만들고 링크를 보내면, 다들 이름을 고르고 메뉴를 담아 보내요. 방장은 모인 주문을 가게별로 바로 봐요.">
+<meta property="og:image" content="https://hichoni.github.io/dinner-order/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="메뉴 모으기">
 <meta name="theme-color" content="#e6f6f3">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -730,6 +740,65 @@ label.prow{display:block;cursor:pointer}
 .sheet-emo .img-note{left:12px;bottom:12px;font-size:.72rem;padding:3px 8px}
 .img-note{display:none}
 .ph.on+.img-note{display:block}
+
+/* 첫 화면: 내가 만든 방 · 참여한 방 */
+.my-rooms{margin-top:6px}
+.my-rooms .seg.wide{margin-bottom:12px}
+.my-rooms .seg button small{font-size:.74rem;color:var(--mute)}
+.my-rooms .seg button.on small{color:var(--mint-d)}
+.room-cards{display:flex;flex-direction:column;gap:12px}
+.room-card{background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--clay);overflow:hidden;animation:rise .35s ease-out both}
+.room-card:nth-child(2){animation-delay:.05s}.room-card:nth-child(3){animation-delay:.1s}.room-card:nth-child(4){animation-delay:.15s}
+.rc-main{display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--ink);text-decoration:none}
+.rc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.rc-chip{font-size:.72rem;font-weight:700;color:var(--sub);background:rgba(255,255,255,.85);box-shadow:var(--clay-s);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.rc-chip.on{color:var(--mint-d);background:#e3f8f4}
+.rc-chip.red{color:#c22a31;background:#ffe9e9}
+.rc-names{display:block;margin-top:6px;font-size:.78rem;color:var(--sub)}
+.rc-acts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border-top:1px solid var(--line)}
+.rc-acts a,.rc-acts button{border:0;background:none;padding:12px 4px;font-size:.84rem;font-weight:700;color:var(--mint-d);text-align:center;text-decoration:none}
+.rc-acts>*+*{border-left:1px solid var(--line)}
+.rc-acts>*:active{background:rgba(20,184,171,.08)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+
+/* 내 주문: 이름별 */
+.mine-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.mine-head .sec-title{margin-bottom:6px}
+.mine-item{position:relative}
+.mine-item.cur .ticket{box-shadow:var(--clay),0 0 0 2px var(--mint)}
+.mine-acts{margin-top:10px}
+
+/* ── 다듬기: 알림·불러오기·움직임 ── */
+#toast{top:calc(env(safe-area-inset-top,0px) + 14px);background:rgba(18,44,41,.82);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);
+  border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px 18px;font-weight:700;font-size:.9rem;box-shadow:0 18px 34px -16px rgba(0,0,0,.45);
+  transform:translateX(-50%) translateY(-16px) scale(.96);transition:transform .32s cubic-bezier(.2,1.4,.4,1),opacity .2s}
+#toast.show{transform:translateX(-50%) translateY(0) scale(1)}
+/* 뼈대 화면 */
+.skel{padding:8px 16px}
+.sk-head{background:var(--glass);border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--clay);padding:22px 20px;display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.sk-row{display:flex;gap:14px;align-items:center;background:var(--glass);border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--clay-s);padding:14px;margin-bottom:10px}
+.sk-row>div{flex:1;display:flex;flex-direction:column;gap:9px}
+.sk{display:block;height:12px;border-radius:8px;background:linear-gradient(90deg,rgba(13,90,84,.07) 0%,rgba(13,90,84,.14) 50%,rgba(13,90,84,.07) 100%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+.sk.big{height:24px}.sk.thumb{width:72px;height:72px;border-radius:18px;flex:0 0 72px}
+.sk.w30{width:30%}.sk.w40{width:40%}.sk.w50{width:50%}.sk.w60{width:60%}.sk.w70{width:70%}.sk.w90{width:90%}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+/* 화면이 바뀔 때만 목록이 차례로 올라와요(실시간으로 다시 그릴 때는 안 움직여요) */
+.mm.enter .stores>*,.mm.enter .menus>*,.mm.enter .who-grid>*,.mm.enter .room-cards>*,.mm.enter .how>li,.mm.enter .stack>*,.mm.enter .plist>*{animation:rise .38s cubic-bezier(.2,.8,.3,1) both}
+.mm.enter :is(.stores,.menus,.who-grid,.room-cards,.how,.stack,.plist)>:nth-child(2){animation-delay:.04s}
+.mm.enter :is(.stores,.menus,.who-grid,.room-cards,.how,.stack,.plist)>:nth-child(3){animation-delay:.08s}
+.mm.enter :is(.stores,.menus,.who-grid,.room-cards,.how,.stack,.plist)>:nth-child(4){animation-delay:.12s}
+.mm.enter :is(.stores,.menus,.who-grid,.room-cards,.how,.stack,.plist)>:nth-child(5){animation-delay:.16s}
+.mm.enter :is(.stores,.menus,.who-grid,.room-cards,.how,.stack,.plist)>:nth-child(n+6){animation-delay:.2s}
+.room-card{animation:none}
+/* 누르는 느낌 */
+.mm :is(.store,.room-card .rc-main,.who-btn,.how li,.land-camp,.prow,.menu-main,.cat-row button,.pick-row){transition:transform .14s ease,box-shadow .2s}
+.mm :is(.store,.room-card .rc-main,.who-btn,.prow,.menu-main):active{transform:scale(.985)}
+.mm .btn{transition:transform .12s ease,box-shadow .2s,filter .2s}
+.mm .btn:active{transform:translateY(1px) scale(.985);filter:brightness(.97)}
+.mm .btn:not(:disabled):hover{filter:brightness(1.03)}
+.bump{animation:bump .5s cubic-bezier(.2,1.6,.4,1)}
+.so-ic{animation:pop .45s cubic-bezier(.2,1.6,.4,1) both}
+@media (hover:hover){.mm .store:hover,.mm .room-card:hover{box-shadow:var(--clay)}}
 </style>
 </head>
 <body>
@@ -813,6 +882,7 @@ const S = {
   who: '', cart: {}, req: '', sentAt: 0,
   draft: null, catFor: 'create', catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(),
   edit: null, sumBy: 'store', byPerson: true, sending: false,
+  homeTab: '', sums: {}, sumsLoading: false,
 };
 const myRooms = () => load('mm-rooms', []);
 function rememberRoom(id, patch) {
@@ -820,6 +890,9 @@ function rememberRoom(id, patch) {
   list.unshift({...old, id, ...patch, at: Date.now()});
   save('mm-rooms', list.slice(0, 30));
 }
+// 이 기기에서 보낸 주문의 이름(방마다). 방을 열면 실제 응답(uid 가 이 기기)으로 다시 맞춰요.
+const sentNames = id => load('mm-sent', {})[id] || [];
+function setSentNames(id, names) { const all = load('mm-sent', {}); if (names.length) all[id] = names; else delete all[id]; save('mm-sent', all); }
 const roomLocal = () => load('mm-room-' + S.roomId, {});
 function persistRoom() { save('mm-room-' + S.roomId, {who: S.who, cart: S.cart, req: S.req, sentAt: S.sentAt}); }
 
@@ -856,7 +929,7 @@ function friendly(e) {
 let unsub = [];
 function stopListening() { for (const u of unsub) try { u(); } catch {} unsub = []; }
 
-async function openRoom(id, key) {
+async function openRoom(id, key, want = '') {
   stopListening();
   Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), host: false, loading: true, error: '', store: null, edit: null});
   const local = roomLocal();
@@ -880,13 +953,23 @@ async function openRoom(id, key) {
       if (!snap.exists()) { S.room = null; S.loading = false; S.error = 'gone'; render(); return; }
       S.room = tidyRoom(snap.data()); S.loading = false;
       rememberRoom(id, S.host ? {title: S.room.title, host: true} : {title: S.room.title});
-      if (first && S.host && !S.who) S.tab = 'sum';
+      if (first && want && (want === 'mine' || S.host)) S.tab = want;
+      else if (first && S.host && !S.who) S.tab = 'sum';
+      if (first && S.created) setTimeout(() => confetti(document.querySelector('.share-card .sc-ic')), 250);
       first = false;
       reindex(); keepView();
-    }, e => { S.loading = false; S.error = friendly(e); render(); }));
+    }, e => { S.loading = false; S.error = /permission/.test(String(e && e.code)) ? '방 기능이 아직 켜지지 않았어요(Firebase 규칙 게시 전이에요). 방장에게 알려 주세요.' : friendly(e); render(); }));
+    let firstAnswers = true;
     unsub.push(FB.onSnapshot(FB.collection(DB, 'dinnerRooms', id, 'answers'), snap => {
       if (S.roomId !== id) return;
+      // 방장 화면: 다른 사람이 새로 보내면 살짝 알려 줘요(처음 불러올 때·내가 보낸 것은 빼고)
+      if (!firstAnswers && S.host) {
+        const fresh = snap.docChanges().filter(c => c.type === 'added' && !c.doc.metadata.hasPendingWrites && c.doc.data().uid !== UID);
+        if (fresh.length) { toast(`🙋 ${fresh.map(c => str(c.doc.data().name, 20)).join(', ')} 주문이 들어왔어요`); buzz(15); S.bumpLive = true; }
+      }
+      firstAnswers = false;
       S.answers = new Map(snap.docs.map(d => [d.id, tidyAnswer(d.id, d.data())]));
+      if (UID) setSentNames(id, [...S.answers.values()].filter(a => a.uid === UID).map(a => a.name));
       keepView();
     }, () => {}));
   } catch (e) { S.loading = false; S.error = friendly(e); render(); }
@@ -896,9 +979,11 @@ function keepView() {
   const a = document.activeElement;
   if (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.closest('#app')) { refreshLive(); return; }
   if (document.getElementById('sheet')) return;
-  rerender();
+  rerender(); bumpLive();
 }
 function refreshLive() { const n = document.getElementById('liveCount'); if (n) n.textContent = S.answers.size; }
+// 숫자가 바뀌면 톡 튀어요
+function bumpLive() { if (!S.bumpLive) return; S.bumpLive = false; for (const e of document.querySelectorAll('#liveCount, .prog-num b')) { e.classList.remove('bump'); void e.offsetWidth; e.classList.add('bump'); } }
 
 // ---------- 메뉴 찾기 ----------
 const ITEMS = new Map();
@@ -969,6 +1054,21 @@ const IMG_NOTE = {review: '손님 사진', ref: '비슷한 메뉴 사진'};
 const imgNote = m => (m.img && IMG_NOTE[m.imgFrom] ? `<span class="img-note">${IMG_NOTE[m.imgFrom]}</span>` : '');
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 function buzz(p) { try { navigator.vibrate?.(p); } catch {} }
+// 색종이: 캔버스 하나를 잠깐 띄웠다가 지워요(움직임 줄이기 설정이면 안 해요).
+function confetti(from) {
+  if (reduceMotion() || !from) return;
+  const r = from.getBoundingClientRect(), cv = document.createElement('canvas');
+  cv.className = 'confetti'; cv.width = innerWidth; cv.height = innerHeight; document.body.append(cv);
+  const ctx = cv.getContext('2d'), colors = ['#14b8ab', '#34d6c8', '#ffb39a', '#9fa6ff', '#ffd66b'];
+  const bits = Array.from({length: 80}, () => ({x: r.left + r.width / 2, y: r.top + r.height / 2, vx: (Math.random() - .5) * 10, vy: -Math.random() * 10 - 3, s: 5 + Math.random() * 5, c: colors[Math.floor(Math.random() * colors.length)], a: Math.random() * 6}));
+  let t = 0;
+  const step = () => {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    for (const b of bits) { b.x += b.vx; b.y += b.vy; b.vy += .34; b.a += .2; ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.a); ctx.fillStyle = b.c; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-b.s / 2, -b.s / 4, b.s, b.s / 2, 2) : ctx.rect(-b.s / 2, -b.s / 4, b.s, b.s / 2); ctx.fill(); ctx.restore(); }
+    if (++t < 80) requestAnimationFrame(step); else cv.remove();
+  };
+  step();
+}
 
 // 복사: 막히면 직접 복사하게 글을 보여 줘요.
 async function copyText(text) {
@@ -991,9 +1091,18 @@ async function copyOrShow(text, okMsg, boxId) {
 }
 const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://hichoni.github.io/dinner-order/');
 const roomLink = (id = S.roomId) => `${pageBase()}#r=${id}`;
-function inviteText() {
-  const r = S.room, dl = deadlineInfo(r.deadline);
-  return [`🍽 ${r.title}`, '링크를 열고 이름을 고른 뒤 메뉴를 담아 「보내기」만 누르면 돼요!', dl ? `⏰ ${dl.at}까지` : '', roomLink()].filter(Boolean).join('\n');
+function inviteText(r = S.room, id = S.roomId) {
+  const dl = deadlineInfo(r.deadline);
+  return [`🍽 ${r.title}`, '링크를 열고 이름을 고른 뒤 메뉴를 담아 「보내기」만 누르면 돼요!', dl ? `⏰ ${dl.at}까지` : '', roomLink(id)].filter(Boolean).join('\n');
+}
+// 휴대폰에서는 공유 창(카톡 바로 고르기)을, 안 되면 복사를 써요.
+async function shareOrCopy(r, id, boxId) {
+  const text = inviteText(r, id);
+  if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+    try { await navigator.share({title: r.title, text: text.split('\n').slice(0, -1).join('\n'), url: roomLink(id)}); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  copyOrShow(text, '🔗 복사했어요. 단톡방에 붙여넣어 보내 주세요', boxId);
 }
 
 // ---------- 그리기 ----------
@@ -1005,41 +1114,71 @@ function render(enter = false) {
   document.title = S.route === 'room' && S.room ? `${S.room.title} · 메뉴 모으기` : '메뉴 모으기';
 }
 function rerender() { const y = scrollY; render(); scrollTo(0, y); }
-function go(extra) { Object.assign(S, extra); render(true); scrollTo(0, 0); }
+function go(extra) { Object.assign(S, extra); document.getElementById('toast')?.classList.remove('show'); render(true); scrollTo(0, 0); }
 const topBar = (title, back, right = '') => `<header class="top">${back ? `<button class="back" data-act="${back}" aria-label="뒤로">${ICON.back}</button>` : ''}<h1>${title}</h1>${right}</header>`;
 
 // ---------- 첫 화면 ----------
 function viewHome() {
-  const rooms = myRooms();
+  const rooms = myRooms(), made = rooms.filter(r => r.host), joined = rooms.filter(r => !r.host);
+  const tab = S.homeTab || (made.length ? 'made' : 'joined');
+  const list = tab === 'made' ? made : joined;
+  if (rooms.length && !S.sumsLoading && rooms.some(r => !S.sums[r.id])) loadSums(rooms);
   return `<section class="land">
     <div class="deco" aria-hidden="true"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
     <div class="land-logo"><span class="logo-ic">${ICON.mine}</span><b>메뉴 모으기</b></div>
     <h1>메뉴 수합,<br><em>링크 하나로 끝.</em></h1>
     <p>방을 만들어 링크를 단톡방에 보내면, 다들 이름을 고르고 메뉴를 담아 보내요. 방장은 모인 주문을 가게별로 바로 봐요.</p>
     <button class="btn block land-go" data-act="new">${ICON.plus}방 만들기</button>
-    ${CATALOG.count ? `<button class="land-camp" data-act="new-camp"><span class="lc-ic">🏕️</span><span class="lc-txt"><b>${esc(CAMP.title || '캠프 저녁 방')} 바로 만들기</b><small>${esc(CAMP.place || '')} 주변 맛집 · 가족 명단이 미리 들어가요</small></span><span class="lc-go">›</span></button>` : ''}
   </section>
   <div class="wrap">
+    ${rooms.length ? `<section class="my-rooms">
+      <div class="seg wide" role="tablist"><button class="${tab === 'made' ? 'on' : ''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab === 'made'}">내가 만든 방 <small>${made.length}</small></button><button class="${tab === 'joined' ? 'on' : ''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab === 'joined'}">참여한 방 <small>${joined.length}</small></button></div>
+      <div class="room-cards">${list.map(roomCard).join('') || `<p class="muted empty-line">${tab === 'made' ? '아직 만든 방이 없어요. 위에서 「방 만들기」를 눌러 보세요.' : '링크로 들어간 방이 여기에 모여요.'}</p>`}</div>
+    </section>` : ''}
+    <h2 class="sec-title">이렇게 써요</h2>
     <ol class="how">
       <li><i class="t1">✏️</i><b>방 만들기</b><span>가게·메뉴를 고르고 받을 사람을 정해요</span></li>
       <li><i class="t2">🔗</i><b>링크 보내기</b><span>단톡방에 링크만 붙여넣어요</span></li>
       <li><i class="t3">🙋</i><b>다들 골라요</b><span>이름 고르고 메뉴 담아 보내기</span></li>
       <li><i class="t4">📋</i><b>모아서 주문</b><span>가게별로 실시간 정리돼요</span></li>
     </ol>
-    ${rooms.length ? `<h2 class="sec-title">내 방</h2><div class="room-list">${rooms.map(r => `<a class="room-row" href="#r=${esc(r.id)}"><span class="rr-ic">${r.host ? '👑' : '🙋'}</span><span class="rr-txt"><b>${esc(r.title || '방')}</b><small>${r.host ? '내가 만든 방' : '참여한 방'} · ${new Date(r.at).toLocaleDateString('ko-KR', {month: 'numeric', day: 'numeric'})}</small></span><span class="rr-go">›</span></a>`).join('')}</div>` : ''}
   </div>`;
+}
+// 방 카드: 만든 방은 상태·응답 수와 관리 버튼, 참여한 방은 내가 보낸 이름
+function roomCard(r) {
+  const sum = S.sums[r.id], names = sentNames(r.id);
+  const status = !sum ? '<span class="rc-chip">불러오는 중…</span>' : sum.gone ? '<span class="rc-chip red">지워진 방</span>'
+    : `<span class="rc-chip${sum.closed ? ' red' : ' on'}">${sum.closed ? '마감' : '받는 중'}</span>${sum.answers != null ? `<span class="rc-chip">🙋 ${sum.answers}명</span>` : ''}${sum.deadline ? `<span class="rc-chip">⏰ ${esc(deadlineInfo(sum.deadline)?.text || '')}</span>` : ''}`;
+  const title = esc(sum && !sum.gone ? sum.title : r.title || '방');
+  if (r.host) {
+    return `<article class="room-card"><a class="rc-main" href="#r=${esc(r.id)}"><span class="rr-ic">👑</span><span class="rr-txt"><b>${title}</b><span class="rc-chips">${status}</span></span><span class="rr-go">›</span></a>
+      ${sum && !sum.gone ? `<div class="rc-acts"><a href="#r=${esc(r.id)}&t=sum">모인 주문</a><button data-act="card-share" data-id="${esc(r.id)}">링크 보내기</button><a href="#r=${esc(r.id)}&t=set">방 설정</a></div>` : `<div class="rc-acts"><button data-act="card-forget" data-id="${esc(r.id)}">목록에서 빼기</button></div>`}</article>`;
+  }
+  return `<article class="room-card"><a class="rc-main" href="#r=${esc(r.id)}&t=mine"><span class="rr-ic">🙋</span><span class="rr-txt"><b>${title}</b><span class="rc-chips">${status}</span>
+    <small class="rc-names">${names.length ? `보낸 이름: ${names.map(esc).join(', ')}` : '아직 보낸 주문 없음'}</small></span><span class="rr-go">›</span></a>
+    ${sum && sum.gone ? `<div class="rc-acts"><button data-act="card-forget" data-id="${esc(r.id)}">목록에서 빼기</button></div>` : ''}</article>`;
+}
+// 첫 화면의 방 상태(제목·마감·응답 수)를 한 번 읽어 와요.
+async function loadSums(rooms) {
+  S.sumsLoading = true;
+  try {
+    await boot();
+    await Promise.all(rooms.map(async r => {
+      try {
+        const snap = await FB.getDoc(FB.doc(DB, 'dinnerRooms', r.id));
+        if (!snap.exists()) { S.sums[r.id] = {gone: true}; return; }
+        const d = tidyRoom(snap.data()), sum = {title: d.title, closed: d.closed, deadline: d.deadline, answers: null};
+        if (r.host) { try { sum.answers = (await FB.getDocs(FB.collection(DB, 'dinnerRooms', r.id, 'answers'))).size; } catch {} }
+        S.sums[r.id] = sum;
+      } catch { S.sums[r.id] = {title: r.title, closed: false, answers: null, err: true}; }
+    }));
+  } catch {}
+  S.sumsLoading = false;
+  if (S.route === 'home') rerender();
 }
 
 // ---------- 방 만들기 ----------
 const EMPTY_DRAFT = () => ({title: '', note: '', deadline: '', stores: [], mode: 'free', names: '', freeJoin: false, custom: {name: '', lines: ''}});
-function campDraft() {
-  const d = EMPTY_DRAFT();
-  d.title = CAMP.title || '캠프 저녁';
-  d.note = [CAMP.place ? `받는 곳: ${CAMP.place}` : '', CAMP.mealTime ? `저녁 ${CAMP.mealTime}` : ''].filter(Boolean).join(' · ');
-  d.mode = 'list'; d.names = (CAMP.families || []).join('\n'); d.freeJoin = true;
-  if (CAMP.date && CAMP.deadline) d.deadline = `${CAMP.date}T${CAMP.deadline}`;
-  return d;
-}
 const parseNames = t => [...new Set(String(t).split(/[\n,]+/).map(x => x.trim().replace(/\s+/g, ' ').slice(0, 20)).filter(Boolean))].slice(0, 120);
 // "아메리카노 4500" / "카페라떼 5,000원" / "녹차" 한 줄에 하나
 function parseMenu(text, sid) {
@@ -1115,7 +1254,9 @@ function viewCatalog() {
 
 // ---------- 방 ----------
 function viewRoom() {
-  if (S.loading || (!S.room && !S.error)) return `${topBar('메뉴 모으기', 'home')}<div class="empty"><div class="spinner"></div><p class="muted">방을 여는 중…</p></div>`;
+  if (S.loading || (!S.room && !S.error)) return `${topBar('', 'home')}<div class="skel" aria-busy="true" aria-label="방을 여는 중">
+    <div class="sk-head"><i class="sk w60"></i><i class="sk w90 big"></i><i class="sk w40"></i></div>
+    ${'<div class="sk-row"><i class="sk thumb"></i><div><i class="sk w70"></i><i class="sk w50"></i><i class="sk w30"></i></div></div>'.repeat(3)}</div>`;
   if (!S.room) {
     return `${topBar('메뉴 모으기', 'home')}<div class="empty"><div class="big">🔍</div><h2>${S.error === 'gone' ? '방을 찾을 수 없어요' : '방을 열지 못했어요'}</h2><p class="muted">${S.error === 'gone' ? '링크가 맞는지, 방장이 방을 지우지 않았는지 확인해 주세요.' : esc(S.error)}</p><button class="btn" data-act="retry">다시 열기</button></div>`;
   }
@@ -1170,8 +1311,12 @@ function cartBar(label = '', act = 'tab" data-t="cart') {
   label = label || (myAnswer() ? '고친 주문 보러 가기' : '장바구니 보기');
   return n ? `<button class="cartbar" data-act="${act}"><span class="n">${n}</span><span class="sp">${label}</span><span>${won(cartSum())}</span></button>` : '';
 }
+// 방장이 마감했거나 마감 시간이 지나면 참여자는 더 보내거나 고칠 수 없어요(방장은 돼요).
+const isLate = () => { const d = deadlineInfo(S.room?.deadline); return !!d && d.left <= 0; };
+const locked = () => !S.host && (S.room.closed || isLate());
 function closedNote() {
-  return S.room.closed ? `<div class="notice red">방장이 주문을 마감했어요. 더 고치려면 방장에게 말해 주세요.</div>` : '';
+  if (!S.room.closed && !isLate()) return '';
+  return `<div class="notice red">${S.room.closed ? '방장이 주문을 마감했어요.' : `마감 시간(${esc(deadlineInfo(S.room.deadline).at)})이 지났어요.`} ${S.host ? '방장은 그래도 넣고 고칠 수 있어요.' : '더 고치려면 방장에게 말해 주세요.'}</div>`;
 }
 function sentNote() {
   const a = myAnswer();
@@ -1249,7 +1394,7 @@ function roomCart() {
   <div class="band thin"></div>
   <section class="wrap summary"><div class="total"><span>합계</span><span>${won(cartSum())}</span></div>
     <p class="muted">메뉴판 기준 금액이에요.</p></section>
-  ${S.room.closed && !S.host ? '' : cartBar(S.sending ? '보내는 중…' : a ? '고친 주문 보내기' : `${S.who} 주문 보내기`, 'send')}${roomNav()}`;
+  ${locked() ? '' : cartBar(S.sending ? '보내는 중…' : a ? '고친 주문 보내기' : `${S.who} 주문 보내기`, 'send')}${roomNav()}`;
 }
 function ticket(a) {
   const byStore = new Map();
@@ -1261,14 +1406,19 @@ function ticket(a) {
     <div class="t-total"><span>합계</span><b>${won(sum)}</b></div></div>`;
 }
 function roomMine() {
-  const a = myAnswer();
-  if (!a) return `${topBar('내 주문', '', whoChip())}<div class="empty"><div class="big">🧾</div><h2>아직 보낸 주문이 없어요</h2><p class="muted">메뉴를 담고 장바구니에서 「보내기」를 눌러 주세요.</p><button class="btn" data-act="tab" data-t="menu">메뉴 보러 가기</button></div>${roomNav()}`;
-  const other = a.uid && a.uid !== UID && !S.host; // 같은 이름으로 다른 기기에서 보낸 주문
+  const mine = [...S.answers.values()].filter(a => a.uid === UID).sort((a, b) => (b.name === S.who) - (a.name === S.who) || b.at - a.at);
+  const cur = myAnswer(), other = cur && cur.uid && cur.uid !== UID && !S.host; // 같은 이름으로 다른 기기에서 보낸 주문
+  const lock = locked();
+  if (!mine.length && !other) return `${topBar('내 주문', '', whoChip())}<div class="empty"><div class="big">🧾</div><h2>아직 보낸 주문이 없어요</h2><p class="muted">메뉴를 담고 장바구니에서 「보내기」를 눌러 주세요.</p><button class="btn" data-act="tab" data-t="${S.who ? 'menu' : 'who'}">메뉴 보러 가기</button></div>${roomNav()}`;
+  const justSent = cur && cur.uid === UID && Date.now() - S.sentAt < 15000;
   return `${topBar('내 주문', '', whoChip())}<div class="wrap">
-    ${other ? `<div class="notice other-dev"><b>「${esc(a.name)}」 주문은 다른 기기에서 보냈어요.</b> 고치려면 그 기기에서 하거나 방장에게 말해 주세요. 내 이름이 아니면 「다른 사람 것도 넣기」로 이름을 다시 골라 주세요.</div>`
-      : '<div class="sent-ok"><div class="so-ic">✓</div><h2>방장에게 보냈어요</h2><p class="muted">따로 카톡을 보내지 않아도 돼요. 고치려면 아래 「고치기」를 눌러 다시 보내 주세요.</p></div>'}
-    ${ticket(a)}
-    <div class="row" style="margin-top:14px"><button class="btn gray" style="flex:1" data-act="edit-mine"${(S.room.closed && !S.host) || other ? ' disabled' : ''}>고치기</button><button class="btn gray" style="flex:1" data-act="tab" data-t="who">다른 사람 것도 넣기</button></div>
+    ${other ? `<div class="notice other-dev"><b>「${esc(cur.name)}」 주문은 다른 기기에서 보냈어요.</b> 고치려면 그 기기에서 하거나 방장에게 말해 주세요. 내 이름이 아니면 아래에서 이름을 다시 골라 주세요.</div>${ticket(cur)}` : ''}
+    ${justSent ? '<div class="sent-ok"><div class="so-ic">✓</div><h2>방장에게 보냈어요</h2><p class="muted">따로 카톡을 보내지 않아도 돼요. 고치려면 「고치기」를 눌러 다시 보내 주세요.</p></div>' : ''}
+    ${mine.length ? `<div class="mine-head"><h2 class="sec-title">이 기기에서 보낸 주문 <small>${mine.length}</small></h2>${mine.length > 1 ? '<span class="hint">이름마다 따로 고치고 취소할 수 있어요</span>' : ''}</div>` : ''}
+    <div class="stack">${mine.map(a => `<div class="mine-item${a.name === S.who ? ' cur' : ''}">${ticket(a)}
+      <div class="row mine-acts"><button class="btn gray" style="flex:1" data-act="edit-mine" data-who="${esc(a.name)}"${lock ? ' disabled' : ''}>고치기</button><button class="btn gray" style="flex:1" data-act="answer-del" data-who="${esc(a.name)}"${lock ? ' disabled' : ''}>취소</button></div></div>`).join('')}</div>
+    ${lock ? `<p class="hint" style="text-align:center;margin-top:10px">${S.room.closed ? '방장이 마감해서' : '마감 시간이 지나서'} 고치거나 취소할 수 없어요.</p>` : ''}
+    <button class="btn line-dark block" style="margin-top:14px" data-act="tab" data-t="who">다른 이름으로 하나 더 넣기</button>
     <button class="text-btn" data-act="tab" data-t="${S.host ? 'sum' : 'all'}" style="margin-top:8px">다른 사람들은 뭐 골랐나 보기 ›</button>
   </div>${roomNav()}`;
 }
@@ -1300,7 +1450,7 @@ function ownerMessage(g) {
 function shareCard() {
   return `<section class="share-card"><div class="sc-top"><span class="sc-ic">${ICON.link}</span><div><b>참여 링크</b><span>단톡방에 붙여넣으면 다들 이 방으로 들어와요</span></div></div>
     <div class="sc-link">${esc(roomLink())}</div>
-    <button class="btn block" data-act="copy-invite">링크 복사</button>
+    <button class="btn block" data-act="copy-invite">${ICON.link}링크 보내기</button>
     <div id="inviteBox" hidden class="copy-box"><textarea class="input code-box" readonly aria-label="초대 글"></textarea></div></section>`;
 }
 function progressBlock(withRemind) {
@@ -1451,6 +1601,7 @@ async function createRoom() {
 async function sendAnswer() {
   const lines = cartLines();
   if (!lines.length || S.sending) return;
+  if (locked()) { toast(S.room.closed ? '방장이 주문을 마감했어요' : '마감 시간이 지났어요'); return; }
   S.req = (document.getElementById('req')?.value ?? S.req).trim().slice(0, 200);
   S.sending = true; rerender();
   try {
@@ -1459,8 +1610,10 @@ async function sendAnswer() {
       items: lines.map(l => ({m: l.item.id, n: l.n, name: l.item.name, price: l.item.price, s: l.item.store.id})),
     });
     S.sending = false; S.sentAt = Date.now(); persistRoom();
+    setSentNames(S.roomId, [...new Set([...sentNames(S.roomId), S.who])]);
     buzz([20, 40, 20]);
     go({tab: 'mine'});
+    confetti(document.querySelector('.so-ic'));
   } catch (e) {
     S.sending = false; rerender();
     toast(/permission/.test(String(e && e.code)) ? (S.room.closed ? '방장이 주문을 마감했어요.' : `「${S.who}」 이름으로 다른 기기에서 이미 보냈어요. 그 기기에서 고치거나 방장에게 말해 주세요.`) : friendly(e));
@@ -1488,7 +1641,7 @@ function confirmTwice(el, msg) {
   setTimeout(() => { if (el.isConnected) { delete el.dataset.armed; el.textContent = old; } }, 3000);
   return false;
 }
-function setWho(name) {
+function setWho(name, tab) {
   name = String(name || '').trim().replace(/\s+/g, ' ').slice(0, 20);
   if (!name) { toast('이름을 적어 주세요'); return; }
   const r = S.room;
@@ -1501,7 +1654,7 @@ function setWho(name) {
   }
   persistRoom();
   rememberRoom(S.roomId, {title: r.title});
-  go({tab: myAnswer() ? 'mine' : 'menu'});
+  go({tab: tab || (myAnswer() ? 'mine' : 'menu')});
 }
 function pickedFromCatalog() {
   const by = new Map(CATALOG.stores.map(s => [s.id, s]));
@@ -1515,11 +1668,17 @@ document.addEventListener('click', async e => {
   const act = el.dataset.act, id = el.dataset.id;
   switch (act) {
     case 'home': stopListening(); location.hash = ''; go({route: 'home'}); break;
-    case 'new': case 'new-camp':
-      S.draft = act === 'new-camp' ? campDraft() : S.draft || EMPTY_DRAFT();
+    case 'new':
+      S.draft = S.draft || EMPTY_DRAFT();
       if (location.hash === '#new') go({route: 'create'}); else location.hash = 'new';
       break;
     case 'retry': openRoom(S.roomId); break;
+    case 'home-tab': S.homeTab = el.dataset.t; rerender(); break;
+    case 'card-forget': save('mm-rooms', myRooms().filter(r => r.id !== id)); delete S.sums[id]; rerender(); break;
+    case 'card-share': {
+      const r = myRooms().find(x => x.id === id), sum = S.sums[id] || {};
+      shareOrCopy({title: sum.title || r?.title || '메뉴 모으기', deadline: sum.deadline || ''}, id, 'inviteBox'); break;
+    }
     case 'mode': S.draft.mode = el.dataset.m; rerender(); break;
     case 'names-camp': S.draft.names = (CAMP.families || []).join('\n'); rerender(); break;
     case 'draft-del': S.draft.stores = S.draft.stores.filter(s => s.id !== id); rerender(); break;
@@ -1537,7 +1696,8 @@ document.addEventListener('click', async e => {
       rerender(); toast(`${name} 메뉴 ${menu.length}개를 넣었어요`); break;
     }
     case 'catalog': {
-      try { el.disabled = true; await loadCatalog(); } catch { el.disabled = false; toast('맛집 목록을 못 불러왔어요. 인터넷 연결을 확인해 주세요'); return; }
+      const label = el.textContent;
+      try { el.disabled = true; el.textContent = '불러오는 중…'; await loadCatalog(); } catch { el.disabled = false; el.textContent = label; toast('맛집 목록을 못 불러왔어요. 인터넷 연결을 확인해 주세요'); return; }
       S.catFor = el.dataset.for;
       const have = (S.catFor === 'create' ? S.draft.stores : S.edit.stores).map(s => s.id);
       S.catPicked = new Set(have.filter(x => CATALOG.stores.some(s => s.id === x)));
@@ -1592,10 +1752,15 @@ document.addEventListener('click', async e => {
       persistRoom(); rerender(); break;
     }
     case 'send': sendAnswer(); break;
-    case 'edit-mine': go({tab: 'cart'}); break;
+    case 'edit-mine': {
+      const name = el.dataset.who;
+      if (name && name !== S.who) { S.who = ''; setWho(name, 'cart'); } else go({tab: 'cart'});
+      break;
+    }
     case 'answer-del': {
       if (!confirmTwice(el, '한 번 더 누르면 취소해요')) break;
-      try { await FB.deleteDoc(FB.doc(DB, 'dinnerRooms', S.roomId, 'answers', answerId(S.who))); toast('보낸 주문을 취소했어요'); } catch (err) { toast(friendly(err)); }
+      const name = el.dataset.who || S.who;
+      try { await FB.deleteDoc(FB.doc(DB, 'dinnerRooms', S.roomId, 'answers', answerId(name))); toast(`「${name}」 주문을 취소했어요`); } catch (err) { toast(friendly(err)); }
       break;
     }
     case 'answer-del-host': {
@@ -1606,7 +1771,7 @@ document.addEventListener('click', async e => {
     case 'sum-by': S.sumBy = el.dataset.by; rerender(); break;
     case 'by-person': S.byPerson = el.checked; break;
     case 'copy': copyOrShow(el.dataset.text, el.dataset.msg || '복사했어요', ''); break;
-    case 'copy-invite': copyOrShow(inviteText(), '🔗 복사했어요. 단톡방에 붙여넣어 보내 주세요', 'inviteBox'); break;
+    case 'copy-invite': shareOrCopy(S.room, S.roomId, 'inviteBox'); break;
     case 'copy-remind': copyOrShow(document.getElementById('remindText').value, '📣 재촉 글을 복사했어요', 'remindBox'); break;
     case 'copy-owner': copyOrShow(ownerMessage(totals()[Number(el.dataset.i)]), '📋 주문 메시지를 복사했어요', 'ownerBox' + el.dataset.i); break;
     case 'copy-host': {
@@ -1684,8 +1849,10 @@ function route() {
   if (id) {
     const key = (h.get('k') || '').replace(/[^a-z0-9]/gi, '').slice(0, 64);
     // 방장 열쇠는 주소창에서 바로 지워요(실수로 그대로 공유하지 않게). 이 기기에는 기억해요.
-    if (key) { rememberRoom(id, {key}); history.replaceState(null, '', `#r=${id}`); }
-    if (id !== S.roomId || S.route !== 'room') openRoom(id, key);
+    const want = ['sum', 'set', 'mine'].includes(h.get('t')) ? h.get('t') : '';
+    if (key || want) { if (key) rememberRoom(id, {key}); history.replaceState(null, '', `#r=${id}`); }
+    if (id !== S.roomId || S.route !== 'room') openRoom(id, key, want);
+    else if (want) go({tab: want});
     return;
   }
   stopListening(); S.roomId = '';
