@@ -347,6 +347,15 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .store .hrs{font-size:.74rem;font-weight:700;color:var(--mute)}
 .tagline{margin:8px 0 2px;font-size:.88rem;color:var(--sub);font-style:italic}
 .shop-facts{display:flex;flex-direction:column;gap:3px;margin:10px 0 2px;font-size:.84rem;color:var(--sub);font-weight:600}
+
+/* 맛집 구경: 주문 받는 가게보다 한 단계 옅게 */
+.sec-sub{margin:-4px 0 10px}
+.open-head h2{color:var(--mint-d)}
+.store.look{background:#fbfcfc;box-shadow:0 1px 2px rgba(16,35,42,.05)}
+.store.look .thumb{filter:saturate(.85)}
+.look-tag{position:absolute;left:16px;top:16px;z-index:2;background:rgba(22,35,42,.75);color:#fff;font-size:.68rem;font-weight:800;border-radius:7px;padding:2px 6px}
+.mpin.look span{width:30px;height:30px;font-size:.95rem;border-color:#b9c6ca;opacity:.8;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.mpin.cluster.look span{background:#9aaaaf;box-shadow:0 0 0 4px rgba(154,170,175,.25),0 2px 6px rgba(0,0,0,.2)}
 </style>
 </head>
 <body>
@@ -5714,6 +5723,8 @@ function homeStores() {
   const open = openStores(), ordering = open.length > 0;
   return {ordering, all: ordering ? open : CFG.stores, list: (ordering ? open : CFG.stores).filter(inRadius)};
 }
+// 고른 동네 안의 모든 가게(주문 받는 가게 + 구경 가게)
+const zoneStores = () => CFG.stores.filter(inRadius);
 function radiusSeg(light = false) {
   if (CFG.radius.length < 2) return '';
   const base = openStores().length ? openStores() : CFG.stores;
@@ -5724,12 +5735,12 @@ const minPrice = s => Math.min(...s.menu.map(m => m.price).filter(Boolean), Infi
 function storeChips(s) {
   return `<div class="chips">${howFar(s) ? `<span class="chip mint">${howFar(s)}</span>` : ''}<span class="chip">${esc(s.category)}</span>${s.area ? `<span class="chip">${esc(s.area)}</span>` : ''}${s.reviews ? `<span class="chip">리뷰 ${shortNum(s.reviews)}</span>` : ''}${s.delivery ? '<span class="chip deliv">🛵 배민</span>' : ''}${s.menu.some(m => !m.price) ? '<span class="chip warn">가격 확인 필요</span>' : ''}</div>`;
 }
-function storeCard(s, ordering) {
+function storeCard(s, ordering, look = false) {
   const n = s.menu.reduce((a, m) => a + (S.cart[m.id] || 0), 0);
   const best = s.menu.filter(m => (m.tags || []).includes('best'));
   const line = (best.length ? best : s.menu).slice(0, 2).map(m => m.name).join(' · ');
   const low = minPrice(s);
-  return `<button class="store" data-act="store" data-id="${esc(s.id)}">${thumb(s)}
+  return `<button class="store${look ? ' look' : ''}" data-act="store" data-id="${esc(s.id)}">${thumb(s)}${look ? '<span class="look-tag">👀 구경</span>' : ''}
     <div class="body"><b>${esc(s.name)}</b>${storeChips(s)}
       <div class="menu-line">${esc(line)}</div><div class="from">${low < Infinity ? `${won(low)}부터` : ''}${s.hours ? `<span class="hrs">${esc(s.hours.split(' (')[0].split(' ·')[0])}</span>` : ''}</div></div>
     ${ordering && n ? `<span class="badge">${n}개 담음</span>` : ''}</button>`;
@@ -5743,12 +5754,15 @@ function sortStores(list) {
 }
 function viewHome() {
   const {ordering, list} = homeStores();
-  const cats = [...new Set(list.map(s => s.category))];
+  const zone = zoneStores();
+  const cats = [...new Set(zone.map(s => s.category))];
   if (S.cat !== '전체' && !cats.includes(S.cat)) S.cat = '전체';
-  const stores = sortStores(list.filter(s => S.cat === '전체' || s.category === S.cat));
+  const inCat = s => S.cat === '전체' || s.category === S.cat;
+  const stores = ordering ? sortStores(list.filter(inCat)) : [];
+  const looks = sortStores(zone.filter(s => !isOpen(s)).filter(inCat));
   const pick = list.find(s => s.id === S.pick);
   const popular = list.flatMap(s => s.menu.filter(m => (m.tags || []).includes('best')).map(m => ({m, s}))).slice(0, 12);
-  const catIcon = c => CAT_EMOJI[c] || list.find(s => s.category === c)?.emoji || '🍴';
+  const catIcon = c => CAT_EMOJI[c] || zone.find(s => s.category === c)?.emoji || '🍴';
   return `<header class="top home-top"><button class="where" data-act="nav" data-v="map" aria-label="지도에서 보기"><small>${esc(S.who)} · 저녁 ${esc(CFG.mealTime)}</small><b>📍 ${esc(placeShort())} <span>▾</span></b></button>
     ${S.who ? `<button class="chip-who" data-act="who" aria-label="주문하는 사람 바꾸기 (지금 ${esc(S.who)})">${avatar(S.who)}</button>` : ''}</header>
   <section class="slot-card">
@@ -5759,13 +5773,18 @@ function viewHome() {
     <button class="ddal" data-act="ddal"${list.length ? '' : ' disabled'}><span>딸깍!</span><small>${list.length}곳 중에서 하나 골라 줄게요</small></button>
   </section>
   <div class="wrap">
-  ${ordering ? '' : `<div class="browse-note">🗺️ <span><b>지금은 구경만 할 수 있어요.</b> ${esc(CFG.manager)}께서 가게를 고르면 담을 수 있어요.</span></div>`}
+  ${ordering ? '' : `<div class="browse-note">🍽️ <span><b>지금은 맛집 구경 중이에요.</b> ${esc(CFG.manager)}께서 오늘 주문할 가게를 고르면 맨 위에 「오늘 주문 받는 가게」로 나와요.</span></div>`}
   ${S.last && ordering ? `<button class="sent-note" data-act="nav" data-v="done">${S.last.copied ? '✅ 주문서를 복사했어요. 카톡에 붙여넣었나요?' : '🧾 만든 주문서가 있어요. 눌러서 복사해 보내기'}<span>›</span></button>` : ''}
   <div class="cats" role="group" aria-label="종류">${['전체', ...cats].map(c => `<button class="cat${S.cat === c ? ' on' : ''}" data-act="cat" data-cat="${esc(c)}" aria-pressed="${S.cat === c}"><i>${c === '전체' ? '🍽️' : catIcon(c)}</i>${esc(c)}</button>`).join('')}</div>
   ${popular.length && S.cat === '전체' ? `<div class="sec-head"><h2>⭐ 인기 메뉴</h2></div><div class="rail">${popular.map(({m, s}) => `<button class="pop-card" data-act="item" data-id="${esc(m.id)}"><div class="pop-emo" style="--c:${esc(s.color)}">${esc(m.emoji || s.emoji)}${photo(m.img)}</div><b>${esc(m.name)}</b><span>${esc(shortName(s))}</span><em>${price(m.price)}</em></button>`).join('')}</div>` : ''}
-  <div class="sec-head"><h2>${ordering ? '오늘 주문 받는 가게' : '주변 맛집'} <small>${stores.length}</small></h2></div>
-  <div class="sorts" role="group" aria-label="정렬">${SORTS.map(([k, l]) => `<button class="${S.sort === k ? 'on' : ''}" data-act="sort" data-sort="${k}" aria-pressed="${S.sort === k}">${l}</button>`).join('')}</div>
-  <div class="stores">${stores.map(s => storeCard(s, ordering)).join('') || '<p class="muted">여기에는 가게가 없어요. 위에서 다른 동네를 골라 보세요.</p>'}</div>
+  <div class="sorts" role="group" aria-label="정렬" style="margin-top:18px">${SORTS.map(([k, l]) => `<button class="${S.sort === k ? 'on' : ''}" data-act="sort" data-sort="${k}" aria-pressed="${S.sort === k}">${l}</button>`).join('')}</div>
+  ${ordering ? `<div class="sec-head open-head"><h2>🛵 오늘 주문 받는 가게 <small>${stores.length}</small></h2></div>
+  <p class="muted sec-sub">여기서 메뉴를 담아 주문서를 만들어요.</p>
+  <div class="stores">${stores.map(s => storeCard(s, true)).join('') || '<p class="muted">이 동네·종류에는 주문 받는 가게가 없어요. 위에서 「전체」를 골라 보세요.</p>'}</div>` : ''}
+  ${looks.length ? `<div class="sec-head"><h2>🍽️ 주변 맛집 구경 <small>${looks.length}</small></h2></div>
+  <p class="muted sec-sub">메뉴·사진·가격을 둘러보는 곳이에요. ${ordering ? '오늘 주문은 위 가게에서 해요.' : '담기는 가게를 고른 뒤에 돼요.'}</p>
+  <div class="stores">${looks.map(s => storeCard(s, false, ordering)).join('')}</div>` : ''}
+  ${!stores.length && !looks.length ? '<p class="muted">여기에는 가게가 없어요. 위에서 다른 동네를 골라 보세요.</p>' : ''}
   <button class="footer-link" data-act="admin">🔐 담당자 화면</button></div>${ordering ? cartBar() : ''}${nav()}`;
 }
 // 릴 화면: 고르기 전에는 빈 접시, 고른 뒤에는 가게 그림·이름·걸리는 시간
@@ -5860,7 +5879,7 @@ function viewStore() {
     <div class="shop-facts">${s.hours ? `<div>🕒 ${esc(s.hours)}</div>` : '<div>🕒 토요일 영업시간은 전화로 확인해 주세요</div>'}${s.phone ? `<div>📞 ${esc(s.phone)}</div>` : ''}</div>
     <div class="acts"><button class="small-btn" data-act="show-on-map" data-id="${esc(s.id)}">🗺️ 지도</button>${s.phone ? `<button class="small-btn" data-act="copy-phone" data-id="${esc(s.id)}">📞 번호 복사</button>` : ''}${canOpenLinks && s.naver ? `<a class="small-btn" href="${esc(safeImg(s.naver))}" target="_blank" rel="noopener">네이버 ↗</a>` : ''}${mapLinks(s)}</div></div></section>
   <div class="wrap">
-  ${ordering ? '' : `<div class="notice mint">👀 오늘은 구경만 할 수 있는 가게예요.</div>`}
+  ${ordering ? '' : `<div class="notice mint">🍽️ <b>맛집 구경 중이에요.</b> ${openStores().length ? '오늘 주문은 홈 맨 위 「오늘 주문 받는 가게」에서 할 수 있어요.' : `${esc(CFG.manager)}께서 오늘 주문할 가게를 고르면 그 가게에서 담을 수 있어요.`}</div>`}
   ${filters.length > 1 ? `<div class="sorts" role="group" aria-label="메뉴 고르기">${filters.map(([k, l]) => `<button class="${S.mfilter === k ? 'on' : ''}" data-act="mfilter" data-f="${k}" aria-pressed="${S.mfilter === k}">${l}</button>`).join('')}</div>` : ''}
   <div class="menus">${menu.map(m => menuRow(m, s, ordering)).join('') || '<p class="muted">메뉴를 준비 중이에요.</p>'}</div>
   <div class="card shop-info"><b>ℹ️ 가게 정보</b>${s.address ? `<p class="muted">📍 ${esc(s.address)}</p>` : ''}${s.info ? `<p class="muted">${esc(s.info)}</p>` : ''}${s.posOk ? '' : '<p class="muted">🗺️ 지도의 핀은 동네 기준 <b>대략 위치</b>예요.</p>'}${s.source ? `<p class="muted">🔎 ${esc(s.source)}</p>` : ''}</div>
@@ -5883,7 +5902,7 @@ function openItem(id) {
       <div class="sheet-price">${price(it.price)}</div>
       ${ordering ? `<div class="sheet-qty"><span>수량</span><div class="qty big"><button data-act="sq" data-d="-1" aria-label="하나 빼기">−</button><b>${q}</b><button data-act="sq" data-d="1" aria-label="하나 더">+</button></div></div>
       <button class="btn block" data-act="sheet-add" data-id="${esc(id)}">${S.cart[id] ? `${q}개로 바꾸기` : `${q}개 담기`}${it.price ? ` · ${won(it.price * q)}` : ''}</button>`
-      : `<p class="notice mint">👀 오늘은 구경만 할 수 있는 가게예요.</p><button class="btn block" data-act="store" data-id="${esc(s.id)}">가게 보기</button>`}</div>`;
+      : `<p class="notice mint">🍽️ 맛집 구경 중이에요. 이 가게는 오늘 주문 받는 가게가 아니라 담을 수는 없어요.</p><button class="btn block" data-act="store" data-id="${esc(s.id)}">가게 둘러보기</button>`}</div>`;
   };
   bg.addEventListener('click', e => {
     if (e.target === bg) { closeSheet(); return; }
@@ -5982,7 +6001,7 @@ function pinPositions(stores) {
   return pos;
 }
 function viewMap() {
-  const {ordering, list} = homeStores();
+  const ordering = openStores().length > 0, list = zoneStores();
   return `${topBar('🗺️ 가게 지도')}
   <div class="mapwrap"><div id="map" class="map" role="region" aria-label="가게 지도"></div>
     <div class="map-top">${radiusSeg(true)}</div>
@@ -5994,13 +6013,15 @@ function viewMap() {
 function mapSheet(list, ordering) {
   const s = list.find(x => x.id === S.pick);
   if (!s) {
+    const n = list.filter(isOpen).length;
     return `<div class="row" style="align-items:center"><span style="font-size:1.6rem">👆</span><div style="flex:1"><b>핀을 누르면 가게가 보여요</b>
-      <div class="muted">${ordering ? '오늘 주문 받는 가게' : '주변 맛집'} ${list.length}곳 · 🎲 를 누르면 하나 골라 줘요</div></div></div>`;
+      <div class="muted">${ordering ? `진한 핀 = 오늘 주문 받는 가게 ${n}곳 · 흐린 핀 = 맛집 구경 ${list.length - n}곳` : `주변 맛집 ${list.length}곳`} · 🎲 딸깍</div></div></div>`;
   }
+  ordering = isOpen(s);
   const best = s.menu.filter(m => (m.tags || []).includes('best'));
   const line = (best.length ? best : s.menu).slice(0, 2).map(m => `${m.name} ${price(m.price)}`).join(' · ');
   return `<div class="row">${thumb(s, 'sm')}
-    <div style="flex:1;min-width:0"><div class="name">${esc(s.name)}</div>${storeChips(s)}<div class="muted" style="margin-top:4px">${esc(line)}</div>
+    <div style="flex:1;min-width:0"><div class="name">${esc(s.name)}</div>${ordering ? '<span class="chip mint">🛵 오늘 주문 받는 가게</span>' : openStores().length ? '<span class="chip">👀 맛집 구경</span>' : ''}${storeChips(s)}<div class="muted" style="margin-top:4px">${esc(line)}</div>
     ${s.posOk ? '' : '<div class="muted">📍 핀은 대략 위치예요</div>'}</div></div>
     <div class="row" style="margin-top:10px"><button class="btn gray" style="flex:1;padding:11px" data-act="sheet-close">닫기</button><button class="btn" style="flex:2;padding:11px" data-act="store" data-id="${esc(s.id)}">${ordering ? '메뉴 보고 담기' : '메뉴 구경하기'}</button></div>`;
 }
@@ -6014,7 +6035,7 @@ async function mountMap() {
   try { await loadLeaflet(); } catch { S.mapFailed = '지도 프로그램을 불러오지 못했어요'; mapFallback(S.mapFailed); return; }
   if (!el.isConnected || S.view !== 'map') return;
   unmountMap();
-  const L = window.L, {all, list} = homeStores(), focus = S.mapFocus;
+  const L = window.L, all = CFG.stores, list = zoneStores(), focus = S.mapFocus, ordering = openStores().length > 0;
   S.mapFocus = false;
   const camp = CFG.campPos.lat ? [CFG.campPos.lat, CFG.campPos.lng] : [36.5684, 128.7294];
   MAP = L.map(el, {zoomControl: false, attributionControl: true}).setView(camp, 11);
@@ -6023,14 +6044,30 @@ async function mountMap() {
   L.marker(camp, {icon: L.divIcon({className: 'mpin camp' + (CFG.campPos.ok ? '' : ' rough'), html: '<span>🏕</span>', iconSize: [46, 46], iconAnchor: [23, 23]}), keyboard: false, zIndexOffset: 500})
     .addTo(MAP).bindTooltip('수련원' + (CFG.campPos.ok ? '' : ' (대략 위치)'), {direction: 'top', offset: [0, -20]});
   const pos = pinPositions(all), bounds = [camp];
-  PINDATA = all.filter(s => pos.get(s.id)).map(s => ({s, at: L.latLng(pos.get(s.id)), on: list.includes(s)}));
-  for (const d of PINDATA) if (d.on) bounds.push(d.at);
+  PINDATA = all.filter(s => pos.get(s.id)).map(s => ({s, at: L.latLng(pos.get(s.id)), on: list.includes(s), look: ordering && !isOpen(s)}));
+  // 처음 보기는 주문 받는 가게가 다 들어가게(없으면 동네 가게 전부)
+  for (const d of PINDATA) if (d.on && (!ordering || !d.look)) bounds.push(d.at);
   PINLAYER = L.layerGroup().addTo(MAP);
   const sel = PINDATA.find(d => d.s.id === S.pick && d.on);
-  if (focus && sel) MAP.setView(sel.at, 15, {animate: false});
-  else if (bounds.length > 1) MAP.fitBounds(bounds, {paddingTopLeft: [60, 80], paddingBottomRight: [50, 40], maxZoom: 14, animate: false});
+  const fit = () => {
+    if (!MAP) return;
+    if (focus && sel) MAP.setView(sel.at, 15, {animate: false});
+    else if (bounds.length > 1) {
+      // 위쪽 버튼(동네 고르기·🏕·🎲)에 핀이 가리지 않게, 지도 높이에 맞춰 여백을 줘요.
+      const h = el.clientHeight || 400, w = el.clientWidth || 360;
+      MAP.fitBounds(bounds, {paddingTopLeft: [Math.min(70, w * .2), Math.max(80, Math.min(150, h * .4))], paddingBottomRight: [Math.min(60, w * .15), Math.min(50, h * .12)], maxZoom: 14, animate: false});
+    }
+  };
+  fit();
   drawPins();
   MAP.on('zoomend', drawPins);
+  // 화면(갤러리·휴대폰)이 자리를 잡느라 지도 크기가 바뀌면 다시 재고, 처음 2초 동안은 핀이 다 보이게 다시 맞춰요.
+  const born = Date.now(), map = MAP;
+  let moved = false;
+  MAP.on('dragstart', () => { moved = true; });
+  try {
+    new ResizeObserver(() => { if (MAP !== map) return; map.invalidateSize({pan: false}); if (!moved && Date.now() - born < 2000) { fit(); drawPins(); } }).observe(el);
+  } catch {}
 }
 // 가까이 붙은 핀은 숫자 묶음(🍽 3)으로 보여 주고, 누르면 그 자리로 확대해요.
 function drawPins() {
@@ -6044,17 +6081,18 @@ function drawPins() {
       continue;
     }
     const pt = MAP.latLngToContainerPoint(d.at);
-    const g = d.s.id === S.pick ? null : groups.find(x => !x.sel && x.pt.distanceTo(pt) < 40);
-    if (g) g.items.push(d); else groups.push({pt, items: [d], sel: d.s.id === S.pick});
+    // 주문 받는 가게는 구경 가게와 섞어 묶지 않아요(묶음 속에 숨지 않게).
+    const g = d.s.id === S.pick ? null : groups.find(x => !x.sel && x.look === d.look && x.pt.distanceTo(pt) < 40);
+    if (g) g.items.push(d); else groups.push({pt, items: [d], sel: d.s.id === S.pick, look: d.look});
   }
   for (const g of groups) {
     if (g.items.length === 1) {
-      const {s, at} = g.items[0], on = s.id === S.pick;
-      const m = L.marker(at, {icon: pinIcon(s, on ? ' sel' : ''), title: s.name, zIndexOffset: on ? 1000 : 0});
+      const {s, at, look} = g.items[0], on = s.id === S.pick;
+      const m = L.marker(at, {icon: pinIcon(s, (on ? ' sel' : '') + (look ? ' look' : '')), title: s.name, zIndexOffset: on ? 1000 : look ? -100 : 0});
       m.on('click', () => selectPin(s.id, false));
       PINLAYER.addLayer(m); PINS.set(s.id, m);
     } else {
-      const m = L.marker(g.items[0].at, {icon: L.divIcon({className: 'mpin cluster', html: `<span><b>${g.items.length}</b></span>`, iconSize: [46, 46], iconAnchor: [23, 23]}), title: g.items.map(d => d.s.name).join(', '), zIndexOffset: 200});
+      const m = L.marker(g.items[0].at, {icon: L.divIcon({className: 'mpin cluster' + (g.items.every(d => d.look) ? ' look' : ''), html: `<span><b>${g.items.length}</b></span>`, iconSize: [46, 46], iconAnchor: [23, 23]}), title: g.items.map(d => d.s.name).join(', '), zIndexOffset: 200});
       m.on('click', () => MAP.fitBounds(g.items.map(d => d.at), {padding: [70, 70], maxZoom: 17}));
       PINLAYER.addLayer(m);
     }
@@ -6072,7 +6110,7 @@ function addTiles(i) {
   layer.on('tileerror', () => { if (++bad === 4 && !ok) setTimeout(() => { if (MAP !== map) return; map.removeLayer(layer); addTiles(i + 1); }, 0); });
 }
 function selectPin(id, fly) {
-  const {ordering, list} = homeStores();
+  const ordering = openStores().length > 0, list = zoneStores();
   S.pick = id;
   const sheet = document.getElementById('mapSheet');
   if (sheet) sheet.innerHTML = mapSheet(list, ordering);
@@ -6084,7 +6122,7 @@ function selectPin(id, fly) {
 function mapFallback(reason) {
   const wrap = document.querySelector('.mapwrap');
   if (!wrap) return;
-  const {all, list} = homeStores();
+  const all = CFG.stores, list = zoneStores();
   const box = document.getElementById('map');
   if (box) box.outerHTML = `<div class="map-fallback"><div class="notice">🗺️ ${esc(reason)}. 대신 <b>약도</b>로 보여 드려요(방향·거리는 대략).</div>${sketchMap(all, list)}</div>`;
 }
