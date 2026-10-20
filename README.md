@@ -5,6 +5,6 @@
 
 - 주소: https://hichoni.github.io/dinner-order/
 - `index.html`, `firebase.js` — 원본은 `hichoni/app-gallery` 의 `apps/dinner-order/room/` (`python3 apps/dinner-order/room/build.py` → `room/dist/`).
-  설명·데이터 구조·Firebase 규칙은 거기 `room/README.md`.
+  설명·데이터 구조·Firebase 규칙은 거기 `room/README.md`, 이어서 작업하려면 `apps/dinner-order/HANDOVER.md` 부터.
 - `classic.html` — 예전 판(파일 하나, 주문 코드를 카톡으로 모으기). 예전 `#s=` 링크는 자동으로 이리로 와요.
 - `firebase.js` 는 Firebase JS SDK(Apache-2.0) 묶음이에요. 라이선스: `firebase-LICENSE.txt`.
