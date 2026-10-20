@@ -454,6 +454,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 .mpin.look span{width:30px;height:30px;font-size:.95rem;border-color:#c4cdd0;opacity:.85;box-shadow:0 1px 4px rgba(0,0,0,.16)}
 .mpin.cluster.look span{background:#a3adb1;box-shadow:0 0 0 4px rgba(163,173,177,.25),0 2px 6px rgba(0,0,0,.2)}
+.img-note{display:none;position:absolute;left:6px;bottom:6px;z-index:2;font-size:.6rem;font-weight:700;color:#fff;background:rgba(16,40,38,.55);border-radius:6px;padding:2px 5px;pointer-events:none}
+.ph.on+.img-note{display:block}
+.sheet-emo .img-note{left:12px;bottom:12px;font-size:.72rem;padding:3px 8px}
 /* 메뉴 모으기(방) — style.css 위에 덧붙여요.
    클레이·글라스: 옅은 청록 바탕 + 뒤에 흐린 색 구름, 반투명 흰 카드(유리)에 부드러운 그림자, 손으로 빚은 듯 볼록한 버튼.
    색은 배민 느낌의 청록 하나에, 꾸밈으로만 살구·라벤더를 아주 옅게 써요. 글꼴은 프리텐다드. */
@@ -723,6 +726,10 @@ label.prow{display:block;cursor:pointer}
 @media (prefers-reduced-transparency:reduce){.mm .stores,.mm .menus,.mm .card,.mm .f-sec,.mm .a-sec,.mm .room-head,.mm .nav,.bottom-bar{background:#fff}}
 .mm .summary .total{border:0;padding-top:0;margin-top:0}
 .mm .summary p{margin:6px 0 0}
+.img-note{position:absolute;left:6px;bottom:6px;z-index:2;font-size:.6rem;font-weight:700;color:#fff;background:rgba(16,40,38,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:6px;padding:2px 5px;pointer-events:none;letter-spacing:0}
+.sheet-emo .img-note{left:12px;bottom:12px;font-size:.72rem;padding:3px 8px}
+.img-note{display:none}
+.ph.on+.img-note{display:block}
 </style>
 </head>
 <body>
@@ -774,6 +781,7 @@ function tidyStore(s, i = 0) {
     menu: (Array.isArray(s.menu) ? s.menu : []).slice(0, 60).filter(m => m && m.id).map(m => ({
       id: str(m.id, 40), name: str(m.name, 40, '메뉴'), emoji: str(m.emoji, 8), price: num(m.price), desc: str(m.desc, 120),
       tags: Array.isArray(m.tags) ? m.tags.filter(t => ['best', 'kid', 'hot'].includes(t)) : [], img: safeImg(str(m.img, 400)),
+      imgFrom: ['review', 'ref'].includes(m.imgFrom) ? m.imgFrom : '',
     })),
   };
 }
@@ -956,6 +964,9 @@ const minPrice = s => Math.min(...s.menu.map(m => m.price).filter(Boolean), Infi
 const storeMeta = s => [s.category, s.reviews ? `리뷰 ${s.reviews.toLocaleString('ko-KR')}` : '', s.minutes ? `차로 ${s.minutes}분` : '', s.area].filter(Boolean).map(esc).join('<i>·</i>');
 const TAG_LABEL = {best: ['', '인기'], kid: ['kid', '아이 추천'], hot: ['hot', '매움']};
 const tags = m => (m.tags || []).map(t => (TAG_LABEL[t] ? `<span class="tag ${TAG_LABEL[t][0]}">${TAG_LABEL[t][1]}</span>` : '')).join('');
+// 사진 출처 표시: 손님 리뷰 사진 / 다른 가게의 비슷한 메뉴 사진
+const IMG_NOTE = {review: '손님 사진', ref: '비슷한 메뉴 사진'};
+const imgNote = m => (m.img && IMG_NOTE[m.imgFrom] ? `<span class="img-note">${IMG_NOTE[m.imgFrom]}</span>` : '');
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 function buzz(p) { try { navigator.vibrate?.(p); } catch {} }
 
@@ -1185,7 +1196,7 @@ function menuRow(m, s) {
   return `<div class="menu${n ? ' in' : ''}${pic || m.emoji ? '' : ' plain'}"><button class="menu-main" data-act="item" data-id="${esc(m.id)}">
       <span class="info"><span class="tags">${tags(m)}</span><span class="name">${esc(m.name)}</span>${m.desc ? `<span class="desc">${esc(m.desc)}</span>` : ''}
       <span class="price${m.price ? '' : ' unknown'}">${price(m.price)}</span></span>
-      ${pic || m.emoji ? `<span class="m-emo" style="--c:${esc(s.color)}">${esc(m.emoji || s.emoji)}${photo(pic)}</span>` : ''}</button>
+      ${pic || m.emoji ? `<span class="m-emo" style="--c:${esc(s.color)}">${esc(m.emoji || s.emoji)}${photo(pic)}${imgNote(m)}</span>` : ''}</button>
     <div class="m-ctl">${qtyCtl(m.id, m.name)}</div></div>`;
 }
 const MENU_FILTERS = [['all', '전체'], ['best', '인기'], ['kid', '아이 추천'], ['hot', '매운 것']];
@@ -1384,7 +1395,7 @@ function openItem(id) {
   const pic = it.img || it.emoji;
   const draw = () => {
     bg.innerHTML = `<div class="sheet" role="dialog" aria-label="${esc(it.name)}"><button class="sheet-x" data-act="item-close" aria-label="닫기">✕</button>
-      ${pic ? `<div class="sheet-emo" style="--c:${esc(s.color)}">${esc(it.emoji || s.emoji)}${photo(it.img)}</div>` : '<div class="sheet-gap"></div>'}
+      ${pic ? `<div class="sheet-emo" style="--c:${esc(s.color)}">${esc(it.emoji || s.emoji)}${photo(it.img)}${imgNote(it)}</div>` : '<div class="sheet-gap"></div>'}
       <div class="sheet-body"><div class="tags">${tags(it)}</div><h2>${esc(it.name)}</h2>${it.desc ? `<p class="muted">${esc(it.desc)}</p>` : ''}
       <div class="sheet-store">${esc(s.name)}</div>
       <div class="sheet-price">${price(it.price)}</div>
