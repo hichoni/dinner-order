@@ -1,11 +1,15 @@
 {
-  "version": "2026-10-22-food-roulette-sound",
+  "version": "2026-10-22-independent-audio",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "b3d079f600c2d951cdfebf09b6e55cd82e8dc99b",
+  "applicationCommit": "289ff1581143f1f6cdf2974cae5f6d5afef684ab",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
-  "audio": "original-synth-loop-and-sfx"
+  "audio": "independent-bgm-sfx-switches-and-volume",
+  "audioDefaults": {
+    "music": 25,
+    "effects": 70
+  }
 }
