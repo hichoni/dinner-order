@@ -1044,6 +1044,16 @@ body::after{display:none}body::before{background:#e8f7f3}
 }
 @media(min-width:1180px){.host-layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;align-items:start}.host-created{grid-column:1/-1}.mm .host-created{margin:0}.host-overview{position:sticky;top:112px}.mm .host-results .seg{margin-top:0}.mm .host-overview .a-sec{padding:16px}.mm .host-overview .prog{gap:10px}}
 @media(max-width:374px){.home-brand,.land,.home-content{padding-left:18px;padding-right:18px}.mm .land h1{font-size:32px}.mm .land p{font-size:15px}.mm .menu .name{font-size:15px}.mm .menu .desc{-webkit-line-clamp:1}.mm .menu.plain .menu-main{padding-right:108px}.mm .qty b{min-width:20px}.mm .nav-i span{font-size:11px}.brand-footer{font-size:11px;gap:8px;padding:24px 18px}.mm .chip-who{max-width:34%;font-size:12px}}
+/* Keep the mint glass shell; use a calm, readable surface for each chosen menu. */
+.mm .menu-item-box{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin:10px 0;padding:16px;background:linear-gradient(135deg,#f3fcf8,#e8f7f1);border:1px solid #c4dfd5;border-radius:15px;box-shadow:inset 0 1px 0 #fff;break-inside:avoid}
+.menu-item-main{flex:1;min-width:0}.mm .menu-item-name{display:block;color:#153d38;font-size:18px;line-height:1.5;font-weight:750;overflow-wrap:anywhere;word-break:keep-all}
+.mm .menu-item-store{display:block;margin-top:5px;color:#4c6863;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.menu-item-side{display:flex;flex:0 0 auto;flex-direction:column;align-items:flex-end;gap:6px;font-variant-numeric:tabular-nums}.mm .menu-item-count{display:inline-flex;align-items:center;justify-content:center;min-width:42px;min-height:28px;padding:2px 8px;border:1px solid #c3ddd3;border-radius:8px;background:#fff;color:#24594d;font-size:14px;font-weight:700}.mm .menu-item-price{font-size:15px;color:#153d38;white-space:nowrap}
+.mm .answer-store-group{margin:16px 0}.mm .answer-store-group>.menu-item-box:first-child{margin-top:0}.mm .menu-box-request{padding:12px 16px;margin-top:-2px;border-left:3px solid #83b9a5;background:#f6faf8;border-radius:0 10px 10px 0;color:#4c6863;font-size:13px;line-height:1.6;overflow-wrap:anywhere;break-inside:avoid}.mm .menu-box-request b{font-size:13px;font-weight:650}.mm .menu-box-request p{margin:4px 0 0;white-space:pre-wrap}
+.mm .sum-head{gap:10px}.mm .sum-head>div{flex:1;min-width:0}.mm .sum-head b{overflow-wrap:anywhere}.mm .sum-head>.sum-won{flex:0 0 auto;font-size:15px}.mm .cart-store .cs-head{margin-bottom:14px}.mm .cart-store .cs-head b{font-size:14px}.mm .name-in .btn{white-space:nowrap;flex-shrink:0}
+@media(max-width:420px){.mm .menu-item-box{padding:13px 12px;gap:10px}.mm .menu-item-name{font-size:17px}.mm .menu-item-store{font-size:13px}.mm .menu-item-price{font-size:14px}.mm .cart-store,.mm .ticket,.mm .sum-card{padding:16px}.mm .who-content .name-in{flex-wrap:wrap}.mm .who-content .name-in .input{flex:1 1 100%}.mm .who-content .name-in .btn{width:100%}}
+@media(max-width:350px){.mm .cart-store .menu-item-box{flex-wrap:wrap}.mm .cart-store .menu-item-main{flex-basis:100%}.mm .cart-store .menu-item-side{width:100%;flex-direction:row;align-items:center;justify-content:space-between}.mm .menu-item-name{font-size:16px}}
+@media print{.mm .menu-item-box{background:#fff!important;border-color:#9ab9ae;box-shadow:none}.mm .menu-box-request{background:#fff!important}.mm .answer-store-group{break-inside:avoid}}
 /* 유리 효과를 지원하지 않거나 대비를 높이면 읽기 쉬운 단색 면으로 전환. */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.mm .top,.mm .nav,.mm .bottom-bar,.mm .shop-compact,.home-preview{background:#f4fcf8}}
 @media(prefers-reduced-transparency:reduce){.mm .top,.mm .nav,.mm .bottom-bar,.mm .shop-compact,.home-preview{background:#f4fcf8;backdrop-filter:none;-webkit-backdrop-filter:none}}
@@ -1057,10 +1067,10 @@ body::after{display:none}body::before{background:#e8f7f3}
 <div id="toast" role="status" aria-live="polite"></div>
 <script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"수련원 주변 맛집"},"count":226}</script>
 <script type="module">
-// 메뉴 모으기 — 배달앱이 아니라 「총무의 메뉴 수합」 도구예요. 총무(방장)가 방을 만들고 링크를 보내면,
-// 링크를 연 사람이 이름을 밝히고 총무가 정한 가게 안에서 먹고 싶은 메뉴를 골라 보내요(내가 쏜다면 예산 안에서).
-// 총무는 고른 메뉴를 바로(실시간) 보고, 가게별로 정리된 주문 메시지를 복사해 가게에 한 번에 주문해요.
-// 장바구니는 보내기 전 초안, 제출 내역은 서버에 저장된 선택이에요. 회원가입 없이 익명 로그인해요.
+// 메뉴 모으기 — 배달앱이 아니라 「방 관리자의 메뉴 수합」 도구예요. 방 관리자(방장)가 방을 만들고 링크를 보내면,
+// 링크를 연 사람이 이름을 밝히고 방 관리자가 정한 가게 안에서 먹고 싶은 메뉴를 골라 보내요(내가 쏜다면 예산 안에서).
+// 방 관리자는 고른 메뉴를 바로(실시간) 보고, 가게별로 정리된 주문 메시지를 복사해 가게에 한 번에 주문해요.
+// 장바구니는 보내기 전 초안, 보낸 메뉴는 서버에 저장된 선택이에요. 회원가입 없이 익명 로그인해요.
 // 저장은 갤러리 Firebase(익명 로그인 + Firestore). 규칙은 room/rooms.rules 에 있어요.
 // 주소: #r=<방 id>  (방장 열쇠까지: #r=<방 id>&k=<열쇠>)   #new = 방 만들기
 
@@ -1083,6 +1093,13 @@ const $app = document.getElementById('app');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const won = n => Number(n || 0).toLocaleString('ko-KR') + '원';
 const price = n => (n ? won(n) : '가격 확인');
+function treatHeadline(by) {
+  const name = String(by || '').trim();
+  if (!name) return '오늘은 한턱!';
+  const last = name.charCodeAt(name.length - 1);
+  if (last >= 0xac00 && last <= 0xd7a3) return `${name}${(last - 0xac00) % 28 ? '이' : '가'} 쏜다!`;
+  return `${name}의 한턱!`;
+}
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 const clone = v => JSON.parse(JSON.stringify(v));
@@ -1115,8 +1132,8 @@ function tidyRoom(d) {
     title: str(d.title, 40, '메뉴 모으기'), note: str(d.note, 300), deadline: str(d.deadline, 20),
     names: (Array.isArray(d.names) ? d.names : []).map(n => str(n, 20)).filter(Boolean).slice(0, 120),
     freeJoin: d.freeJoin !== false, closed: d.closed === true, owner: str(d.owner, 128),
-    // 🎁 내가 쏜다: 쏘는 사람과 1인 예산(원). 없으면 null
-    treat: d.treat && num(d.treat.cap) > 0 ? {by: str(d.treat.by, 20, '총무') || '총무', cap: num(d.treat.cap)} : null,
+    // 🎁 내가 쏜다: 쏘는 사람과 1인당 예산(원). 없으면 null
+    treat: d.treat && num(d.treat.cap) > 0 ? {by: str(d.treat.by, 20).trim(), cap: num(d.treat.cap)} : null,
     stores: (Array.isArray(d.stores) ? d.stores : []).slice(0, 20).map(tidyStore),
   };
 }
@@ -1185,7 +1202,7 @@ function boot() {
 }
 function friendly(e) {
   const c = String(e && (e.code || e.message) || e);
-  if (/permission/.test(c)) return '권한이 없어요. (수합이 마감됐거나, 다른 기기에서 같은 이름으로 보낸 선택이에요)';
+  if (/permission/.test(c)) return '권한이 없어요. (메뉴 모으기가 마감됐거나, 다른 기기에서 같은 이름으로 보낸 선택이에요)';
   if (/unavailable|network|offline/i.test(c)) return '인터넷 연결을 확인해 주세요.';
   if (/operation-not-allowed|admin-restricted/.test(c)) return 'Firebase 익명 로그인이 꺼져 있어요.';
   return '잠깐 문제가 생겼어요. 다시 해 주세요.';
@@ -1217,12 +1234,14 @@ async function openRoom(id, key, want = '') {
       if (!snap.exists()) { S.room = null; S.loading = false; S.error = 'gone'; render(); return; }
       S.room = tidyRoom(snap.data()); S.loading = false;
       rememberRoom(id, S.host ? {title: S.room.title, host: true} : {title: S.room.title});
-      if (first && want && (want === 'mine' || S.host)) S.tab = want;
+      if (first && want && (!['sum', 'set'].includes(want) || S.host)) Object.assign(S, restoredRoomView(id), {tab: want});
       else if (first && S.host && !S.who) S.tab = 'sum';
       if (first && S.created) setTimeout(() => confetti(document.querySelector('.share-card .sc-ic')), 250);
+      const initialView = first;
       first = false;
       reindex(); keepView();
-    }, e => { S.loading = false; S.error = /permission/.test(String(e && e.code)) ? '방 기능이 아직 켜지지 않았어요(Firebase 규칙 게시 전이에요). 총무에게 알려 주세요.' : friendly(e); render(); }));
+      if (initialView) rememberView();
+    }, e => { S.loading = false; S.error = /permission/.test(String(e && e.code)) ? '방 기능이 아직 켜지지 않았어요(Firebase 규칙 게시 전이에요). 방을 관리하는 사람에게 알려 주세요.' : friendly(e); render(); }));
     let firstAnswers = true;
     unsub.push(FB.onSnapshot(FB.collection(DB, 'dinnerRooms', id, 'answers'), snap => {
       if (S.roomId !== id) return;
@@ -1258,7 +1277,7 @@ const cartCount = () => cartLines().reduce((a, l) => a + l.n, 0);
 const cartSum = () => cartLines().reduce((a, l) => a + l.n * l.item.price, 0);
 function setQty(id, n) { n = Math.max(0, Math.min(30, n)); if (n) S.cart[id] = n; else delete S.cart[id]; persistRoom(); }
 const myAnswer = () => (S.who ? S.answers.get(answerId(S.who)) : null);
-// 🎁 예산: 담으려는 것까지 합쳐 1인 예산을 넘는지(가격 모르는 메뉴는 0원으로 쳐요)
+// 🎁 예산: 담으려는 것까지 합쳐 1인당 예산을 넘는지(가격 모르는 메뉴는 0원으로 쳐요)
 const budget = () => S.room?.treat?.cap || 0;
 const budgetLeft = () => budget() - cartSum();
 function fitsBudget(id, qty) {
@@ -1285,8 +1304,8 @@ function captureRequests() {
 }
 function selectionStatus() {
   const a = myAnswer(), same = cartIsSent();
-  const text = !a ? '아직 제출하지 않았어요' : same ? '총무에게 보냈어요' : '변경사항을 아직 보내지 않았어요';
-  return `<div id="selectionStatus" class="selection-status ${same ? 'sent' : 'draft'}" role="status"><b>${text}</b>${a && !same ? '<span>다시 보내기 전까지 기존 제출 내역은 유지돼요.</span>' : ''}</div>`;
+  const text = !a ? '아직 보내지 않았어요' : same ? '메뉴를 보냈어요' : '변경사항을 아직 보내지 않았어요';
+  return `<div id="selectionStatus" class="selection-status ${same ? 'sent' : 'draft'}" role="status"><b>${text}</b>${a && !same ? '<span>다시 보내기 전까지 보낸 메뉴는 유지돼요.</span>' : ''}</div>`;
 }
 
 // ---------- 시간 ----------
@@ -1333,7 +1352,7 @@ document.addEventListener('error', e => { const t = e.target; if (t && t.tagName
 document.addEventListener('load', e => { const t = e.target; if (t && t.tagName === 'IMG' && t.hasAttribute('data-fb')) t.classList.add('on'); }, true);
 const minPrice = s => Math.min(...s.menu.map(m => m.price).filter(Boolean), Infinity);
 const storeMeta = s => [s.category, s.reviews ? `리뷰 ${s.reviews.toLocaleString('ko-KR')}` : '', s.minutes ? `차로 ${s.minutes}분` : '', s.area].filter(Boolean).map(esc).join('<i>·</i>');
-const TAG_LABEL = {best: ['', '인기'], kid: ['kid', '아이 추천'], hot: ['hot', '매움']};
+const TAG_LABEL = {best: ['', '인기'], hot: ['hot', '매움']};
 const tags = m => (m.tags || []).map(t => (TAG_LABEL[t] ? `<span class="tag ${TAG_LABEL[t][0]}">${TAG_LABEL[t][1]}</span>` : '')).join('');
 // 사진 출처 표시: 손님 리뷰 사진 / 다른 가게의 비슷한 메뉴 사진
 const IMG_NOTE = {review: '손님 사진', ref: '비슷한 메뉴 사진'};
@@ -1380,7 +1399,7 @@ const roomLink = (id = S.roomId) => `${pageBase()}${EMU ? '?emu' : ''}#r=${id}`;
 function inviteText(r = S.room, id = S.roomId) {
   const dl = deadlineInfo(r.deadline);
   const t = r.treat;
-  return [`🍽 ${r.title}`, t ? `🎁 ${t.by} 쏜다! 1인 ${won(t.cap)}까지` : '', '링크를 열고 이름을 고른 뒤 먹고 싶은 메뉴를 골라 「보내기」만 누르면 돼요!', dl ? `⏰ ${dl.at}까지` : '', roomLink(id)].filter(Boolean).join('\n');
+  return [`🍽 ${r.title}`, t ? `🎁 ${treatHeadline(t.by)} 1인당 ${won(t.cap)}까지` : '', '링크를 열고 이름을 고른 뒤 먹고 싶은 메뉴를 골라 「보내기」만 누르면 돼요!', dl ? `⏰ ${dl.at}까지` : '', roomLink(id)].filter(Boolean).join('\n');
 }
 // 휴대폰에서는 공유 창(카톡 바로 고르기)을, 안 되면 복사를 써요.
 async function shareOrCopy(r, id, boxId) {
@@ -1403,7 +1422,24 @@ function render(enter = false) {
   document.title = S.route === 'room' && S.room ? `${S.room.title} · 메뉴 모으기` : '메뉴 모으기';
 }
 function rerender() { const y = scrollY; render(); scrollTo(0, y); }
-function go(extra) { Object.assign(S, extra); document.getElementById('toast')?.classList.remove('show'); render(true); scrollTo(0, 0); }
+const ROOM_TABS = ['who', 'menu', 'store', 'cart', 'review', 'mine', 'sum', 'all', 'set'];
+function restoredRoomView(id) {
+  const v = history.state?.dinnerView;
+  return v?.id === id ? {store: str(v.store, 40) || null, menuQuery: str(v.menuQuery, 100), mfilter: ['all', 'best', 'hot'].includes(v.mfilter) ? v.mfilter : 'all'} : {};
+}
+function rememberView(method = 'replaceState') {
+  if (S.route !== 'room' || !S.room || !S.roomId || !ROOM_TABS.includes(S.tab)) return;
+  // Navigation metadata only: never put a management key, cart or requests in history.
+  const dinnerView = {id: S.roomId, tab: S.tab, store: S.store, menuQuery: S.menuQuery, mfilter: S.mfilter};
+  history[method]({dinnerView}, '', `#r=${encodeURIComponent(S.roomId)}&t=${S.tab}`);
+}
+function go(extra, recordHistory = true) {
+  const before = `${S.route}/${S.tab}/${S.store}`;
+  if (recordHistory && new URLSearchParams(location.hash.slice(1)).get('r') === S.roomId) rememberView();
+  Object.assign(S, extra);
+  document.getElementById('toast')?.classList.remove('show'); render(true); scrollTo(0, 0);
+  rememberView(recordHistory && before !== `${S.route}/${S.tab}/${S.store}` ? 'pushState' : 'replaceState');
+}
 const brand = () => `<img src="brand-mark.svg" width="36" height="36" alt=""><b>메뉴 모으기</b>`;
 const topBar = (title, back, right = '') => `<header class="top">${back ? `<button class="back" data-act="${back}" aria-label="뒤로">${ICON.back}</button>` : ''}<div class="top-title${title ? '' : ' top-brand'}">${title ? `<span class="top-eyebrow">메뉴 모으기</span><h1>${title}</h1>` : brand()}</div>${right}</header>`;
 
@@ -1417,7 +1453,7 @@ function viewHome() {
   <section class="land">
     <div class="land-copy"><span class="land-kicker">회원가입 없이 · 링크 하나로</span>
     <h1>함께 먹을 메뉴,<br><em>한곳에 모아요.</em></h1>
-    <p>점심부터 커피 한 잔까지.<br>각자 고른 메뉴는 한곳에, 총무의 준비는 가볍게.</p>
+    <p>점심부터 커피 한 잔까지.<br>각자 고른 메뉴는 한곳에, 메뉴 모으는 수고는 가볍게.</p>
     <button class="btn land-go" data-act="new">${ICON.plus}방 만들기 <span aria-hidden="true">→</span></button>
     <span class="land-hint">초대받았나요? 받은 링크를 열면 바로 참여할 수 있어요.</span></div>
     <div class="home-preview" aria-label="메뉴가 모이는 화면 예시">
@@ -1431,14 +1467,14 @@ function viewHome() {
   </section>
   <div class="wrap home-content">
     ${rooms.length ? `<section class="my-rooms">
-      <div class="seg wide" role="tablist"><button class="${tab === 'made' ? 'on' : ''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab === 'made'}">내가 만든 방 <small>${made.length}</small></button><button class="${tab === 'joined' ? 'on' : ''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab === 'joined'}">참여한 방 <small>${joined.length}</small></button></div>
+      <div class="seg wide" role="tablist"><button class="${tab === 'made' ? 'on' : ''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab === 'made'}">관리하는 방 <small>${made.length}</small></button><button class="${tab === 'joined' ? 'on' : ''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab === 'joined'}">참여한 방 <small>${joined.length}</small></button></div>
       <div class="room-cards">${list.map(roomCard).join('') || `<p class="muted empty-line">${tab === 'made' ? '아직 만든 방이 없어요. 위에서 「방 만들기」를 눌러 보세요.' : '링크로 들어간 방이 여기에 모여요.'}</p>`}</div>
     </section>` : ''}
     <div class="how-heading"><span class="eyebrow">준비는 가볍게</span><h2 class="sec-title">세 번이면, 메뉴 모으기 끝.</h2></div>
     <ol class="how">
       <li><i>01</i><div><b>방 만들고 링크 보내기</b><span>가게와 메뉴를 넣고 함께 먹을 사람을 초대해요.</span></div></li>
       <li><i>02</i><div><b>이름 적고 메뉴 고르기</b><span>가입 없이 이름만. 요청사항을 확인하고 보내요.</span></div></li>
-      <li><i>03</i><div><b>모인 메뉴 한눈에 보기</b><span>가게별·사람별로 정리된 내용을 보고 총무가 주문해요.</span></div></li>
+      <li><i>03</i><div><b>모인 메뉴 한눈에 보기</b><span>가게별·사람별로 모인 메뉴를 확인하고 주문에 활용해요.</span></div></li>
     </ol>
   </div><footer class="brand-footer">메뉴 모으기<span>함께 먹는 시간을 더 가볍게.</span></footer>`;
 }
@@ -1446,11 +1482,11 @@ function viewHome() {
 function roomCard(r) {
   const sum = S.sums[r.id], names = sentNames(r.id);
   const status = !sum ? '<span class="rc-chip">불러오는 중…</span>' : sum.gone ? '<span class="rc-chip red">지워진 방</span>'
-    : `<span class="rc-chip${sum.closed ? ' red' : ' on'}">${sum.closed ? '수합 마감' : '수합 중'}</span>${sum.answers != null ? `<span class="rc-chip">🙋 ${sum.answers}명</span>` : ''}${sum.deadline ? `<span class="rc-chip">⏰ ${esc(deadlineInfo(sum.deadline)?.text || '')}</span>` : ''}${sum.treat ? `<span class="rc-chip gift">🎁 ${esc(sum.treat.by)} 쏜다</span>` : ''}`;
+    : `<span class="rc-chip${sum.closed ? ' red' : ' on'}">${sum.closed ? '마감' : '메뉴 모으는 중'}</span>${sum.answers != null ? `<span class="rc-chip">🙋 ${sum.answers}명</span>` : ''}${sum.deadline ? `<span class="rc-chip">⏰ ${esc(deadlineInfo(sum.deadline)?.text || '')}</span>` : ''}${sum.treat ? `<span class="rc-chip gift">🎁 ${esc(treatHeadline(sum.treat.by))}</span>` : ''}`;
   const title = esc(sum && !sum.gone ? sum.title : r.title || '방');
   if (r.host) {
     return `<article class="room-card"><a class="rc-main" href="#r=${esc(r.id)}"><span class="rr-ic">👑</span><span class="rr-txt"><b>${title}</b><span class="rc-chips">${status}</span></span><span class="rr-go">›</span></a>
-      ${sum && !sum.gone ? `<div class="rc-acts"><a href="#r=${esc(r.id)}&t=sum">수합 현황</a><button data-act="card-share" data-id="${esc(r.id)}">링크 보내기</button><a href="#r=${esc(r.id)}&t=set">방 설정</a></div>` : `<div class="rc-acts"><button data-act="card-forget" data-id="${esc(r.id)}">목록에서 빼기</button></div>`}</article>`;
+      ${sum && !sum.gone ? `<div class="rc-acts"><a href="#r=${esc(r.id)}&t=sum">모인 메뉴</a><button data-act="card-share" data-id="${esc(r.id)}">링크 보내기</button><a href="#r=${esc(r.id)}&t=set">방 설정</a></div>` : `<div class="rc-acts"><button data-act="card-forget" data-id="${esc(r.id)}">목록에서 빼기</button></div>`}</article>`;
   }
   return `<article class="room-card"><a class="rc-main" href="#r=${esc(r.id)}&t=mine"><span class="rr-ic">🙋</span><span class="rr-txt"><b>${title}</b><span class="rc-chips">${status}</span>
     <small class="rc-names">${names.length ? `보낸 이름: ${names.map(esc).join(', ')}` : '아직 보낸 선택 없음'}</small></span><span class="rr-go">›</span></a>
@@ -1477,14 +1513,14 @@ async function loadSums(rooms) {
 
 // ---------- 방 만들기 ----------
 const EMPTY_DRAFT = () => ({title: '', note: '', deadline: '', stores: [], mode: 'free', names: '', freeJoin: false, custom: {name: '', lines: ''}, treat: null});
-// 🎁 내가 쏜다: 체크하면 쏘는 사람·1인 예산을 정하고, 참여자는 그 예산 안에서만 골라요.
+// 🎁 내가 쏜다: 체크하면 쏘는 사람·1인당 예산을 정하고, 참여자는 그 예산 안에서만 골라요.
 const CAP_CHIPS = [5000, 10000, 15000, 20000, 30000];
 function treatForm(p, t) {
   const on = !!t;
-  return `<section class="${p === 'c' ? 'f-sec' : 'a-sec'} treat-sec${on ? ' on' : ''}">${p === 'c' ? '<h2><i>4</i>계산은 누가? <small>(선택)</small></h2>' : '<h3>🎁 내가 쏜다</h3>'}
-    <label class="treat-toggle"><input type="checkbox" id="${p}-treat" ${on ? 'checked' : ''}><span class="tt-ic">🎁</span><span class="tt-txt"><b>내가 쏜다!</b><small>체크하면 정한 예산 안에서만 고를 수 있어요</small></span><span class="switch"><i></i></span></label>
-    ${on ? `<div class="treat-fields"><label class="field">쏘는 사람<input class="input" id="${p}-treat-by" maxlength="20" placeholder="예: 김부장, 교장선생님" value="${esc(t.by || '')}"></label>
-      <label class="field">1인 예산 <span class="hint">이 금액까지 골라요</span><div class="cap-in"><input class="input" id="${p}-treat-cap" type="number" min="0" step="500" inputmode="numeric" placeholder="10000" value="${t.cap || ''}"><span>원</span></div></label>
+  return `<section class="${p === 'c' ? 'f-sec' : 'a-sec'} treat-sec${on ? ' on' : ''}">${p === 'c' ? '<h2><i>4</i>계산은 누가? <small>(선택)</small></h2>' : '<h3>🎁 오늘은 한턱!</h3>'}
+    <label class="treat-toggle"><input type="checkbox" id="${p}-treat" ${on ? 'checked' : ''}><span class="tt-ic">🎁</span><span class="tt-txt"><b>오늘은 한턱!</b><small>체크하면 정한 예산 안에서만 고를 수 있어요</small></span><span class="switch"><i></i></span></label>
+    ${on ? `<div class="treat-fields"><label class="field">한턱 내는 사람 (선택)<input class="input" id="${p}-treat-by" maxlength="20" placeholder="예: 연구부장, 민수" value="${esc(t.by || '')}"></label>
+      <label class="field">1인당 예산 <span class="hint">이 금액까지 골라요</span><div class="cap-in"><input class="input" id="${p}-treat-cap" type="number" min="0" step="500" inputmode="numeric" placeholder="10000" value="${t.cap || ''}"><span>원</span></div></label>
       <div class="cap-chips">${CAP_CHIPS.map(v => `<button class="${num(t.cap) === v ? 'on' : ''}" data-act="cap-chip" data-for="${p}" data-v="${v}">${v >= 10000 ? `${v / 10000}만` : `${v / 1000}천`}원</button>`).join('')}</div></div>` : ''}
   </section>`;
 }
@@ -1514,7 +1550,7 @@ function viewCreate() {
     ${S.createError ? `<div class="notice red" role="alert"><b>방을 만들지 못했어요.</b><p>${esc(S.createError)}</p><span>적은 내용은 이 기기에 보관했어요. 아래 버튼으로 다시 시도해 주세요.</span></div>` : ''}
     <section class="f-sec"><h2><i>1</i>무엇을 모을까요?</h2>
       <label class="field">방 이름<input class="input" id="c-title" maxlength="40" placeholder="예: 3학년 협의회 음료, 캠프 저녁" value="${esc(d.title)}"></label>
-      <label class="field">📢 총무 한마디 <span class="hint">(선택) 방 맨 위에 늘 붙어 있어요</span><textarea class="input" id="c-note" rows="2" maxlength="300" placeholder="예: 1인 1음료! 3시까지 골라 주세요. 디카페인은 요청에 적어 주세요.">${esc(d.note)}</textarea></label>
+      <label class="field">📢 모임 안내 <span class="hint">(선택) 방 맨 위에 늘 붙어 있어요</span><textarea class="input" id="c-note" rows="2" maxlength="300" placeholder="예: 1인 1음료! 3시까지 골라 주세요. 디카페인은 요청에 적어 주세요.">${esc(d.note)}</textarea></label>
       <label class="field">마감 <span class="hint">(선택)</span><input class="input" id="c-deadline" type="datetime-local" value="${esc(d.deadline)}"></label></section>
     <section class="f-sec"><h2><i>2</i>어디서 고를까요? <small>${d.stores.length ? `${d.stores.length}곳` : ''}</small></h2>
       ${d.stores.map(s => storeRow(s, `<button class="x-btn" data-act="draft-del" data-id="${esc(s.id)}" aria-label="${esc(s.name)} 빼기">✕</button>`)).join('') || '<p class="hint-box">가게를 하나 이상 넣어 주세요. 맛집 목록에서 고르거나, 카페처럼 메뉴를 직접 적어도 돼요.</p>'}
@@ -1570,49 +1606,49 @@ function viewRoom() {
     <div class="sk-head"><i class="sk w60"></i><i class="sk w90 big"></i><i class="sk w40"></i></div>
     ${'<div class="sk-row"><i class="sk thumb"></i><div><i class="sk w70"></i><i class="sk w50"></i><i class="sk w30"></i></div></div>'.repeat(3)}</div>`;
   if (!S.room) {
-    return `${topBar('메뉴 모으기', 'home')}<div class="empty"><div class="big">🔍</div><h2>${S.error === 'gone' ? '방을 찾을 수 없어요' : '방을 열지 못했어요'}</h2><p class="muted">${S.error === 'gone' ? '링크가 맞는지, 총무가 방을 지우지 않았는지 확인해 주세요.' : esc(S.error)}</p><button class="btn" data-act="retry">다시 열기</button></div>`;
+    return `${topBar('메뉴 모으기', 'home')}<div class="empty"><div class="big">🔍</div><h2>${S.error === 'gone' ? '방을 찾을 수 없어요' : '방을 열지 못했어요'}</h2><p class="muted">${S.error === 'gone' ? '링크가 맞는지, 방이 삭제되지 않았는지 확인해 주세요.' : esc(S.error)}</p><button class="btn" data-act="retry">다시 열기</button></div>`;
   }
   if (!S.who && !['sum', 'set', 'all'].includes(S.tab)) S.tab = 'who';
   const views = {who: roomWho, menu: roomMenu, store: roomStore, cart: roomCart, review: roomReview, mine: roomMine, all: roomAll, sum: roomSum, set: roomSet};
   const html = (views[S.tab] || roomMenu)();
   return S.tab === 'set' ? html : html.replace('</header>', '</header>' + pinBar()); // 어느 화면이든 위 막대 바로 아래에 붙어 있어요
 }
-// 📢 총무 한마디·🎁 내가 쏜다: 방 어느 화면에서나 위에 붙어 있어요(한마디는 눌러서 펼치기/접기)
+// 📢 모임 안내·🎁 내가 쏜다: 방 어느 화면에서나 위에 붙어 있어요(한마디는 눌러서 펼치기/접기)
 function pinBar() {
   const r = S.room, t = r.treat, note = r.note;
   if (!t && !note) return '';
   const left = t ? t.cap - cartSum() : 0;
   return `<div class="pin-bar"><div class="pb-in">
-    ${t ? `<div class="pb-treat"><span class="pb-gift">🎁</span><span><b>${esc(t.by)} 쏜다!</b> 1인 <b>${won(t.cap)}</b>까지</span>${S.who ? `<span class="pb-left${left < 0 ? ' over' : ''}">${left < 0 ? `${won(-left)} 넘음` : `남은 ${won(left)}`}</span>` : ''}</div>` : ''}
-    ${note ? `<button class="pb-note${S.pinOpen ? ' open' : ''}" data-act="pin-toggle" aria-expanded="${!!S.pinOpen}"><span class="pb-ic">📢</span><span class="pb-txt"><b>총무 한마디</b>${esc(note)}</span>${note.length > 24 || note.includes('\n') ? `<span class="pb-more">${S.pinOpen ? '접기' : '더보기'}</span>` : ''}</button>` : ''}
+    ${t ? `<div class="pb-treat"><span class="pb-gift">🎁</span><span><b>${esc(treatHeadline(t.by))}</b> 1인당 <b>${won(t.cap)}</b>까지</span>${S.who ? `<span class="pb-left${left < 0 ? ' over' : ''}">${left < 0 ? `${won(-left)} 넘음` : `남은 ${won(left)}`}</span>` : ''}</div>` : ''}
+    ${note ? `<button class="pb-note${S.pinOpen ? ' open' : ''}" data-act="pin-toggle" aria-expanded="${!!S.pinOpen}"><span class="pb-ic">📢</span><span class="pb-txt"><b>모임 안내</b>${esc(note)}</span>${note.length > 24 || note.includes('\n') ? `<span class="pb-more">${S.pinOpen ? '접기' : '더보기'}</span>` : ''}</button>` : ''}
   </div></div>`;
 }
 function roomNav() {
   const n = cartIsSent() ? 0 : cartCount(), sent = !!myAnswer();
   const here = S.tab === 'store' ? 'menu' : S.tab === 'review' ? 'cart' : S.tab;
   const item = (t, label, extra = '') => `<button class="nav-i${here === t ? ' on' : ''}" data-act="tab" data-t="${t}"${here === t ? ' aria-current="page"' : ''}><i>${ICON[t]}</i><span>${label}</span>${extra}</button>`;
-  const items = [item('menu', '메뉴'), item('cart', '장바구니', n ? `<b class="nav-badge" id="cartBadge">${n}</b>` : ''), item('mine', '제출 내역', sent ? '<b class="nav-dot done" aria-label="제출 완료"></b>' : '')];
-  items.push(S.host ? item('sum', '수합 현황', `<b class="nav-badge soft">${S.answers.size}</b>`) : item('all', '모두의 선택'));
+  const items = [item('menu', '메뉴'), item('cart', '장바구니', n ? `<b class="nav-badge" id="cartBadge">${n}</b>` : ''), item('mine', '보낸 메뉴', sent ? '<b class="nav-dot done" aria-label="보내기 완료"></b>' : '')];
+  items.push(S.host ? item('sum', '모인 메뉴', `<b class="nav-badge soft">${S.answers.size}</b>`) : item('all', '모인 메뉴'));
   if (S.host) items.push(item('set', '방 설정'));
-  return `<nav class="nav n${items.length}" aria-label="메뉴"><a class="nav-brand" href="#" data-act="home" aria-label="메뉴 모으기 홈">${brand()}</a><div class="nav-room"><span>${S.host ? '내가 만든 방' : '함께 고르는 방'}</span><b>${esc(S.room.title)}</b></div>${items.join('')}<div class="nav-foot">가입 없이, 이름만으로.<br>함께 먹는 시간을 더 가볍게.</div></nav>`;
+  return `<nav class="nav n${items.length}" aria-label="메뉴"><a class="nav-brand" href="#" data-act="home" aria-label="메뉴 모으기 홈">${brand()}</a><div class="nav-room"><span>${S.host ? '관리하는 방' : '함께 고르는 방'}</span><b>${esc(S.room.title)}</b></div>${items.join('')}<div class="nav-foot">가입 없이, 이름만으로.<br>함께 먹는 시간을 더 가볍게.</div></nav>`;
 }
 const whoChip = () => (S.who ? `<button class="chip-who" data-act="tab" data-t="who" aria-label="이름 바꾸기 (지금 ${esc(S.who)})"><i>${avatar(S.who)}</i>${esc(S.who)}</button>` : '');
 function roomHead(big = false) {
   const r = S.room, dl = deadlineInfo(r.deadline);
   return `<section class="room-head${big ? ' big' : ''}">
-    ${S.host ? '<span class="host-badge">👑 내가 총무</span>' : ''}
+    ${S.host ? '<span class="host-badge">⚙ 방 관리 가능</span>' : ''}
     <h1>${esc(r.title)}</h1>
-    <div class="rh-meta">${r.closed ? '<span class="rh-chip red">수합 마감</span>' : dl ? `<span class="rh-chip${dl.left <= 0 ? ' red' : dl.left <= 30 ? ' warn' : ''}">⏰ ${esc(dl.text)}</span>` : ''}<span class="rh-chip">🙋 <b id="liveCount">${S.answers.size}</b>명 응답${r.names.length ? ` / ${r.names.length}` : ''}</span></div>
+    <div class="rh-meta">${r.closed ? '<span class="rh-chip red">마감</span>' : dl ? `<span class="rh-chip${dl.left <= 0 ? ' red' : dl.left <= 30 ? ' warn' : ''}">⏰ ${esc(dl.text)}</span>` : ''}<span class="rh-chip">🙋 <b id="liveCount">${S.answers.size}</b>명 보냄${r.names.length ? ` / ${r.names.length}` : ''}</span></div>
   </section>`;
 }
 // 이름 고르기
 function roomWho() {
   const r = S.room, answered = new Set([...S.answers.values()].map(a => a.name));
   return `${topBar('', 'home')}${roomHead(true)}
-  <div class="wrap who-content"><span class="eyebrow">가입 없이 바로 시작</span><h2 class="sec-title">어떤 이름으로 고를까요?</h2>
+  <div class="wrap who-content"><span class="eyebrow">가입은 생략, 이름만 부탁해요.</span><h2 class="sec-title">이름부터 알려 주세요</h2>
     ${r.names.length ? `<div class="who-grid">${r.names.map(n => `<button class="who-btn${answered.has(n) ? ' did' : ''}${S.who === n ? ' me' : ''}" data-act="who" data-who="${esc(n)}"><i>${avatar(n)}</i>${esc(n)}${answered.has(n) ? '<small>✓ 냈어요</small>' : ''}</button>`).join('')}</div>` : ''}
-    ${!r.names.length || r.freeJoin ? `${r.names.length ? '<p class="hint" style="margin-top:16px">명단에 없으면 이름을 적어 주세요.</p>' : ''}<div class="row name-in"><input class="input" id="whoName" maxlength="20" placeholder="이름 (예: 김선생, 3번 가족)" aria-label="이름" value="${S.who && !r.names.includes(S.who) ? esc(S.who) : ''}"><button class="btn" data-act="who-typed">시작</button></div>` : ''}
-    <p class="hint" style="margin-top:14px">같은 기기에서 이름을 바꿔 여러 사람 것을 대신 골라 보낼 수 있어요.</p>
+    ${!r.names.length || r.freeJoin ? `${r.names.length ? '<p class="hint" style="margin-top:16px">명단에 없으면 이름을 적어 주세요.</p>' : ''}<div class="row name-in"><input class="input" id="whoName" maxlength="20" placeholder="함께하는 사람들이 알아볼 이름" aria-label="이름" value="${S.who && !r.names.includes(S.who) ? esc(S.who) : ''}"><button class="btn" data-act="who-typed">메뉴 고르기</button></div>` : ''}
+    <p class="hint" style="margin-top:14px">다른 사람 몫도 고르나요? 메뉴를 보낸 뒤 이름을 바꿔 다시 고를 수 있어요.</p>
   </div>${S.host ? roomNav() : ''}`;
 }
 function storeCard(s) {
@@ -1638,15 +1674,15 @@ const isLate = () => { const d = deadlineInfo(S.room?.deadline); return !!d && d
 const locked = () => !S.host && (S.room.closed || isLate());
 function closedNote() {
   if (!S.room.closed && !isLate()) return '';
-  return `<div class="notice red">${S.room.closed ? '총무가 수합을 마감했어요.' : `마감 시간(${esc(deadlineInfo(S.room.deadline).at)})이 지났어요.`} ${S.host ? '총무는 그래도 넣고 고칠 수 있어요.' : '더 고치려면 총무에게 말해 주세요.'}</div>`;
+  return `<div class="notice red">${S.room.closed ? '메뉴 모으기가 마감됐어요.' : `마감 시간(${esc(deadlineInfo(S.room.deadline).at)})이 지났어요.`} ${S.host ? '방 관리 권한이 있으면 마감 후에도 고칠 수 있어요.' : '더 고치려면 방을 관리하는 사람에게 알려 주세요.'}</div>`;
 }
 function sentNote() {
   const a = myAnswer();
-  return a ? `<button class="sent-note${cartIsSent() ? '' : ' unsent'}" data-act="tab" data-t="${cartIsSent() ? 'mine' : 'cart'}"><span>${cartIsSent() ? '✓ 총무에게 보냈어요' : '변경사항을 아직 보내지 않았어요'}</span><span>${cartIsSent() ? '제출 내역' : '장바구니'} ›</span></button>` : '';
+  return a ? `<button class="sent-note${cartIsSent() ? '' : ' unsent'}" data-act="tab" data-t="${cartIsSent() ? 'mine' : 'cart'}"><span>${cartIsSent() ? '✓ 메뉴를 보냈어요' : '변경사항을 아직 보내지 않았어요'}</span><span>${cartIsSent() ? '보낸 메뉴' : '장바구니'} ›</span></button>` : '';
 }
 function roomMenu() {
   const r = S.room;
-  if (!r.stores.length) return `${topBar(esc(r.title), 'home', whoChip())}<div class="empty"><h2>아직 메뉴가 없어요</h2><p>총무가 메뉴를 넣으면 여기서 고를 수 있어요.</p></div>${roomNav()}`;
+  if (!r.stores.length) return `${topBar(esc(r.title), 'home', whoChip())}<div class="empty"><h2>아직 메뉴가 없어요</h2><p>방에 메뉴가 추가되면 여기서 고를 수 있어요.</p></div>${roomNav()}`;
   if (!storeOf(S.store)) S.store = r.stores[0]?.id;
   return roomStore();
 }
@@ -1664,7 +1700,7 @@ function menuRow(m, s) {
       ${pic || m.emoji ? `<span class="m-emo" style="--c:${esc(s.color)}">${esc(m.emoji || s.emoji)}${photo(pic)}${imgNote(m)}</span>` : ''}</button>
     <div class="m-ctl">${qtyCtl(m.id, m.name)}</div></div>`;
 }
-const MENU_FILTERS = [['all', '전체'], ['best', '인기'], ['kid', '아이 추천'], ['hot', '매운 것']];
+const MENU_FILTERS = [['all', '전체'], ['best', '인기'], ['hot', '매운 것']];
 const canOpenLinks = location.origin !== 'null';
 const searchWords = value => str(value, 200).normalize('NFKC').toLocaleLowerCase('ko').trim().split(/\s+/).filter(Boolean);
 function menuGroups(query = S.menuQuery, filter = S.mfilter) {
@@ -1709,7 +1745,7 @@ function roomStore() {
   ].filter(Boolean);
   const dl = deadlineInfo(S.room.deadline);
   return `${topBar(esc(S.room.title), 'home', whoChip())}
-  <div class="menu-context"><span>${S.room.closed ? '수합 마감' : dl ? esc(dl.text) : '수합 중'}</span><span><b id="liveCount">${S.answers.size}</b>명 제출</span></div>
+  <div class="menu-context"><span>${S.room.closed ? '마감' : dl ? esc(dl.text) : '메뉴 모으는 중'}</span><span><b id="liveCount">${S.answers.size}</b>명 보냄</span></div>
   <div class="menu-search"><label for="menuSearch">이 방 메뉴 검색</label><div class="menu-search-row"><input class="input" type="search" id="menuSearch" value="${esc(S.menuQuery)}" maxlength="80" placeholder="모든 가게의 메뉴 이름·설명 검색" autocomplete="off" aria-controls="menuResults"><button id="clearMenuSearch" class="small-btn" data-act="menu-search-clear" aria-label="검색어 지우기"${S.menuQuery ? '' : ' disabled'}>×</button></div><p id="menuSearchCount" class="search-count" role="status" aria-live="polite" aria-atomic="true">${menuSearchCount()}</p></div>
   <div id="storeBrowse"${searchWords(S.menuQuery).length ? ' hidden' : ''}>
   ${S.room.stores.length > 1 ? `<div class="store-tabs" role="group" aria-label="가게 선택">${S.room.stores.map(x => `<button class="${x.id === s.id ? 'on' : ''}" data-act="store" data-id="${esc(x.id)}" aria-pressed="${x.id === s.id}">${esc(x.name)}</button>`).join('')}</div>` : ''}
@@ -1729,7 +1765,7 @@ function quickRequests(storeId) {
 function storeRequestInput(s) {
   const value = str(S.storeReqs[s.id], 200), id = `storeReq-${encodeURIComponent(s.id)}`;
   return `<div class="store-request"><label for="${id}">${esc(s.name)} 요청사항 <span class="muted">(선택)</span></label>
-    <p class="hint" id="${id}-help">이 가게에 전달할 요청이에요. 총무와 참여자가 볼 수 있어요.</p>
+    <p class="hint" id="${id}-help">이 가게의 메뉴에만 붙는 요청이에요. 방에 참여한 사람들이 볼 수 있어요.</p>
     <div class="quick">${quickRequests(s.id).map(t => `<button class="${value.split(/\s*,\s*/).includes(t) ? 'on' : ''}" data-act="quick-req" data-id="${esc(s.id)}" data-t="${esc(t)}" aria-pressed="${value.split(/\s*,\s*/).includes(t)}">${esc(t)}</button>`).join('')}</div>
     <textarea class="input" id="${id}" data-store-req="${esc(s.id)}" aria-describedby="${id}-help" maxlength="200" rows="2" placeholder="예: ${esc(s.menu[0]?.name || '메뉴')}는 ${quickRequests(s.id)[0]}">${esc(value)}</textarea></div>`;
 }
@@ -1739,7 +1775,7 @@ function legacyRequestHtml(a) {
 function roomCart() {
   const lines = cartLines(), a = myAnswer();
   if (!lines.length) {
-    return `${topBar('장바구니', '', whoChip())}<div class="empty"><div class="big">🍽️</div><h2>장바구니가 비어 있어요</h2><p class="muted">${a ? '장바구니를 비워도 이미 보낸 제출 내역은 유지돼요.' : '메뉴에서 + 를 눌러 골라 보세요.'}</p><button class="btn" data-act="tab" data-t="menu">메뉴 보러 가기</button>
+    return `${topBar('장바구니', '', whoChip())}<div class="empty"><div class="big">🍽️</div><h2>장바구니가 비어 있어요</h2><p class="muted">${a ? '장바구니를 비워도 이미 보낸 메뉴는 유지돼요.' : '오늘의 메뉴, 첫 후보를 담아 보세요.'}</p><button class="btn" data-act="tab" data-t="menu">메뉴 보러 가기</button>
     ${a ? `<button class="text-btn red" data-act="answer-del" style="margin-top:14px">보낸 선택 취소하기</button>` : ''}</div>${roomNav()}`;
   }
   const byStore = new Map();
@@ -1748,16 +1784,16 @@ function roomCart() {
   <div class="wrap">${closedNote()}${selectionStatus()}</div>
   <div class="wrap who-line"><i>${avatar(S.who)}</i><span><b>${esc(S.who)}</b>의 선택${a ? '<span class="muted"> · 고쳐서 다시 보내면 바뀌어요</span>' : ''}</span></div>
   ${[...byStore].map(([s, ls]) => `<div class="band thin"></div><section class="wrap cart-store"><div class="cs-head">${thumb(s, 'sm')}<div><b>${esc(s.name)}</b></div></div>
-    ${ls.map(l => `<div class="line"><div><div class="nm">${esc(l.item.name)}</div><div class="muted">${l.item.price ? won(l.item.price * l.n) : '가격 확인'}</div></div>${qtyCtl(l.item.id, l.item.name)}</div>`).join('')}
+    ${ls.map(l => menuItemBox({...l.item, n: l.n}, '', qtyCtl(l.item.id, l.item.name))).join('')}
     <button class="more" data-act="store" data-id="${esc(s.id)}">+ 더 고르기</button>${storeRequestInput(s)}</section>`).join('')}
   ${S.req ? `<div class="band thin"></div><section class="wrap cart-req legacy-request"><label for="req" class="h3">가게 미지정 요청 · 이전 방식</label>
     <p class="hint" id="reqHelp">기존 내용을 보존했어요. 필요한 요청은 위 가게별 칸으로 옮겨 주세요. 이 칸은 가게 주문 메시지에 자동으로 들어가지 않아요.</p>
     <textarea class="input" id="req" maxlength="200" rows="3" aria-describedby="reqHelp">${esc(S.req)}</textarea></section>` : ''}
   <div class="band thin"></div>
   <section class="wrap summary"><div class="total"><span>합계</span><span>${won(cartSum())}</span></div>
-    ${budget() ? `<div class="budget${budgetLeft() < 0 ? ' over' : ''}"><div class="bd-top"><span>🎁 ${esc(S.room.treat.by)} 쏘는 1인 예산 ${won(budget())}</span><b>${budgetLeft() < 0 ? `${won(-budgetLeft())} 넘었어요` : `남은 ${won(budgetLeft())}`}</b></div><div class="bar"><i style="width:${Math.min(100, Math.round(cartSum() / budget() * 100))}%"></i></div>${budgetLeft() < 0 ? '<p>예산 안으로 줄여야 보낼 수 있어요.</p>' : ''}</div>` : ''}
+    ${budget() ? `<div class="budget${budgetLeft() < 0 ? ' over' : ''}"><div class="bd-top"><span>🎁 1인당 예산 ${won(budget())}</span><b>${budgetLeft() < 0 ? `${won(-budgetLeft())} 넘었어요` : `남은 ${won(budgetLeft())}`}</b></div><div class="bar"><i style="width:${Math.min(100, Math.round(cartSum() / budget() * 100))}%"></i></div>${budgetLeft() < 0 ? '<p>예산 안으로 줄여야 보낼 수 있어요.</p>' : ''}</div>` : ''}
     <p class="muted">메뉴판 기준 금액이에요.</p></section>
-  ${locked() ? '' : cartBar(cartIsSent() ? '제출 내역 보기' : '요청사항 확인하고 보내기', cartIsSent() ? 'tab" data-t="mine' : 'review')}${roomNav()}`;
+  ${locked() ? '' : cartBar(cartIsSent() ? '보낸 메뉴 보기' : '요청사항 확인하고 보내기', cartIsSent() ? 'tab" data-t="mine' : 'review')}${roomNav()}`;
 }
 function roomReview() {
   const lines = cartLines();
@@ -1767,35 +1803,50 @@ function roomReview() {
   return `${topBar('보내기 전 확인', 'tab" data-t="cart', whoChip())}<div class="wrap review">
     ${closedNote()}${selectionStatus()}<h2 class="sec-title">${esc(S.who)} 님, 이렇게 보낼까요?</h2>
     ${ticket(draft, true)}
-    <p class="hint">${a ? '다시 보내면 기존 제출 내역이 이 내용으로 바뀌어요.' : '아래 버튼을 누르면 총무에게 제출돼요.'}</p>
+    <p class="hint">${a ? '다시 보내면 보낸 메뉴가 이 내용으로 바뀌어요.' : '보내면 이 방의 모인 메뉴에 반영돼요. 가게 주문은 별도로 진행해요.'}</p>
     <button class="btn gray block" data-act="tab" data-t="cart">메뉴·요청사항 고치기</button>
-  </div>${locked() ? '' : cartBar(S.sending ? '보내는 중…' : a ? '수정한 선택 보내기' : '총무에게 보내기', 'send')}${roomNav()}`;
+  </div>${locked() ? '' : cartBar(S.sending ? '보내는 중…' : a ? '변경사항 보내기' : '이대로 보내기', 'send')}${roomNav()}`;
+}
+// Menu names remain the primary content in cart, confirmation and both summaries.
+function menuItemBox(item, storeName = '', controls = '') {
+  return `<div class="menu-item-box"><div class="menu-item-main"><b class="menu-item-name">${esc(item.name)}</b>${storeName ? `<span class="menu-item-store">${esc(storeName)}</span>` : ''}</div>
+    <div class="menu-item-side">${controls || `<span class="menu-item-count">${item.n}개</span>`}${item.price != null ? `<b class="menu-item-price">${item.price ? won(item.price * item.n) : '가격 확인'}</b>` : ''}</div></div>`;
+}
+function answerStoreGroups(a) {
+  const groups = new Map();
+  for (const item of a.items) { if (!groups.has(item.s)) groups.set(item.s, []); groups.get(item.s).push(item); }
+  return [...groups];
+}
+function answerMenuBoxes(a, showEmptyRequests = false) {
+  return answerStoreGroups(a).map(([sid, items]) => {
+    const name = storeOf(sid)?.name || '(지운 가게)', request = str(a.storeReqs?.[sid], 200).trim();
+    return `<section class="answer-store-group" aria-label="${esc(name)} 메뉴">${items.map(i => menuItemBox(i, name)).join('')}
+      ${request || showEmptyRequests ? `<div class="menu-box-request"><b>${esc(name)} 요청사항</b><p>${esc(request) || '요청사항 없음'}</p></div>` : ''}</section>`;
+  }).join('');
 }
 function ticket(a, preview = false) {
-  const byStore = new Map();
-  for (const it of a.items) { const k = it.s; if (!byStore.has(k)) byStore.set(k, []); byStore.get(k).push(it); }
   const sum = a.items.reduce((x, i) => x + i.price * i.n, 0);
-  return `<div class="ticket"><div class="t-head"><span>🍽 ${esc(S.room.title)}</span><b>${avatar(a.name)} ${esc(a.name)}</b><small>${preview ? '아직 제출 전 · 최종 확인' : `${new Date(a.at).toLocaleString('ko-KR', {month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})} 제출 완료`}</small></div>
-    ${[...byStore].map(([sid, ls]) => `<div class="t-store">${esc(storeOf(sid)?.name || '(지운 가게)')}</div>${ls.map(i => `<div class="t-line"><span>${esc(i.name)} × ${i.n}</span><span>${i.price ? won(i.price * i.n) : '가격 확인'}</span></div>`).join('')}<div class="t-req"><b>이 가게 요청사항</b><p>${esc(str(a.storeReqs?.[sid], 200).trim()) || '요청사항 없음'}</p></div>`).join('')}
-    ${legacyRequestHtml(a)}
+  return `<div class="ticket"><div class="t-head"><span>🍽 ${esc(S.room.title)}</span><b>${avatar(a.name)} ${esc(a.name)}</b><small>${preview ? '아직 제출 전 · 최종 확인' : `${new Date(a.at).toLocaleString('ko-KR', {month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})} 보내기 완료`}</small></div>
+    ${answerMenuBoxes(a, true)}${legacyRequestHtml(a)}
     <div class="t-total"><span>합계</span><b>${won(sum)}</b></div></div>`;
 }
+
 function roomMine() {
   const mine = [...S.answers.values()].filter(a => a.uid === UID).sort((a, b) => (b.name === S.who) - (a.name === S.who) || b.at - a.at);
   const cur = myAnswer(), other = cur && cur.uid && cur.uid !== UID && !S.host; // 같은 이름으로 다른 기기에서 보낸 주문
   const lock = locked();
-  if (!mine.length && !other) return `${topBar('제출 내역', '', whoChip())}<div class="empty"><div class="big">🧾</div><h2>아직 제출한 내역이 없어요</h2><p class="muted">장바구니에 담은 뒤 요청사항을 확인하고 「총무에게 보내기」를 눌러 주세요.</p><button class="btn" data-act="tab" data-t="${cartCount() ? 'cart' : S.who ? 'menu' : 'who'}">${cartCount() ? '장바구니 확인하기' : '메뉴 보러 가기'}</button></div>${roomNav()}`;
+  if (!mine.length && !other) return `${topBar('보낸 메뉴', '', whoChip())}<div class="empty"><div class="big">🧾</div><h2>아직 보낸 메뉴가 없어요</h2><p class="muted">장바구니에 담은 뒤 요청사항을 확인하고 「이대로 보내기」를 눌러 주세요.</p><button class="btn" data-act="tab" data-t="${cartCount() ? 'cart' : S.who ? 'menu' : 'who'}">${cartCount() ? '장바구니 확인하기' : '메뉴 보러 가기'}</button></div>${roomNav()}`;
   const justSent = cur && cur.uid === UID && Date.now() - S.sentAt < 15000;
-  return `${topBar('제출 내역', '', whoChip())}<div class="wrap">
-    ${cur && !other && !cartIsSent() ? `<div class="notice"><b>장바구니에 보내지 않은 변경사항이 있어요.</b><p>아래는 마지막으로 제출한 내용이에요.</p><button class="text-btn" data-act="tab" data-t="cart">장바구니 이어서 확인하기 ›</button></div>` : ''}
-    ${other ? `<div class="notice other-dev"><b>「${esc(cur.name)}」 선택은 다른 기기에서 보냈어요.</b> 고치려면 그 기기에서 하거나 총무에게 말해 주세요. 내 이름이 아니면 아래에서 이름을 다시 골라 주세요.</div>${ticket(cur)}` : ''}
-    ${justSent ? '<div class="sent-ok" role="status"><div class="so-ic">✓</div><div><h2>총무에게 보냈어요</h2><p class="muted">수합 중에는 아래 「고치기」로 다시 보낼 수 있어요.</p></div></div>' : ''}
-    ${mine.length ? `<div class="mine-head"><h2 class="sec-title">이 기기에서 보낸 선택 <small>${mine.length}</small></h2>${mine.length > 1 ? '<span class="hint">이름마다 따로 고치고 취소할 수 있어요</span>' : ''}</div>` : ''}
+  return `${topBar('보낸 메뉴', '', whoChip())}<div class="wrap">
+    ${cur && !other && !cartIsSent() ? `<div class="notice"><b>장바구니에 보내지 않은 변경사항이 있어요.</b><p>아래는 마지막으로 보낸 메뉴예요.</p><button class="text-btn" data-act="tab" data-t="cart">장바구니 이어서 확인하기 ›</button></div>` : ''}
+    ${other ? `<div class="notice other-dev"><b>「${esc(cur.name)}」 선택은 다른 기기에서 보냈어요.</b> 고치려면 그 기기에서 하거나 방을 관리하는 사람에게 알려 주세요. 내 이름이 아니면 아래에서 이름을 다시 골라 주세요.</div>${ticket(cur)}` : ''}
+    ${justSent ? '<div class="sent-ok" role="status"><div class="so-ic">✓</div><div><h2>메뉴를 보냈어요</h2><p class="muted">마음이 바뀌었나요? 마감 전까지 메뉴와 요청사항을 고칠 수 있어요.</p></div></div>' : ''}
+    ${mine.length ? `<div class="mine-head"><h2 class="sec-title">이 기기에서 보낸 메뉴 <small>${mine.length}</small></h2>${mine.length > 1 ? '<span class="hint">이름마다 따로 고치고 취소할 수 있어요</span>' : ''}</div>` : ''}
     <div class="stack">${mine.map(a => `<div class="mine-item${a.name === S.who ? ' cur' : ''}">${ticket(a)}
       <div class="row mine-acts"><button class="btn gray" style="flex:1" data-act="edit-mine" data-who="${esc(a.name)}"${lock ? ' disabled' : ''}>고치기</button><button class="btn gray" style="flex:1" data-act="answer-del" data-who="${esc(a.name)}"${lock ? ' disabled' : ''}>취소</button></div></div>`).join('')}</div>
-    ${lock ? `<p class="hint" style="text-align:center;margin-top:10px">${S.room.closed ? '총무가 마감해서' : '마감 시간이 지나서'} 고치거나 취소할 수 없어요.</p>` : ''}
-    <button class="btn line-dark block" style="margin-top:14px" data-act="tab" data-t="who">다른 이름으로 하나 더 넣기</button>
-    <button class="text-btn" data-act="tab" data-t="${S.host ? 'sum' : 'all'}" style="margin-top:8px">다른 사람들은 뭐 골랐나 보기 ›</button>
+    ${lock ? `<p class="hint" style="text-align:center;margin-top:10px">${S.room.closed ? '메뉴 모으기가 마감되어' : '마감 시간이 지나서'} 고치거나 취소할 수 없어요.</p>` : ''}
+    <button class="btn line-dark block" style="margin-top:14px" data-act="tab" data-t="who">다른 사람 메뉴도 고르기</button>
+    <button class="text-btn" data-act="tab" data-t="${S.host ? 'sum' : 'all'}" style="margin-top:8px">모인 메뉴 구경하기 ›</button>
   </div>${roomNav()}`;
 }
 
@@ -1831,24 +1882,24 @@ function shareCard() {
 }
 function progressBlock(withRemind) {
   const r = S.room, answered = new Set([...S.answers.values()].map(a => a.name));
-  if (!r.names.length) return `<section class="a-sec prog"><div class="prog-num"><b>${S.answers.size}</b>명</div><div class="prog-txt"><b>고른 사람</b><span>${r.closed ? '수합을 마감했어요' : '링크를 연 사람이 이름을 적고 골라요'}</span></div></section>`;
+  if (!r.names.length) return `<section class="a-sec prog"><div class="prog-num"><b>${S.answers.size}</b>명</div><div class="prog-txt"><b>메뉴를 보낸 사람</b><span>${r.closed ? '메뉴 모으기를 마감했어요' : '링크를 연 사람이 이름을 적고 골라요'}</span></div></section>`;
   const todo = r.names.filter(n => !answered.has(n)), done = r.names.length - todo.length, extra = [...answered].filter(n => !r.names.includes(n));
   const pct = Math.round(done / r.names.length * 100);
-  const remind = `🍽 ${r.title}\n아직 안 고른 분: ${todo.join(', ')}\n링크 열고 이름 고른 뒤 먹고 싶은 메뉴를 골라 「보내기」 눌러 주세요!\n${roomLink()}`;
-  return `<section class="a-sec prog"><div class="prog-num"><b>${done}</b>/${r.names.length}</div><div class="prog-txt"><b>고른 사람${extra.length ? ` · 명단 밖 ${extra.length}명` : ''}</b><span>${r.closed ? '수합을 마감했어요' : todo.length ? `아직 ${todo.length}명` : '모두 냈어요! 🎉'}</span><div class="bar"><i style="width:${pct}%"></i></div></div></section>
-  ${todo.length ? `<section class="a-sec"><div class="a-head"><h3>아직이에요 <small>${todo.length}</small></h3>${withRemind ? '<button class="text-btn" data-act="copy-remind">재촉 글 복사</button>' : ''}</div>
+  const remind = `🍽 ${r.title}\n아직 메뉴를 보내지 않은 분: ${todo.join(', ')}\n링크 열고 이름 고른 뒤 먹고 싶은 메뉴를 골라 「보내기」 눌러 주세요!\n${roomLink()}`;
+  return `<section class="a-sec prog"><div class="prog-num"><b>${done}</b>/${r.names.length}</div><div class="prog-txt"><b>메뉴를 보낸 사람${extra.length ? ` · 명단 밖 ${extra.length}명` : ''}</b><span>${r.closed ? '메뉴 모으기를 마감했어요' : todo.length ? `아직 ${todo.length}명` : '모두 보냈어요! 🎉'}</span><div class="bar"><i style="width:${pct}%"></i></div></div></section>
+  ${todo.length ? `<section class="a-sec"><div class="a-head"><h3>아직이에요 <small>${todo.length}</small></h3>${withRemind ? '<button class="text-btn" data-act="copy-remind">참여 안내 복사</button>' : ''}</div>
     <div class="pills">${todo.map(w => `<span class="pill no">${esc(w)}</span>`).join('')}</div>
     ${withRemind ? `<div id="remindBox" hidden class="copy-box"><textarea class="input code-box" readonly></textarea></div><textarea id="remindText" hidden>${esc(remind)}</textarea>` : ''}</section>` : ''}`;
 }
 function byStoreHtml(host) {
   const groups = totals();
-  if (!groups.length) return '<p class="muted empty-line">아직 아무도 안 골랐어요.</p>';
+  if (!groups.length) return '<p class="muted empty-line">아직 모인 메뉴가 없어요. 첫 메뉴의 주인공을 기다리는 중!</p>';
   const total = groups.reduce((a, g) => a + g.sum, 0);
   const unassigned = [...S.answers.values()].filter(a => a.req);
   return `${unassigned.length ? `<section class="card unassigned-requests"><h3>가게 미지정 요청 · 이전 방식</h3><p class="hint">어느 가게의 요청인지 확인해 주세요. 아래 가게 주문 메시지에는 자동으로 넣지 않아요.</p>${unassigned.map(a => `<p><strong>${esc(a.name)}</strong><br>${esc(a.req)}</p>`).join('')}</section>` : ''}
   ${host ? `<label class="toggle no-print"><input type="checkbox" data-act="by-person" ${S.byPerson ? 'checked' : ''}> 가게 주문 메시지에 사람별로 나눠 적기</label>` : ''}
   <div class="stack">${groups.map((g, i) => `<section class="card sum-card"><div class="sum-head">${thumb(g.store, 'sm')}<div><b>${esc(g.store.name)}</b>${g.store.phone ? `<span>${esc(g.store.phone)}</span>` : ''}</div><b class="sum-won">${won(g.sum)}</b></div>
-    ${[...g.items.values()].map(it => `<div class="line"><span>${esc(it.name)}</span><b>${it.n}개</b></div>`).join('')}
+    ${[...g.items.values()].map(it => menuItemBox({name: it.name, n: it.n})).join('')}
     <p class="muted">${g.who.size}명: ${[...g.who.keys()].map(esc).join(', ')}</p>
     ${[...g.who].some(([, x]) => x.r) ? `<div class="group-requests"><b>이 가게 요청사항</b>${[...g.who].filter(([, x]) => x.r).map(([w, x]) => `<p><strong>${esc(w)}</strong> · ${esc(x.ls.join(', '))}<br>${esc(x.r)}</p>`).join('')}</div>` : ''}
     ${host ? `<details class="message-preview no-print"><summary>가게 주문 메시지 미리보기</summary><pre>${esc(ownerMessage(g))}</pre></details>` : ''}
@@ -1859,21 +1910,20 @@ function byStoreHtml(host) {
 function byPersonHtml(host) {
   const order = S.room.names;
   const list = [...S.answers.values()].sort((a, b) => ((order.indexOf(a.name) + 1 || 999) - (order.indexOf(b.name) + 1 || 999)) || a.at - b.at);
-  if (!list.length) return '<p class="muted empty-line">아직 아무도 안 골랐어요.</p>';
+  if (!list.length) return '<p class="muted empty-line">아직 모인 메뉴가 없어요. 첫 메뉴의 주인공을 기다리는 중!</p>';
   return `<div class="stack">${list.map(a => `<section class="card sum-card"><div class="sum-head"><i class="who-ava">${avatar(a.name)}</i><div><b>${esc(a.name)}</b><span>${new Date(a.at).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'})}</span></div><b class="sum-won">${won(a.items.reduce((x, i) => x + i.price * i.n, 0))}</b></div>
-    ${a.items.map(i => `<div class="line"><span>${esc(i.name)} <small class="muted">${esc(storeOf(i.s)?.name || '')}</small></span><b>${i.n}개</b></div>`).join('')}
-    ${Object.entries(requestsForItems(a.storeReqs, a.items)).map(([sid, text]) => `<p class="req-line"><b>${esc(storeOf(sid)?.name || '(지운 가게)')} 요청사항</b><br>${esc(text)}</p>`).join('')}
+    ${answerMenuBoxes(a)}
     ${legacyRequestHtml(a)}
-    ${host ? `<button class="text-btn red no-print" data-act="answer-del-host" data-id="${esc(a.id)}">이 응답 지우기</button>` : ''}</section>`).join('')}</div>`;
+    ${host ? `<button class="text-btn red no-print" data-act="answer-del-host" data-id="${esc(a.id)}">보낸 메뉴 삭제</button>` : ''}</section>`).join('')}</div>`;
 }
 function sumSeg() {
   return `<div class="seg wide no-print" role="group"><button class="${S.sumBy === 'store' ? 'on' : ''}" data-act="sum-by" data-by="store">가게별</button><button class="${S.sumBy === 'person' ? 'on' : ''}" data-act="sum-by" data-by="person">사람별</button></div>`;
 }
 function roomSum() {
   if (!S.host) { S.tab = 'all'; return roomAll(); }
-  return `${topBar('수합 현황', '', whoChip())}
+  return `${topBar('모인 메뉴', '', whoChip())}
   <div class="wrap admin host-layout">${S.created ? '<div class="notice mint host-created"><b>방을 만들었어요!</b> 참여 링크를 보내면 각자의 메뉴가 여기에 모여요.</div>' : ''}
-    <aside class="host-overview" aria-label="참여와 수합 현황">${progressBlock(true)}${shareCard()}${treatSummary()}</aside>
+    <aside class="host-overview" aria-label="참여 현황과 모인 메뉴">${progressBlock(true)}${shareCard()}${treatSummary()}</aside>
     <div class="host-results">${sumSeg()}${S.sumBy === 'store' ? byStoreHtml(true) : byPersonHtml(true)}
     <button class="btn gray block no-print" style="margin-top:14px" data-act="print">인쇄하기</button>
     ${S.who ? '' : '<button class="btn line-dark block no-print" style="margin-top:10px" data-act="tab" data-t="who">나도 고르기</button>'}
@@ -1884,12 +1934,12 @@ function treatSummary() {
   if (!t) return '';
   const total = [...S.answers.values()].reduce((x, a) => x + a.items.reduce((y, i) => y + i.price * i.n, 0), 0);
   const heads = S.room.names.length || S.answers.size;
-  return `<section class="a-sec treat-sum"><div class="a-head"><h3>🎁 ${esc(t.by)} 쏜다</h3><span class="hint">1인 ${won(t.cap)}</span></div>
+  return `<section class="a-sec treat-sum"><div class="a-head"><h3>🎁 ${esc(treatHeadline(t.by))}</h3><span class="hint">1인당 ${won(t.cap)}</span></div>
     <div class="ts-row"><span>지금까지 고른 금액</span><b>${won(total)}</b></div>
     <div class="ts-row"><span>예산 최대(${heads}명 × ${won(t.cap)})</span><b>${won(heads * t.cap)}</b></div></section>`;
 }
 function roomAll() {
-  return `${topBar('모두의 선택', '', whoChip())}<div class="wrap admin">${progressBlock(false)}${sumSeg()}${S.sumBy === 'store' ? byStoreHtml(false) : byPersonHtml(false)}</div>${roomNav()}`;
+  return `${topBar('모인 메뉴', '', whoChip())}<div class="wrap admin">${progressBlock(false)}${sumSeg()}${S.sumBy === 'store' ? byStoreHtml(false) : byPersonHtml(false)}</div>${roomNav()}`;
 }
 
 // ---------- 방 설정 (방장) ----------
@@ -1898,11 +1948,11 @@ function roomSet() {
   const e = S.edit || (S.edit = {...clone(S.room), namesText: S.room.names.join('\n'), dirty: false});
   return `${topBar('방 설정', '', whoChip())}
   <div class="wrap admin form">
-    <section class="a-sec"><h3>수합</h3>
-      <div class="state-row"><div><b>${S.room.closed ? '수합을 마감했어요' : '수합 중'}</b><span>${S.room.closed ? '다시 열면 고르고 고칠 수 있어요.' : '마감하면 더 보내거나 고칠 수 없어요(총무는 돼요).'}</span></div><button class="btn ${S.room.closed ? '' : 'red'}" data-act="toggle-close">${S.room.closed ? '다시 열기' : '마감하기'}</button></div></section>
+    <section class="a-sec"><h3>메뉴 모으기</h3>
+      <div class="state-row"><div><b>${S.room.closed ? '메뉴 모으기를 마감했어요' : '메뉴 모으는 중'}</b><span>${S.room.closed ? '다시 열면 고르고 고칠 수 있어요.' : '마감하면 참여자는 메뉴를 보내거나 고칠 수 없어요. 방 관리 권한이 있으면 수정할 수 있어요.'}</span></div><button class="btn ${S.room.closed ? '' : 'red'}" data-act="toggle-close">${S.room.closed ? '다시 열기' : '마감하기'}</button></div></section>
     <section class="a-sec"><h3>방 정보</h3>
       <label class="field">방 이름<input class="input" data-e="title" maxlength="40" value="${esc(e.title)}"></label>
-      <label class="field">📢 총무 한마디 <span class="hint">방 맨 위에 늘 붙어 있어요</span><textarea class="input" data-e="note" rows="2" maxlength="300">${esc(e.note)}</textarea></label>
+      <label class="field">📢 모임 안내 <span class="hint">방 맨 위에 늘 붙어 있어요</span><textarea class="input" data-e="note" rows="2" maxlength="300">${esc(e.note)}</textarea></label>
       <label class="field">마감<input class="input" type="datetime-local" data-e="deadline" value="${esc(e.deadline)}"></label></section>
     ${treatForm('e', e.treat)}
     <section class="a-sec"><h3>누가 고르나요</h3>
@@ -1916,8 +1966,8 @@ function roomSet() {
         ${e.stores.length > 1 ? `<button class="text-btn red" data-act="edit-store-del" data-id="${esc(s.id)}" style="margin-left:14px">이 가게 빼기</button>` : ''}</div></details>`).join('')}
       <div class="two" style="margin-top:12px">${CATALOG.count ? `<button class="btn line-dark" data-act="catalog" data-for="room">목록에서 더 넣기</button>` : ''}<button class="btn line-dark" data-act="custom-open" data-for="e">메뉴 직접 적기</button></div>
       ${S.editCustomOpen ? customForm('e') : ''}</section>
-    <section class="a-sec"><h3>다른 기기에서도 총무로</h3><p class="hint">이 링크로 열면 그 기기도 총무 화면이 돼요. <b>총무끼리만</b> 나눠 주세요.</p>
-      <button class="btn gray block" data-act="copy-host">총무 링크 복사</button><div id="hostBox" hidden class="copy-box"><textarea class="input code-box" readonly></textarea></div></section>
+    <section class="a-sec"><h3>다른 기기에서 방 관리하기</h3><p class="hint">휴대폰이나 PC에서 이 링크를 열면 이 방이 「관리하는 방」에 추가돼요. 방 설정과 모인 메뉴를 수정·삭제할 수 있으니 <b>본인 기기나 함께 관리할 사람에게만</b> 보내 주세요.</p>
+      <button class="btn gray block" data-act="copy-host">관리 링크 복사</button><div id="hostBox" hidden class="copy-box"><textarea class="input code-box" readonly></textarea></div></section>
     <section class="a-sec"><h3>방 지우기</h3><p class="hint">방과 링크가 없어져요. 되돌릴 수 없어요.</p><button class="btn red block" data-act="room-del">방 지우기</button></section>
   </div>
   ${e.dirty ? `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">${S.sending ? '저장 중…' : '바꾼 내용 저장'}</button></div>` : ''}
@@ -1966,13 +2016,13 @@ function roomDoc(d) {
     names: d.names, freeJoin: !!d.freeJoin, stores: d.stores.map(s => tidyStore(s)),
   };
   // 쏘는 방만 treat 칸을 써요(쏘다가 끄면 null). 안 쏘는 방은 칸 자체가 없어요.
-  if (d.treat !== undefined) out.treat = d.treat && num(d.treat.cap) > 0 ? {by: String(d.treat.by || '총무').trim().slice(0, 20) || '총무', cap: Math.min(10000000, num(d.treat.cap))} : null;
+  if (d.treat !== undefined) out.treat = d.treat && num(d.treat.cap) > 0 ? {by: String(d.treat.by || '').trim().slice(0, 20), cap: Math.min(10000000, num(d.treat.cap))} : null;
   return out;
 }
 async function createRoom() {
   const d = S.draft;
   if (!d.title.trim() || !d.stores.length || S.sending) return;
-  if (d.treat && !(num(d.treat.cap) > 0)) { toast('🎁 1인 예산을 적어 주세요'); document.getElementById('c-treat-cap')?.focus(); return; }
+  if (d.treat && !(num(d.treat.cap) > 0)) { toast('🎁 1인당 예산을 적어 주세요'); document.getElementById('c-treat-cap')?.focus(); return; }
   if (d.mode === 'list' && !parseNames(d.names).length) { toast('참여할 이름을 한 명 이상 적어 주세요'); document.getElementById('c-names')?.focus(); return; }
   S.sending = true; S.createError = ''; persistDraft(); rerender();
   try {
@@ -1998,7 +2048,7 @@ async function createRoom() {
 async function sendAnswer() {
   const lines = cartLines();
   if (!lines.length || S.sending) return;
-  if (locked()) { toast(S.room.closed ? '총무가 수합을 마감했어요' : '마감 시간이 지났어요'); return; }
+  if (locked()) { toast(S.room.closed ? '메뉴 모으기가 마감됐어요' : '마감 시간이 지났어요'); return; }
   if (budget() && budgetLeft() < 0) { overBudgetToast(); return; }
   captureRequests();
   S.sending = true; rerender();
@@ -2014,7 +2064,7 @@ async function sendAnswer() {
     confetti(document.querySelector('.so-ic'));
   } catch (e) {
     S.sending = false; rerender();
-    toast(/permission/.test(String(e && e.code)) ? (S.room.closed ? '총무가 수합을 마감했어요.' : `「${S.who}」 이름으로 다른 기기에서 이미 보냈어요. 그 기기에서 고치거나 총무에게 말해 주세요.`) : friendly(e));
+    toast(/permission/.test(String(e && e.code)) ? (S.room.closed ? '메뉴 모으기가 마감됐어요.' : `「${S.who}」 이름으로 다른 기기에서 이미 보냈어요. 그 기기에서 고치거나 방을 관리하는 사람에게 알려 주세요.`) : friendly(e));
   }
 }
 async function saveEdit() {
@@ -2022,7 +2072,7 @@ async function saveEdit() {
   if (!e || S.sending) return;
   if (!e.title.trim()) { toast('방 이름을 적어 주세요'); return; }
   if (!e.stores.length) { toast('가게가 하나는 있어야 해요'); return; }
-  if (e.treat && !(num(e.treat.cap) > 0)) { toast('🎁 1인 예산을 적어 주세요'); return; }
+  if (e.treat && !(num(e.treat.cap) > 0)) { toast('🎁 1인당 예산을 적어 주세요'); return; }
   S.sending = true; rerender();
   try {
     await FB.updateDoc(FB.doc(DB, 'dinnerRooms', S.roomId), {...roomDoc({...e, names: parseNames(e.namesText), treat: e.treat || (S.room.treat ? null : undefined)}), updatedAt: FB.serverTimestamp()});
@@ -2199,11 +2249,11 @@ document.addEventListener('click', async e => {
     case 'copy-owner': copyOrShow(ownerMessage(totals()[Number(el.dataset.i)]), '📋 가게 주문 메시지를 복사했어요. 가게에 그대로 보내면 돼요', 'ownerBox' + el.dataset.i); break;
     case 'copy-host': {
       const key = myRooms().find(r => r.id === S.roomId)?.key;
-      if (!key) { toast('이 기기에는 총무 열쇠가 없어요. 방을 만든 기기에서 복사해 주세요'); return; }
-      copyOrShow(`${roomLink()}&k=${key}`, '👑 총무 링크를 복사했어요. 총무끼리만 나눠 주세요', 'hostBox'); break;
+      if (!key) { toast('이 기기에는 관리 키가 없어요. 방을 만든 기기에서 복사해 주세요'); return; }
+      copyOrShow(`${roomLink()}&k=${key}`, '👑 관리 링크를 복사했어요. 함께 관리할 사람에게만 보내 주세요', 'hostBox'); break;
     }
     case 'print': try { print(); } catch { toast('이 화면에서는 인쇄가 안 돼요'); } break;
-    case 'toggle-close': hostUpdate({closed: !S.room.closed}, S.room.closed ? '다시 열었어요' : '수합을 마감했어요'); break;
+    case 'toggle-close': hostUpdate({closed: !S.room.closed}, S.room.closed ? '다시 열었어요' : '메뉴 모으기를 마감했어요'); break;
     case 'edit-save': saveEdit(); break;
     case 'edit-cancel': S.edit = null; S.editCustomOpen = false; rerender(); break;
     case 'edit-menu-del': { for (const s of S.edit.stores) s.menu = s.menu.filter(m => m.id !== id); S.edit.dirty = true; rerender(); break; }
@@ -2253,7 +2303,7 @@ document.addEventListener('input', e => {
     const status = document.getElementById('selectionStatus'); if (status) status.outerHTML = selectionStatus();
     const nav = document.querySelector('.nav'); if (nav) nav.outerHTML = roomNav();
     const bar = document.querySelector('.cartbar');
-    if (bar) { bar.dataset.act = cartIsSent() ? 'tab' : 'review'; bar.dataset.t = 'mine'; bar.querySelector('.sp').textContent = cartIsSent() ? '제출 내역 보기' : '요청사항 확인하고 보내기'; }
+    if (bar) { bar.dataset.act = cartIsSent() ? 'tab' : 'review'; bar.dataset.t = 'mine'; bar.querySelector('.sp').textContent = cartIsSent() ? '보낸 메뉴 보기' : '요청사항 확인하고 보내기'; }
     return;
   }
   if (t.id === 'e-cname' || t.id === 'e-clines') { S.editCustom = S.editCustom || {name: '', lines: ''}; S.editCustom[t.id === 'e-cname' ? 'name' : 'lines'] = t.value; return; }
@@ -2285,21 +2335,26 @@ function route() {
   // 예전 「링크로 보내기」 판(#s=…)은 classic.html 로 보내요.
   if (/^#s=/.test(location.hash)) { location.replace('classic.html' + location.hash); return; }
   const h = new URLSearchParams(location.hash.replace(/^#/, ''));
-  if (location.hash === '#new') { S.draft = S.draft || load('mm-create-draft', null) || EMPTY_DRAFT(); stopListening(); go({route: 'create'}); return; }
   const id = (h.get('r') || '').replace(/[^a-z0-9]/gi, '').slice(0, 40);
+  const want = ROOM_TABS.includes(h.get('t')) ? h.get('t') : '';
+  if (S.route === 'room' && S.tab === 'set' && S.edit?.dirty && (id !== S.roomId || want !== 'set')) {
+    rememberView('pushState'); toast('바꾼 내용을 저장하거나 되돌려 주세요'); return;
+  }
+  if (location.hash === '#new') { S.draft = S.draft || load('mm-create-draft', null) || EMPTY_DRAFT(); stopListening(); go({route: 'create'}, false); return; }
   if (id) {
     const key = (h.get('k') || '').replace(/[^a-z0-9]/gi, '').slice(0, 64);
     // 방장 열쇠는 주소창에서 바로 지워요(실수로 그대로 공유하지 않게). 이 기기에는 기억해요.
-    const want = ['sum', 'set', 'mine'].includes(h.get('t')) ? h.get('t') : '';
-    if (key || want) { if (key) rememberRoom(id, {key}); history.replaceState(null, '', `#r=${id}`); }
+    if (key) { rememberRoom(id, {key}); history.replaceState(null, '', `#r=${id}${want ? `&t=${want}` : ''}`); }
     if (id !== S.roomId || S.route !== 'room') openRoom(id, key, want);
-    else if (want) go({tab: want});
+    else go({...restoredRoomView(id), tab: want || (S.who ? 'menu' : 'who')}, false);
     return;
   }
   stopListening(); S.roomId = '';
-  if (S.route !== 'catalog') go({route: 'home'});
+  if (S.route !== 'catalog') go({route: 'home'}, false);
 }
 addEventListener('hashchange', route);
+// Two store views can share the same hash; popstate also restores their store/search context.
+addEventListener('popstate', route);
 route();
 setInterval(() => { if (S.route === 'room' && S.room && S.room.deadline && !document.querySelector('input:focus,textarea:focus')) { const c = document.querySelector('.rh-meta'); if (c) rerender(); } }, 60000);
 </script>
