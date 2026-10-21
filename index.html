@@ -1545,6 +1545,66 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .room-head{padding:16px!important}.mm .room-head h1{margin:0 0 10px}.mm .room-head .pills{margin:0}
 :root[data-palette=sky]{--sub:#516d78;--mute:#6c8189}
 
+/* A table waiting to be filled: branded home and useful empty states. */
+.mm.view-home .home-brand-scene{padding:24px 20px 20px;transform:none}
+.mm.view-home .home-brand-scene .brand-art{margin:0 0 12px}
+.mm.view-home .brand-motto{font-size:18px;font-weight:600;line-height:1.45;margin:0 0 17px;letter-spacing:-.035em;color:var(--mint-d)}
+.mm.view-home .scene-orders{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.mm.view-home .scene-orders>div{display:flex;align-items:center;justify-content:center;flex-direction:column;min-width:0;padding:9px 4px 10px!important;border-radius:17px;transform:none}
+.mm.view-home .scene-orders>div:nth-child(1){background:linear-gradient(145deg,#ffffffd9,#ddf2edb0)!important}
+.mm.view-home .scene-orders>div:nth-child(2){background:linear-gradient(145deg,#ffffffe0,#fff2bdb0)!important}
+.mm.view-home .scene-orders>div:nth-child(3){background:linear-gradient(145deg,#ffffffd9,#e0edfab0)!important}
+.mm.view-home .scene-orders .food-mascot{width:64px;height:59px;margin:0}
+.mm.view-home .scene-orders b{font-size:14px;line-height:1.3;margin:3px 0 0;font-weight:600}
+.mm.view-home .land-go b{font-size:17px;font-weight:650}
+.mm.view-home .land-go svg{width:24px;height:24px;flex-shrink:0}
+.mm.view-home .room-cards.is-empty{grid-template-columns:1fr}
+.home-empty-tray{position:relative;overflow:hidden;text-align:center;padding:12px 18px 16px;border:1px solid #ffffff;border-radius:23px;background:linear-gradient(150deg,#ffffffb0,#ffffff55);box-shadow:inset 0 1px 0 #fff,0 7px 22px #285d6908;backdrop-filter:blur(18px)}
+.empty-place-settings{display:flex;justify-content:center;align-items:center;gap:3px;max-width:330px;margin:0 auto}
+.empty-place{display:block;width:29%;max-width:94px;transform:rotate(-8deg)}
+.empty-place-main{width:34%;max-width:113px;transform:translateY(-3px)}
+.empty-place:last-child{transform:rotate(8deg)}
+.empty-place svg{display:block;width:100%;height:auto;overflow:visible}
+.dish-shadow{fill:#bed2d5;opacity:.25}
+.dish-body{fill:#dce7e8;stroke:#9fb8bc;stroke-width:2;stroke-linejoin:round}
+.dish-rim{fill:#f8fbfa;stroke:#a6bec2;stroke-width:2}
+.dish-stroke{stroke:#9fb8bc;stroke-width:3;stroke-linecap:round}
+.dish-plus{stroke:#498e91;stroke-width:3;stroke-linecap:round}
+.empty-tray-copy h2{font-size:19px;line-height:1.4;font-weight:650;letter-spacing:-.04em;margin:0 0 5px;color:var(--ink)}
+.empty-tray-copy p{font-size:13px;line-height:1.5;color:var(--sub);margin:0}
+.empty-tray-action{display:inline-flex;align-items:center;gap:18px;border:1px solid #c1dbda;background:#ffffffa8;color:var(--mint-d);border-radius:12px;font-size:14px;font-weight:650;padding:9px 16px;min-height:42px;margin:12px 0 0;cursor:pointer;box-shadow:inset 0 1px #fff}
+.empty-tray-action span{font-size:19px}
+.empty-tray-action:hover{background:#fff;border-color:var(--mint)}
+.empty-tray-action:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.mm.view-home .brief-how{margin:18px 0 16px;padding-top:14px}
+.mm.view-home .brief-how li b{font-size:12px}
+.mm.view-home .my-rooms .seg.wide button{font-size:14px;min-height:46px}
+@media(max-width:600px){
+ .mm.view-home .land{padding:12px 0 17px;gap:12px}
+ .mm.view-home .home-brand-scene{padding:17px 13px 13px;border-radius:24px}
+ .mm.view-home .home-brand-scene .brand-art{margin:0 0 9px;aspect-ratio:4.08}
+ .mm.view-home .brand-motto{font-size:16px;margin:0 0 13px;line-height:1.35}
+ .mm.view-home .home-brand-scene .scene-orders{display:grid!important}
+ .mm.view-home .scene-orders>div{padding:6px 3px 8px!important;border-radius:15px}
+ .mm.view-home .scene-orders .food-mascot{width:58px;height:54px}
+ .mm.view-home .scene-orders b{font-size:13px;margin-top:2px}
+ .mm.view-home .land-go{min-height:55px;border-radius:16px;padding:12px 17px;gap:10px}
+ .mm.view-home .land-go span{font-size:23px}
+ .mm.view-home .my-rooms .seg.wide{margin-bottom:10px}
+ .mm.view-home .brand-footer{padding:13px 0;gap:9px}
+ .home-empty-tray{padding:9px 12px 15px}
+ .empty-place-settings{max-width:280px}
+}
+@media(max-width:360px){
+ .mm.view-home .brand-motto{font-size:14px}
+ .mm.view-home .my-rooms .seg.wide button{font-size:13px;padding:8px 5px;gap:5px}
+ .mm.view-home .land-go b{font-size:16px}
+ .mm.view-home .scene-orders .food-mascot{width:51px;height:48px}
+ .empty-tray-copy h2{font-size:18px}
+ .empty-tray-copy p{font-size:12px}
+ .mm.view-home .brief-how li b{font-size:11px}
+}
+
 /* Three landings, a springing tray, then delivery. Native vectors at every scale. */
 .brand-motion{--motion-blue:#8dc6e9;--motion-lemon:#f5d15b;width:310px;max-width:100%;margin:auto;isolation:isolate;color:#007e7a}
 :root[data-palette=mint] .brand-motion{--motion-blue:#a4e5d9;--motion-lemon:#ffad69}
@@ -1580,14 +1640,14 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
 <meta property="og:title" content="다맛다 — 얼른 담아! 우리끼리 먹는다?">
 <meta property="og:description" content="얼른 담아! 우리끼리 먹는다? 메뉴를 고르고, 담아서, 방장에게 보내요.">
-<meta property="og:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-approved-v3.png">
-<meta property="og:image:width" content="1536">
-<meta property="og:image:height" content="1024">
+<meta property="og:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
+<meta property="og:image:width" content="1774">
+<meta property="og:image:height" content="887">
 <meta property="og:image:alt" content="다맛다. 밥, 면, 커피를 한 쟁반에 담아요.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="다맛다 — 얼른 담아!">
 <meta name="twitter:description" content="얼른 담아! 우리끼리 먹는다? 메뉴를 고르고, 담아서, 방장에게 보내요.">
-<meta name="twitter:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-approved-v3.png">
+<meta name="twitter:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
 </head>
 <body>
 <div id="app"></div>
@@ -1631,7 +1691,7 @@ function brandMotionWord(){return '<strong class="motion-word"><span style="--st
 function brandLoadingView(){return `<section class="brand-loading" role="status" aria-live="polite" aria-busy="true">${brandMotion('loading')}<h2>방을 여는 중<span class="loading-dots" aria-hidden="true">···</span></h2></section>`;}
 
 // Motion shared by the production room UI and the isolated design preview.
-function brandAsset() { return document.documentElement.dataset.palette === 'sky' ? 'assets/brand-sky.png' : 'assets/brand.png'; }
+function brandAsset() { return document.documentElement.dataset.palette === 'sky' ? 'assets/brand-sky.png' : 'assets/brand-mint.png'; }
 function applyPalette(value) {
   const palette = value === 'sky' ? 'sky' : 'mint';
   document.documentElement.dataset.palette = palette;
@@ -2089,15 +2149,26 @@ const brand = () => `<span class="brand-lockup" aria-label="다맛다"><span cla
 const topBar = (title, back, right = '') => `<header class="top">${back ? `<button class="back" data-act="${back}" aria-label="뒤로">${ICON.back}</button>` : ''}<div class="top-title${title ? '' : ' top-brand'}">${title ? `<span class="top-eyebrow">다맛다</span><h1>${title}</h1>` : brand()}</div>${right}</header>`;
 
 // ---------- 첫 화면 ----------
+function homeEmptyTray(joined = false) {
+  return `<div class="home-empty-tray">
+    <div class="empty-place-settings" aria-hidden="true">
+      <span class="empty-place"><svg viewBox="0 0 90 90" fill="none"><ellipse cx="45" cy="68" rx="31" ry="7" class="dish-shadow"/><path d="M17 40h56c-2 23-13 30-28 30S19 63 17 40Z" class="dish-body"/><ellipse cx="45" cy="40" rx="28" ry="8" class="dish-rim"/><path d="M36 74h18" class="dish-stroke"/></svg></span>
+      <span class="empty-place empty-place-main"><svg viewBox="0 0 100 90" fill="none"><ellipse cx="50" cy="71" rx="34" ry="8" class="dish-shadow"/><ellipse cx="50" cy="50" rx="35" ry="23" class="dish-body"/><ellipse cx="50" cy="48" rx="25" ry="15" class="dish-rim"/><path d="M44 48h12m-6-6v12" class="dish-plus"/></svg></span>
+      <span class="empty-place"><svg viewBox="0 0 90 90" fill="none"><ellipse cx="44" cy="70" rx="28" ry="7" class="dish-shadow"/><path d="M62 36h8c15 0 12 25-8 25" class="dish-stroke"/><path d="M22 30h42l-3 30c-1 15-34 15-36 0Z" class="dish-body"/><ellipse cx="43" cy="30" rx="21" ry="7" class="dish-rim"/></svg></span>
+    </div>
+    <div class="empty-tray-copy"><h2>${joined ? '같이 먹을 자리, 여기.' : '첫 메뉴, 누가 담을래?'}</h2><p>${joined ? '초대 링크로 들어오면 여기에 모여요.' : '가게를 고르고, 같이 먹을 사람을 불러요.'}</p></div>
+    ${joined ? '' : '<button class="empty-tray-action" data-act="new">이 그릇부터 채우기 <span aria-hidden="true">↗</span></button>'}
+  </div>`;
+}
 function viewHome() {
   const rooms=myRooms(),made=rooms.filter(r=>r.host),joined=rooms.filter(r=>!r.host);
-  const tab=S.homeTab||(made.length?'made':'joined'),list=tab==='made'?made:joined;
+  const tab=S.homeTab||(made.length||!rooms.length?'made':'joined'),list=tab==='made'?made:joined;
   if(rooms.length&&!S.sumsLoading&&rooms.some(r=>!S.sums[r.id]))loadSums(rooms);
-  return `<header class="home-brand"><a href="#" aria-label="다맛다 홈">${brand()}</a><nav class="home-nav"><a href="#how">어떻게 써요?</a><a href="#new" class="home-small-cta">방 만들기 ↗</a></nav></header>
-  <section class="land"><div class="land-copy"><span class="land-kicker">우리끼리, 메뉴 모으는 곳</span><h1>오늘 뭐 먹어?<br><em>각자 담아봐.</em></h1><p>커피 한 잔부터 단체 점심까지.<br>이름만 적고 고르면, 메뉴와 요청사항이 한곳에 모여요.</p><button class="btn land-go" data-act="new">새 방 만들기 <span aria-hidden="true">↗</span></button><span class="land-hint">초대받았나요? 받은 링크로 바로 들어오세요.</span></div>
-  <div class="home-brand-scene"><h1 class="mobile-home-title">다맛다</h1><div class="scene-label"><span>DIFFERENT TASTES, ONE TRAY</span><span>입맛 존중</span></div><div class="brand-art"><img src="${brandAsset()}" alt="다맛다"></div><div class="brand-motto">얼른 담아! 우리끼리 먹는다?</div><div class="scene-orders"><div>${FOOD_MASCOTS[0]}<b>난 든든하게.</b><small>밥파 · 지민</small></div><div>${FOOD_MASCOTS[1]}<b>난 면이요.</b><small>면파 · 수현</small></div><div>${FOOD_MASCOTS[2]}<b>난 커피부터!</b><small>커피파 · 민수</small></div></div><div class="scene-rail"><i class="scene-dot"></i></div></div></section>
-  <div class="wrap home-content">${rooms.length?`<section class="my-rooms"><div class="seg wide" role="tablist" aria-label="내 방 목록"><button class="${tab==='made'?'on':''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab==='made'}">내가 만든 방 <small>${made.length}</small></button><button class="${tab==='joined'?'on':''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab==='joined'}">함께 먹는 방 <small>${joined.length}</small></button></div><div class="room-cards">${list.map(roomCard).join('')||'<p class="muted empty-line">아직 방이 없어요.</p>'}</div></section>`:''}
-  <ol class="how brief-how" id="how"><li><i>01</i><b>방 만들기</b></li><li><i>02</i><b>링크 공유</b></li><li><i>03</i><b>메뉴 모으기</b></li></ol></div><footer class="brand-footer"><span>다맛다 © 2026</span><div class="theme-options" role="group" aria-label="색상 테마"><button data-palette-choice="mint" aria-pressed="${document.documentElement.dataset.palette==='mint'}"><i></i>민트 · 귤</button><button data-palette-choice="sky" aria-pressed="${document.documentElement.dataset.palette==='sky'}"><i></i>블루 · 레몬</button></div><a class="screen-tour-link" href="screens.html">화면 둘러보기 ↗</a></footer>`;
+  return `<header class="home-brand"><a href="#" aria-label="다맛다 홈">${brand()}</a><nav class="home-nav"><a href="#how">어떻게 써요?</a><a href="#new" class="home-small-cta">같이 담기 ↗</a></nav></header>
+  <section class="land"><div class="land-copy"><span class="land-kicker">우리끼리, 메뉴 모으는 곳</span><h1>오늘 뭐 먹어?<br><em>각자 담아봐.</em></h1><p>커피 한 잔부터 단체 점심까지.<br>각자 고른 메뉴를 한곳에 담아요.</p><button class="btn land-go" data-act="new">${BRAND_ICONS.cart}<b>같이 담기 시작</b><span aria-hidden="true">↗</span></button><span class="land-hint">초대받았다면 받은 링크로 들어오세요.</span></div>
+  <div class="home-brand-scene"><h1 class="mobile-home-title">다맛다</h1><div class="brand-art"><img src="${brandAsset()}" alt="다맛다" fetchpriority="high"></div><div class="brand-motto">얼른 담아! 우리끼리 먹는다?</div><div class="scene-orders"><div>${FOOD_MASCOTS[0]}<b>밥도.</b></div><div>${FOOD_MASCOTS[1]}<b>면도.</b></div><div>${FOOD_MASCOTS[2]}<b>커피도!</b></div></div></div></section>
+  <div class="wrap home-content"><section class="my-rooms"><div class="seg wide" role="tablist" aria-label="같이 담는 모임"><button class="${tab==='made'?'on':''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab==='made'}">내가 연 모임 <small>${made.length}</small></button><button class="${tab==='joined'?'on':''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab==='joined'}">참여한 모임 <small>${joined.length}</small></button></div><div class="room-cards${list.length?'':' is-empty'}">${list.map(roomCard).join('')||homeEmptyTray(tab==='joined')}</div></section>
+  <ol class="how brief-how" id="how"><li><i>01</i><b>가게 고르고</b></li><li><i>02</i><b>같이 담고</b></li><li><i>03</i><b>한 번에 모으기</b></li></ol></div><footer class="brand-footer"><span>다맛다 © 2026</span><div class="theme-options" role="group" aria-label="색상 테마"><button data-palette-choice="mint" aria-pressed="${document.documentElement.dataset.palette==='mint'}"><i></i>민트 · 귤</button><button data-palette-choice="sky" aria-pressed="${document.documentElement.dataset.palette==='sky'}"><i></i>블루 · 레몬</button></div><a class="screen-tour-link" href="screens.html">화면 둘러보기 ↗</a></footer>`;
 }
 
 // 방 카드: 만든 방은 상태·응답 수와 관리 버튼, 참여한 방은 내가 보낸 이름
@@ -2166,12 +2237,12 @@ function customForm(prefix) {
 }
 function viewCreate() {
   const d = S.draft, can = d.title.trim() && d.stores.length;
-  return `${topBar('방 만들기', 'home')}
+  return `${topBar('같이 담기', 'home')}
   <div class="wrap form create-form">
 
-    ${S.createError ? `<div class="notice red" role="alert"><b>방을 만들지 못했어요.</b><p>${esc(S.createError)}</p><span>적은 내용은 남아 있어요. 다시 시도해 주세요.</span></div>` : ''}
+    ${S.createError ? `<div class="notice red" role="alert"><b>담기를 시작하지 못했어요.</b><p>${esc(S.createError)}</p><span>적은 내용은 남아 있어요. 다시 시도해 주세요.</span></div>` : ''}
     <div class="create-board">
-      <section class="create-section"><label class="field" for="c-title"><span class="create-label"><i>01</i>우리 방 이름</span></label><input class="input" id="c-title" maxlength="40" placeholder="예: 오늘 커피는 내가 쏜다!" value="${esc(d.title)}"></section>
+      <section class="create-section"><label class="field" for="c-title"><span class="create-label"><i>01</i>모임 이름</span></label><input class="input" id="c-title" maxlength="40" placeholder="예: 오늘 커피는 내가 쏜다!" value="${esc(d.title)}"></section>
       <section class="create-section"><h2 class="create-label"><i>02</i>메뉴 고를 가게 <small>${d.stores.length ? `${d.stores.length}곳 담음` : '1곳 이상'}</small></h2>
         ${d.stores.length ? `<div class="create-picked">${d.stores.map(s => storeRow(s, `<button class="x-btn" data-act="draft-del" data-id="${esc(s.id)}" aria-label="${esc(s.name)} 빼기">✕</button>`)).join('')}</div>` : ''}
         <div class="create-choices">${CATALOG.count ? `<button class="create-choice" data-act="catalog" data-for="create"><span aria-hidden="true">${FOOD_ICONS.bowl}</span><b>주변 맛집 목록</b><span class="choice-arrow" aria-hidden="true">＋</span></button>` : ''}<button class="create-choice direct" data-act="custom-open" data-for="c" aria-expanded="${!!d.customOpen}"><span aria-hidden="true">${FOOD_ICONS.cup}</span><b>직접 적기</b><span class="choice-arrow" aria-hidden="true">＋</span></button></div>
@@ -2188,7 +2259,7 @@ function viewCreate() {
       ${treatForm('c', d.treat)}
     </div></section>
   </div>
-  <div class="bottom-bar create-submit"><button class="btn block" data-act="create"${can && !S.sending ? '' : ' disabled'}>${S.sending ? '만드는 중…' : can ? S.createError ? '다시 방 만들기' : '방 만들고 링크 받기' : d.title.trim() ? '가게를 넣어 주세요' : '방 이름을 적어 주세요'}</button></div>`;
+  <div class="bottom-bar create-submit"><button class="btn block" data-act="create"${can && !S.sending ? '' : ' disabled'}>${S.sending ? '만드는 중…' : can ? S.createError ? '다시 시작하기' : '시작하고 초대 링크 받기' : d.title.trim() ? '가게를 넣어 주세요' : '모임 이름을 적어 주세요'}</button></div>`;
 }
 
 

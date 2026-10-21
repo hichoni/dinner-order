@@ -312,3 +312,63 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .plist{grid-template-columns:minmax(0,1fr);min-width:0;width:100%;padding:0}.mm .prow,.mm .prow-main{min-width:0;max-width:100%;width:100%}.mm .prow-txt{min-width:0;flex:1}.mm .prow-txt .menu-line{white-space:normal;overflow:hidden;overflow-wrap:anywhere}.mm .catalog-check{flex-shrink:0}.mm .prow-txt b{overflow-wrap:anywhere}
 .mm .room-head{padding:16px!important}.mm .room-head h1{margin:0 0 10px}.mm .room-head .pills{margin:0}
 :root[data-palette=sky]{--sub:#516d78;--mute:#6c8189}
+
+/* A table waiting to be filled: branded home and useful empty states. */
+.mm.view-home .home-brand-scene{padding:24px 20px 20px;transform:none}
+.mm.view-home .home-brand-scene .brand-art{margin:0 0 12px}
+.mm.view-home .brand-motto{font-size:18px;font-weight:600;line-height:1.45;margin:0 0 17px;letter-spacing:-.035em;color:var(--mint-d)}
+.mm.view-home .scene-orders{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.mm.view-home .scene-orders>div{display:flex;align-items:center;justify-content:center;flex-direction:column;min-width:0;padding:9px 4px 10px!important;border-radius:17px;transform:none}
+.mm.view-home .scene-orders>div:nth-child(1){background:linear-gradient(145deg,#ffffffd9,#ddf2edb0)!important}
+.mm.view-home .scene-orders>div:nth-child(2){background:linear-gradient(145deg,#ffffffe0,#fff2bdb0)!important}
+.mm.view-home .scene-orders>div:nth-child(3){background:linear-gradient(145deg,#ffffffd9,#e0edfab0)!important}
+.mm.view-home .scene-orders .food-mascot{width:64px;height:59px;margin:0}
+.mm.view-home .scene-orders b{font-size:14px;line-height:1.3;margin:3px 0 0;font-weight:600}
+.mm.view-home .land-go b{font-size:17px;font-weight:650}
+.mm.view-home .land-go svg{width:24px;height:24px;flex-shrink:0}
+.mm.view-home .room-cards.is-empty{grid-template-columns:1fr}
+.home-empty-tray{position:relative;overflow:hidden;text-align:center;padding:12px 18px 16px;border:1px solid #ffffff;border-radius:23px;background:linear-gradient(150deg,#ffffffb0,#ffffff55);box-shadow:inset 0 1px 0 #fff,0 7px 22px #285d6908;backdrop-filter:blur(18px)}
+.empty-place-settings{display:flex;justify-content:center;align-items:center;gap:3px;max-width:330px;margin:0 auto}
+.empty-place{display:block;width:29%;max-width:94px;transform:rotate(-8deg)}
+.empty-place-main{width:34%;max-width:113px;transform:translateY(-3px)}
+.empty-place:last-child{transform:rotate(8deg)}
+.empty-place svg{display:block;width:100%;height:auto;overflow:visible}
+.dish-shadow{fill:#bed2d5;opacity:.25}
+.dish-body{fill:#dce7e8;stroke:#9fb8bc;stroke-width:2;stroke-linejoin:round}
+.dish-rim{fill:#f8fbfa;stroke:#a6bec2;stroke-width:2}
+.dish-stroke{stroke:#9fb8bc;stroke-width:3;stroke-linecap:round}
+.dish-plus{stroke:#498e91;stroke-width:3;stroke-linecap:round}
+.empty-tray-copy h2{font-size:19px;line-height:1.4;font-weight:650;letter-spacing:-.04em;margin:0 0 5px;color:var(--ink)}
+.empty-tray-copy p{font-size:13px;line-height:1.5;color:var(--sub);margin:0}
+.empty-tray-action{display:inline-flex;align-items:center;gap:18px;border:1px solid #c1dbda;background:#ffffffa8;color:var(--mint-d);border-radius:12px;font-size:14px;font-weight:650;padding:9px 16px;min-height:42px;margin:12px 0 0;cursor:pointer;box-shadow:inset 0 1px #fff}
+.empty-tray-action span{font-size:19px}
+.empty-tray-action:hover{background:#fff;border-color:var(--mint)}
+.empty-tray-action:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.mm.view-home .brief-how{margin:18px 0 16px;padding-top:14px}
+.mm.view-home .brief-how li b{font-size:12px}
+.mm.view-home .my-rooms .seg.wide button{font-size:14px;min-height:46px}
+@media(max-width:600px){
+ .mm.view-home .land{padding:12px 0 17px;gap:12px}
+ .mm.view-home .home-brand-scene{padding:17px 13px 13px;border-radius:24px}
+ .mm.view-home .home-brand-scene .brand-art{margin:0 0 9px;aspect-ratio:4.08}
+ .mm.view-home .brand-motto{font-size:16px;margin:0 0 13px;line-height:1.35}
+ .mm.view-home .home-brand-scene .scene-orders{display:grid!important}
+ .mm.view-home .scene-orders>div{padding:6px 3px 8px!important;border-radius:15px}
+ .mm.view-home .scene-orders .food-mascot{width:58px;height:54px}
+ .mm.view-home .scene-orders b{font-size:13px;margin-top:2px}
+ .mm.view-home .land-go{min-height:55px;border-radius:16px;padding:12px 17px;gap:10px}
+ .mm.view-home .land-go span{font-size:23px}
+ .mm.view-home .my-rooms .seg.wide{margin-bottom:10px}
+ .mm.view-home .brand-footer{padding:13px 0;gap:9px}
+ .home-empty-tray{padding:9px 12px 15px}
+ .empty-place-settings{max-width:280px}
+}
+@media(max-width:360px){
+ .mm.view-home .brand-motto{font-size:14px}
+ .mm.view-home .my-rooms .seg.wide button{font-size:13px;padding:8px 5px;gap:5px}
+ .mm.view-home .land-go b{font-size:16px}
+ .mm.view-home .scene-orders .food-mascot{width:51px;height:48px}
+ .empty-tray-copy h2{font-size:18px}
+ .empty-tray-copy p{font-size:12px}
+ .mm.view-home .brief-how li b{font-size:11px}
+}
