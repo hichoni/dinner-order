@@ -1,4 +1,18 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>다맛다 모션</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="motion.css"><link rel="stylesheet" href="theme.css"><link rel="stylesheet" href="brand-motion.css"><style>*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--bg);font:14px Pretendard,sans-serif}#app{width:100%;min-height:100dvh;display:grid;place-items:center}.brand-loading{padding:25px 0}.send-curtain{background:var(--bg);backdrop-filter:none}.send-panel{padding:0}.send-finish{font-family:inherit}.brand-loading .brand-motion{width:250px}.preview-title{position:absolute;top:24px;left:0;right:0;font-size:12px;color:var(--sub);text-align:center}.send-curtain{z-index:1}</style></head><body><div id="app"></div><script src="assets/brand-icons.js"></script><script src="brand-motion.js"></script><script src="motion.js"></script><script>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>다맛다 모션</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><link rel="stylesheet" href="motion.css"><link rel="stylesheet" href="theme.css"><link rel="stylesheet" href="brand-motion.css"><style>*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--bg);font:14px Pretendard,sans-serif}#app{width:100%;min-height:100dvh;display:grid;place-items:center}.brand-loading{padding:25px 0}.send-curtain{background:var(--bg);backdrop-filter:none}.send-panel{padding:0}.send-finish{font-family:inherit}.brand-loading .brand-motion{width:250px}.preview-title{position:absolute;top:24px;left:0;right:0;font-size:12px;color:var(--sub);text-align:center}.send-curtain{z-index:1}</style><meta name="description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+<meta property="og:site_name" content="다맛다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
+<meta property="og:title" content="다맛다">
+<meta property="og:description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+<meta property="og:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
+<meta property="og:image:width" content="1774">
+<meta property="og:image:height" content="887">
+<meta property="og:image:alt" content="다맛다. 밥, 면, 커피를 한 쟁반에 담아요.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="다맛다">
+<meta name="twitter:description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+<meta name="twitter:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
+</head><body><div id="app"></div><script src="assets/brand-icons.js"></script><script src="brand-motion.js"></script><script src="motion.js"></script><script>
 const params=new URLSearchParams(location.search),kind=params.get('state')||'loading';
 const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 applyPalette(params.get('palette')||'sky');
