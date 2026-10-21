@@ -1,18 +1,12 @@
-// Animate the three actual approved logo cards, without changing the artwork.
-let brandMotionId = 0;
-function brandMotion(mode = 'loading') {
-  const id='damatda-motion-'+(++brandMotionId),src=brandAsset();
-  const crops=[
-    'M136 448Q138 424 168 417L263 396Q298 390 311 424L337 541Q342 572 313 585L210 608Q173 615 159 573Z',
-    'M321 414Q321 363 363 362L483 367Q520 370 521 411L515 550Q515 590 480 595L353 591Q317 590 315 554Z',
-    'M532 435Q542 391 576 400L675 427Q707 439 696 480L675 566Q666 601 628 604L540 582Q513 573 516 545Z'
-  ];
-  return `<div class="brand-motion ${mode}" aria-hidden="true"><svg class="motion-cards" xmlns="http://www.w3.org/2000/svg" viewBox="95 330 660 350"><defs>${crops.map((d,i)=>`<clipPath id="${id}-${i}"><path d="${d}"/></clipPath>`).join('')}</defs>${crops.map((_,i)=>`<g class="motion-piece piece-${i}" style="--step:${i}"><image href="${src}" width="1536" height="1024" clip-path="url(#${id}-${i})"/></g>`).join('')}<path class="motion-tray" d="M132 563C153 646 258 642 423 640C592 639 674 645 720 552" fill="none" stroke="#00776f" stroke-width="27" stroke-linecap="round"/></svg><div class="motion-step-labels"><span style="--step:0">고르고</span><span style="--step:1">담아서</span><span style="--step:2">보내기</span></div></div>`;
+// Resolution-independent food artwork. No cropped bitmap images.
+function motionFood(kind) {
+ const face='<g fill="#075e60" stroke="none"><circle cx="37" cy="54" r="2.6"/><circle cx="57" cy="54" r="2.6"/></g><path d="M42 61q5 5 10 0" fill="none"/><g fill="#f9b89b" stroke="none"><ellipse cx="29" cy="60" rx="5" ry="2.8"/><ellipse cx="65" cy="60" rx="5" ry="2.8"/></g>';
+ if(kind==='rice')return `<g stroke="#007e7a" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 46Q14 32 26 29Q26 17 40 21Q49 10 59 23Q73 21 76 34Q84 36 79 47" fill="#fffdf4"/><path d="M16 45H80Q78 78 48 78Q19 78 16 45Z" fill="var(--motion-blue)"/>${face}<path d="m33 30 2-4m15 5 2-5m13 9 2-4" stroke-width="2.8"/></g>`;
+ if(kind==='noodle')return `<g stroke="#007e7a" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 44q-7-13 5-17q5-13 15-4q11-12 19 1q14-5 17 12" fill="#fff9d8"/><path d="M28 39q1-13 12-7q0 10 10 5q7-12 14-4" fill="none" stroke-width="3"/><path d="M16 43H80Q78 79 48 79Q19 79 16 43Z" fill="var(--motion-lemon)"/>${face}<g class="motion-chopsticks"><path d="m51 27 30-19m-24 24L87 13" stroke-width="4"/></g></g>`;
+ return `<g stroke="#007e7a" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M73 40h5q19 0 12 17q-3 9-17 7" fill="#e0f5ee"/><path d="M20 33H75L71 64Q69 80 47 80Q26 80 23 63Z" fill="#d0f0eb"/><ellipse cx="47" cy="34" rx="27" ry="8" fill="#fff4d8"/><path d="M34 34q13-7 26 0" stroke="#c89b65" stroke-width="3"/>${face}<g class="motion-steam" fill="none" stroke-width="2.8"><path d="M40 20q-5-5 0-10M53 18q-5-5 0-10"/></g></g>`;
 }
-function brandMotionWord(){
-  const id='damatda-word-'+(++brandMotionId),src=brandAsset();
-  return `<svg class="motion-word" xmlns="http://www.w3.org/2000/svg" viewBox="750 350 690 275"><defs>${[750,980,1200].map((x,i)=>`<clipPath id="${id}-${i}"><rect x="${x}" y="350" width="${i===0?230:i===1?220:240}" height="275"/></clipPath>`).join('')}</defs>${[0,1,2].map(i=>`<g style="--step:${i}"><image href="${src}" width="1536" height="1024" clip-path="url(#${id}-${i})"/></g>`).join('')}</svg>`;
+function brandMotion(mode='loading') {
+ return `<div class="brand-motion ${mode}" aria-hidden="true"><svg class="motion-cards" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 235"><ellipse class="motion-shadow" cx="180" cy="202" rx="134" ry="9"/><g class="motion-delivery"><g transform="translate(25 46)"><g class="motion-piece piece-0" style="--step:0"><rect class="motion-card" x="0" y="0" width="96" height="121" rx="25" fill="#eef9f6"/>${motionFood('rice')}<circle cx="48" cy="103" r="5" fill="#007e7a"/></g></g><g transform="translate(132 33)"><g class="motion-piece piece-1" style="--step:1"><rect class="motion-card" width="96" height="134" rx="25" fill="#fff5cd"/>${motionFood('noodle')}<circle cx="48" cy="116" r="5" fill="#007e7a"/></g></g><g transform="translate(239 46)"><g class="motion-piece piece-2" style="--step:2"><rect class="motion-card" width="96" height="121" rx="25" fill="#e5effb"/>${motionFood('coffee')}<circle cx="48" cy="103" r="5" fill="#007e7a"/></g></g><path class="motion-tray" d="M16 175Q29 194 65 194H295Q331 194 344 175" fill="none" stroke="#007e7a" stroke-width="10" stroke-linecap="round"/><path d="M49 204H311" stroke="#b0dfd8" stroke-width="4" stroke-linecap="round"/></g><g class="motion-spark" fill="none" stroke="var(--motion-lemon)" stroke-width="5" stroke-linecap="round"><path d="M180 4v9M157 10l5 7M203 10l-5 7"/></g></svg><div class="motion-step-labels"><span style="--step:0"><i>1</i>고르고</span><span style="--step:1"><i>2</i>담아서</span><span style="--step:2"><i>3</i>보내기</span></div></div>`;
 }
-function brandLoadingView(){
- return `<section class="brand-loading" role="status" aria-live="polite" aria-busy="true">${brandMotion('loading')}<h2>방을 여는 중<span class="loading-dots" aria-hidden="true">···</span></h2></section>`;
-}
+function brandMotionWord(){return '<strong class="motion-word"><span style="--step:0">다</span><span style="--step:1">맛</span><span style="--step:2">다</span></strong>';}
+function brandLoadingView(){return `<section class="brand-loading" role="status" aria-live="polite" aria-busy="true">${brandMotion('loading')}<h2>방을 여는 중<span class="loading-dots" aria-hidden="true">···</span></h2></section>`;}

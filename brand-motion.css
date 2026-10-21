@@ -1,32 +1,28 @@
-/* One rhythm: three logo cards lift in quick succession, then settle on the tray. */
-.brand-motion{width:280px;max-width:100%;margin:0 auto;color:var(--mint-d);isolation:isolate}
-.motion-cards{width:100%;height:auto;display:block;overflow:visible;mix-blend-mode:multiply}
-.motion-piece{transform-box:fill-box;transform-origin:center bottom;animation:brand-tick 1.65s cubic-bezier(.22,.75,.25,1) infinite;animation-delay:calc(var(--step)*.14s)}
-.motion-tray{transform-origin:50% 90%;animation:tray-settle 1.65s ease-in-out .42s infinite}
-.motion-step-labels{display:flex;justify-content:space-around;gap:6px;margin:12px 4px 0;font-size:13px;font-weight:550;color:var(--sub)}
-.motion-step-labels span{padding:6px 10px;border-radius:20px;animation:step-tick 1.65s ease-in-out infinite;animation-delay:calc(var(--step)*.14s)}
-.brand-loading{min-height:310px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 0 55px}
-.brand-loading .motion-step-labels{display:none}.brand-loading h2{font-size:15px;font-weight:500;margin:20px 0 0;color:var(--sub)}
-.loading-dots{letter-spacing:2px;margin-left:3px}
-.send-curtain .brand-motion{width:286px;margin:15px auto 24px}
-.send-curtain .motion-piece{animation:brand-gather .65s cubic-bezier(.2,1.3,.4,1) calc(var(--step)*.16s) both,brand-tick 1.65s ease-in-out calc(1.2s + var(--step)*.14s) infinite}
-.send-curtain .send-panel h2{font-size:18px;font-weight:550}
-.send-curtain .send-logo-final{display:none;align-items:center;justify-content:center;gap:3px;margin:0 auto 16px;width:min(290px,100%);color:var(--mint-d)}
-.send-logo-final .motion-word{display:block;width:248px;max-width:88%;height:auto;mix-blend-mode:multiply;overflow:visible}
-.send-logo-final>span{font-size:58px;line-height:1;color:var(--accent);font-weight:650;transform:rotate(7deg)}
-.send-logo-final .motion-word g{animation:brand-word-pop .46s cubic-bezier(.2,1.4,.4,1) calc(var(--step)*.09s) both;transform-origin:center;transform-box:fill-box}
-.send-curtain.done .send-logo-final{display:flex}.send-curtain.done .motion-step-labels{display:none}
-.send-curtain.done .brand-motion{width:230px;margin:0 auto 8px}
-.send-curtain.done .motion-piece{animation:none;transform:none;opacity:1}
-.send-curtain.done .motion-tray{animation:none}
-.send-curtain.done h2{position:absolute;clip-path:inset(50%);height:1px;width:1px;overflow:hidden}
-.send-curtain.done .send-message{font-size:14px;color:var(--sub)}
-.mm .sent-ok{min-height:66px}.mm .so-ic{width:45px;height:45px;flex:0 0 45px;background:none!important}.sent-brand,.sent-brand svg{display:block;width:45px;height:45px}
-.motion-paused *,.motion-paused *::before,.motion-paused *::after{animation-play-state:paused!important}
-@keyframes brand-tick{0%,42%,100%{transform:translateY(0) rotate(0)}13%{transform:translateY(-24px) rotate(-4deg)}25%{transform:translateY(3px) rotate(2deg)}34%{transform:translateY(-3px) rotate(0)}}
-@keyframes tray-settle{0%,34%,100%{transform:scaleX(1)}15%{transform:scaleX(1.025)}}
-@keyframes step-tick{0%,42%,100%{background:transparent;color:var(--sub)}13%,25%{background:var(--accent-soft);color:var(--mint-d)}}
-@keyframes brand-gather{from{opacity:0;transform:translateY(-70px) rotate(-12deg) scale(.85)}to{opacity:1;transform:none}}
-@keyframes brand-word-pop{from{opacity:0;transform:translateY(-16px) rotate(-5deg)}to{opacity:1;transform:none}}
-@media(max-width:360px){.brand-motion{width:250px}.send-curtain{padding:20px}.send-curtain .brand-motion{width:252px}.send-curtain.done .brand-motion{width:210px}.send-logo-final .motion-word{width:220px}.send-logo-final>span{font-size:51px}.send-curtain.done .send-message{font-size:13px}}
-@media(prefers-reduced-motion:reduce){.motion-piece,.motion-tray,.motion-step-labels span,.send-curtain .motion-piece,.send-logo-final .motion-word g{animation:none!important;opacity:1;transform:none}}
+/* Three landings, a springing tray, then delivery. Native vectors at every scale. */
+.brand-motion{--motion-blue:#8dc6e9;--motion-lemon:#f5d15b;width:310px;max-width:100%;margin:auto;isolation:isolate;color:#007e7a}
+:root[data-palette=mint] .brand-motion{--motion-blue:#a4e5d9;--motion-lemon:#ffad69}
+.motion-cards{display:block;width:100%;height:auto;overflow:visible}.motion-card{stroke:#007e7a;stroke-width:3;filter:drop-shadow(0 6px 0 #007e7a12)}
+.motion-piece{transform-origin:48px 121px;animation:food-land 2.8s cubic-bezier(.2,.8,.3,1) infinite;animation-delay:calc(var(--step)*.2s)}
+.motion-shadow{fill:#006b6512;transform-origin:180px 202px;animation:shadow-breathe 2.8s ease-in-out infinite}.motion-tray{transform-origin:180px 194px;animation:tray-spring 2.8s ease-in-out infinite}.motion-spark{transform-origin:180px 20px;animation:food-spark 2.8s ease-out infinite}
+.motion-steam{animation:food-steam 1.4s ease-in-out infinite}.motion-chopsticks{transform-origin:65px 25px;animation:chop-tick 2.8s ease-in-out infinite}
+.motion-step-labels{display:flex;justify-content:space-between;gap:7px;margin:6px 7px 0;font-size:14px;font-weight:650;color:#617c80}.motion-step-labels span{display:flex;align-items:center;gap:5px;padding:7px;border-radius:14px;animation:step-glow 2.8s ease-in-out infinite;animation-delay:calc(var(--step)*.2s)}.motion-step-labels i{font-size:11px;line-height:19px;width:19px;height:19px;border-radius:50%;background:#e6f3f0;text-align:center;font-style:normal;color:#007e7a}
+.brand-loading{min-height:340px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 0}.brand-loading h2{font-size:16px;font-weight:550;margin:24px 0 0;color:var(--sub)}.loading-dots{letter-spacing:2px;margin-left:3px}
+.send-curtain .brand-motion{width:310px;margin:0 auto 26px}.send-curtain .send-panel h2{font-size:19px;font-weight:650}.sending .motion-delivery{animation:tray-delivery 2.8s cubic-bezier(.4,0,.3,1) infinite}.sending .motion-step-labels span:last-child{animation-delay:1.65s}
+.send-curtain .send-logo-final{display:none;align-items:center;justify-content:center;gap:5px;margin:10px auto 18px;color:#007e7a}.send-logo-final .motion-word{display:flex;gap:2px;font-size:54px;line-height:1.15;letter-spacing:-3px;font-weight:750}.motion-word>span{display:inline-block;animation:word-land .65s cubic-bezier(.2,1.7,.4,1) calc(var(--step)*.12s) both}.motion-word>span:nth-child(2){color:var(--accent,#377ac3)}.send-logo-final>span{font-size:56px;line-height:1;font-weight:650;color:var(--accent,#377ac3);animation:word-land .65s cubic-bezier(.2,1.7,.4,1) .4s both}
+.send-curtain.done .send-logo-final{display:flex}.send-curtain.done .motion-step-labels{display:none}.send-curtain.done .brand-motion{width:230px;margin:0 auto}.send-curtain.done .motion-piece,.send-curtain.done .motion-delivery,.send-curtain.done .motion-tray{animation:none;transform:none;opacity:1}.send-curtain.done h2{position:absolute;clip-path:inset(50%);height:1px;width:1px;overflow:hidden}.send-curtain.done .send-message{font-size:15px;color:var(--sub)}
+.motion-paused *,.motion-paused *::before,.motion-paused *::after{animation-play-state:paused!important}.mm .sent-ok{min-height:75px}.mm .so-ic{width:48px;height:48px;flex:0 0 48px;background:none!important}.sent-brand,.sent-brand svg{display:block;width:48px;height:48px}
+@keyframes food-land{0%{opacity:0;transform:translateY(-55px) rotate(-12deg) scale(.85)}12%{opacity:1;transform:translateY(5px) rotate(3deg) scale(1.04,.93)}19%{transform:translateY(-12px) rotate(-3deg) scale(.97,1.03)}27%,81%{opacity:1;transform:none}91%,100%{opacity:0;transform:translateY(-30px) scale(.88)}}
+@keyframes tray-spring{0%,32%,63%,100%{transform:none}16%,42%{transform:translateY(3px) scaleX(1.02)}23%,49%{transform:translateY(-2px)}}
+@keyframes tray-delivery{0%,60%{opacity:1;transform:none}73%{opacity:1;transform:translateX(-12px) rotate(-2deg)}88%,100%{opacity:0;transform:translateX(370px) rotate(6deg)}}
+@keyframes shadow-breathe{0%,100%{transform:scaleX(.7);opacity:.4}30%,70%{transform:scaleX(1);opacity:1}}
+@keyframes food-spark{0%,42%,76%,100%{opacity:0;transform:scale(.5)}50%,65%{opacity:1;transform:scale(1)}}
+@keyframes food-steam{0%,100%{opacity:.5;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+@keyframes chop-tick{0%,35%,65%,100%{transform:none}46%{transform:rotate(-7deg)}54%{transform:rotate(4deg)}}
+@keyframes step-glow{0%,8%,42%,100%{background:transparent;color:#617c80}14%,30%{background:#d8f2ea;color:#006f68}}
+@keyframes word-land{from{opacity:0;transform:translateY(-25px) rotate(-9deg) scale(.7)}to{opacity:1;transform:none}}
+@media(max-width:360px){.brand-motion,.send-curtain .brand-motion{width:270px}.send-curtain{padding:18px}.send-curtain.done .brand-motion{width:210px}.send-logo-final .motion-word{font-size:48px}.motion-step-labels{font-size:13px;gap:2px}}
+@media(prefers-reduced-motion:reduce){.brand-motion *,.send-logo-final *{animation:none!important;opacity:1;transform:none}.motion-spark{opacity:0}}
+.motion-word>span:nth-child(2),.send-logo-final>span{color:var(--secondary,#3678c2)}
+.motion-piece{animation-fill-mode:both}
+.brand-motion .motion-cards{overflow:hidden}
+.send-curtain{overflow-x:hidden}.send-curtain .send-panel{overflow:hidden}

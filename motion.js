@@ -5,7 +5,6 @@ function applyPalette(value) {
   document.documentElement.dataset.palette = palette;
   try { localStorage.setItem('damatda-palette', palette); } catch {}
   document.querySelectorAll('.brand-lockup img,.brand-art img').forEach(img => { img.src = brandAsset(); });
-  document.querySelectorAll('.brand-motion image,.motion-word image').forEach(img=>img.setAttribute('href',brandAsset()));
   document.querySelectorAll('[data-palette-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.paletteChoice === palette)));
 }
 let flightOrigin = null;
@@ -49,7 +48,7 @@ function sendingCurtain() {
 }
 function finishSendCurtain() {
   const el=sendCurtain;if(!el)return;
-  const remaining=reduceMotion()?0:Math.max(0,1100-(performance.now()-Number(el.dataset.started)));
+  const remaining=reduceMotion()?0:Math.max(0,2550-(performance.now()-Number(el.dataset.started)));
   if(remaining>0){setTimeout(()=>{if(sendCurtain===el)finishSendCurtain();},remaining);return;}
   el.classList.add('done');
   el.querySelector('#sendingTitle').textContent='다맛다!';

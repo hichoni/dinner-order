@@ -2,13 +2,13 @@
 const params=new URLSearchParams(location.search),kind=params.get('state')||'loading';
 const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 applyPalette(params.get('palette')||'sky');
-let demoTimer,deadline=0,remaining=1900;
+let demoTimer,deadline=0,remaining=2800;
 function replay(){
  clearTimeout(demoTimer);dismissSendCurtain(false);document.documentElement.classList.remove('motion-paused');
  if(kind==='loading'){document.getElementById('app').innerHTML=brandLoadingView();return;}
  sendingCurtain();
- if(kind==='complete'){sendCurtain.dataset.started=String(performance.now()-1200);finishSendCurtain();}
- else {remaining=1900;deadline=performance.now()+remaining;demoTimer=setTimeout(finishSendCurtain,remaining);}
+ if(kind==='complete'){sendCurtain.dataset.started=String(performance.now()-3000);finishSendCurtain();}
+ else {remaining=2800;deadline=performance.now()+remaining;demoTimer=setTimeout(finishSendCurtain,remaining);}
  const button=sendCurtain.querySelector('.send-finish');button.textContent='다시 보기 ↻';button.addEventListener('click',replay);
 }
 replay();
