@@ -1,8 +1,9 @@
 {
-  "version": "2026-10-22-shared-avatars",
+  "version": "2026-10-22-transparent-logos",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "feb0c9a9eb68e420dad5ab069e8445d6a4016ebb"
+  "applicationCommit": "16c6ee7bbc3f5cab6ab6dffa58ba6dbd847a0978",
+  "logoTransparency": "RGBA PNG"
 }
