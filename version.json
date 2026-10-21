@@ -1,9 +1,11 @@
 {
-  "version": "2026-10-22-transparent-logos",
+  "version": "2026-10-22-food-roulette-sound",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "16c6ee7bbc3f5cab6ab6dffa58ba6dbd847a0978",
-  "logoTransparency": "RGBA PNG"
+  "applicationCommit": "b3d079f600c2d951cdfebf09b6e55cd82e8dc99b",
+  "logoTransparency": "RGBA PNG",
+  "homeRoulette": true,
+  "audio": "original-synth-loop-and-sfx"
 }
