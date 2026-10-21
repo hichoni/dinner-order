@@ -1,0 +1,114 @@
+[
+  {
+    "id": "rice",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 18142
+  },
+  {
+    "id": "chicken",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 28586
+  },
+  {
+    "id": "iced-tea",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 26574
+  },
+  {
+    "id": "gimbap",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 29428
+  },
+  {
+    "id": "noodle",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 20874
+  },
+  {
+    "id": "bagel",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 26360
+  },
+  {
+    "id": "coffee",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 14798
+  },
+  {
+    "id": "tteokbokki",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 23394
+  },
+  {
+    "id": "salmon-sushi",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 20008
+  },
+  {
+    "id": "iced-americano",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 23818
+  },
+  {
+    "id": "milk-bread",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 26080
+  },
+  {
+    "id": "jjajangmyeon",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 23402
+  },
+  {
+    "id": "inari-sushi",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 26564
+  },
+  {
+    "id": "udon",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 19468
+  },
+  {
+    "id": "tangsuyuk",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 28284
+  },
+  {
+    "id": "jjamppong",
+    "width": 320,
+    "height": 320,
+    "alpha": true,
+    "webBytes": 26362
+  }
+]

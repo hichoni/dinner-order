@@ -1,0 +1,82 @@
+[
+  {
+    "id": "rice",
+    "name": "밥",
+    "src": "assets/characters/rice-avatar.webp"
+  },
+  {
+    "id": "chicken",
+    "name": "치킨",
+    "src": "assets/characters/chicken-avatar.webp"
+  },
+  {
+    "id": "iced-tea",
+    "name": "아이스티",
+    "src": "assets/characters/iced-tea-avatar.webp"
+  },
+  {
+    "id": "gimbap",
+    "name": "김밥",
+    "src": "assets/characters/gimbap-avatar.webp"
+  },
+  {
+    "id": "noodle",
+    "name": "면",
+    "src": "assets/characters/noodle-avatar.webp"
+  },
+  {
+    "id": "bagel",
+    "name": "베이글",
+    "src": "assets/characters/bagel-avatar.webp"
+  },
+  {
+    "id": "coffee",
+    "name": "커피",
+    "src": "assets/characters/coffee-avatar.webp"
+  },
+  {
+    "id": "tteokbokki",
+    "name": "떡볶이",
+    "src": "assets/characters/tteokbokki-avatar.webp"
+  },
+  {
+    "id": "salmon-sushi",
+    "name": "초밥",
+    "src": "assets/characters/salmon-sushi-avatar.webp"
+  },
+  {
+    "id": "iced-americano",
+    "name": "아아",
+    "src": "assets/characters/iced-americano-avatar.webp"
+  },
+  {
+    "id": "milk-bread",
+    "name": "식빵",
+    "src": "assets/characters/milk-bread-avatar.webp"
+  },
+  {
+    "id": "jjajangmyeon",
+    "name": "짜장면",
+    "src": "assets/characters/jjajangmyeon-avatar.webp"
+  },
+  {
+    "id": "inari-sushi",
+    "name": "유부초밥",
+    "src": "assets/characters/inari-sushi-avatar.webp"
+  },
+  {
+    "id": "udon",
+    "name": "우동",
+    "src": "assets/characters/udon-avatar.webp"
+  },
+  {
+    "id": "tangsuyuk",
+    "name": "탕수육",
+    "src": "assets/characters/tangsuyuk-avatar.webp"
+  },
+  {
+    "id": "jjamppong",
+    "name": "짬뽕",
+    "src": "assets/characters/jjamppong-avatar.webp"
+  }
+]

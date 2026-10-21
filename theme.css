@@ -372,3 +372,24 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
  .empty-tray-copy p{font-size:12px}
  .mm.view-home .brief-how li b{font-size:11px}
 }
+
+/* Six soft backplates keep food colors natural and distinguish larger groups. */
+.food-avatar{--avatar-bg:#e0f2e9;--avatar-edge:#bdded2;display:inline-flex;align-items:center;justify-content:center;width:100%;height:100%;padding:3px;border-radius:35%;background:linear-gradient(145deg,#ffffffc7,var(--avatar-bg));border:1px solid var(--avatar-edge);box-shadow:inset 0 1px 0 #fff,0 3px 7px #25494408;vertical-align:middle;flex-shrink:0;overflow:visible}
+.avatar-tone-0{--avatar-bg:#dcf2e6;--avatar-edge:#badfc9}
+.avatar-tone-1{--avatar-bg:#ffe7cf;--avatar-edge:#f0d2b5}
+.avatar-tone-2{--avatar-bg:#deedff;--avatar-edge:#bdd5f0}
+.avatar-tone-3{--avatar-bg:#eee3fa;--avatar-edge:#d8c9ea}
+.avatar-tone-4{--avatar-bg:#fff3c7;--avatar-edge:#eadca8}
+.avatar-tone-5{--avatar-bg:#fbe0e5;--avatar-edge:#eac4cd}
+.food-avatar img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #284d4510)}
+.mm .who-btn i{width:66px;height:66px}
+.mm .who-btn .food-avatar{transition:transform .16s ease}
+.mm .who-btn:hover .food-avatar,.mm .who-btn.me .food-avatar{transform:translateY(-2px) rotate(-3deg)}
+.mm .who-btn.did .food-avatar{box-shadow:inset 0 1px #fff,0 0 0 2px #fff}
+.mm .who-ava{background:none;width:44px;height:44px;border-radius:0}
+.mm .who-ava .food-avatar{width:44px;height:44px;padding:2px}
+.mm .t-head>b .food-avatar{width:30px;height:30px;padding:1px;border-radius:10px;margin-right:3px}
+@media(max-width:360px){.mm .who-btn i{width:60px;height:60px}}
+@media(prefers-reduced-motion:reduce){.mm .who-btn .food-avatar{transition:none}.mm .who-btn:hover .food-avatar,.mm .who-btn.me .food-avatar{transform:none}}
+
+.mm .who-btn>span{font-size:16px;font-weight:650;line-height:1.35}

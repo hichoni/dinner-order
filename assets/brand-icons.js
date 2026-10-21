@@ -18,5 +18,12 @@ const BRAND_ICONS = {
   "send": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"m3 9 17-6-6 17-3-7-8-4Zm8 4 9-10\"/></svg>",
   "gift": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M4 11h16v10H4zM3 7h18v4H3zM12 7v14\"/><path d=\"M12 7C5 7 5 1 8 2c3 0 4 5 4 5Zm0 0s1-5 4-5c3-1 3 5-4 5Z\"/></svg>"
 };
-const FOOD_MASCOTS = ['rice','noodle','coffee'].map(name=>`<img class="food-mascot" src="assets/characters/${name}-round.png" alt="" decoding="async">`);
-const FOOD_AVATARS = FOOD_MASCOTS;
+const FOOD_CHARACTERS = [{"id":"rice","name":"밥","src":"assets/characters/rice-avatar.webp"},{"id":"chicken","name":"치킨","src":"assets/characters/chicken-avatar.webp"},{"id":"iced-tea","name":"아이스티","src":"assets/characters/iced-tea-avatar.webp"},{"id":"gimbap","name":"김밥","src":"assets/characters/gimbap-avatar.webp"},{"id":"noodle","name":"면","src":"assets/characters/noodle-avatar.webp"},{"id":"bagel","name":"베이글","src":"assets/characters/bagel-avatar.webp"},{"id":"coffee","name":"커피","src":"assets/characters/coffee-avatar.webp"},{"id":"tteokbokki","name":"떡볶이","src":"assets/characters/tteokbokki-avatar.webp"},{"id":"salmon-sushi","name":"초밥","src":"assets/characters/salmon-sushi-avatar.webp"},{"id":"iced-americano","name":"아아","src":"assets/characters/iced-americano-avatar.webp"},{"id":"milk-bread","name":"식빵","src":"assets/characters/milk-bread-avatar.webp"},{"id":"jjajangmyeon","name":"짜장면","src":"assets/characters/jjajangmyeon-avatar.webp"},{"id":"inari-sushi","name":"유부초밥","src":"assets/characters/inari-sushi-avatar.webp"},{"id":"udon","name":"우동","src":"assets/characters/udon-avatar.webp"},{"id":"tangsuyuk","name":"탕수육","src":"assets/characters/tangsuyuk-avatar.webp"},{"id":"jjamppong","name":"짬뽕","src":"assets/characters/jjamppong-avatar.webp"}];
+const AVATAR_TONES = 6;
+function foodAvatar(index) {
+  const n = Number.isFinite(index) ? Math.abs(Math.trunc(index)) : 0;
+  const food = FOOD_CHARACTERS[n % FOOD_CHARACTERS.length];
+  const tone = (n + Math.floor(n / FOOD_CHARACTERS.length)) % AVATAR_TONES;
+  return `<span class="food-avatar avatar-tone-${tone}" data-character="${food.id}" title="${food.name}"><img src="${food.src}" alt="" width="64" height="64" decoding="async"></span>`;
+}
+const FOOD_MASCOTS = ['rice','noodle','coffee'].map(name=>`<img class="food-mascot" src="assets/characters/${name}-avatar.webp" alt="" decoding="async">`);
