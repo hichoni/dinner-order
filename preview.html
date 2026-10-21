@@ -1449,6 +1449,13 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 
 .mm .who-btn>span{font-size:16px;font-weight:650;line-height:1.35}
 
+/* Blend complete cropped logo layers. The glass header forms its own backdrop
+   group, so blend that group as well to prevent an opaque white image plate. */
+.brand-lockup,.brand-art{mix-blend-mode:multiply}
+.brand-lockup img,.brand-art img{mix-blend-mode:normal}
+.mm .top:has(.brand-lockup){mix-blend-mode:multiply}
+.ap-foot .ap-status{min-height:1.4em}
+
 /* A small capsule machine: tactile glass, real food portraits, one-second reveal. */
 .avatar-picker-bg{position:fixed;inset:0;z-index:1500;display:flex;align-items:center;justify-content:center;padding:16px;background:#173d4c70;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .avatar-picker{font-family:inherit;width:430px;max-width:100%;max-height:calc(100dvh - 32px);display:flex;flex-direction:column;overflow:hidden;border:1px solid #fff;border-radius:28px;background:linear-gradient(140deg,#f1fbf8f7,#f3f7fff7);box-shadow:0 24px 80px #143c4b45;color:#244a50;animation:avatarSheetIn .24s ease-out}
@@ -1528,19 +1535,19 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .motion-piece{animation-fill-mode:both}
 .brand-motion .motion-cards{overflow:hidden}
 .send-curtain{overflow-x:hidden}.send-curtain .send-panel{overflow:hidden}
-</style><meta name="description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+</style><meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:site_name" content="다맛다">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
-<meta property="og:title" content="다맛다">
-<meta property="og:description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+<meta property="og:title" content="다맛다 — 총무도 밥 좀 먹자.">
+<meta property="og:description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
 <meta property="og:image:width" content="1774">
 <meta property="og:image:height" content="887">
 <meta property="og:image:alt" content="다맛다. 밥, 면, 커피를 한 쟁반에 담아요.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="다맛다">
-<meta name="twitter:description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+<meta name="twitter:title" content="다맛다 — 총무도 밥 좀 먹자.">
+<meta name="twitter:description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta name="twitter:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
 </head><body class="design-preview"><div class="preview-bar"><span>다맛다 <i>DESIGN PREVIEW</i></span><div class="theme-options" role="group" aria-label="색상 테마"><button data-palette-choice="mint" aria-pressed="true"><i></i>민트 · 귤</button><button data-palette-choice="sky" aria-pressed="false"><i></i>블루 · 레몬</button></div></div><div id="app"></div><div id="toast" role="status" aria-live="polite"></div><aside class="preview-dock"><details><summary>화면 둘러보기</summary><nav><a class="all-screens-link" href="screens.html">전체 11개 화면 ↗</a><a href="#">첫 화면</a><a href="#new">같이 담기</a><a href="?role=member#r=coffeetime&t=who">이름 입력</a><a href="?role=member#r=coffeetime&t=menu">메뉴 고르기</a><a href="?role=member#r=coffeetime&t=cart">장바구니</a><a href="?role=host#r=coffeetime&t=sum">방장 화면</a><a href="?role=host#r=coffeetime&t=set">방 설정</a><button data-preview="motion">다맛다! 재생</button><button data-preview="arrival">도착 알림 체험</button><button data-preview="failure">전송 실패 체험</button><button data-preview="reset" class="preview-reset">예시 데이터 초기화</button></nav><p>예시 데이터로 동작하는 시안입니다.<br>실제 주문방에는 전송되지 않아요.<br>사진: 기존 가게 카탈로그</p></details></aside><script id="dn-catalog" type="application/json">{"camp":{"title":"오늘의 메뉴","areaLabel":"주변 가게","families":[]},"count":8,"stores":[{"id":"n1255211534","name":"커피홀베이커리 안동풍산점","emoji":"🥐","color":"#f5e9d6","category":"카페","area":"풍산읍","minutes":8,"phone":"0507-1331-5298","address":"경북 안동시 풍산읍 풍산중앙길 151-5 1층","photo":"https://ldb-phinf.pstatic.net/20220621_81/1655745529526tSQLO_JPEG/9B2B81EF-46CF-4BC6-A2B4-34482D9A7031.jpeg","reviews":1150,"hours":"","naver":"https://m.place.naver.com/restaurant/1255211534/home","note":"","menu":[{"id":"n1255211534-7","name":"바닐라 라떼","emoji":"☕","price":6700,"desc":"고소한 우유에 바닐라 한 스푼","tags":["best"],"img":"https://ldb-phinf.pstatic.net/20220626_27/1656214475708aPTGW_JPEG/AAAF78AB-BFE8-42CD-9341-C64CFE779735.jpeg"},{"id":"n1255211534-6","name":"한라봉 에이드","emoji":"🍹","price":6000,"desc":"제주 한라봉으로 기분까지 상큼하게","tags":[],"img":"https://ldb-phinf.pstatic.net/20220626_20/1656214424021f7jkz_JPEG/4C87010B-DAA0-4FE4-8FE4-827EF98B6505.jpeg"},{"id":"n1255211534-3","name":"딸기 요거트 스무디","emoji":"🥤","price":6700,"desc":"상큼한 딸기와 요거트의 만남","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_205/1656144669527KMT0v_JPEG/5A6FF99F-F511-475A-84C6-A507B457EA68.jpeg"},{"id":"n1255211534-1","name":"먹물 소금빵","emoji":"🥐","price":2800,"desc":"짭조름한 버터 풍미, 겉바속촉","tags":["best"],"img":"https://ldb-phinf.pstatic.net/20220621_222/1655745914355xyVx5_JPEG/36588144-CAD2-43C2-86F0-78008D87998F.jpeg"},{"id":"n1255211534-2","name":"크림 페스츄리","emoji":"🥐","price":3500,"desc":"바삭한 페스츄리에 부드러운 크림","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_176/1656143974728omWXv_JPEG/168B6846-4B74-4BF3-B613-4096F95B3B34.jpeg"},{"id":"n1255211534-4","name":"리얼 초코 케이크","emoji":"🍰","price":5500,"desc":"오늘은 진하게 달달해도 되니까","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_258/1656145228360zIu6u_JPEG/C1BD0E2A-21B7-48FF-B552-7B1C31EC21F6.jpeg"},{"id":"n1255211534-5","name":"진짜 갈릭빵","emoji":"🥐","price":3700,"desc":"마늘 듬뿍, 고소함도 듬뿍","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_41/1656145319351DmVA9_JPEG/85233D27-F616-49DF-B2DE-C8489927AF28.jpeg"}]},{"id":"n15394604","name":"매화반점","emoji":"🥟","color":"#ffe2e2","category":"중식","area":"풍산읍","minutes":8,"phone":"054-858-7006","address":"경북 안동시 풍산읍 풍산태사로 1037","photo":"https://pup-review-phinf.pstatic.net/MjAyNjA4MzBfMjQ2/MDAxNzg4MDk2OTg4MzEy.-nSjeOG3iWW-lmV2IXOPV-8mKIsV8JXgad07fQvfCcgg.ZmwYvSrIjaGkpIjkYTUarwsFbKJ52eJJoLaWcBFXAOIg.JPEG/0E218DD3-7801-4AE4-98C7-8A67618024F8.jpeg","reviews":279,"hours":"","naver":"https://m.place.naver.com/restaurant/15394604/home","note":"고기 듬뿍 차돌짬뽕의 깊은 맛","menu":[{"id":"n15394604-1","name":"짜장면","emoji":"🍜","price":7000,"desc":"","tags":["best","kid"],"img":"https://ldb-phinf.pstatic.net/20230826_49/1693040368208YrrPa_JPEG/1693040266548.jpg","imgFrom":"ref"},{"id":"n15394604-2","name":"짬뽕","emoji":"🍲","price":8000,"desc":"","tags":["best","hot"],"img":"https://pup-review-phinf.pstatic.net/MjAyNjA0MTRfMTQg/MDAxNzc2MTQyMTI5ODk4.yyiEkK7eNTXXkrojn5whwF-zM_VetF-uzxpMaKdbRq4g.nTSTp7DIVui24SiITPWNDk2qB0k_xSma_xzfBHJwz5Ig.JPEG/2091566E-BC76-4079-A25A-3163A3AC2C94.jpeg?type=w560_sharpen","imgFrom":"review"},{"id":"n15394604-3","name":"우동","emoji":"🍜","price":8000,"desc":"","tags":["kid"],"img":"https://pup-review-phinf.pstatic.net/MjAyNTA2MjlfNjIg/MDAxNzUxMTcwNzE0NjYz.p6uHHmQM4iK9psmwhW4EIHDoRhVOqhBfVNaH0S-DNZEg.ZwMIYXsrAm0gngMX6KIBho1G85pv0hPs0kni9LHBhUgg.JPEG/20250629_123038.jpg.jpg?type=w560_sharpen","imgFrom":"review"},{"id":"n15394604-4","name":"간짜장","emoji":"🍜","price":6000,"desc":"","tags":["kid"],"img":"https://pup-review-phinf.pstatic.net/MjAyNTA0MjhfMjgy/MDAxNzQ1ODQ2MTQ1MjA2.J9FBFXv7AutCzBNcxuOKj7qTaz_KEGsFhPgIe4hBOAog.JMo914NKxPBEXrnhM_8Sh5Md8W4_MV6mMYnXzjYjC-wg.JPEG/20250425_150554.jpg.jpg?type=w560_sharpen","imgFrom":"ref"},{"id":"n15394604-5","name":"울면","emoji":"🍜","price":8000,"desc":"","tags":[],"img":""}]},{"id":"n15395183","name":"땅땅치킨 풍산점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"풍산읍","minutes":8,"phone":"054-841-0086","address":"경북 안동시 풍산읍 풍산중앙길 135","photo":"https://ldb-phinf.pstatic.net/20240104_172/1704327170081gYm6u_PNG/%B6%A5%B6%A5%C4%A1%C5%B2_%BD%C5%B1%D4%B7%CE%B0%ED.png","reviews":33,"hours":"","naver":"https://m.place.naver.com/restaurant/15395183/home","note":"","menu":[{"id":"n15395183-1","name":"땅땅불갈비","emoji":"🍗","price":23000,"desc":"윤기 좔좔한 비주얼에 속살까지 간장 양념이 쏙 베어 식어도 맛있는 오븐 치킨!","tags":["best","hot"],"img":"https://ldb-phinf.pstatic.net/20250915_9/1757897392745ukMiK_JPEG/%B6%A5%B6%A5%BA%D2%B0%A5%BA%F1.jpg"},{"id":"n15395183-2","name":"허브순살치킨","emoji":"🍗","price":23000,"desc":"바삭한 닭다리살과 오묘한 맛을 가진 허브간장의 절묘한 만남!","tags":["best","kid"],"img":"https://ldb-phinf.pstatic.net/20250915_224/17578974049140cc13_JPEG/%C7%E3%BA%EA%BC%F8%BB%EC.jpg"},{"id":"n15395183-3","name":"땅땅불갈비 + 허브순살치킨","emoji":"🍗","price":28000,"desc":"아직도 안 먹어 봤니? 진리의 세트3번","tags":["hot"],"img":"https://ldb-phinf.pstatic.net/20250915_42/1757897383646bAzMr_JPEG/%BC%BC%C6%AE3.jpg"},{"id":"n15395183-4","name":"허브순살치킨 + 후왕","emoji":"🍗","price":27000,"desc":"100% 닭다리살 달콤한 허브순살치킨과 바삭한 '봉치킨' 후왕의 만남","tags":["kid"],"img":"https://ldb-phinf.pstatic.net/20260512_276/1778575044295IQvrj_JPEG/%BC%BC%C6%AE-01.jpg"},{"id":"n15395183-5","name":"허브순살치킨 + 매콤양념치킨","emoji":"🍗","price":27000,"desc":"100% 닭다리살 달콤한 허브순살치킨과 매콤양념치킨의 반전 매력의 만남","tags":["hot"],"img":"https://ldb-phinf.pstatic.net/20260512_256/1778575077839sKs80_JPEG/%BC%BC%C6%AE-02.jpg"},{"id":"n15395183-6","name":"후왕","emoji":"🍗","price":26000,"desc":"후라이드의 왕! 바삭한 식감의 100% 봉 치킨!","tags":[],"img":"https://ldb-phinf.pstatic.net/20260512_99/1778575828675mtBsC_JPEG/01_%C8%C4%BF%D5_1.jpg"}]},{"id":"n1490668196","name":"BHC치킨 안동풍산점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"풍산읍","minutes":8,"phone":"054-853-0944","address":"경북 안동시 풍산읍 풍산중앙길 107-1 (안교리)","photo":"https://ldb-phinf.pstatic.net/20260924_156/1790207871387K3bB0_JPEG/IMG_8600.jpg","reviews":30,"hours":"토 15:00~23:00","naver":"https://m.place.naver.com/restaurant/1490668196/home","note":"","menu":[{"id":"n1490668196-o19011808","name":"콰삭킹","emoji":"🍗","price":21000,"desc":"극강의 바삭함! 차원이 다른 바삭한 소리와 식감의 신개념 치킨 *스윗 하바네로 소스와 함께 제공됩니다.","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_63/1752712264602nhjC0_PNG/image.png"},{"id":"n1490668196-o20973963","name":"스윗칠리킹","emoji":"🍗","price":21900,"desc":"세상에 없던 바삭한 양념치킨! 달콤 칠리 소스를 얇게 코팅한 크리스피 양념치킨","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20251118_249/1763425816816Hrelq_PNG/image.png"},{"id":"n1490668196-o14100674","name":"뿌링클","emoji":"🍗","price":21000,"desc":"뿌링뿌링! 세상에 없던 마법의 맛 뿌링클","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_194/1752712257018WPbMg_PNG/image.png"},{"id":"n1490668196-o14100676","name":"후라이드 스틱","emoji":"🍗","price":23000,"desc":"명불허전! 바삭하고 고소하게 정직하게 튀겨낸 BHC 후라이드 치킨의 정석, 인기만점 닭다리만 모아 담은 스틱","tags":["best","kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_150/1752712253539v0JyB_PNG/image.png"},{"id":"n1490668196-o14100673","name":"뿌링클순살","emoji":"🍗","price":23000,"desc":"뿌링뿌링! 뼈 없는 순살로 구성된 세상에 없던 마법의 맛 뿌링클","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_289/1752712253139iv1YJ_PNG/image.png"},{"id":"n1490668196-o14100672","name":"HOT뿌링클 순살","emoji":"🍗","price":23000,"desc":"뿌링뿌링! 뼈없는 순살로 구성된 세상에 없던 마법 뿌링가루의 HOT한 변신","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_117/1752712257181PJtlW_PNG/image.png"}]},{"id":"n920197731","name":"교촌치킨 경북도청점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":15,"phone":"054-654-0007","address":"경북 예천군 호명읍 새움3로 20 신성프라자 111,112호","photo":"https://ldb-phinf.pstatic.net/20221130_290/1669782289053g3gih_JPEG/%B1%B3%C3%CC%C4%A1%C5%B2_%BD%C5%B1%D4_BI_%BE%C6%C0%CC%C4%DC%28%C4%AB%C4%AB%BF%C0%29.jpg","reviews":304,"hours":"","naver":"https://m.place.naver.com/restaurant/920197731/home","note":"","menu":[{"id":"n920197731-o18527850","name":"허니콤보","emoji":"🍗","price":23000,"desc":"달콤한 허니 소스에 쫄깃한 날개와 담백한 다리가 만난 메뉴 [날개(윙+봉)+다리, 조리 전 중량 880g]","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250724_253/1753317018675HNiSN_PNG/image.png"},{"id":"n920197731-o18527852","name":"레드콤보","emoji":"🍗","price":23000,"desc":"국내산 청양 홍고추의 매콤한 맛에 날개와 다리를 함께 즐길 수 있는 메뉴[날개(윙+봉)+다리, 조리 전 중량 920g] 원육 수급이 원활하지 않","tags":["best","hot"],"img":"https://naverbooking-phinf.pstatic.net/20250724_182/1753317020505LHhxP_PNG/image.png"},{"id":"n920197731-o18527865","name":"반반콤보","emoji":"🍗","price":23000,"desc":"마늘 간장 맛과 매콤한 맛이 밴 날개와 다리의 행복한 만남[날개(윙+봉)+다리, 조리 전 중량 920g] 원육 수급이 원활하지 않아 한시적으로 ","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250724_232/1753317019634YPXlE_PNG/image.png"},{"id":"n920197731-o18527849","name":"간장콤보","emoji":"🍗","price":22000,"desc":"마늘과 간장 소스의 풍부한 맛에 가장 인기있는 부위인 날개와 다리를 함께 즐길 수 있는 메뉴[날개(윙+봉)+다리, 조리 전 중량 920g] 원육","tags":["best","kid"],"img":"https://naverbooking-phinf.pstatic.net/20250724_58/1753317015994xNPpe_PNG/image.png"},{"id":"n920197731-o18527862","name":"허니순살","emoji":"🍗","price":23000,"desc":"부드럽고 담백한 안심, 정육 순살에 허니소스의 달콤함이 어우러진 순살치킨 [정육+안심, 조리 전 중량 500g, 레드디핑소스 포함]","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250724_133/1753317018886DLRVe_PNG/image.png"},{"id":"n920197731-o18527853","name":"레드순살","emoji":"🍗","price":23000,"desc":"국내산 청양 홍고추의 매콤함을 담은 순살치킨 [정육, 조리 전 중량 700g]","tags":["hot"],"img":"https://naverbooking-phinf.pstatic.net/20261001_262/1790814745485PxS4q_JPEG/image.jpg"}]},{"id":"n1454017835","name":"이춘봉인생치킨 경북도청점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":16,"phone":"0507-1417-0007","address":"경북 예천군 호명읍 행복로 177","photo":"https://ldb-phinf.pstatic.net/20190708_257/1562578819577LkMSl_JPEG/OS94MUwjrZSH6WbqFD112fh0.jpg","reviews":290,"hours":"토 16:00~23:30 · 마지막 주문 23:00","naver":"https://m.place.naver.com/restaurant/1454017835/home","note":"","menu":[{"id":"n1454017835-1","name":"간장숯불바베큐","emoji":"🍗","price":21000,"desc":"","tags":["best","hot"],"img":""},{"id":"n1454017835-2","name":"양념숯불바베큐","emoji":"🍗","price":21000,"desc":"","tags":["best","hot"],"img":""},{"id":"n1454017835-3","name":"크림슨이춘봉바베큐","emoji":"🍗","price":22000,"desc":"","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20261013_42/1791854438565thdeI_JPEG/image.jpg","imgFrom":"ref"},{"id":"n1454017835-4","name":"소금구이참숯바베큐치킨","emoji":"🍗","price":19000,"desc":"인생치킨에서 선보이는 담백함과 깔끔한 맛!\n직화로 구워 참숯의 향은 살리고, 육질은 쫄깃하며 기름기는\n쏙~ 뺏다. 치킨 본연의 맛을 즐기고 싶은","tags":[],"img":"https://ldb-phinf.pstatic.net/20190708_47/1562578085951OtX0a_JPEG/3c0CSSBoJN21QI_hMOQEFTdB.jpg"},{"id":"n1454017835-5","name":"이춘봉참숯바베큐치킨","emoji":"🍗","price":21000,"desc":"고품격 참숯의 향과 인생치킨에서 만든 특제소스가 만나서\n완벽한 숯불바베큐가 탄생했다. 남녀노소 누구나 즐길수 있는\n인생치킨의 대표메뉴!","tags":[],"img":"https://ldb-phinf.pstatic.net/20190708_25/1562578135785uwQAt_JPEG/jtGRXIrlkiv48GvnkghoEeHy.jpg"},{"id":"n1454017835-6","name":"후라이드치킨","emoji":"🍗","price":18000,"desc":"지금까지 바삭함은 잊어라!\n어릴적 처음 먹어 보았던 추억의 바로 그맛!\n인생치킨에서 재현되다!","tags":["kid"],"img":"https://ldb-phinf.pstatic.net/20190708_179/1562578279762v77wA_JPEG/LRMf6p0Bm28H3Afk15_0hz7Z.jpg"}]},{"id":"n1395993023","name":"BHC 도청신도시점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":15,"phone":"054-652-8879","address":"경북 예천군 호명읍 새움3로 30 제일프라자","photo":"https://ldb-phinf.pstatic.net/20260924_156/1790207871387K3bB0_JPEG/IMG_8600.jpg","reviews":160,"hours":"","naver":"https://m.place.naver.com/restaurant/1395993023/home","note":"","menu":[{"id":"n1395993023-o14100674","name":"뿌링클","emoji":"🍗","price":21000,"desc":"뿌링뿌링! 세상에 없던 마법의 맛 뿌링클","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_194/1752712257018WPbMg_PNG/image.png"},{"id":"n1395993023-o14100627","name":"맛초킹","emoji":"🍗","price":21000,"desc":"매콤짭잘! 밥과 함께 먹기에 딱 좋은 완벽조합","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_259/1752712251044SjwsF_PNG/image.png"},{"id":"n1395993023-o14100564","name":"HOT후라이드","emoji":"🍗","price":21000,"desc":"명불허전! 바삭함, 고소함 가득! 매콤하게 튀긴 매운 맛 후라이드 치킨의 정석 *HOT후라이드 시즈닝으로 인해 튀김 성상이 어둡게 나타날 수 있","tags":["best","kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_25/1752712258732Txnd0_PNG/image.png"},{"id":"n1395993023-o19011808","name":"콰삭킹","emoji":"🍗","price":21000,"desc":"극강의 바삭함! 차원이 다른 바삭한 소리와 식감의 신개념 치킨 *스윗 하바네로 소스와 함께 제공됩니다.","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_63/1752712264602nhjC0_PNG/image.png"},{"id":"n1395993023-o14100618","name":"후라이드","emoji":"🍗","price":20000,"desc":"명불허전! 바삭하고 고소하게 정직하게 튀겨낸 BHC 후라이드 역시 치킨의 정석","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_12/1752712257836T7b4R_PNG/image.png"},{"id":"n1395993023-o22774679","name":"[NEW] 커링클","emoji":"🍗","price":21900,"desc":"은은한 커리향과 부드러운 크림의 풍미가 어우러진 달콤 매콤 시즈닝 치킨에 새콤달콤한 허니버터요거트소스를 곁들여 더욱 다채롭게 즐길 수 있는 치킨","tags":[],"img":"https://naverbooking-phinf.pstatic.net/20260713_244/1783902623522n3KpL_PNG/image.png"}]},{"id":"n1391935184","name":"본가옛날통닭","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":14,"phone":"054-655-4499","address":"경북 안동시 풍천면 검무로 10-10 1층 129호, 130호, 131호 본가옛날통닭","photo":"https://ldb-phinf.pstatic.net/20260714_211/1784029123828GjS4n_JPEG/28780.jpg","reviews":131,"hours":"토 17:30~23:00 · 마지막 주문 22:00","naver":"https://m.place.naver.com/restaurant/1391935184/home","note":"","menu":[{"id":"n1391935184-1","name":"BONGA후라이드통닭","emoji":"🍗","price":20900,"desc":"비교 할수 없는 겉바 속촉 후라이드통닭","tags":["best","kid"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5M4xM6R5ZeW-Z_VX4iNtB8BqPZ_1f10ii4xEgykH1Mou.jpg"},{"id":"n1391935184-2","name":"BONGA옛날통닭4조각(4조각)","emoji":"🐔","price":20900,"desc":"통닭은 역시 본가옛날통닭","tags":["best"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5NsKfWuaHDwpbXi9ngMbvba1yttCwKj-qdt9lQBFqwQ8.jpg"},{"id":"n1391935184-3","name":"BONGA양념통닭","emoji":"🍗","price":22900,"desc":"바삭하게 튀겨낸 통닭에 특제 양념소스를 버무려 더욱 풍미를 느낀다.","tags":["best"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5DwTbeS_0LbvgiGADbjRKCGomoK3lPx4p6If8zFfPCQy.jpg"},{"id":"n1391935184-4","name":"BONGA간장통닭","emoji":"🐔","price":22900,"desc":"살짝매콤 달콤 짭쪼름한 오리지날 간장통닭","tags":["best","kid"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5He8iRQ3gWMzOLYrT0vCTrP9ueTUxX6Wj_Q3j3GaV-aN.jpg"},{"id":"n1391935184-5","name":"BONGA마늘간장통닭","emoji":"🐔","price":23900,"desc":"단짠단짠 마법의 비법소스  마늘간장 소스와 통닭의 환상 콜라보","tags":["best","kid"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5NHmp2x062iG874hnEFwnMDKrp8x5BDmslk4RiKTGzxm.jpg"},{"id":"n1391935184-6","name":"BONGA땡초통닭","emoji":"🐔","price":23900,"desc":"매콥한게 땡길때 먹을수록 땡기는맛","tags":["best","hot"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5JE6uLWj2_KiGWuFLWxrQ1YFO9YP3vX3dVJh0SWs1i0V.jpg"}]}]}</script><script type="module">const PREVIEW_CATALOG = [{"id":"n1255211534","name":"커피홀베이커리 안동풍산점","emoji":"🥐","color":"#f5e9d6","category":"카페","area":"풍산읍","minutes":8,"phone":"0507-1331-5298","address":"경북 안동시 풍산읍 풍산중앙길 151-5 1층","photo":"https://ldb-phinf.pstatic.net/20220621_81/1655745529526tSQLO_JPEG/9B2B81EF-46CF-4BC6-A2B4-34482D9A7031.jpeg","reviews":1150,"hours":"","naver":"https://m.place.naver.com/restaurant/1255211534/home","note":"","menu":[{"id":"n1255211534-7","name":"바닐라 라떼","emoji":"☕","price":6700,"desc":"고소한 우유에 바닐라 한 스푼","tags":["best"],"img":"https://ldb-phinf.pstatic.net/20220626_27/1656214475708aPTGW_JPEG/AAAF78AB-BFE8-42CD-9341-C64CFE779735.jpeg"},{"id":"n1255211534-6","name":"한라봉 에이드","emoji":"🍹","price":6000,"desc":"제주 한라봉으로 기분까지 상큼하게","tags":[],"img":"https://ldb-phinf.pstatic.net/20220626_20/1656214424021f7jkz_JPEG/4C87010B-DAA0-4FE4-8FE4-827EF98B6505.jpeg"},{"id":"n1255211534-3","name":"딸기 요거트 스무디","emoji":"🥤","price":6700,"desc":"상큼한 딸기와 요거트의 만남","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_205/1656144669527KMT0v_JPEG/5A6FF99F-F511-475A-84C6-A507B457EA68.jpeg"},{"id":"n1255211534-1","name":"먹물 소금빵","emoji":"🥐","price":2800,"desc":"짭조름한 버터 풍미, 겉바속촉","tags":["best"],"img":"https://ldb-phinf.pstatic.net/20220621_222/1655745914355xyVx5_JPEG/36588144-CAD2-43C2-86F0-78008D87998F.jpeg"},{"id":"n1255211534-2","name":"크림 페스츄리","emoji":"🥐","price":3500,"desc":"바삭한 페스츄리에 부드러운 크림","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_176/1656143974728omWXv_JPEG/168B6846-4B74-4BF3-B613-4096F95B3B34.jpeg"},{"id":"n1255211534-4","name":"리얼 초코 케이크","emoji":"🍰","price":5500,"desc":"오늘은 진하게 달달해도 되니까","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_258/1656145228360zIu6u_JPEG/C1BD0E2A-21B7-48FF-B552-7B1C31EC21F6.jpeg"},{"id":"n1255211534-5","name":"진짜 갈릭빵","emoji":"🥐","price":3700,"desc":"마늘 듬뿍, 고소함도 듬뿍","tags":[],"img":"https://ldb-phinf.pstatic.net/20220625_41/1656145319351DmVA9_JPEG/85233D27-F616-49DF-B2DE-C8489927AF28.jpeg"}]},{"id":"n15394604","name":"매화반점","emoji":"🥟","color":"#ffe2e2","category":"중식","area":"풍산읍","minutes":8,"phone":"054-858-7006","address":"경북 안동시 풍산읍 풍산태사로 1037","photo":"https://pup-review-phinf.pstatic.net/MjAyNjA4MzBfMjQ2/MDAxNzg4MDk2OTg4MzEy.-nSjeOG3iWW-lmV2IXOPV-8mKIsV8JXgad07fQvfCcgg.ZmwYvSrIjaGkpIjkYTUarwsFbKJ52eJJoLaWcBFXAOIg.JPEG/0E218DD3-7801-4AE4-98C7-8A67618024F8.jpeg","reviews":279,"hours":"","naver":"https://m.place.naver.com/restaurant/15394604/home","note":"고기 듬뿍 차돌짬뽕의 깊은 맛","menu":[{"id":"n15394604-1","name":"짜장면","emoji":"🍜","price":7000,"desc":"","tags":["best","kid"],"img":"https://ldb-phinf.pstatic.net/20230826_49/1693040368208YrrPa_JPEG/1693040266548.jpg","imgFrom":"ref"},{"id":"n15394604-2","name":"짬뽕","emoji":"🍲","price":8000,"desc":"","tags":["best","hot"],"img":"https://pup-review-phinf.pstatic.net/MjAyNjA0MTRfMTQg/MDAxNzc2MTQyMTI5ODk4.yyiEkK7eNTXXkrojn5whwF-zM_VetF-uzxpMaKdbRq4g.nTSTp7DIVui24SiITPWNDk2qB0k_xSma_xzfBHJwz5Ig.JPEG/2091566E-BC76-4079-A25A-3163A3AC2C94.jpeg?type=w560_sharpen","imgFrom":"review"},{"id":"n15394604-3","name":"우동","emoji":"🍜","price":8000,"desc":"","tags":["kid"],"img":"https://pup-review-phinf.pstatic.net/MjAyNTA2MjlfNjIg/MDAxNzUxMTcwNzE0NjYz.p6uHHmQM4iK9psmwhW4EIHDoRhVOqhBfVNaH0S-DNZEg.ZwMIYXsrAm0gngMX6KIBho1G85pv0hPs0kni9LHBhUgg.JPEG/20250629_123038.jpg.jpg?type=w560_sharpen","imgFrom":"review"},{"id":"n15394604-4","name":"간짜장","emoji":"🍜","price":6000,"desc":"","tags":["kid"],"img":"https://pup-review-phinf.pstatic.net/MjAyNTA0MjhfMjgy/MDAxNzQ1ODQ2MTQ1MjA2.J9FBFXv7AutCzBNcxuOKj7qTaz_KEGsFhPgIe4hBOAog.JMo914NKxPBEXrnhM_8Sh5Md8W4_MV6mMYnXzjYjC-wg.JPEG/20250425_150554.jpg.jpg?type=w560_sharpen","imgFrom":"ref"},{"id":"n15394604-5","name":"울면","emoji":"🍜","price":8000,"desc":"","tags":[],"img":""}]},{"id":"n15395183","name":"땅땅치킨 풍산점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"풍산읍","minutes":8,"phone":"054-841-0086","address":"경북 안동시 풍산읍 풍산중앙길 135","photo":"https://ldb-phinf.pstatic.net/20240104_172/1704327170081gYm6u_PNG/%B6%A5%B6%A5%C4%A1%C5%B2_%BD%C5%B1%D4%B7%CE%B0%ED.png","reviews":33,"hours":"","naver":"https://m.place.naver.com/restaurant/15395183/home","note":"","menu":[{"id":"n15395183-1","name":"땅땅불갈비","emoji":"🍗","price":23000,"desc":"윤기 좔좔한 비주얼에 속살까지 간장 양념이 쏙 베어 식어도 맛있는 오븐 치킨!","tags":["best","hot"],"img":"https://ldb-phinf.pstatic.net/20250915_9/1757897392745ukMiK_JPEG/%B6%A5%B6%A5%BA%D2%B0%A5%BA%F1.jpg"},{"id":"n15395183-2","name":"허브순살치킨","emoji":"🍗","price":23000,"desc":"바삭한 닭다리살과 오묘한 맛을 가진 허브간장의 절묘한 만남!","tags":["best","kid"],"img":"https://ldb-phinf.pstatic.net/20250915_224/17578974049140cc13_JPEG/%C7%E3%BA%EA%BC%F8%BB%EC.jpg"},{"id":"n15395183-3","name":"땅땅불갈비 + 허브순살치킨","emoji":"🍗","price":28000,"desc":"아직도 안 먹어 봤니? 진리의 세트3번","tags":["hot"],"img":"https://ldb-phinf.pstatic.net/20250915_42/1757897383646bAzMr_JPEG/%BC%BC%C6%AE3.jpg"},{"id":"n15395183-4","name":"허브순살치킨 + 후왕","emoji":"🍗","price":27000,"desc":"100% 닭다리살 달콤한 허브순살치킨과 바삭한 '봉치킨' 후왕의 만남","tags":["kid"],"img":"https://ldb-phinf.pstatic.net/20260512_276/1778575044295IQvrj_JPEG/%BC%BC%C6%AE-01.jpg"},{"id":"n15395183-5","name":"허브순살치킨 + 매콤양념치킨","emoji":"🍗","price":27000,"desc":"100% 닭다리살 달콤한 허브순살치킨과 매콤양념치킨의 반전 매력의 만남","tags":["hot"],"img":"https://ldb-phinf.pstatic.net/20260512_256/1778575077839sKs80_JPEG/%BC%BC%C6%AE-02.jpg"},{"id":"n15395183-6","name":"후왕","emoji":"🍗","price":26000,"desc":"후라이드의 왕! 바삭한 식감의 100% 봉 치킨!","tags":[],"img":"https://ldb-phinf.pstatic.net/20260512_99/1778575828675mtBsC_JPEG/01_%C8%C4%BF%D5_1.jpg"}]},{"id":"n1490668196","name":"BHC치킨 안동풍산점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"풍산읍","minutes":8,"phone":"054-853-0944","address":"경북 안동시 풍산읍 풍산중앙길 107-1 (안교리)","photo":"https://ldb-phinf.pstatic.net/20260924_156/1790207871387K3bB0_JPEG/IMG_8600.jpg","reviews":30,"hours":"토 15:00~23:00","naver":"https://m.place.naver.com/restaurant/1490668196/home","note":"","menu":[{"id":"n1490668196-o19011808","name":"콰삭킹","emoji":"🍗","price":21000,"desc":"극강의 바삭함! 차원이 다른 바삭한 소리와 식감의 신개념 치킨 *스윗 하바네로 소스와 함께 제공됩니다.","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_63/1752712264602nhjC0_PNG/image.png"},{"id":"n1490668196-o20973963","name":"스윗칠리킹","emoji":"🍗","price":21900,"desc":"세상에 없던 바삭한 양념치킨! 달콤 칠리 소스를 얇게 코팅한 크리스피 양념치킨","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20251118_249/1763425816816Hrelq_PNG/image.png"},{"id":"n1490668196-o14100674","name":"뿌링클","emoji":"🍗","price":21000,"desc":"뿌링뿌링! 세상에 없던 마법의 맛 뿌링클","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_194/1752712257018WPbMg_PNG/image.png"},{"id":"n1490668196-o14100676","name":"후라이드 스틱","emoji":"🍗","price":23000,"desc":"명불허전! 바삭하고 고소하게 정직하게 튀겨낸 BHC 후라이드 치킨의 정석, 인기만점 닭다리만 모아 담은 스틱","tags":["best","kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_150/1752712253539v0JyB_PNG/image.png"},{"id":"n1490668196-o14100673","name":"뿌링클순살","emoji":"🍗","price":23000,"desc":"뿌링뿌링! 뼈 없는 순살로 구성된 세상에 없던 마법의 맛 뿌링클","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_289/1752712253139iv1YJ_PNG/image.png"},{"id":"n1490668196-o14100672","name":"HOT뿌링클 순살","emoji":"🍗","price":23000,"desc":"뿌링뿌링! 뼈없는 순살로 구성된 세상에 없던 마법 뿌링가루의 HOT한 변신","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_117/1752712257181PJtlW_PNG/image.png"}]},{"id":"n920197731","name":"교촌치킨 경북도청점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":15,"phone":"054-654-0007","address":"경북 예천군 호명읍 새움3로 20 신성프라자 111,112호","photo":"https://ldb-phinf.pstatic.net/20221130_290/1669782289053g3gih_JPEG/%B1%B3%C3%CC%C4%A1%C5%B2_%BD%C5%B1%D4_BI_%BE%C6%C0%CC%C4%DC%28%C4%AB%C4%AB%BF%C0%29.jpg","reviews":304,"hours":"","naver":"https://m.place.naver.com/restaurant/920197731/home","note":"","menu":[{"id":"n920197731-o18527850","name":"허니콤보","emoji":"🍗","price":23000,"desc":"달콤한 허니 소스에 쫄깃한 날개와 담백한 다리가 만난 메뉴 [날개(윙+봉)+다리, 조리 전 중량 880g]","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250724_253/1753317018675HNiSN_PNG/image.png"},{"id":"n920197731-o18527852","name":"레드콤보","emoji":"🍗","price":23000,"desc":"국내산 청양 홍고추의 매콤한 맛에 날개와 다리를 함께 즐길 수 있는 메뉴[날개(윙+봉)+다리, 조리 전 중량 920g] 원육 수급이 원활하지 않","tags":["best","hot"],"img":"https://naverbooking-phinf.pstatic.net/20250724_182/1753317020505LHhxP_PNG/image.png"},{"id":"n920197731-o18527865","name":"반반콤보","emoji":"🍗","price":23000,"desc":"마늘 간장 맛과 매콤한 맛이 밴 날개와 다리의 행복한 만남[날개(윙+봉)+다리, 조리 전 중량 920g] 원육 수급이 원활하지 않아 한시적으로 ","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250724_232/1753317019634YPXlE_PNG/image.png"},{"id":"n920197731-o18527849","name":"간장콤보","emoji":"🍗","price":22000,"desc":"마늘과 간장 소스의 풍부한 맛에 가장 인기있는 부위인 날개와 다리를 함께 즐길 수 있는 메뉴[날개(윙+봉)+다리, 조리 전 중량 920g] 원육","tags":["best","kid"],"img":"https://naverbooking-phinf.pstatic.net/20250724_58/1753317015994xNPpe_PNG/image.png"},{"id":"n920197731-o18527862","name":"허니순살","emoji":"🍗","price":23000,"desc":"부드럽고 담백한 안심, 정육 순살에 허니소스의 달콤함이 어우러진 순살치킨 [정육+안심, 조리 전 중량 500g, 레드디핑소스 포함]","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250724_133/1753317018886DLRVe_PNG/image.png"},{"id":"n920197731-o18527853","name":"레드순살","emoji":"🍗","price":23000,"desc":"국내산 청양 홍고추의 매콤함을 담은 순살치킨 [정육, 조리 전 중량 700g]","tags":["hot"],"img":"https://naverbooking-phinf.pstatic.net/20261001_262/1790814745485PxS4q_JPEG/image.jpg"}]},{"id":"n1454017835","name":"이춘봉인생치킨 경북도청점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":16,"phone":"0507-1417-0007","address":"경북 예천군 호명읍 행복로 177","photo":"https://ldb-phinf.pstatic.net/20190708_257/1562578819577LkMSl_JPEG/OS94MUwjrZSH6WbqFD112fh0.jpg","reviews":290,"hours":"토 16:00~23:30 · 마지막 주문 23:00","naver":"https://m.place.naver.com/restaurant/1454017835/home","note":"","menu":[{"id":"n1454017835-1","name":"간장숯불바베큐","emoji":"🍗","price":21000,"desc":"","tags":["best","hot"],"img":""},{"id":"n1454017835-2","name":"양념숯불바베큐","emoji":"🍗","price":21000,"desc":"","tags":["best","hot"],"img":""},{"id":"n1454017835-3","name":"크림슨이춘봉바베큐","emoji":"🍗","price":22000,"desc":"","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20261013_42/1791854438565thdeI_JPEG/image.jpg","imgFrom":"ref"},{"id":"n1454017835-4","name":"소금구이참숯바베큐치킨","emoji":"🍗","price":19000,"desc":"인생치킨에서 선보이는 담백함과 깔끔한 맛!\n직화로 구워 참숯의 향은 살리고, 육질은 쫄깃하며 기름기는\n쏙~ 뺏다. 치킨 본연의 맛을 즐기고 싶은","tags":[],"img":"https://ldb-phinf.pstatic.net/20190708_47/1562578085951OtX0a_JPEG/3c0CSSBoJN21QI_hMOQEFTdB.jpg"},{"id":"n1454017835-5","name":"이춘봉참숯바베큐치킨","emoji":"🍗","price":21000,"desc":"고품격 참숯의 향과 인생치킨에서 만든 특제소스가 만나서\n완벽한 숯불바베큐가 탄생했다. 남녀노소 누구나 즐길수 있는\n인생치킨의 대표메뉴!","tags":[],"img":"https://ldb-phinf.pstatic.net/20190708_25/1562578135785uwQAt_JPEG/jtGRXIrlkiv48GvnkghoEeHy.jpg"},{"id":"n1454017835-6","name":"후라이드치킨","emoji":"🍗","price":18000,"desc":"지금까지 바삭함은 잊어라!\n어릴적 처음 먹어 보았던 추억의 바로 그맛!\n인생치킨에서 재현되다!","tags":["kid"],"img":"https://ldb-phinf.pstatic.net/20190708_179/1562578279762v77wA_JPEG/LRMf6p0Bm28H3Afk15_0hz7Z.jpg"}]},{"id":"n1395993023","name":"BHC 도청신도시점","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":15,"phone":"054-652-8879","address":"경북 예천군 호명읍 새움3로 30 제일프라자","photo":"https://ldb-phinf.pstatic.net/20260924_156/1790207871387K3bB0_JPEG/IMG_8600.jpg","reviews":160,"hours":"","naver":"https://m.place.naver.com/restaurant/1395993023/home","note":"","menu":[{"id":"n1395993023-o14100674","name":"뿌링클","emoji":"🍗","price":21000,"desc":"뿌링뿌링! 세상에 없던 마법의 맛 뿌링클","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_194/1752712257018WPbMg_PNG/image.png"},{"id":"n1395993023-o14100627","name":"맛초킹","emoji":"🍗","price":21000,"desc":"매콤짭잘! 밥과 함께 먹기에 딱 좋은 완벽조합","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_259/1752712251044SjwsF_PNG/image.png"},{"id":"n1395993023-o14100564","name":"HOT후라이드","emoji":"🍗","price":21000,"desc":"명불허전! 바삭함, 고소함 가득! 매콤하게 튀긴 매운 맛 후라이드 치킨의 정석 *HOT후라이드 시즈닝으로 인해 튀김 성상이 어둡게 나타날 수 있","tags":["best","kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_25/1752712258732Txnd0_PNG/image.png"},{"id":"n1395993023-o19011808","name":"콰삭킹","emoji":"🍗","price":21000,"desc":"극강의 바삭함! 차원이 다른 바삭한 소리와 식감의 신개념 치킨 *스윗 하바네로 소스와 함께 제공됩니다.","tags":["best"],"img":"https://naverbooking-phinf.pstatic.net/20250717_63/1752712264602nhjC0_PNG/image.png"},{"id":"n1395993023-o14100618","name":"후라이드","emoji":"🍗","price":20000,"desc":"명불허전! 바삭하고 고소하게 정직하게 튀겨낸 BHC 후라이드 역시 치킨의 정석","tags":["kid"],"img":"https://naverbooking-phinf.pstatic.net/20250717_12/1752712257836T7b4R_PNG/image.png"},{"id":"n1395993023-o22774679","name":"[NEW] 커링클","emoji":"🍗","price":21900,"desc":"은은한 커리향과 부드러운 크림의 풍미가 어우러진 달콤 매콤 시즈닝 치킨에 새콤달콤한 허니버터요거트소스를 곁들여 더욱 다채롭게 즐길 수 있는 치킨","tags":[],"img":"https://naverbooking-phinf.pstatic.net/20260713_244/1783902623522n3KpL_PNG/image.png"}]},{"id":"n1391935184","name":"본가옛날통닭","emoji":"🍗","color":"#fff0c2","category":"치킨","area":"도청신도시","minutes":14,"phone":"054-655-4499","address":"경북 안동시 풍천면 검무로 10-10 1층 129호, 130호, 131호 본가옛날통닭","photo":"https://ldb-phinf.pstatic.net/20260714_211/1784029123828GjS4n_JPEG/28780.jpg","reviews":131,"hours":"토 17:30~23:00 · 마지막 주문 22:00","naver":"https://m.place.naver.com/restaurant/1391935184/home","note":"","menu":[{"id":"n1391935184-1","name":"BONGA후라이드통닭","emoji":"🍗","price":20900,"desc":"비교 할수 없는 겉바 속촉 후라이드통닭","tags":["best","kid"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5M4xM6R5ZeW-Z_VX4iNtB8BqPZ_1f10ii4xEgykH1Mou.jpg"},{"id":"n1391935184-2","name":"BONGA옛날통닭4조각(4조각)","emoji":"🐔","price":20900,"desc":"통닭은 역시 본가옛날통닭","tags":["best"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5NsKfWuaHDwpbXi9ngMbvba1yttCwKj-qdt9lQBFqwQ8.jpg"},{"id":"n1391935184-3","name":"BONGA양념통닭","emoji":"🍗","price":22900,"desc":"바삭하게 튀겨낸 통닭에 특제 양념소스를 버무려 더욱 풍미를 느낀다.","tags":["best"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5DwTbeS_0LbvgiGADbjRKCGomoK3lPx4p6If8zFfPCQy.jpg"},{"id":"n1391935184-4","name":"BONGA간장통닭","emoji":"🐔","price":22900,"desc":"살짝매콤 달콤 짭쪼름한 오리지날 간장통닭","tags":["best","kid"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5He8iRQ3gWMzOLYrT0vCTrP9ueTUxX6Wj_Q3j3GaV-aN.jpg"},{"id":"n1391935184-5","name":"BONGA마늘간장통닭","emoji":"🐔","price":23900,"desc":"단짠단짠 마법의 비법소스  마늘간장 소스와 통닭의 환상 콜라보","tags":["best","kid"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5NHmp2x062iG874hnEFwnMDKrp8x5BDmslk4RiKTGzxm.jpg"},{"id":"n1391935184-6","name":"BONGA땡초통닭","emoji":"🐔","price":23900,"desc":"매콥한게 땡길때 먹을수록 땡기는맛","tags":["best","hot"],"img":"https://imagefarm.baemin.com/smartmenuimage/upload/image/2020/8/18/NjzOGLtWmKn-8oA7-PgN5JE6uLWj2_KiGWuFLWxrQ1YFO9YP3vX3dVJh0SWs1i0V.jpg"}]}];
 // Isolated browser-local adapter. This file never contacts Firebase.
@@ -1659,7 +1666,7 @@ function foodAvatar(index, selectedTone) {
 }
 const FOOD_MASCOTS = ['rice','noodle','coffee'].map(name=>`<img class="food-mascot" src="assets/characters/${name}-avatar.webp" alt="" decoding="async">`);
 
-// Local, room-scoped avatar preferences. No order or identity data is submitted here.
+// Confirmed profiles live in Firestore; local storage holds only unconfirmed drafts.
 const AVATAR_TONE_NAMES = ['민트', '살구', '하늘', '라벤더', '레몬', '분홍'];
 const avatarMemory = new Map();
 const avatarStorageKey = () => 'mm-avatars-' + (S.roomId || 'local');
@@ -1699,6 +1706,8 @@ function randomAvatar(previous = null, occupied = []) {
   return candidates[randomAvatarIndex(candidates.length)];
 }
 function avatarChoice(name) {
+  const shared=validAvatar(S.profiles?.get(answerId(name)));
+  if(shared)return shared;
   const choices=avatarChoices(), key=answerId(name);
   if (!Object.hasOwn(choices,key)) {
     choices[key]=randomAvatar(null,Object.values(choices));
@@ -1706,14 +1715,45 @@ function avatarChoice(name) {
   }
   return {...choices[key]};
 }
-function saveAvatarChoice(name, value) {
+function cacheAvatarChoice(name, value) {
   const choice=validAvatar(value);
   if (!choice) return false;
   const choices=avatarChoices(); choices[answerId(name)]=choice;
   save(avatarStorageKey(),choices);
   return true;
 }
+function tidyAvatarProfile(id, data) {
+  const choice=validAvatar(data);
+  if(!choice || typeof data.name!=='string' || !data.name.length || data.name.length>20 || answerId(data.name)!==id || typeof data.uid!=='string' || !data.uid.length || data.uid.length>128)return null;
+  return {name:data.name,uid:data.uid,...choice};
+}
+function avatarOwner(name) {
+  return S.answers.get(answerId(name))?.uid || S.profiles?.get(answerId(name))?.uid || '';
+}
+function canEditAvatar(name) {
+  const owner=avatarOwner(name);
+  return !!UID && !!S.room && (S.host || (!S.room.closed && (!owner || owner===UID)));
+}
+async function saveAvatarChoice(name,value) {
+  const choice=validAvatar(value),roomId=S.roomId;
+  if(!choice || !roomId || !S.profilesReady || !canEditAvatar(name))throw new Error('permission-denied');
+  if(typeof navigator!=='undefined' && navigator.onLine===false)throw new Error('network unavailable');
+  const profile={name,...choice,uid:S.host ? (avatarOwner(name)||UID) : UID};
+  await FB.setDoc(FB.doc(DB,'dinnerRooms',roomId,'profiles',answerId(name)),{...profile,updatedAt:FB.serverTimestamp()});
+  if(S.roomId!==roomId)return false;
+  S.profiles.set(answerId(name),profile); cacheAvatarChoice(name,choice);
+  return true;
+}
 let avatarPicker=null;
+const avatarMigrationAttempts=new Set();
+function migrateMyAvatar() {
+  if(!S.who||!S.profilesReady||!S.answersReady||!canEditAvatar(S.who)||S.profiles.has(answerId(S.who)))return;
+  if(avatarOwner(S.who)&&avatarOwner(S.who)!==UID)return;
+  const choice=validAvatar(avatarChoices()[answerId(S.who)]),key=S.roomId+':'+answerId(S.who);
+  if(!choice||avatarMigrationAttempts.has(key))return;
+  avatarMigrationAttempts.add(key);
+  saveAvatarChoice(S.who,choice).catch(()=>{});
+}
 const avatarDice = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="8" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/></svg>';
 function avatarPickerHTML(picker) {
   const p=picker.draft;
@@ -1727,7 +1767,7 @@ function avatarPickerHTML(picker) {
       <div class="ap-grid-label"><b>직접 고르기</b><span>16종</span></div>
       <div class="ap-foods" role="group" aria-label="음식 캐릭터">${FOOD_CHARACTERS.map((food,i)=>`<button class="ap-food" data-avatar-food="${i}" aria-label="${food.name}" aria-pressed="${p.food===i}"><img src="${food.src}" alt="" width="56" height="56"><span>${food.name}</span></button>`).join('')}</div>
     </div>
-    <footer class="ap-foot"><button class="ap-confirm" data-avatar-action="confirm">이 캐릭터로 담기 <span aria-hidden="true">↗</span></button><small>이 기기에 저장돼요</small></footer>
+    <footer class="ap-foot"><button class="ap-confirm" data-avatar-action="confirm">이 캐릭터로 담기 <span aria-hidden="true">↗</span></button><small class="ap-status" role="status" aria-live="polite">같이 먹는 사람들에게도 이렇게 보여요</small></footer>
   </section>`;
 }
 function openAvatarPicker(name) {
@@ -1736,20 +1776,34 @@ function openAvatarPicker(name) {
   if (S.room.names.length && !S.room.freeJoin && !S.room.names.includes(name)) { toast('명단에 있는 이름만 고를 수 있어요'); return; }
   closeSheet();
   const bg=document.createElement('div'); bg.id='sheet'; bg.className='avatar-picker-bg';
-  avatarPicker={name,roomId:S.roomId,draft:avatarChoice(name),rolling:false,timer:0,trigger:document.activeElement,overflow:document.body.style.overflow,inert:$app.inert};
+  avatarPicker={name,roomId:S.roomId,draft:avatarChoice(name),rolling:false,saving:false,timer:0,trigger:document.activeElement,overflow:document.body.style.overflow,inert:$app.inert};
   bg.innerHTML=avatarPickerHTML(avatarPicker);
-  bg.addEventListener('click',e=>{
+  bg.addEventListener('click',async e=>{
     if(e.target===bg){closeAvatarPicker();return;}
     const button=e.target.closest('button'); if(!button)return;
     const p=avatarPicker;if(!p)return;
     if(button.dataset.avatarAction==='cancel'){closeAvatarPicker();return;}
-    if(p.rolling)return;
-    if(button.dataset.avatarAction==='roll'){rollAvatarPicker();return;}
+    if(p.rolling||p.saving)return;
+    if(button.dataset.avatarAction==='roll'){if(canEditAvatar(p.name))rollAvatarPicker();return;}
     if(button.dataset.avatarAction==='confirm'){
       const {name,draft,roomId}=p;
       if(roomId!==S.roomId){closeAvatarPicker();return;}
-      saveAvatarChoice(name,draft);closeAvatarPicker(false);setWho(name);return;
+      if(!S.profilesReady){syncAvatarPicker();return;}
+      if(!canEditAvatar(name)){closeAvatarPicker(false);setWho(name);return;}
+      p.saving=true;p.error='';syncAvatarPicker();
+      try{
+        const saved=await saveAvatarChoice(name,draft);
+        if(avatarPicker!==p)return;
+        if(!saved){closeAvatarPicker();return;}
+        closeAvatarPicker(false);setWho(name);
+      }catch(error){
+        if(avatarPicker!==p)return;
+        p.saving=false;p.error=/permission/.test(String(error.code||error.message))?'이름이 이미 선택됐어요. 다른 이름으로 골라 주세요.':'저장하지 못했어요. 연결을 확인하고 다시 눌러 주세요.';
+        syncAvatarPicker();
+      }
+      return;
     }
+    if(!canEditAvatar(p.name)||!S.profilesReady)return;
     if(button.hasAttribute('data-avatar-food'))p.draft.food=Number(button.dataset.avatarFood);
     if(button.hasAttribute('data-avatar-tone'))p.draft.tone=Number(button.dataset.avatarTone);
     updateAvatarPicker();
@@ -1761,7 +1815,17 @@ function openAvatarPicker(name) {
     else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
   });
   document.body.append(bg);document.body.style.overflow='hidden';$app.inert=true;
-  bg.querySelector('[data-avatar-action="roll"]').focus();
+  syncAvatarPicker();
+  bg.querySelector('[data-avatar-action="roll"]:not(:disabled), [data-avatar-action="confirm"]:not(:disabled), .ap-close').focus();
+}
+function syncAvatarPicker() {
+  const p=avatarPicker,bg=document.querySelector('.avatar-picker-bg');if(!p||!bg)return;
+  const editable=canEditAvatar(p.name),ready=S.profilesReady;
+  if(!editable&&!p.rolling&&!p.saving){p.draft=avatarChoice(p.name);updateAvatarPicker();}
+  for(const b of bg.querySelectorAll('[data-avatar-food],[data-avatar-tone],.ap-roll'))b.disabled=!ready||!editable||p.saving||p.rolling;
+  const confirm=bg.querySelector('.ap-confirm');confirm.disabled=!ready||p.saving||p.rolling;
+  confirm.textContent=p.saving?'같이 보는 중…':editable?'이 캐릭터로 담기 ↗':'이 이름으로 보기 ↗';
+  bg.querySelector('.ap-status').textContent=p.error||S.profilesError||(!ready?'캐릭터를 불러오는 중…':p.saving?'캐릭터와 배경색을 저장하고 있어요':!editable?'이 캐릭터는 선택한 기기나 방장이 바꿀 수 있어요':'같이 먹는 사람들에게도 이렇게 보여요');
 }
 function updateAvatarPicker(announce=true) {
   const p=avatarPicker,bg=document.querySelector('.avatar-picker-bg');if(!p||!bg)return;
@@ -1771,7 +1835,7 @@ function updateAvatarPicker(announce=true) {
   for(const b of bg.querySelectorAll('[data-avatar-tone]'))b.setAttribute('aria-pressed',String(Number(b.dataset.avatarTone)===p.draft.tone));
 }
 function rollAvatarPicker() {
-  const p=avatarPicker,bg=document.querySelector('.avatar-picker-bg');if(!p||p.rolling||!bg)return;
+  const p=avatarPicker,bg=document.querySelector('.avatar-picker-bg');if(!p||p.rolling||p.saving||!canEditAvatar(p.name)||!S.profilesReady||!bg)return;
   p.rolling=true;const result=randomAvatar(p.draft),delays=[65,65,75,85,95,115,145,190,250];let step=0;
   const panel=bg.querySelector('.avatar-picker');panel.classList.remove('is-revealed');panel.classList.add('is-rolling');panel.setAttribute('aria-busy','true');
   bg.querySelector('.ap-result').textContent='두구두구…';bg.querySelector('.ap-roll span').textContent='뽑는 중';
@@ -1780,7 +1844,7 @@ function rollAvatarPicker() {
     if(avatarPicker!==p||!bg.isConnected)return;
     p.draft=result;p.rolling=false;updateAvatarPicker();
     panel.classList.remove('is-rolling');panel.classList.add('is-revealed');panel.removeAttribute('aria-busy');
-    bg.querySelector('.ap-roll span').textContent='다시 뽑기';for(const b of bg.querySelectorAll('button'))b.disabled=false;
+    bg.querySelector('.ap-roll span').textContent='다시 뽑기';syncAvatarPicker();
     if (!bg.contains(document.activeElement)) bg.querySelector('.ap-roll').focus();
     if(!reduceMotion())buzz([15,35,25]);
   };
@@ -1983,7 +2047,7 @@ function tidyAnswer(id, d) {
 
 // ---------- 상태 ----------
 const S = {
-  route: 'home', roomId: '', room: null, answers: new Map(), host: false, loading: false, error: '',
+  route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', host: false, loading: false, error: '',
   tab: 'menu', store: null, mfilter: 'all', menuQuery: '',
   who: '', cart: {}, req: '', storeReqs: {}, sentAt: 0,
   draft: null, catFor: 'create', catQuery: '', catArea: '도청신도시', catCat: 'all', catPicked: new Set(),
@@ -2038,7 +2102,7 @@ function stopListening() { for (const u of unsub) try { u(); } catch {} unsub = 
 
 async function openRoom(id, key, want = '') {
   stopListening();
-  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all'});
+  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all'});
   const local = roomLocal();
   Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), sentAt: local.sentAt || 0, tab: local.who ? 'menu' : 'who'});
   render();
@@ -2052,6 +2116,7 @@ async function openRoom(id, key, want = '') {
     if (!isHost && key) {
       try { await FB.setDoc(hostRef, {key, at: FB.serverTimestamp()}); isHost = true; } catch {}
     }
+    if (S.roomId !== id || S.route !== 'room') return;
     S.host = isHost;
     if (isHost && key) rememberRoom(id, {key, host: true});
     let first = true;
@@ -2065,7 +2130,7 @@ async function openRoom(id, key, want = '') {
       if (first && S.created) setTimeout(() => confetti(document.querySelector('.share-card .sc-ic')), 250);
       const initialView = first;
       first = false;
-      reindex(); keepView();
+      reindex(); syncAvatarPicker(); migrateMyAvatar(); keepView();
       if (initialView) rememberView();
     }, e => { S.loading = false; S.error = /permission/.test(String(e && e.code)) ? '방 기능이 아직 켜지지 않았어요(Firebase 규칙 게시 전이에요). 방을 관리하는 사람에게 알려 주세요.' : friendly(e); render(); }));
     let firstAnswers = true;
@@ -2077,10 +2142,22 @@ async function openRoom(id, key, want = '') {
       if (fresh.length) { announceArrival([...new Set(fresh.map(c => str(c.doc.data().name, 20)))], fresh.every(c => c.type === 'modified')); buzz(15); S.bumpLive = true; }
       }
       firstAnswers = false;
-      S.answers = new Map(snap.docs.map(d => [d.id, tidyAnswer(d.id, d.data())]));
+      S.answers = new Map(snap.docs.map(d => [d.id, tidyAnswer(d.id, d.data())])); S.answersReady = true;
       if (UID) setSentNames(id, [...S.answers.values()].filter(a => a.uid === UID).map(a => a.name));
-      keepView();
+      syncAvatarPicker(); migrateMyAvatar(); keepView();
     }, () => {}));
+    unsub.push(FB.onSnapshot(FB.collection(DB, 'dinnerRooms', id, 'profiles'), snap => {
+      if (S.roomId !== id) return;
+      // Ignore optimistic local writes until the server accepts them.
+      if (snap.metadata?.hasPendingWrites) return;
+      S.profiles = new Map(snap.docs.map(d => [d.id, tidyAvatarProfile(d.id, d.data())]).filter(([, p]) => p));
+      S.profilesReady = true; S.profilesError = '';
+      syncAvatarPicker(); migrateMyAvatar(); keepView();
+    }, e => {
+      if (S.roomId !== id) return;
+      S.profilesReady = false; S.profilesError = friendly(e);
+      syncAvatarPicker();
+    }));
   } catch (e) { S.loading = false; S.error = friendly(e); render(); }
 }
 // 실시간으로 바뀌면 다시 그리되, 글자를 적고 있으면 방해하지 않아요.
@@ -3171,7 +3248,7 @@ addEventListener('hashchange', route);
 // Two store views can share the same hash; popstate also restores their store/search context.
 addEventListener('popstate', route);
 route();
-setInterval(() => { if (S.route === 'room' && S.room && S.room.deadline && !document.querySelector('input:focus,textarea:focus')) { const c = document.querySelector('.rh-meta'); if (c) rerender(); } }, 60000);
+setInterval(() => { if (S.route === 'room' && S.room && S.room.deadline && !document.getElementById('sheet') && !document.querySelector('input:focus,textarea:focus')) { const c = document.querySelector('.rh-meta'); if (c) rerender(); } }, 60000);
 
 
 // Optional requests remain open across quantity changes and snapshot renders.

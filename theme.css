@@ -393,3 +393,10 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 @media(prefers-reduced-motion:reduce){.mm .who-btn .food-avatar{transition:none}.mm .who-btn:hover .food-avatar,.mm .who-btn.me .food-avatar{transform:none}}
 
 .mm .who-btn>span{font-size:16px;font-weight:650;line-height:1.35}
+
+/* Blend complete cropped logo layers. The glass header forms its own backdrop
+   group, so blend that group as well to prevent an opaque white image plate. */
+.brand-lockup,.brand-art{mix-blend-mode:multiply}
+.brand-lockup img,.brand-art img{mix-blend-mode:normal}
+.mm .top:has(.brand-lockup){mix-blend-mode:multiply}
+.ap-foot .ap-status{min-height:1.4em}

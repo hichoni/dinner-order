@@ -1,18 +1,18 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>다맛다 · 로딩과 전송</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"><style>
 *{box-sizing:border-box}body{margin:0;background:#eef4f3;color:#203e42;font:14px Pretendard,system-ui,sans-serif;letter-spacing:-.025em}header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:24px 30px;background:#ffffffcc;border-bottom:1px solid #dbe7e3}h1{font-size:22px;font-weight:650;margin:0}nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}a,button,select{font:inherit;font-size:12px;color:inherit;cursor:pointer}a{text-decoration:none;padding:9px}button,select{border:1px solid #cbded9;border-radius:9px;padding:9px 12px;background:#fff}button[aria-pressed=true]{background:#00776f;color:#fff}main{max-width:1400px;margin:auto;padding:24px 30px}.intro{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.intro p{margin:0;color:#6d8680;font-size:13px}.states{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.state h2{font-size:17px;font-weight:600;margin:0 0 12px;display:flex;gap:10px;align-items:baseline}.state h2 small{font-size:11px;color:#819590;font-weight:500}.device{border:1px solid #d5e4df;border-radius:25px;overflow:hidden;background:#f7fbfa;box-shadow:0 12px 25px -23px #294d48}.device iframe{width:100%;height:470px;border:0;display:block}.caption{margin:12px 2px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:#758b84}.caption button{padding:6px 9px;font-size:11px}.note{margin-top:24px;color:#81948e;font-size:12px}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #efbd4d;outline-offset:3px}@media(max-width:900px){header{align-items:flex-start;padding:20px}.states{grid-template-columns:1fr;max-width:430px;margin:auto}main{padding:20px}.intro{align-items:flex-start;flex-direction:column}.device iframe{height:450px}header nav a{display:none}}@media(min-width:901px) and (max-height:780px){header{padding:18px 28px}main{padding-top:18px}.device iframe{height:405px}.intro{margin-bottom:18px}}
-</style><meta name="description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+</style><meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:site_name" content="다맛다">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
-<meta property="og:title" content="다맛다">
-<meta property="og:description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+<meta property="og:title" content="다맛다 — 총무도 밥 좀 먹자.">
+<meta property="og:description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
 <meta property="og:image:width" content="1774">
 <meta property="og:image:height" content="887">
 <meta property="og:image:alt" content="다맛다. 밥, 면, 커피를 한 쟁반에 담아요.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="다맛다">
-<meta name="twitter:description" content="메뉴와 요청사항을 담아 한 번에 보내세요.">
+<meta name="twitter:title" content="다맛다 — 총무도 밥 좀 먹자.">
+<meta name="twitter:description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta name="twitter:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
 </head><body><header><h1>다맛다 · 로딩과 전송</h1><nav><a href="screens.html">전체 화면 ↗</a><a href="assets.html">캐릭터 · 아이콘 ↗</a><select aria-label="색상 테마"><option value="sky">블루 · 레몬</option><option value="mint">민트 · 귤</option></select></nav></header><main><div class="intro"><p>밥 → 면 → 커피. 세 장이 모이면, 다맛다!</p><nav><button id="replay">전체 다시 재생 ↻</button><button id="pause" aria-pressed="false">일시정지</button></nav></div><div class="states"></div><p class="note">실제 앱과 같은 모션 코드입니다. 여기서는 예시만 재생해요. 움직임 줄이기 설정도 반영합니다.</p></main><script>
 const scenes=[['loading','방 열기','연결되는 동안 반복'],['sending','고르고 · 담아서 · 보내기','세 장 모으기 → 완료'],['complete','다맛다!','전송 완료']];
