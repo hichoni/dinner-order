@@ -1714,8 +1714,8 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .draw-caption{font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap}
 .game-sound,.game-shuffle{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:36px;padding:5px 9px;font-weight:600;line-height:1.2;font-family:inherit;font-size:12px;color:var(--mint-d);background:#ffffffa6;border:1px solid #d4e6e4;border-radius:11px;cursor:pointer;white-space:nowrap;box-shadow:inset 0 1px #fff}
 .game-sound svg,.game-shuffle svg{width:17px;height:17px;flex-shrink:0}
-.game-sound[aria-pressed=true]{background:#d9f2ecb8;border-color:#a6d6cf}
-.game-sound[aria-pressed=true] .sound-slash,.game-sound[aria-pressed=false] .sound-waves{display:none}
+.game-sound[data-sound-active=true]{background:#d9f2ecb8;border-color:#a6d6cf}
+.game-sound[data-sound-active=true] .sound-slash,.game-sound[data-sound-active=false] .sound-waves{display:none}
 .game-sound:focus-visible,.game-shuffle:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
 .game-sound:hover,.game-shuffle:not(:disabled):hover{background:#fff;border-color:var(--mint)}
 .game-shuffle:disabled{cursor:default;opacity:.62}
@@ -1740,6 +1740,41 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 @media(max-width:600px){.draw-caption{font-size:11px}.home-play-tools{margin-bottom:6px}.game-sound,.game-shuffle{font-size:11px;padding:5px 7px;gap:4px;min-height:36px}.game-sound svg,.game-shuffle svg{width:16px;height:16px}.food-reel{--reel-size:57px}.mm.view-home .food-roulette .food-mascot{width:63px;height:57px}.mm.view-home .food-roulette b{font-size:13px}.mm.view-home .brand-motto{margin-bottom:8px}.mm .top:has(.game-sound) .chip-who{max-width:39%}}
 @media(max-width:360px){.draw-caption{font-size:10px}.home-play-tools>div{gap:3px}.game-shuffle{padding:5px}.food-reel{--reel-size:53px}.mm.view-home .food-roulette .food-mascot{width:58px;height:53px}}
 @media(prefers-reduced-motion:reduce){.game-shuffle.spinning svg,.roulette-card.landed .food-reel,.roulette-card.landed .reel-spark{animation:none}.food-reel-strip{will-change:auto}}
+
+/* Separate channel controls; the native dialog traps focus and supports Escape. */
+.sound-panel{box-sizing:border-box;width:min(400px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow-y:auto;padding:22px;margin:auto;border:1px solid #fff;border-radius:27px;color:var(--ink,#203f49);background:linear-gradient(145deg,#fffffff2,#eef8f5f2);box-shadow:0 25px 90px #183e4940,inset 0 1px 0 #fff;backdrop-filter:blur(24px);font-family:inherit}
+.sound-panel::backdrop{background:#163b4652;backdrop-filter:blur(5px)}
+.sound-panel>header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sound-panel h2{font-size:22px;font-weight:700;letter-spacing:-.04em;margin:0}
+.sound-panel button{font-family:inherit;cursor:pointer}
+.sound-close{display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid #dce9e6;border-radius:50%;background:#ffffffa6;color:var(--sub,#526c75);font-size:26px;line-height:1}
+.sound-channel{padding:17px 16px 13px;border:1px solid #fff;border-radius:19px;background:linear-gradient(135deg,#ffffffd9,#dff2ee70);box-shadow:inset 0 1px #fff;margin-bottom:12px}
+.sound-channel[data-sound-row=effects]{background:linear-gradient(135deg,#ffffffe3,#fff0be65)}
+.sound-channel-head{display:flex;gap:10px;align-items:center}
+.sound-channel-icon{display:grid;place-items:center;width:39px;height:39px;flex-shrink:0;color:var(--mint-d,#007d72);background:#ddf1eb;border:1px solid #fff;border-radius:13px}
+.sound-channel[data-sound-row=effects] .sound-channel-icon{background:#fff0ba;color:#966c10}
+.sound-channel-icon svg{width:22px;height:22px}.sound-channel-icon .sound-slash{display:none}
+.sound-channel h3{font-size:17px;font-weight:650;letter-spacing:-.03em;margin:0 0 2px}
+.sound-channel small{font-size:11px;color:var(--sub,#526c75)}
+.sound-switch{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:7px;min-width:78px;min-height:42px;margin-left:auto;padding:5px 7px 5px 11px;border:1px solid #cbdcda;border-radius:22px;background:#e2ebe9;color:#5c7774;transition:background .18s}
+.sound-switch span{font-size:11px;font-weight:700;min-width:25px}.sound-switch i{width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 4px #33574c24}
+.sound-switch[aria-checked=true]{background:#087d77;border-color:#087d77;color:#fff}
+.sound-switch[aria-checked=false]{flex-direction:row-reverse;padding:5px 11px 5px 7px}
+.sound-volume{display:flex;align-items:center;gap:14px;margin-top:10px}
+.sound-volume output{font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;width:43px;flex-shrink:0;text-align:right;color:var(--mint-d,#007d72)}
+.sound-volume input{--volume:0%;appearance:none;-webkit-appearance:none;min-width:0;width:100%;height:44px;margin:0;background:transparent;cursor:pointer;accent-color:#087d77}
+.sound-volume input::-webkit-slider-runnable-track{height:6px;border-radius:10px;background:linear-gradient(to right,#087d77 var(--volume),#d7e5e2 var(--volume))}
+.sound-volume input::-moz-range-track{height:6px;border-radius:10px;background:linear-gradient(to right,#087d77 var(--volume),#d7e5e2 var(--volume))}
+.sound-volume input::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:23px;height:23px;margin-top:-8.5px;border:3px solid #fff;border-radius:50%;background:#087d77;box-shadow:0 1px 6px #195c5b40}
+.sound-volume input::-moz-range-thumb{box-sizing:border-box;width:23px;height:23px;border:3px solid #fff;border-radius:50%;background:#087d77;box-shadow:0 1px 6px #195c5b40}
+.sound-channel[data-enabled=false] .sound-volume{opacity:.55}
+.sound-preview{display:flex;align-items:center;gap:5px;min-height:36px;margin:0 0 0 auto;padding:5px 10px;border:1px solid #d5e3df;border-radius:10px;background:#ffffffb5;font-size:12px;font-weight:600;color:var(--mint-d,#007d72)}
+.sound-preview span{font-size:17px}.sound-preview:disabled{opacity:.45;cursor:default}
+.sound-done{width:100%;min-height:48px;margin-top:6px;border:1px solid #087d77;border-radius:14px;background:#087d77;color:#fff;font-size:16px;font-weight:650}
+.sound-panel :is(button,input):focus-visible{outline:3px solid #338bc0;outline-offset:3px}
+.sound-notice{font-size:13px;color:#986022;margin:8px 0}
+@media(max-width:600px){.sound-panel{width:100%;max-width:460px;max-height:90dvh;margin:auto auto 0;padding:21px 20px max(22px,env(safe-area-inset-bottom));border-radius:26px 26px 0 0}.sound-panel>header{margin-bottom:16px}.sound-channel{padding:16px 15px 11px}.sound-panel h2{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.sound-switch{transition:none}}
 </style>
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:site_name" content="다맛다">
@@ -2110,21 +2145,97 @@ const DamatdaPlay = (() => {
   write('damatda-home-draw', JSON.stringify(choices));
   const shuffleIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m17 3 4 4-4 4M3 7h3c5 0 7 10 12 10h3m-4-4 4 4-4 4M3 17h3c2 0 3-1 4-3m4-4c1-2 2-3 4-3h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const soundIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path class="sound-waves" d="M16 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path class="sound-slash" d="m16 9 5 6m0-6-5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
-  let muted = read('damatda-sound') === 'off', context = null, music = null, effects = null;
+  const settingsKey = 'damatda-audio-v2';
+  function readSettings(raw = read(settingsKey)) {
+    const legacyOn = read('damatda-sound') !== 'off';
+    const defaults = {music:{enabled:legacyOn,volume:25},effects:{enabled:legacyOn,volume:70}};
+    try {
+      const value = JSON.parse(raw);
+      for (const channel of ['music','effects']) {
+        if (typeof value?.[channel]?.enabled === 'boolean') defaults[channel].enabled = value[channel].enabled;
+        if (typeof value?.[channel]?.volume === 'number' && Number.isFinite(value[channel].volume)) defaults[channel].volume = Math.round(Math.min(100,Math.max(0,value[channel].volume)));
+      }
+    } catch {}
+    return defaults;
+  }
+  let settings = readSettings(), context = null, music = null, effects = null, soundPanel = null;
   let clock = null, nextStep = 0, step = 0, unlocked = false, starting = null, unavailable = false;
-  const voices = new Set();
-  const soundOn = () => !muted && context?.state === 'running' && !document.hidden;
+  const voices = new Map();
+  const channelOn = channel => settings[channel].enabled && settings[channel].volume > 0;
+  const wantsAudio = () => channelOn('music') || channelOn('effects');
+  const soundOn = () => wantsAudio() && context?.state === 'running' && !document.hidden;
   function soundButton(compact = false) {
-    return `<button type="button" class="game-sound${compact ? ' compact' : ''}" data-game-sound aria-pressed="${soundOn()}" aria-label="${soundOn() ? '배경음과 효과음 끄기' : '배경음과 효과음 켜기'}">${soundIcon}<span>${soundOn() ? '소리 ON' : '소리 OFF'}</span></button>`;
+    return `<button type="button" class="game-sound${compact ? ' compact' : ''}" data-game-sound data-sound-active="${soundOn()}" aria-label="소리 설정" aria-haspopup="dialog" aria-expanded="${Boolean(soundPanel)}">${soundIcon}<span>소리 설정</span></button>`;
   }
   function updateSound() {
     const on = soundOn();
     document.querySelectorAll('[data-game-sound]').forEach(button => {
-      button.setAttribute('aria-pressed', String(on));
-      button.setAttribute('aria-label', unavailable ? '이 브라우저에서 소리를 재생할 수 없어요' : on ? '배경음과 효과음 끄기' : '배경음과 효과음 켜기');
-      button.title = unavailable ? '소리 재생을 지원하지 않는 브라우저예요' : on ? '배경음 · 효과음 켜짐' : '터치하면 배경음 · 효과음이 켜져요';
-      const label = button.querySelector('span'); if (label) label.textContent = on ? '소리 ON' : '소리 OFF';
+      button.setAttribute('data-sound-active', String(on));
+      button.setAttribute('aria-expanded', String(Boolean(soundPanel)));
+      button.title = 'BGM · 효과음 개별 설정';
     });
+    if (!soundPanel) return;
+    for (const channel of ['music','effects']) {
+      const option = settings[channel], row = soundPanel.querySelector(`[data-sound-row="${channel}"]`);
+      const toggle = row.querySelector('[data-sound-toggle]'), slider = row.querySelector('input');
+      toggle.setAttribute('aria-checked', String(option.enabled));
+      toggle.querySelector('span').textContent = option.enabled ? 'ON' : 'OFF';
+      row.dataset.enabled = String(option.enabled);
+      slider.value = String(option.volume); slider.setAttribute('aria-valuetext', `${option.volume}%`);
+      slider.style.setProperty('--volume', `${option.volume}%`);
+      row.querySelector('output').textContent = `${option.volume}%`;
+    }
+    soundPanel.querySelector('[data-sound-preview]').disabled = !channelOn('effects') || unavailable;
+    const notice = soundPanel.querySelector('.sound-notice');
+    notice.hidden = !unavailable; notice.textContent = unavailable ? '이 브라우저에서는 소리를 재생할 수 없어요.' : '';
+  }
+  function openSoundPanel(trigger) {
+    if (soundPanel) return;
+    const dialog = document.createElement('dialog');
+    dialog.className = 'sound-panel'; dialog.setAttribute('aria-labelledby','sound-panel-title');
+    const note = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18V6l11-3v12M9 9l11-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="6" cy="18" rx="3" ry="2.5" fill="currentColor"/><ellipse cx="17" cy="15" rx="3" ry="2.5" fill="currentColor"/></svg>';
+    dialog.innerHTML = `<header><h2 id="sound-panel-title">소리 설정</h2><button type="button" class="sound-close" data-sound-close aria-label="소리 설정 닫기">×</button></header>${['music','effects'].map(channel => `<section class="sound-channel" data-sound-row="${channel}"><div class="sound-channel-head"><span class="sound-channel-icon">${channel === 'music' ? note : soundIcon}</span><div><h3>${channel === 'music' ? '배경음악' : '효과음'}</h3><small>${channel === 'music' ? 'BGM' : '버튼 · 담기 · 도착'}</small></div><button type="button" role="switch" class="sound-switch" data-sound-toggle="${channel}" aria-label="${channel === 'music' ? '배경음악' : '효과음'}" aria-checked="${settings[channel].enabled}"><span></span><i aria-hidden="true"></i></button></div><div class="sound-volume"><input type="range" id="sound-volume-${channel}" data-sound-volume="${channel}" min="0" max="100" step="1" value="${settings[channel].volume}" aria-label="${channel === 'music' ? '배경음악' : '효과음'} 볼륨"><output for="sound-volume-${channel}"></output></div>${channel === 'effects' ? '<button type="button" class="sound-preview" data-sound-preview><span aria-hidden="true">▷</span> 들어보기</button>' : ''}</section>`).join('')}<p class="sound-notice" role="status" hidden></p><button type="button" class="sound-done" data-sound-close>완료</button>`;
+    document.body.append(dialog); soundPanel = dialog;
+    dialog.addEventListener('close', () => {
+      dialog.remove(); soundPanel = null; updateSound();
+      (trigger.isConnected ? trigger : document.querySelector('[data-game-sound]'))?.focus({preventScroll:true});
+    });
+    dialog.addEventListener('click', event => {
+      if (event.target !== dialog) return;
+      const rect = dialog.getBoundingClientRect();
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+    });
+    updateSound(); dialog.showModal();
+  }
+  function stopVoices(bus) {
+    for (const [voice, output] of voices) {
+      if (bus && bus !== output) continue;
+      try { voice.stop(); } catch {}
+      voices.delete(voice);
+    }
+  }
+  function applyLevels() {
+    if (!context) return;
+    for (const [channel, bus, maximum] of [['music',music,.4],['effects',effects,.6]]) {
+      if (!bus) continue;
+      const target = channelOn(channel) ? settings[channel].volume / 100 * maximum : 0;
+      bus.gain.cancelScheduledValues(context.currentTime);
+      bus.gain.setTargetAtTime(target,context.currentTime,.025);
+      if (!channelOn(channel)) stopVoices(bus);
+    }
+  }
+  function syncScheduler() {
+    const needed = soundOn() && channelOn('music');
+    if (!needed && clock !== null) { clearInterval(clock); clock = null; }
+    if (needed && clock === null) {
+      nextStep = context.currentTime + .04; schedule(); clock = setInterval(schedule,60);
+    }
+  }
+  function saveSettings() {
+    write(settingsKey,JSON.stringify(settings));
+    applyLevels(); syncScheduler(); updateSound();
+    if (wantsAudio()) return startSound();
+    hush(); return Promise.resolve();
   }
   const frequency = midi => 440 * 2 ** ((midi - 69) / 12);
   function tone(midi, at, duration, volume, type = 'sine', bus = music, slide = 0) {
@@ -2133,9 +2244,9 @@ const DamatdaPlay = (() => {
     osc.type = type; osc.frequency.setValueAtTime(frequency(midi), at);
     if (slide) osc.frequency.exponentialRampToValueAtTime(frequency(midi + slide), at + duration);
     envelope.gain.setValueAtTime(0, at);
-    envelope.gain.linearRampToValueAtTime(volume, at + .008);
+    envelope.gain.linearRampToValueAtTime(volume, at + (bus === effects ? .004 : .008));
     envelope.gain.exponentialRampToValueAtTime(.0001, at + duration);
-    osc.connect(envelope); envelope.connect(bus); voices.add(osc);
+    osc.connect(envelope); envelope.connect(bus); voices.set(osc,bus);
     osc.onended = () => { voices.delete(osc); osc.disconnect(); envelope.disconnect(); };
     osc.start(at); osc.stop(at + duration + .025);
   }
@@ -2152,7 +2263,7 @@ const DamatdaPlay = (() => {
   ];
   const roots = [48,45,53,43,48,45,53,43], stepLength = 60 / 112 / 2;
   function schedule() {
-    if (!soundOn()) return;
+    if (!soundOn() || !channelOn('music')) return;
     if (nextStep < context.currentTime - .1) nextStep = context.currentTime + .025;
     while (nextStep < context.currentTime + .18) {
       const phrase = Math.floor(step / 16) % 8, beat = step % 16, note = melody[phrase][beat];
@@ -2164,13 +2275,12 @@ const DamatdaPlay = (() => {
   }
   function hush() {
     if (clock !== null) clearInterval(clock); clock = null;
-    for (const voice of voices) { try { voice.stop(); } catch {} }
-    voices.clear();
+    stopVoices();
     if (context && context.state !== 'closed') context.suspend().catch(() => {});
     updateSound();
   }
   async function startSound() {
-    if (muted || document.hidden || unavailable) return;
+    if (!wantsAudio() || document.hidden || unavailable) return;
     unlocked = true;
     if (starting) return starting;
     starting = (async () => {
@@ -2179,18 +2289,16 @@ const DamatdaPlay = (() => {
           const Audio = globalThis.AudioContext || globalThis.webkitAudioContext;
           if (!Audio) { unavailable = true; return; }
           context = new Audio();
-          music = context.createGain(); music.gain.value = .22; music.connect(context.destination);
-          effects = context.createGain(); effects.gain.value = .3; effects.connect(context.destination);
+          music = context.createGain(); music.gain.value = 0; music.connect(context.destination);
+          effects = context.createGain(); effects.gain.value = 0; effects.connect(context.destination);
           context.addEventListener('statechange', () => {
             if (context.state !== 'running' && clock !== null) { clearInterval(clock); clock = null; }
             updateSound();
           });
         }
         await context.resume();
-        if (muted || document.hidden) { hush(); return; }
-        if (context.state === 'running' && clock === null) {
-          nextStep = context.currentTime + .04; schedule(); clock = setInterval(schedule, 60);
-        }
+        if (!wantsAudio() || document.hidden) { hush(); return; }
+        applyLevels(); syncScheduler();
       } catch { /* An in-app browser may refuse audio; the app stays usable. */ }
       finally { updateSound(); }
     })();
@@ -2198,7 +2306,7 @@ const DamatdaPlay = (() => {
   }
   let lastTap = -1;
   function effect(kind = 'tap') {
-    if (!soundOn()) return;
+    if (!soundOn() || !channelOn('effects')) return;
     const now = context.currentTime + .006;
     if (kind === 'tap' && now - lastTap < .065) return;
     if (kind === 'tap') lastTap = now;
@@ -2279,10 +2387,19 @@ const DamatdaPlay = (() => {
     if (!event.isTrusted) return;
     const sound = event.target.closest('[data-game-sound]');
     if (sound) {
-      if (soundOn()) { muted = true; write('damatda-sound','off'); hush(); }
-      else { muted = false; write('damatda-sound','on'); startSound().then(() => effect('add')); }
-      updateSound(); return;
+      startSound(); openSoundPanel(sound); return;
     }
+    const toggle = event.target.closest('[data-sound-toggle]');
+    if (toggle) {
+      const channel = toggle.dataset.soundToggle;
+      if (!['music','effects'].includes(channel)) return;
+      settings[channel].enabled = !settings[channel].enabled;
+      saveSettings().then(() => { if (channel === 'effects' && settings.effects.enabled) effect('add'); });
+      return;
+    }
+    if (event.target.closest('[data-sound-close]')) { soundPanel?.close(); return; }
+    if (event.target.closest('[data-sound-preview]')) { startSound().then(() => effect('add')); return; }
+    if (event.target.closest('.sound-panel')) return;
     // Any deliberate first click unlocks audio; reload never circumvents autoplay policy.
     startSound();
     const shuffle = event.target.closest('[data-game-shuffle]');
@@ -2294,17 +2411,28 @@ const DamatdaPlay = (() => {
     else if (/^send/.test(action)) effect('send');
     else effect('tap');
   }, true);
+  document.addEventListener('input', event => {
+    if (!event.isTrusted) return;
+    const input = event.target.closest('[data-sound-volume]');
+    if (!input || !['music','effects'].includes(input.dataset.soundVolume)) return;
+    const value = Number(input.value); if (!Number.isFinite(value)) return;
+    settings[input.dataset.soundVolume].volume = Math.round(Math.min(100,Math.max(0,value)));
+    saveSettings();
+  });
+  document.addEventListener('change', event => {
+    if (event.isTrusted && event.target.closest('[data-sound-volume="effects"]')) startSound().then(() => effect('tap'));
+  });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { cancelSpin(); hush(); } else if (unlocked && !muted) startSound();
+    if (document.hidden) { cancelSpin(); hush(); } else if (unlocked && wantsAudio()) startSound();
   });
   addEventListener('pagehide', () => { cancelSpin(); hush(); });
-  addEventListener('pageshow', () => { if (unlocked && !muted) startSound(); });
+  addEventListener('pageshow', () => { if (unlocked && wantsAudio()) startSound(); });
   // Other open tabs share only the audio preference, not an AudioContext.
   addEventListener('storage', event => {
-    if (event.key !== 'damatda-sound') return;
-    muted = event.newValue === 'off';
-    if (muted) hush(); else if (unlocked) startSound();
-    updateSound();
+    if (event.key !== settingsKey) return;
+    settings = readSettings(event.newValue);
+    applyLevels(); syncScheduler(); updateSound();
+    if (!wantsAudio()) hush(); else if (unlocked) startSound();
   });
   return {homeHTML, mount, effect};
 })();

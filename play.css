@@ -4,8 +4,8 @@
 .draw-caption{font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap}
 .game-sound,.game-shuffle{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:36px;padding:5px 9px;font-weight:600;line-height:1.2;font-family:inherit;font-size:12px;color:var(--mint-d);background:#ffffffa6;border:1px solid #d4e6e4;border-radius:11px;cursor:pointer;white-space:nowrap;box-shadow:inset 0 1px #fff}
 .game-sound svg,.game-shuffle svg{width:17px;height:17px;flex-shrink:0}
-.game-sound[aria-pressed=true]{background:#d9f2ecb8;border-color:#a6d6cf}
-.game-sound[aria-pressed=true] .sound-slash,.game-sound[aria-pressed=false] .sound-waves{display:none}
+.game-sound[data-sound-active=true]{background:#d9f2ecb8;border-color:#a6d6cf}
+.game-sound[data-sound-active=true] .sound-slash,.game-sound[data-sound-active=false] .sound-waves{display:none}
 .game-sound:focus-visible,.game-shuffle:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
 .game-sound:hover,.game-shuffle:not(:disabled):hover{background:#fff;border-color:var(--mint)}
 .game-shuffle:disabled{cursor:default;opacity:.62}
@@ -30,3 +30,38 @@
 @media(max-width:600px){.draw-caption{font-size:11px}.home-play-tools{margin-bottom:6px}.game-sound,.game-shuffle{font-size:11px;padding:5px 7px;gap:4px;min-height:36px}.game-sound svg,.game-shuffle svg{width:16px;height:16px}.food-reel{--reel-size:57px}.mm.view-home .food-roulette .food-mascot{width:63px;height:57px}.mm.view-home .food-roulette b{font-size:13px}.mm.view-home .brand-motto{margin-bottom:8px}.mm .top:has(.game-sound) .chip-who{max-width:39%}}
 @media(max-width:360px){.draw-caption{font-size:10px}.home-play-tools>div{gap:3px}.game-shuffle{padding:5px}.food-reel{--reel-size:53px}.mm.view-home .food-roulette .food-mascot{width:58px;height:53px}}
 @media(prefers-reduced-motion:reduce){.game-shuffle.spinning svg,.roulette-card.landed .food-reel,.roulette-card.landed .reel-spark{animation:none}.food-reel-strip{will-change:auto}}
+
+/* Separate channel controls; the native dialog traps focus and supports Escape. */
+.sound-panel{box-sizing:border-box;width:min(400px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow-y:auto;padding:22px;margin:auto;border:1px solid #fff;border-radius:27px;color:var(--ink,#203f49);background:linear-gradient(145deg,#fffffff2,#eef8f5f2);box-shadow:0 25px 90px #183e4940,inset 0 1px 0 #fff;backdrop-filter:blur(24px);font-family:inherit}
+.sound-panel::backdrop{background:#163b4652;backdrop-filter:blur(5px)}
+.sound-panel>header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sound-panel h2{font-size:22px;font-weight:700;letter-spacing:-.04em;margin:0}
+.sound-panel button{font-family:inherit;cursor:pointer}
+.sound-close{display:grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid #dce9e6;border-radius:50%;background:#ffffffa6;color:var(--sub,#526c75);font-size:26px;line-height:1}
+.sound-channel{padding:17px 16px 13px;border:1px solid #fff;border-radius:19px;background:linear-gradient(135deg,#ffffffd9,#dff2ee70);box-shadow:inset 0 1px #fff;margin-bottom:12px}
+.sound-channel[data-sound-row=effects]{background:linear-gradient(135deg,#ffffffe3,#fff0be65)}
+.sound-channel-head{display:flex;gap:10px;align-items:center}
+.sound-channel-icon{display:grid;place-items:center;width:39px;height:39px;flex-shrink:0;color:var(--mint-d,#007d72);background:#ddf1eb;border:1px solid #fff;border-radius:13px}
+.sound-channel[data-sound-row=effects] .sound-channel-icon{background:#fff0ba;color:#966c10}
+.sound-channel-icon svg{width:22px;height:22px}.sound-channel-icon .sound-slash{display:none}
+.sound-channel h3{font-size:17px;font-weight:650;letter-spacing:-.03em;margin:0 0 2px}
+.sound-channel small{font-size:11px;color:var(--sub,#526c75)}
+.sound-switch{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:7px;min-width:78px;min-height:42px;margin-left:auto;padding:5px 7px 5px 11px;border:1px solid #cbdcda;border-radius:22px;background:#e2ebe9;color:#5c7774;transition:background .18s}
+.sound-switch span{font-size:11px;font-weight:700;min-width:25px}.sound-switch i{width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 4px #33574c24}
+.sound-switch[aria-checked=true]{background:#087d77;border-color:#087d77;color:#fff}
+.sound-switch[aria-checked=false]{flex-direction:row-reverse;padding:5px 11px 5px 7px}
+.sound-volume{display:flex;align-items:center;gap:14px;margin-top:10px}
+.sound-volume output{font-size:16px;font-weight:650;font-variant-numeric:tabular-nums;width:43px;flex-shrink:0;text-align:right;color:var(--mint-d,#007d72)}
+.sound-volume input{--volume:0%;appearance:none;-webkit-appearance:none;min-width:0;width:100%;height:44px;margin:0;background:transparent;cursor:pointer;accent-color:#087d77}
+.sound-volume input::-webkit-slider-runnable-track{height:6px;border-radius:10px;background:linear-gradient(to right,#087d77 var(--volume),#d7e5e2 var(--volume))}
+.sound-volume input::-moz-range-track{height:6px;border-radius:10px;background:linear-gradient(to right,#087d77 var(--volume),#d7e5e2 var(--volume))}
+.sound-volume input::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:23px;height:23px;margin-top:-8.5px;border:3px solid #fff;border-radius:50%;background:#087d77;box-shadow:0 1px 6px #195c5b40}
+.sound-volume input::-moz-range-thumb{box-sizing:border-box;width:23px;height:23px;border:3px solid #fff;border-radius:50%;background:#087d77;box-shadow:0 1px 6px #195c5b40}
+.sound-channel[data-enabled=false] .sound-volume{opacity:.55}
+.sound-preview{display:flex;align-items:center;gap:5px;min-height:36px;margin:0 0 0 auto;padding:5px 10px;border:1px solid #d5e3df;border-radius:10px;background:#ffffffb5;font-size:12px;font-weight:600;color:var(--mint-d,#007d72)}
+.sound-preview span{font-size:17px}.sound-preview:disabled{opacity:.45;cursor:default}
+.sound-done{width:100%;min-height:48px;margin-top:6px;border:1px solid #087d77;border-radius:14px;background:#087d77;color:#fff;font-size:16px;font-weight:650}
+.sound-panel :is(button,input):focus-visible{outline:3px solid #338bc0;outline-offset:3px}
+.sound-notice{font-size:13px;color:#986022;margin:8px 0}
+@media(max-width:600px){.sound-panel{width:100%;max-width:460px;max-height:90dvh;margin:auto auto 0;padding:21px 20px max(22px,env(safe-area-inset-bottom));border-radius:26px 26px 0 0}.sound-panel>header{margin-bottom:16px}.sound-channel{padding:16px 15px 11px}.sound-panel h2{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.sound-switch{transition:none}}
