@@ -51,6 +51,7 @@ function finishSendCurtain() {
   const remaining=reduceMotion()?0:Math.max(0,2550-(performance.now()-Number(el.dataset.started)));
   if(remaining>0){setTimeout(()=>{if(sendCurtain===el)finishSendCurtain();},remaining);return;}
   el.classList.add('done');
+  if (typeof DamatdaPlay !== 'undefined') DamatdaPlay.effect('success');
   el.querySelector('#sendingTitle').textContent='다맛다!';
   el.querySelector('.send-message').textContent='방장에게 메뉴가 도착했어요.';
   const button=el.querySelector('.send-finish');button.hidden=false;
@@ -68,6 +69,7 @@ function announceArrival(names, updated = false) {
   const display=names.length>1?`${names[0]}님 외 ${names.length-1}명`: `${names[0]}님`;
   note.innerHTML=`<div class="arrival-icon" aria-hidden="true">${FOOD_ICONS.bowl}</div><div><span class="arrival-eyebrow">${updated?'주문이 바뀌었어요':'방장님, 한 그릇 왔어요'}</span><b>${esc(display)}의 메뉴 ${updated?'수정!':'도착!'}</b><small>모인 메뉴에 ${updated?'변경사항을 반영했어요.':'차곡차곡 담아뒀어요.'}</small></div><button class="arrival-open" type="button">보기 →</button><button class="arrival-close" type="button" aria-label="도착 알림 닫기">×</button><div class="arrival-time"></div>`;
   document.body.append(note);
+  if (typeof DamatdaPlay !== 'undefined') DamatdaPlay.effect('arrival');
   note.querySelector('.arrival-open').onclick=()=>{go({tab:'sum'});note.remove();};
   note.querySelector('.arrival-close').onclick=()=>note.remove();
   arrivalTimer=setTimeout(()=>note.remove(),8500);

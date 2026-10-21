@@ -1,0 +1,32 @@
+/* Three little reels, kept inside the existing glass brand card. */
+.home-play-tools{display:flex;align-items:center;justify-content:space-between;gap:4px;margin:0 0 8px}
+.home-play-tools>div{display:flex;gap:5px;align-items:center}
+.draw-caption{font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap}
+.game-sound,.game-shuffle{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:36px;padding:5px 9px;font-weight:600;line-height:1.2;font-family:inherit;font-size:12px;color:var(--mint-d);background:#ffffffa6;border:1px solid #d4e6e4;border-radius:11px;cursor:pointer;white-space:nowrap;box-shadow:inset 0 1px #fff}
+.game-sound svg,.game-shuffle svg{width:17px;height:17px;flex-shrink:0}
+.game-sound[aria-pressed=true]{background:#d9f2ecb8;border-color:#a6d6cf}
+.game-sound[aria-pressed=true] .sound-slash,.game-sound[aria-pressed=false] .sound-waves{display:none}
+.game-sound:focus-visible,.game-shuffle:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.game-sound:hover,.game-shuffle:not(:disabled):hover{background:#fff;border-color:var(--mint)}
+.game-shuffle:disabled{cursor:default;opacity:.62}
+.game-shuffle.spinning svg{animation:shuffle-turn .7s linear infinite}
+.mm .top .game-sound.compact{width:36px;height:36px;min-width:36px;margin-left:auto;padding:7px;flex-shrink:0}
+.game-sound.compact span{display:none}
+.mm.view-home .food-roulette{gap:9px}
+.mm.view-home .food-roulette>.roulette-card{position:relative;padding:7px 3px 9px!important;overflow:hidden;isolation:isolate}
+.food-reel{display:block;--reel-size:68px;height:var(--reel-size);width:100%;overflow:hidden;contain:layout paint}
+.food-reel-strip{display:block;width:100%;will-change:transform}
+.food-reel-frame{display:flex;align-items:center;justify-content:center;height:var(--reel-size);width:100%}
+.mm.view-home .food-roulette .food-mascot{width:72px;height:66px;object-fit:contain}
+.mm.view-home .food-roulette b{position:relative;z-index:1;font-size:14px;margin:3px 0 0;min-height:19px;white-space:nowrap}
+.reel-spark{position:absolute;right:9px;top:8px;color:#e5ac30;font-size:19px;opacity:0;pointer-events:none}
+.roulette-card.rolling b{color:var(--sub);font-size:12px!important;letter-spacing:.05em}
+.roulette-card.landed .food-reel{animation:reel-land .32s cubic-bezier(.2,.7,.25,1)}
+.roulette-card.landed .reel-spark{animation:reel-spark .55s ease-out}
+.roulette-announcement.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@keyframes reel-land{0%{transform:translateY(-6px) scale(.92)}55%{transform:translateY(2px) scale(1.06,.96)}100%{transform:none}}
+@keyframes reel-spark{0%{opacity:0;transform:scale(.2) rotate(-45deg)}30%{opacity:1}100%{opacity:0;transform:translateY(-5px) scale(1.1) rotate(35deg)}}
+@keyframes shuffle-turn{to{transform:rotate(360deg)}}
+@media(max-width:600px){.draw-caption{font-size:11px}.home-play-tools{margin-bottom:6px}.game-sound,.game-shuffle{font-size:11px;padding:5px 7px;gap:4px;min-height:36px}.game-sound svg,.game-shuffle svg{width:16px;height:16px}.food-reel{--reel-size:57px}.mm.view-home .food-roulette .food-mascot{width:63px;height:57px}.mm.view-home .food-roulette b{font-size:13px}.mm.view-home .brand-motto{margin-bottom:8px}.mm .top:has(.game-sound) .chip-who{max-width:39%}}
+@media(max-width:360px){.draw-caption{font-size:10px}.home-play-tools>div{gap:3px}.game-shuffle{padding:5px}.food-reel{--reel-size:53px}.mm.view-home .food-roulette .food-mascot{width:58px;height:53px}}
+@media(prefers-reduced-motion:reduce){.game-shuffle.spinning svg,.roulette-card.landed .food-reel,.roulette-card.landed .reel-spark{animation:none}.food-reel-strip{will-change:auto}}
