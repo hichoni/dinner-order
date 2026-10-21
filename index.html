@@ -943,7 +943,9 @@ body::after{display:none}body::before{background:#e8f7f3}
 .top-title{flex:1;min-width:0}.top-eyebrow{display:block;font-size:11px;font-weight:600;color:var(--sub);line-height:1.4;margin-bottom:1px}
 .top-brand{display:flex;align-items:center;gap:10px;font-size:18px}.top-brand img{width:30px;height:30px}
 .mm .top h1{font-size:18px;line-height:1.4}.mm .top .back{flex:0 0 44px;width:44px;height:44px;background:linear-gradient(#ffffffed,#eefaf5);border:1px solid #fff;border-radius:14px;box-shadow:var(--clay-s)}
-.mm .chip-who{background:linear-gradient(#fff,#f1fbf6);border:1px solid #fff;box-shadow:var(--clay-s);font-size:13px;padding:5px 10px;max-width:39%;overflow:hidden;text-overflow:ellipsis;display:block}
+.mm .chip-who{background:linear-gradient(#fff,#f1fbf6);border:1px solid #fff;box-shadow:var(--clay-s);font-size:13px;padding:5px 10px;max-width:39%;min-width:0;overflow:hidden;display:inline-flex;align-items:center;gap:4px}
+.mm .chip-who .who-label{flex:none;font-weight:600}
+.mm .chip-who .who-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mm .chip-who i{display:none}
 .mm .nav{width:min(616px,calc(100% - 24px));bottom:calc(10px + env(safe-area-inset-bottom,0px));border-radius:24px;border:1px solid #fff;background:#f8fffcdb;backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);box-shadow:0 14px 36px -18px #176b5c70,inset 0 1px 0 #fff;padding:6px;min-height:var(--nav-h)}
 .mm .nav-i{color:#65776d;padding:8px 0;border-radius:10px;gap:4px;min-height:58px}
@@ -1596,7 +1598,7 @@ function roomNav() {
   if (S.host) items.push(item('set', '방 설정'));
   return `<nav class="nav n${items.length}" aria-label="메뉴"><a class="nav-brand" href="#" data-act="home" aria-label="메뉴 모으기 홈">${brand()}</a><div class="nav-room"><span>${S.host ? '내가 만든 방' : '함께 고르는 방'}</span><b>${esc(S.room.title)}</b></div>${items.join('')}<div class="nav-foot">가입 없이, 이름만으로.<br>함께 먹는 시간을 더 가볍게.</div></nav>`;
 }
-const whoChip = () => (S.who ? `<button class="chip-who" data-act="tab" data-t="who" aria-label="이름 바꾸기 (지금 ${esc(S.who)})"><i>${avatar(S.who)}</i>${esc(S.who)}</button>` : '');
+const whoChip = () => (S.who ? `<button class="chip-who" data-act="tab" data-t="who" aria-label="내 이름 · ${esc(S.who)}, 이름 바꾸기"><span class="who-label">내 이름 ·</span><span class="who-name">${esc(S.who)}</span></button>` : '');
 function roomHead(big = false) {
   const r = S.room, dl = deadlineInfo(r.deadline);
   return `<section class="room-head${big ? ' big' : ''}">
