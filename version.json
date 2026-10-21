@@ -1,8 +1,8 @@
 {
-  "version": "2026-10-21-avatar-picker",
+  "version": "2026-10-22-shared-avatars",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
-  "avatarStorage": "device-local-per-room-and-name",
-  "applicationCommit": "296fba9cb13b7dc71e1b88d73d707cf3c3d73b32"
+  "avatarStorage": "firestore-room-profiles",
+  "applicationCommit": "feb0c9a9eb68e420dad5ab069e8445d6a4016ebb"
 }
