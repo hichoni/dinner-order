@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>메뉴 모으기</title>
-<meta name="description" content="총무의 메뉴 수합 도구. 방을 만들어 링크만 보내면 다들 이름을 고르고 먹고 싶은 메뉴를 골라 보내요. 내가 쏜다면 1인 예산 안에서, 고른 메뉴는 가게별로 바로 모여요.">
+<meta name="description" content="함께 먹을 메뉴, 한곳에 모아요. 회원가입 없이 방을 만들고 링크로 초대하세요. 각자 고른 메뉴와 요청사항을 가게별·사람별로 간편하게 모아요.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/">
-<meta property="og:title" content="메뉴 모으기 — 총무의 메뉴 수합, 링크 하나로">
-<meta property="og:description" content="총무의 메뉴 수합 도구. 방을 만들어 링크만 보내면 다들 이름을 고르고 먹고 싶은 메뉴를 골라 보내요. 내가 쏜다면 1인 예산 안에서, 고른 메뉴는 가게별로 바로 모여요.">
+<meta property="og:title" content="메뉴 모으기 — 함께 먹을 메뉴, 한곳에">
+<meta property="og:description" content="함께 먹을 메뉴, 한곳에 모아요. 회원가입 없이 방을 만들고 링크로 초대하세요. 각자 고른 메뉴와 요청사항을 가게별·사람별로 간편하게 모아요.">
 <meta property="og:image" content="https://hichoni.github.io/dinner-order/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="메뉴 모으기">
-<meta name="theme-color" content="#e6f6f3">
+<meta name="theme-color" content="#f7f8f3">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 /* 저녁에 뭐 먹을래? — 배달앱 같은 모바일 화면.
@@ -897,6 +897,142 @@ label.prow{display:block;cursor:pointer}
 .mm.tab-review{padding-bottom:150px}
 .mm :focus-visible{outline:3px solid #006b60;outline-offset:3px}
 @media(max-width:420px){.mm .menus{margin:0 12px;padding:0 12px}.mm .menu-main{padding:12px 0;min-height:140px}.mm .menu .desc{-webkit-line-clamp:1}.mm .m-emo{flex-basis:72px;height:72px;margin-bottom:44px}.mm .m-ctl{right:0;bottom:10px}.mm .nav-i span{font-size:12px}.mm .cartbar{font-size:14px}.mm .cartbar .sp{white-space:normal;line-height:1.3}.mm .pb-treat{flex-wrap:wrap;gap:4px}.mm .pb-left{margin-left:34px}.mm .pb-in{padding:6px 10px;gap:3px}.mm .pb-note{padding-top:3px;padding-bottom:3px}.mm .shop-title h2{font-size:16px}}
+/* 메뉴 모으기: 종이 메뉴판처럼 편안한 면, 또렷한 선택, 넉넉한 터치 영역.
+   room.css의 동작별 레이아웃 위에서 브랜드와 반응형 배치를 관리합니다. */
+:root{
+  --mint:#087563;--mint-d:#086452;--mint-l:#e4f2eb;--mint-ll:#f0f7f3;
+  --ink:#233b34;--sub:#566960;--mute:#687970;--line:#dce5de;--band:#edf2ed;--bg:#f7f8f3;
+  --glass:#fff;--glass-hi:#fff;--glass-b:#dce5de;--clay:none;--clay-s:none;--press:none;
+  --grad:linear-gradient(#087563,#087563);--grad-shadow:none;--r:18px;--top-h:68px;--nav-h:72px;
+  --display:var(--body);--accent:#d69749;
+}
+html,body{background:var(--bg);color:var(--ink);font-size:16px}
+body::after{display:none}body::before{background:var(--bg)}
+#app{max-width:640px;padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
+#app.view-home{padding-bottom:0}#app.view-create,#app.view-catalog{padding-bottom:30px}
+.mm{line-height:1.5;letter-spacing:-.025em}
+.mm h1,.mm h2,.mm h3{letter-spacing:-.035em}
+.mm .stores,.mm .menus,.mm .room-list,.mm .plist,.mm .card,.mm .ticket,.mm .f-sec,.mm .a-sec,.mm .share-card,.mm .room-head,.mm .cart-store,.mm .summary,.mm .cart-req,.mm .how li,.mm .sent-ok,.mm .who-btn,.mm .room-card{backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
+.mm .btn,.mm .small-btn,.mm .x-btn,.mm .top .back,.mm .chip-who,.mm .who-btn,.mm .filter-chips button,.mm .quick button,.mm .tabs-line button{box-shadow:none;min-height:44px}
+.mm .btn,.sheet .btn{border-radius:12px;box-shadow:none;font-weight:700;padding:13px 18px}
+.mm .btn.block{padding:14px 18px;font-size:16px}
+.mm .btn.gray,.mm .btn.line-dark{background:#fff;border:1px solid #cbd8cf;box-shadow:none}
+.mm .btn.red{background:#b7443c;box-shadow:none}
+.mm .btn:disabled{background:#e2e8e1;color:#67766c;cursor:not-allowed}
+.mm .btn:not(:disabled):hover{filter:brightness(.94)}
+.mm .small-btn,.mm .x-btn{background:#f3f6f1;border:1px solid var(--line);border-radius:10px}
+.mm .text-btn{min-height:44px;padding-top:10px;padding-bottom:10px}
+.mm .input{background:#fff;border:1px solid #baccc1;border-radius:10px;box-shadow:none;font-size:16px;line-height:1.5}
+.mm .input:focus{border-color:var(--mint);box-shadow:0 0 0 3px #d8ece2}
+.mm .field{color:var(--ink);font-weight:650;font-size:14px;line-height:1.6}
+.mm .hint,.mm .muted{color:var(--sub);font-size:14px;line-height:1.6;font-weight:400}
+.mm :focus-visible,.sheet :focus-visible{outline:3px solid #087563;outline-offset:3px}
+.mm .notice,.mm .hint-box,.mm .custom-box,.mm .edit-box{border-radius:12px;box-shadow:none}
+.mm .notice{background:#fff2d9;border-color:#eadfc7}.mm .notice.mint{background:#eaf4ee;color:#205943}
+.mm .notice.red{background:#fff0ed;border-color:#e9cec8;color:#963c35}
+.mm .seg.wide{background:#eaf0e9;box-shadow:none;border-radius:12px;gap:4px}
+.mm .seg.wide button{min-height:44px;border-radius:8px;font-size:14px}
+.mm .seg.wide button.on{box-shadow:0 1px 4px #183e2910;color:var(--mint-d)}
+.mm .top{padding:0 16px;gap:10px;background:rgba(247,248,243,.97);border-bottom:1px solid var(--line);backdrop-filter:none}
+.top-title{flex:1;min-width:0}.top-eyebrow{display:block;font-size:11px;font-weight:600;color:var(--sub);line-height:1.4;margin-bottom:1px}
+.top-brand{display:flex;align-items:center;gap:10px;font-size:18px}.top-brand img{width:30px;height:30px}
+.mm .top h1{font-size:18px;line-height:1.4}.mm .top .back{flex:0 0 44px;width:44px;height:44px;background:transparent;border:1px solid var(--line);border-radius:12px}
+.mm .chip-who{background:#fff;border:1px solid var(--line);font-size:13px;padding:5px 10px;max-width:39%;overflow:hidden;text-overflow:ellipsis;display:block}
+.mm .chip-who i{display:none}
+.mm .nav{width:min(640px,100%);bottom:0;border-radius:0;border:0;border-top:1px solid var(--line);background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));min-height:var(--nav-h)}
+.mm .nav-i{color:#65776d;padding:8px 0;border-radius:10px;gap:4px;min-height:58px}
+.mm .nav-i span{font-size:12px;font-weight:600}.mm .nav-i.on{background:#e8f3ec;color:var(--mint-d);box-shadow:none}
+.mm .nav-badge{box-shadow:none}.nav-brand,.nav-room,.nav-foot{display:none}
+.mm .cartbar{bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom,0px));width:min(608px,calc(100% - 32px));border-radius:14px;min-height:56px;padding:14px 16px;box-shadow:0 6px 20px #183e2922;font-size:15px}
+.mm .cartbar .n{background:#ffffff26;color:#fff;border-radius:6px}.mm .cartbar .sp{font-weight:650}
+.mm .bottom-bar{width:min(640px,100%);bottom:0;border-radius:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:none;background:#fff;border:0;border-top:1px solid var(--line);backdrop-filter:none}
+.mm.tab-set .save-bar~.nav{display:none}
+#app.enter>.bottom-bar{animation:none!important}
+.brand-footer{padding:28px 24px;border-top:1px solid var(--line);color:var(--sub);font-size:13px;display:flex;gap:12px;justify-content:space-between}
+
+/* 첫 만남: 제품을 이해하고 곧바로 방을 만들 수 있는 첫 화면. */
+.home-brand{display:flex;justify-content:space-between;align-items:center;padding:24px 22px 12px}
+.home-brand a,.nav-brand{align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-size:20px;font-weight:750}
+.home-brand a{display:flex;min-height:44px}.home-brand img,.nav-brand img{flex-shrink:0}.home-brand>span{display:none;color:var(--sub);font-size:13px}
+.land{padding:26px 22px 30px;overflow:visible;display:grid;gap:34px}
+.land-kicker{font-size:13px;font-weight:650;color:var(--mint-d);letter-spacing:0;display:inline-flex;align-items:center;gap:8px}
+.land-kicker::before{content:'';width:6px;height:6px;background:var(--mint);border-radius:50%}
+.mm .land h1{font-size:clamp(33px,8.8vw,46px);line-height:1.24;letter-spacing:-.06em;margin:16px 0 18px;font-weight:760}
+.land h1 em{color:var(--mint)}.land p{font-size:16px;line-height:1.8;max-width:none;margin:0 0 22px;color:var(--sub)}
+.mm .land-go{display:flex;gap:10px;min-height:54px;width:100%;font-size:16px}.land-go>span{margin-left:auto}
+.land-hint{display:block;margin-top:12px;font-size:12px;line-height:1.6;color:var(--sub)}
+.home-preview{position:relative;background:#e8eee4;border:1px solid #dce4d7;border-radius:24px;padding:22px 20px 44px;min-width:0}
+.hp-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700}.hp-label{font-size:11px;color:var(--sub);font-weight:400}
+.hp-people{display:flex;align-items:center;gap:0;margin:15px 0;font-size:11px}
+.hp-people>span:not(.hp-check){width:36px;height:36px;display:grid;place-items:center;background:#fff;border:2px solid #e8eee4;border-radius:50%;margin-right:-6px;color:#546147;font-weight:600}
+.hp-people>span:nth-child(2){background:#fae5cb}.hp-people>span:nth-child(3){background:#d8e6dc}.hp-check{margin-left:auto;color:var(--mint-d);font-weight:600}
+.hp-ticket{background:#fff;border:1px solid #d8e2d6;border-radius:14px;padding:18px;box-shadow:0 12px 25px #254a3010}
+.hp-ticket-head{display:flex;gap:12px;align-items:center;margin-bottom:18px}.hp-ticket-head small{display:block;font-size:11px;color:var(--sub);margin-bottom:2px}.hp-ticket-head b{font-size:15px}
+.hp-plate{width:40px;height:40px;display:grid;place-items:center;background:#f2f5ee;border-radius:50%;color:var(--mint)}
+.hp-line,.hp-total{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;padding:10px 0;border-top:1px solid #eef1eb}
+.hp-line b{font-size:13px}.hp-total{padding:16px 0 0;margin-top:8px;border-top:1px dashed #cbd7c6;font-size:12px}.hp-total b{color:var(--mint)}
+.hp-note{position:absolute;right:18px;bottom:-10px;display:flex;gap:10px;align-items:center;padding:12px 16px;background:#fff3dc;border:1px solid #ead9b9;border-radius:12px;color:#725123;transform:rotate(-3deg);font-size:12px;line-height:1.5}
+.hp-note svg{width:24px;height:24px}.home-content{padding:16px 22px 36px}.how-heading{margin:28px 0 18px}.how-heading .sec-title{margin:6px 0 0;font-size:22px}
+.mm .how{grid-template-columns:1fr;gap:0}.mm .how li{background:transparent;border:0;border-radius:0;border-top:1px solid var(--line);padding:20px 0;display:flex;flex-direction:row;gap:16px;align-items:flex-start}
+.mm .how i{font-size:12px;font-weight:700;width:32px;height:32px;margin:0;background:#e8f0e6;border-radius:10px;color:var(--mint-d);flex-shrink:0;box-shadow:none}
+.how b{display:block;font-size:16px;margin:3px 0 4px}.how span{font-size:14px;line-height:1.65;display:block}.my-rooms{margin:12px 0 32px}
+.mm .room-card{border-radius:16px}.rc-acts{background:#f7faf5}.rr-ic{background:#edf3e9;border-radius:12px}.rc-chip{box-shadow:none;background:#f2f5ee}
+
+/* 메뉴: 사진과 가격은 또렷하게, 선택 상태는 테두리와 문구로 함께 표시. */
+.mm .menu-context{padding:10px 20px;font-size:13px;align-items:center}.menu-context>span:first-child{display:flex;align-items:center;gap:6px}.menu-context>span:first-child::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.mm .store-tabs{padding:2px 16px 10px;gap:8px}.mm .store-tabs button{border-radius:10px;border-color:var(--line);color:var(--sub);min-height:44px}.mm .store-tabs button.on{background:var(--mint);color:#fff;border-color:var(--mint)}
+.mm .shop-compact{margin:2px 16px 10px;padding:14px;border-radius:14px;border-color:var(--line);background:#fff}.mm .shop-title{padding-right:68px}.mm .shop-title h2{font-size:17px;font-weight:750}.mm .shop-title span{font-size:12px}.mm .shop-details{font-size:14px}
+.mm .thumb,.mm .m-emo{border-radius:12px;box-shadow:none}.mm .shop-title .thumb{border-radius:10px}
+.mm .menus{background:transparent;border:0;padding:0;margin:0 16px;display:grid;gap:10px;box-shadow:none;backdrop-filter:none}
+.mm .menu{background:#fff;border:1px solid var(--line);border-radius:16px;padding:0 14px;overflow:hidden}.mm .menu:last-child{border-bottom:1px solid var(--line)}
+.mm .menu.in{border-color:var(--mint);background:#f5faf6;box-shadow:inset 3px 0 var(--mint)}
+.mm .menu.over .info{opacity:1}.mm .menu.over .add{background:#e2e8e1;color:#566960}
+.mm .menu-main{padding:14px 0;min-height:142px;gap:12px}.mm .menu .info{padding-right:0;min-width:0}.mm .menu .name{font-size:16px;line-height:1.4;font-weight:700;padding-right:0}.mm .menu .desc{font-size:13px;line-height:1.5;color:var(--sub);-webkit-line-clamp:2;margin-top:5px}.mm .menu .price{font-size:16px;font-weight:700;margin-top:8px}
+.mm .m-emo{width:76px;flex-basis:76px;height:76px;margin-bottom:38px}.mm .m-ctl{right:10px;bottom:10px}.mm .menu.plain .menu-main{min-height:126px;padding-right:115px}.mm .menu.plain .m-ctl{bottom:14px}
+.mm .qty{height:44px;border:1px solid #c8d8cc;background:#fff;border-radius:10px;box-shadow:none!important;overflow:hidden}.mm .qty button{width:44px;height:44px;min-width:44px;color:var(--mint-d);font-size:21px}.mm .qty b{min-width:26px;font-size:14px}.mm .add{border-radius:10px;box-shadow:none;width:44px;height:44px;font-size:24px}
+.mm .tag{font-size:10px;font-weight:650;border-radius:4px;padding:2px 5px}.mm .tag:not(.hot):not(.kid):not(.over){background:#e5f1e7;color:var(--mint-d)}
+.mm .tabs-line{margin:0;padding:0 16px 10px;gap:6px}.mm .tabs-line button,.mm .filter-chips button,.mm .quick button{border:1px solid var(--line);border-radius:9px;box-shadow:none;font-size:13px;background:#fff;min-height:40px}
+.mm .tabs-line button.on,.mm .filter-chips button.on,.mm .quick button.on{background:var(--mint-l);border-color:#b7d5c2;color:var(--mint-d);box-shadow:none}
+.mm .pin-bar{padding:8px 16px 0}.mm .pb-in{background:#edf4e9;border:1px solid #d8e3d2;border-radius:12px;box-shadow:none;backdrop-filter:none;padding:8px 10px}.mm .pb-ic,.mm .pb-gift{box-shadow:none;border-radius:7px}.mm .pb-txt{font-size:13px}.mm .pb-left{background:#fff;color:var(--mint-d)}
+.mm .sent-note{border:1px solid #cfe2d4;background:#eaf4ed;border-radius:10px;box-shadow:none;font-size:13px;padding:10px 12px;min-height:44px}.mm .sent-note.unsent{background:#fff2d9;border-color:#e7d9b9}
+
+/* 작성과 제출: 안내를 줄이고 내용이 중심이 되게. */
+.mm .room-head{background:#eef4e9;border:1px solid #dbe5d4;padding:22px;margin:16px}.mm .room-head h1{font-size:26px;line-height:1.4}.mm .rh-chip,.mm .host-badge{box-shadow:none;background:#fff;font-size:12px}.mm .host-badge{color:var(--mint-d)}
+.who-content{padding-top:20px}.who-content .sec-title{margin:4px 0 18px;font-size:24px}.mm .who-btn{border-radius:12px;min-height:80px}.mm .name-in{gap:8px}.mm .name-in .input{min-width:0}.mm .name-in .btn{min-height:50px}
+.mm .f-sec,.mm .a-sec{border-radius:16px;padding:20px 18px;border:1px solid var(--line)}.mm .f-sec h2{font-size:17px;gap:10px}.mm .f-sec h2 i{width:26px;height:26px;border-radius:7px;background:#e5f0e6;color:var(--mint-d);box-shadow:none}
+.mm .form>p.hint{margin:16px 2px 20px}.mm .treat-toggle{background:#f7f9f3;border:1px solid var(--line);border-radius:12px;box-shadow:none}.mm .tt-ic{background:#f8eacb;box-shadow:none;border-radius:10px}.mm .cap-chips button{min-height:44px;box-shadow:none;background:#fff;border:1px solid var(--line);border-radius:8px}.mm .cap-chips button.on{background:#f8eacb;color:#71541e;border-color:#d8bf83}
+.mm .cart-store,.mm .cart-req,.mm .summary{padding:18px;border-radius:16px}.mm .who-line{margin:14px 16px;padding:0;font-size:14px}.mm .who-line i{box-shadow:none;background:#e8f0e5}
+.mm .selection-status{background:#fff3dc;border:1px solid #e8d9b8;border-radius:10px;font-size:13px;margin-top:14px}.mm .selection-status.sent{background:#eaf4ed;border-color:#cfe2d4}.mm .cart-req .quick{gap:6px}.mm .cart-req .quick button{min-height:44px}.mm .cart-req .input{resize:vertical}.mm .total{font-size:18px}.mm .total span:last-child{font-variant-numeric:tabular-nums}
+.mm .ticket{border-radius:16px;border:1px solid var(--line);padding:20px}.mm .mine-item.cur .ticket{box-shadow:none;border-color:#b5d2bf}.mm .ticket::before,.mm .ticket::after{display:none}.mm .t-head{padding-bottom:16px;text-align:left;border-bottom:1px dashed #cbd8cd}.mm .t-head span{color:var(--sub);font-size:12px}.mm .t-head b{font-size:20px}.mm .t-head small{font-size:12px}.mm .t-store{font-size:14px}.mm .t-line{font-size:14px;gap:14px;align-items:flex-start}.mm .t-line>span:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}.mm .t-total{border-top:1px solid var(--line);font-size:16px}.mm .t-total b{font-size:24px}.mm .t-req{background:#f1f6ee;border-radius:10px;font-size:14px}
+.mm .sent-ok{display:flex;align-items:center;gap:14px;text-align:left;padding:18px;margin:16px 0;background:#eaf4ed;border-color:#cfdfd0;border-radius:14px}.mm .so-ic{width:40px;height:40px;flex:0 0 40px;margin:0;background:var(--mint);font-size:21px;box-shadow:none}.mm .sent-ok h2{font-size:18px}.mm .sent-ok .muted{font-size:13px}
+.mm .mine-head .sec-title{font-size:17px}.mm .mine-acts{gap:8px}.mm .empty{padding:64px 24px}.mm .empty h2{font-size:22px;line-height:1.4}.mm .empty .big{filter:none;font-size:42px}
+.mm .share-card{background:#f0f6ed!important;border:1px solid #d2e1cf;border-radius:16px}.mm .sc-ic{background:#dcebdc;color:var(--mint-d);border-radius:10px;box-shadow:none;flex:0 0 40px;width:40px;height:40px}.mm .sc-link{background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:none;font-size:12px;padding:10px}.mm .sc-top span{font-size:12px;line-height:1.5}.mm .sc-top b{font-size:15px}.mm .prog-num b{font-size:32px}.mm .prog-txt span{font-size:13px}.mm .prog-txt b{font-size:15px}.mm .bar{height:6px;box-shadow:none}.mm .bar i{box-shadow:none}
+.mm .sum-card{border-radius:16px;padding:18px}.mm .sum-head b{font-size:15px}.mm .sum-head>div{min-width:0}.mm .sum-head span{font-size:12px}.mm .sum-won{white-space:nowrap;font-variant-numeric:tabular-nums}.mm .sum-card .line{font-size:14px;gap:12px}.mm .group-requests{background:#f2f6ee;border-color:#dae5d4;font-size:13px}.mm .message-preview pre{background:#fafbf7;font-size:13px}.mm .message-preview summary{font-size:14px}
+.mm .host-created{margin-bottom:16px}.mm .host-results .seg{margin-bottom:14px}.mm .host-overview{min-width:0}.mm .host-results{min-width:0}.mm .host-results .toggle{font-size:13px;margin:8px 0 14px;line-height:1.6}
+.share-card>summary{list-style:none;cursor:pointer;min-height:44px}.share-card>summary::-webkit-details-marker{display:none}.sc-expand{margin-left:auto}.share-card[open] .sc-expand{transform:rotate(180deg)}
+.sheet-bg{background:#233b3466;backdrop-filter:blur(3px)}.sheet{border-radius:22px 22px 0 0;background:#fff;box-shadow:0 15px 80px #0002}.sheet-x{min-width:44px;min-height:44px;box-shadow:none;border:1px solid var(--line)}.sheet .btn{min-height:52px}.sheet .qty button{min-width:44px;min-height:44px}.sheet .qty{height:44px}
+
+@media(min-width:760px){
+  #app{max-width:720px}.mm .menus{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}.mm .menu.plain .menu-main{min-height:142px}.mm .nav{width:720px}.mm .cartbar{width:688px}.mm .bottom-bar{width:720px}
+  .home-brand>span{display:block}.home-preview{max-width:460px;width:100%;justify-self:center}.mm .land h1{font-size:48px}.land-go{max-width:320px}.sheet-bg{align-items:center}.sheet{border-radius:20px;max-height:85vh}
+}
+@media(min-width:1000px){
+  #app{width:calc(100% - 64px);max-width:1184px}#app.with-room-nav{padding-left:224px;padding-top:16px;padding-bottom:110px;min-height:100vh}
+  #app.view-create,#app.view-catalog,#app.tab-who:not(.with-room-nav){max-width:760px}
+  .mm .top{height:84px;margin-bottom:12px;padding:0 24px;border-bottom:1px solid var(--line)}.mm .top h1{font-size:26px}.top-eyebrow{font-size:12px}.mm.with-room-nav .top-eyebrow{display:none}.mm .top .back{display:none}.mm.view-create .top .back,.mm.view-catalog .top .back,.mm.tab-who:not(.with-room-nav) .top .back{display:grid}
+  .mm .nav{position:fixed;top:32px;bottom:32px;left:max(32px,calc((100vw - 1184px)/2));transform:none;width:200px;display:flex;flex-direction:column;gap:6px;border:0;border-right:1px solid var(--line);border-radius:0;padding:0 20px 0 0;background:transparent;overflow-y:auto}
+  .mm.tab-set .save-bar~.nav{display:flex}
+  .nav-brand{display:flex;font-size:19px;padding:0 0 28px;letter-spacing:-.04em}.nav-brand img{width:32px;height:32px}.nav-room{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;padding:14px;background:#eaf0e5;border-radius:12px}.nav-room span{font-size:11px;color:var(--sub)}.nav-room b{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+  .mm .nav-i{flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;min-height:48px;padding:12px;border-radius:10px}.mm .nav-i span{font-size:14px}.mm .nav-i svg{width:20px;height:20px}.mm .nav-i.on{background:#dfeee2}.mm .nav-badge{position:static;margin-left:auto;min-width:22px;height:22px;border:0;font-size:11px}.mm .nav-dot{left:auto;right:12px;top:20px}.nav-foot{display:block;margin-top:auto;padding:32px 8px 0;font-size:12px;color:var(--sub);line-height:1.8}
+  .mm.with-room-nav .cartbar,.mm.with-room-nav .bottom-bar{left:calc(50% + 112px);width:min(928px,calc(100% - 320px));bottom:20px;border-radius:12px}.mm.with-room-nav .cartbar{padding:16px 22px;min-height:60px}.mm.with-room-nav .bottom-bar{border:1px solid var(--line)}.mm .bottom-bar{width:min(760px,calc(100% - 64px))}
+  .mm .pin-bar{position:static;padding:0 16px 12px}.mm .menu-context{padding-top:0;padding-bottom:16px}.mm .shop-compact{margin-bottom:16px;padding:18px}.mm .shop-title h2{font-size:20px}.mm .shop-details summary{top:14px;right:16px}.mm .store-tabs{padding-bottom:14px}.mm .menus{gap:14px}.mm .menu-main{min-height:152px;padding:18px 0}.mm .menu.plain .menu-main{min-height:152px}.mm .menu .name{font-size:17px}.mm .m-emo{width:84px;height:84px;flex-basis:84px}.mm .m-ctl{bottom:12px}
+  .mm.tab-cart>.wrap,.mm.tab-review>.wrap,.mm.tab-mine>.wrap,.mm.tab-who>.wrap{max-width:720px;margin-left:auto;margin-right:auto}.mm.tab-cart>.cart-store,.mm.tab-cart>.cart-req,.mm.tab-cart>.summary{width:calc(100% - 32px)}.mm.tab-cart>.who-line{padding:0 16px}.mm.tab-who .room-head{max-width:688px;margin:20px auto}.mm.tab-who>.wrap{padding:24px 16px}.mm.tab-set .form{max-width:760px;margin:auto}
+  .home-brand{padding:32px 24px}.home-brand a{font-size:23px}.land{grid-template-columns:1.1fr 1fr;align-items:center;gap:64px;padding:48px 40px 72px}.land-copy{padding-bottom:8px}.mm .land h1{font-size:clamp(44px,4.2vw,60px);margin-top:20px}.land p{font-size:18px}.mm .land-go{width:300px;max-width:100%;margin-top:30px}.land-hint{font-size:12px}.home-preview{padding:28px 28px 54px;border-radius:28px;max-width:none}.hp-heading{font-size:18px}.hp-people{margin:20px 0}.hp-ticket{padding:24px}.hp-ticket-head b{font-size:18px}.hp-line{font-size:16px;padding:13px 0}.hp-note{right:24px;bottom:-16px;padding:16px 20px;font-size:13px}.home-content{padding:16px 40px 48px}.mm .how{grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}.mm .how li{flex-direction:column;gap:14px;padding:24px 0}.how-heading .sec-title{font-size:28px}.my-rooms .room-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.brand-footer{margin:0 24px;padding:24px 16px;font-size:13px}
+}
+@media(min-width:1180px){.host-layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;align-items:start}.host-created{grid-column:1/-1}.mm .host-created{margin:0}.host-overview{position:sticky;top:112px}.mm .host-results .seg{margin-top:0}.mm .host-overview .a-sec{padding:16px}.mm .host-overview .prog{gap:10px}}
+@media(max-width:374px){.home-brand,.land,.home-content{padding-left:18px;padding-right:18px}.mm .land h1{font-size:32px}.mm .land p{font-size:15px}.mm .menu .name{font-size:15px}.mm .menu .desc{-webkit-line-clamp:1}.mm .menu.plain .menu-main{padding-right:108px}.mm .qty b{min-width:20px}.mm .nav-i span{font-size:11px}.brand-footer{font-size:11px;gap:8px;padding:24px 18px}.mm .chip-who{max-width:34%;font-size:12px}}
+@media(prefers-reduced-motion:reduce){#app.enter>*,.mm .room-card,.mm .so-ic,.mm .bump,.sheet,.sheet-bg{animation:none!important}*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+@media print{#app.with-room-nav{width:100%;max-width:none;padding:0}.host-layout{display:block}.host-overview{position:static}.home-brand,.brand-footer,.pin-bar{display:none!important}.mm .card,.mm .ticket{box-shadow:none;border:1px solid #bbb}.mm .menus{display:block}}
 </style>
 </head>
 <body>
@@ -1228,13 +1364,15 @@ function render(enter = false) {
   if (S.route === 'create' || S.route === 'catalog') persistDraft();
   closeSheet();
   const v = S.route === 'create' ? viewCreate : S.route === 'catalog' ? viewCatalog : S.route === 'room' ? viewRoom : viewHome;
-  $app.innerHTML = v();
-  $app.className = 'mm view-' + S.route + (S.route === 'room' ? ' tab-' + S.tab : '') + (enter && !reduceMotion() ? ' enter' : '');
+  const content = v();
+  $app.innerHTML = content;
+  $app.className = 'mm view-' + S.route + (S.route === 'room' ? ' tab-' + S.tab : '') + (content.includes('class="nav n') ? ' with-room-nav' : '') + (enter && !reduceMotion() ? ' enter' : '');
   document.title = S.route === 'room' && S.room ? `${S.room.title} · 메뉴 모으기` : '메뉴 모으기';
 }
 function rerender() { const y = scrollY; render(); scrollTo(0, y); }
 function go(extra) { Object.assign(S, extra); document.getElementById('toast')?.classList.remove('show'); render(true); scrollTo(0, 0); }
-const topBar = (title, back, right = '') => `<header class="top">${back ? `<button class="back" data-act="${back}" aria-label="뒤로">${ICON.back}</button>` : ''}<h1>${title}</h1>${right}</header>`;
+const brand = () => `<img src="brand-mark.svg" width="36" height="36" alt=""><b>메뉴 모으기</b>`;
+const topBar = (title, back, right = '') => `<header class="top">${back ? `<button class="back" data-act="${back}" aria-label="뒤로">${ICON.back}</button>` : ''}<div class="top-title${title ? '' : ' top-brand'}">${title ? `<span class="top-eyebrow">메뉴 모으기</span><h1>${title}</h1>` : brand()}</div>${right}</header>`;
 
 // ---------- 첫 화면 ----------
 function viewHome() {
@@ -1242,26 +1380,34 @@ function viewHome() {
   const tab = S.homeTab || (made.length ? 'made' : 'joined');
   const list = tab === 'made' ? made : joined;
   if (rooms.length && !S.sumsLoading && rooms.some(r => !S.sums[r.id])) loadSums(rooms);
-  return `<section class="land">
-    <div class="deco" aria-hidden="true"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-    <div class="land-logo"><span class="logo-ic">${ICON.mine}</span><b>메뉴 모으기</b></div>
-    <h1>메뉴 수합,<br><em>링크 하나로 끝.</em></h1>
-    <p>총무님, 메뉴판 사진 올리고 하나하나 세지 마세요. 방을 만들어 링크만 보내면 다들 이름을 고르고 먹고 싶은 메뉴를 골라 보내요. 고른 메뉴는 가게별·사람별로 바로 모여요.</p>
-    <button class="btn block land-go" data-act="new">${ICON.plus}방 만들기</button>
+  return `<header class="home-brand"><a href="#" aria-label="메뉴 모으기 홈">${brand()}</a><span>함께 고르고, 간편하게 모아요</span></header>
+  <section class="land">
+    <div class="land-copy"><span class="land-kicker">회원가입 없이 · 링크 하나로</span>
+    <h1>함께 먹을 메뉴,<br><em>한곳에 모아요.</em></h1>
+    <p>점심부터 커피 한 잔까지.<br>각자 고른 메뉴는 한곳에, 총무의 준비는 가볍게.</p>
+    <button class="btn land-go" data-act="new">${ICON.plus}방 만들기 <span aria-hidden="true">→</span></button>
+    <span class="land-hint">초대받았나요? 받은 링크를 열면 바로 참여할 수 있어요.</span></div>
+    <div class="home-preview" aria-label="메뉴가 모이는 화면 예시">
+      <div class="hp-heading"><span>오늘의 점심</span><span class="hp-label">화면 예시</span></div>
+      <div class="hp-people"><span>지민</span><span>수현</span><span>민수</span><span class="hp-check">✓ 모두 골랐어요</span></div>
+      <div class="hp-ticket"><div class="hp-ticket-head"><span class="hp-plate" aria-hidden="true">${ICON.menu}</span><div><small>각자의 선택이 한곳에</small><b>오늘도 맛있게, 함께</b></div></div>
+      <div class="hp-line"><span>불고기 덮밥</span><b>2개</b></div><div class="hp-line"><span>채소 비빔밥</span><b>1개</b></div>
+      <div class="hp-total"><span>3명의 메뉴</span><b>모으기 완료 <span aria-hidden="true">✓</span></b></div></div>
+      <div class="hp-note">${ICON.mine}<span>메뉴와 요청사항까지<br><b>빠짐없이 모여요.</b></span></div>
+    </div>
   </section>
-  <div class="wrap">
+  <div class="wrap home-content">
     ${rooms.length ? `<section class="my-rooms">
       <div class="seg wide" role="tablist"><button class="${tab === 'made' ? 'on' : ''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab === 'made'}">내가 만든 방 <small>${made.length}</small></button><button class="${tab === 'joined' ? 'on' : ''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab === 'joined'}">참여한 방 <small>${joined.length}</small></button></div>
       <div class="room-cards">${list.map(roomCard).join('') || `<p class="muted empty-line">${tab === 'made' ? '아직 만든 방이 없어요. 위에서 「방 만들기」를 눌러 보세요.' : '링크로 들어간 방이 여기에 모여요.'}</p>`}</div>
     </section>` : ''}
-    <h2 class="sec-title">이렇게 써요</h2>
+    <div class="how-heading"><span class="eyebrow">준비는 가볍게</span><h2 class="sec-title">세 번이면, 메뉴 모으기 끝.</h2></div>
     <ol class="how">
-      <li><i class="t1">✏️</i><b>방 만들기</b><span>가게·사람·한마디, 쏜다면 예산까지</span></li>
-      <li><i class="t2">🔗</i><b>링크 보내기</b><span>단톡방에 링크만 붙여넣어요</span></li>
-      <li><i class="t3">🙋</i><b>다들 골라요</b><span>이름 고르고 먹고 싶은 메뉴 보내기</span></li>
-      <li><i class="t4">📋</i><b>총무는 정리 끝</b><span>가게별로 모여서 그대로 주문만</span></li>
+      <li><i>01</i><div><b>방 만들고 링크 보내기</b><span>가게와 메뉴를 넣고 함께 먹을 사람을 초대해요.</span></div></li>
+      <li><i>02</i><div><b>이름 적고 메뉴 고르기</b><span>가입 없이 이름만. 요청사항을 확인하고 보내요.</span></div></li>
+      <li><i>03</i><div><b>모인 메뉴 한눈에 보기</b><span>가게별·사람별로 정리된 내용을 보고 총무가 주문해요.</span></div></li>
     </ol>
-  </div>`;
+  </div><footer class="brand-footer">메뉴 모으기<span>함께 먹는 시간을 더 가볍게.</span></footer>`;
 }
 // 방 카드: 만든 방은 상태·응답 수와 관리 버튼, 참여한 방은 내가 보낸 이름
 function roomCard(r) {
@@ -1415,7 +1561,7 @@ function roomNav() {
   const items = [item('menu', '메뉴'), item('cart', '장바구니', n ? `<b class="nav-badge" id="cartBadge">${n}</b>` : ''), item('mine', '제출 내역', sent ? '<b class="nav-dot done" aria-label="제출 완료"></b>' : '')];
   items.push(S.host ? item('sum', '수합 현황', `<b class="nav-badge soft">${S.answers.size}</b>`) : item('all', '모두의 선택'));
   if (S.host) items.push(item('set', '방 설정'));
-  return `<nav class="nav n${items.length}" aria-label="메뉴">${items.join('')}</nav>`;
+  return `<nav class="nav n${items.length}" aria-label="메뉴"><a class="nav-brand" href="#" data-act="home" aria-label="메뉴 모으기 홈">${brand()}</a><div class="nav-room"><span>${S.host ? '내가 만든 방' : '함께 고르는 방'}</span><b>${esc(S.room.title)}</b></div>${items.join('')}<div class="nav-foot">가입 없이, 이름만으로.<br>함께 먹는 시간을 더 가볍게.</div></nav>`;
 }
 const whoChip = () => (S.who ? `<button class="chip-who" data-act="tab" data-t="who" aria-label="이름 바꾸기 (지금 ${esc(S.who)})"><i>${avatar(S.who)}</i>${esc(S.who)}</button>` : '');
 function roomHead(big = false) {
@@ -1430,7 +1576,7 @@ function roomHead(big = false) {
 function roomWho() {
   const r = S.room, answered = new Set([...S.answers.values()].map(a => a.name));
   return `${topBar('', 'home')}${roomHead(true)}
-  <div class="wrap"><h2 class="sec-title">누구세요?</h2>
+  <div class="wrap who-content"><span class="eyebrow">가입 없이 바로 시작</span><h2 class="sec-title">어떤 이름으로 고를까요?</h2>
     ${r.names.length ? `<div class="who-grid">${r.names.map(n => `<button class="who-btn${answered.has(n) ? ' did' : ''}${S.who === n ? ' me' : ''}" data-act="who" data-who="${esc(n)}"><i>${avatar(n)}</i>${esc(n)}${answered.has(n) ? '<small>✓ 냈어요</small>' : ''}</button>`).join('')}</div>` : ''}
     ${!r.names.length || r.freeJoin ? `${r.names.length ? '<p class="hint" style="margin-top:16px">명단에 없으면 이름을 적어 주세요.</p>' : ''}<div class="row name-in"><input class="input" id="whoName" maxlength="20" placeholder="이름 (예: 김선생, 3번 가족)" aria-label="이름" value="${S.who && !r.names.includes(S.who) ? esc(S.who) : ''}"><button class="btn" data-act="who-typed">시작</button></div>` : ''}
     <p class="hint" style="margin-top:14px">같은 기기에서 이름을 바꿔 여러 사람 것을 대신 골라 보낼 수 있어요.</p>
@@ -1571,7 +1717,7 @@ function roomMine() {
   return `${topBar('제출 내역', '', whoChip())}<div class="wrap">
     ${cur && !other && !cartIsSent() ? `<div class="notice"><b>장바구니에 보내지 않은 변경사항이 있어요.</b><p>아래는 마지막으로 제출한 내용이에요.</p><button class="text-btn" data-act="tab" data-t="cart">장바구니 이어서 확인하기 ›</button></div>` : ''}
     ${other ? `<div class="notice other-dev"><b>「${esc(cur.name)}」 선택은 다른 기기에서 보냈어요.</b> 고치려면 그 기기에서 하거나 총무에게 말해 주세요. 내 이름이 아니면 아래에서 이름을 다시 골라 주세요.</div>${ticket(cur)}` : ''}
-    ${justSent ? '<div class="sent-ok"><div class="so-ic">✓</div><h2>총무에게 보냈어요</h2><p class="muted">따로 카톡을 보내지 않아도 돼요. 바꾸고 싶으면 「고치기」로 다시 보내 주세요.</p></div>' : ''}
+    ${justSent ? '<div class="sent-ok" role="status"><div class="so-ic">✓</div><div><h2>총무에게 보냈어요</h2><p class="muted">수합 중에는 아래 「고치기」로 다시 보낼 수 있어요.</p></div></div>' : ''}
     ${mine.length ? `<div class="mine-head"><h2 class="sec-title">이 기기에서 보낸 선택 <small>${mine.length}</small></h2>${mine.length > 1 ? '<span class="hint">이름마다 따로 고치고 취소할 수 있어요</span>' : ''}</div>` : ''}
     <div class="stack">${mine.map(a => `<div class="mine-item${a.name === S.who ? ' cur' : ''}">${ticket(a)}
       <div class="row mine-acts"><button class="btn gray" style="flex:1" data-act="edit-mine" data-who="${esc(a.name)}"${lock ? ' disabled' : ''}>고치기</button><button class="btn gray" style="flex:1" data-act="answer-del" data-who="${esc(a.name)}"${lock ? ' disabled' : ''}>취소</button></div></div>`).join('')}</div>
@@ -1606,10 +1752,10 @@ function ownerMessage(g) {
   return lines.join('\n');
 }
 function shareCard() {
-  return `<section class="share-card"><div class="sc-top"><span class="sc-ic">${ICON.link}</span><div><b>참여 링크</b><span>단톡방에 붙여넣으면 다들 이 방에 들어와 메뉴를 골라요</span></div></div>
+  return `<details class="share-card"${S.created || !S.answers.size ? ' open' : ''}><summary class="sc-top"><span class="sc-ic">${ICON.link}</span><div><b>참여 링크</b><span>링크를 보내 함께 고르기</span></div><span class="sc-expand" aria-hidden="true">⌄</span></summary><div class="sc-content">
     <div class="sc-link">${esc(roomLink())}</div>
     <button class="btn block" data-act="copy-invite">${ICON.link}링크 보내기</button>
-    <div id="inviteBox" hidden class="copy-box"><textarea class="input code-box" readonly aria-label="초대 글"></textarea></div></section>`;
+    <div id="inviteBox" hidden class="copy-box"><textarea class="input code-box" readonly aria-label="초대 글"></textarea></div></div></details>`;
 }
 function progressBlock(withRemind) {
   const r = S.room, answered = new Set([...S.answers.values()].map(a => a.name));
@@ -1651,12 +1797,12 @@ function sumSeg() {
 function roomSum() {
   if (!S.host) { S.tab = 'all'; return roomAll(); }
   return `${topBar('수합 현황', '', whoChip())}
-  <div class="wrap admin">${S.created ? '<div class="notice mint"><b>방을 만들었어요!</b> 아래 링크를 단톡방에 보내면 끝이에요. 다들 고른 메뉴가 이 화면에 바로 모여요.</div>' : ''}
-    ${shareCard()}${progressBlock(true)}${treatSummary()}
-    ${sumSeg()}${S.sumBy === 'store' ? byStoreHtml(true) : byPersonHtml(true)}
+  <div class="wrap admin host-layout">${S.created ? '<div class="notice mint host-created"><b>방을 만들었어요!</b> 참여 링크를 보내면 각자의 메뉴가 여기에 모여요.</div>' : ''}
+    <aside class="host-overview" aria-label="참여와 수합 현황">${progressBlock(true)}${shareCard()}${treatSummary()}</aside>
+    <div class="host-results">${sumSeg()}${S.sumBy === 'store' ? byStoreHtml(true) : byPersonHtml(true)}
     <button class="btn gray block no-print" style="margin-top:14px" data-act="print">인쇄하기</button>
     ${S.who ? '' : '<button class="btn line-dark block no-print" style="margin-top:10px" data-act="tab" data-t="who">나도 고르기</button>'}
-  </div>${roomNav()}`;
+  </div></div>${roomNav()}`;
 }
 function treatSummary() {
   const t = S.room.treat;
@@ -1700,7 +1846,7 @@ function roomSet() {
     <section class="a-sec"><h3>방 지우기</h3><p class="hint">방과 링크가 없어져요. 되돌릴 수 없어요.</p><button class="btn red block" data-act="room-del">방 지우기</button></section>
   </div>
   ${e.dirty ? `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">${S.sending ? '저장 중…' : '바꾼 내용 저장'}</button></div>` : ''}
-  ${e.dirty ? '' : roomNav()}`;
+  ${roomNav()}`;
 }
 
 // ---------- 메뉴 시트 ----------
@@ -1845,7 +1991,10 @@ document.addEventListener('click', async e => {
   if (!el) return;
   const act = el.dataset.act, id = el.dataset.id;
   switch (act) {
-    case 'home': stopListening(); location.hash = ''; go({route: 'home'}); break;
+    case 'home':
+      e.preventDefault();
+      if (S.route === 'room' && S.tab === 'set' && S.edit?.dirty) { toast('바꾼 내용을 저장하거나 되돌려 주세요'); return; }
+      stopListening(); location.hash = ''; go({route: 'home'}); break;
     case 'new':
       S.draft = S.draft || load('mm-create-draft', null) || EMPTY_DRAFT();
       if (location.hash === '#new') go({route: 'create'}); else location.hash = 'new';
@@ -2038,8 +2187,8 @@ document.addEventListener('input', e => {
 function markDirtySoft() {
   if (S.edit.dirty) return;
   S.edit.dirty = true;
-  document.querySelector('.nav')?.remove();
-  $app.insertAdjacentHTML('beforeend', `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">바꾼 내용 저장</button></div>`);
+  const nav = document.querySelector('.nav');
+  (nav || $app).insertAdjacentHTML(nav ? 'beforebegin' : 'beforeend', `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">바꾼 내용 저장</button></div>`);
 }
 document.addEventListener('change', e => { if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
 document.addEventListener('keydown', e => {
