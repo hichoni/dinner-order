@@ -1,10 +1,22 @@
-# 🍽 메뉴 모으기
+# 다맛다
 
-방을 만들고 링크를 단톡방에 보내면, 다들 이름을 고르고 메뉴를 담아 **보내기**. 방장은 모인 주문을 실시간으로 가게별·사람별로 보고,
-가게에 보낼 주문 메시지를 복사해요. 학년 협의회 음료, 캠프 저녁(2026 가족발명메이커캠프) 수합용이에요.
+각자 고른 메뉴를 한곳에 모으는 서비스입니다.
 
-- 주소: https://hichoni.github.io/dinner-order/
-- `index.html`, `firebase.js` — 원본은 `hichoni/app-gallery` 의 `apps/dinner-order/room/` (`python3 apps/dinner-order/room/build.py` → `room/dist/`).
-  설명·데이터 구조·Firebase 규칙은 거기 `room/README.md`, 이어서 작업하려면 `apps/dinner-order/HANDOVER.md` 부터.
-- `classic.html` — 예전 판(파일 하나, 주문 코드를 카톡으로 모으기). 예전 `#s=` 링크는 자동으로 이리로 와요.
-- `firebase.js` 는 Firebase JS SDK(Apache-2.0) 묶음이에요. 라이선스: `firebase-LICENSE.txt`.
+- [앱 열기](https://hichoni.github.io/dinner-order/)
+- [전체 화면](https://hichoni.github.io/dinner-order/screens.html)
+- [로딩·전송 모션](https://hichoni.github.io/dinner-order/motion.html)
+- [캐릭터·아이콘](https://hichoni.github.io/dinner-order/assets.html)
+
+원본: hichoni/app-gallery의 apps/dinner-order/room/. 운영 index.html은 Firebase에 연결합니다. preview.html은 브라우저 안에서만 동작하는 예시입니다. classic.html은 이전 판으로 유지합니다.
+
+
+## 2026-10-21 다맛다 모바일 브랜딩·모션
+
+- 메뉴명 17px, 가격 16px. 짧은 메뉴 행과 고정 장바구니/보내기 유지.
+- 홈·방 만들기·이름 선택·메뉴·장바구니·방 관리·설정의 모바일 배치 정리.
+- 팔다리 없는 음식 아바타 6개, 기능 아이콘 8개. 민트·귤 / 블루·레몬 테마.
+- 승인된 로고 세 카드가 순서대로 모이는 방 로딩·전송 모션. 서버 쓰기 성공 후 다맛다! 표시.
+- screens.html: 10개 화면, motion.html: 로딩/전송/완료, assets.html: SVG 에셋 확인.
+- preview.html은 Firebase와 연결하지 않는 예시 페이지. 운영 index.html은 실제 연결을 유지.
+- 테스트: 앱 상태 15개 통과, 320/390px 메뉴·장바구니·이름 선택·전송 완료와 모션 재생/정지 확인.
+- 기존 데이터 구조·보안 규칙·가게 카탈로그 변경 없음. 방장 도착 알림은 열린 화면 안에서 제공.

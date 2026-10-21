@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>다맛다 · 전체 화면</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:140px}body{margin:0;background:#edf2f2;color:#233e41;font:14px Pretendard,system-ui,sans-serif;letter-spacing:-.03em}button,select{font:inherit}button,a,select{touch-action:manipulation}button,a{cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #efaa47;outline-offset:3px}
+.board-head{position:sticky;top:0;z-index:10;background:#f9fcfbed;backdrop-filter:blur(16px);border-bottom:1px solid #dce5e4;padding:18px 26px 14px}.head-row{display:flex;align-items:center;justify-content:space-between;gap:20px}.board-title{display:flex;align-items:baseline;gap:13px}.board-title h1{font-size:21px;font-weight:650;margin:0;letter-spacing:-.05em}.board-title span{font-size:11px;color:#7c8f8e}.tools{display:flex;align-items:center;gap:7px}.tools button,.tools select,.app-link{border:1px solid #d9e4e1;background:#fff;border-radius:9px;padding:8px 11px;color:#647e79;font-size:11px;min-height:34px}.tools button[aria-pressed=true]{background:#e9f5f4;border-color:#83b8ae;color:#006d66}.swatch{display:inline-block;width:8px;height:8px;border-radius:50%;background:#f48b3e;margin-right:6px}.sky .swatch{background:#ebcb4b;box-shadow:4px 0 #397ec1}.board-nav{display:flex;align-items:center;gap:6px;margin-top:13px;overflow-x:auto;scrollbar-width:none}.board-nav a{font-size:11px;white-space:nowrap;color:#677f7c;padding:7px 11px;border:1px solid transparent;border-radius:7px}.board-nav a:hover{background:#e4efeb}.board-nav a:nth-child(3){margin-right:7px;border-right:1px solid #d7e2df}.board-nav a[aria-current="location"]{background:#dfeee9;color:#146c61}
+main{padding:22px 26px 35px;max-width:1800px;margin:auto}.board-note{display:flex;justify-content:space-between;gap:12px;margin:0 0 20px;font-size:11px;color:#6d8480}.board-note a{color:#287e72}.screens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px 24px}.screen{min-width:0;scroll-margin-top:0}.screen-head{display:flex;align-items:center;gap:8px;margin:0 3px 11px}.screen-head .number{font-size:11px;color:#819590;font-weight:500}.screen-head h2{font-size:16px;font-weight:600;margin:0}.screen-head .state{font-size:10px;color:#69847a;border:1px solid #d6e3dd;padding:3px 6px;border-radius:5px;background:#ffffff70}.screen-head a{margin-left:auto;font-size:10px;color:#5e7d72;padding:6px 0 6px 8px}.device{position:relative;overflow:hidden;width:100%;border:1px solid #d5e2df;background:#f7faf8;border-radius:22px;box-shadow:0 14px 22px -20px #244d4d70}.device iframe{display:block;width:390px;height:780px;transform-origin:top left;border:0;background:#f7faf8}.screen-footer{display:flex;justify-content:space-between;margin:9px 4px 0;color:#83958e;font-size:10px}.screen-footer button{border:0;padding:0;background:none;color:inherit;font-size:10px}.board-footer{font-size:11px;color:#82918b;padding:28px 0 0;text-align:center}
+@media(min-width:1550px){.screens{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:900px){.screens{grid-template-columns:repeat(2,minmax(0,1fr));gap:25px 18px}.board-head{padding:15px 18px 10px}main{padding:18px}.board-title span{display:none}.head-row{gap:10px}.board-title h1{font-size:18px}.tools{gap:5px}.tools button,.tools select,.app-link{font-size:10px;padding:7px}.app-link{display:none}}
+@media(max-width:580px){.screens{grid-template-columns:1fr;max-width:430px;margin:auto}.head-row{flex-wrap:wrap}.board-title{width:100%}.tools{width:100%}.tools select{margin-left:auto}.board-note span:last-child{display:none}.screen-head h2{font-size:17px}.board-head{padding:13px 16px 9px}.board-nav{margin-top:9px}.board-nav a{padding:6px 8px}main{padding:17px 16px}.board-note{font-size:10px}.device{border-radius:20px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head>
+<body><header class="board-head"><div class="head-row"><div class="board-title"><h1>다맛다 <span style="font-size:inherit;color:#66827b;font-weight:400">화면 모음</span></h1><span>10개 화면 · 직접 눌러보기</span></div><div class="tools" role="group" aria-label="미리보기 설정"><button data-theme="mint" aria-pressed="false"><i class="swatch"></i>민트 · 귤</button><button data-theme="sky" class="sky" aria-pressed="true"><i class="swatch"></i>블루 · 레몬</button><select aria-label="화면 너비"><option value="390">390 px</option><option value="320">320 px</option><option value="430">430 px</option></select><a href="motion.html" class="app-link">로딩 · 전송 ↗</a><a href="assets.html" class="app-link">캐릭터 · 아이콘 ↗</a><a href="index.html" class="app-link">앱 열기 ↗</a></div></div><nav class="board-nav" aria-label="화면 바로가기"></nav></header>
+<main><div class="board-note"><span>방을 만들지 않아도 모든 화면을 볼 수 있어요.</span><span>예시 데이터 · 실제 주문방과 연결되지 않아요</span></div><div class="screens"></div><footer class="board-footer">각 화면은 독립된 예시예요. 카드 안에서 메뉴를 담고 보내볼 수 있어요.</footer></main>
+<script>
+const scenes=[
+ ['menu','메뉴 고르기','메뉴 목록','#r=coffeetime&t=menu'],
+ ['cart','장바구니','담은 메뉴','#r=coffeetime&t=cart'],
+ ['host','방 관리','방장','#r=coffeetime&t=sum'],
+ ['home','첫 화면','참여한 방',''],
+ ['create','방 만들기','새 방','#new'],
+ ['catalog','가게 찾기','가게 선택',''],
+ ['who','이름 선택','참여','#r=coffeetime&t=who'],
+ ['mine','보낸 메뉴','전송 완료','#r=coffeetime&t=mine'],
+ ['all','모인 메뉴','참여자','#r=coffeetime&t=all'],
+ ['settings','방 설정','방장','#r=coffeetime&t=set']
+];
+let palette=localStorage.getItem('damatda-palette')==='mint'?'mint':'sky',width=390;
+const url=(scene,embedded=true)=>embedded?'preview.html?scene='+scene[0]+'&embed=1&palette='+palette+scene[3]:'mobile.html?screen='+scene[0]+'&palette='+palette;
+const grid=document.querySelector('.screens'),nav=document.querySelector('.board-nav');
+function markCurrent(){const hash=location.hash||'#screen-menu';nav.querySelectorAll('a').forEach(a=>{if(a.getAttribute('href')===hash)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+addEventListener('hashchange',markCurrent);
+scenes.forEach((scene,index)=>{
+ const a=document.createElement('a');a.href='#screen-'+scene[0];a.textContent=scene[1];nav.append(a);
+ const article=document.createElement('article');article.className='screen';article.id='screen-'+scene[0];
+ article.innerHTML='<div class="screen-head"><span class="number">'+String(index+1).padStart(2,'0')+'</span><h2>'+scene[1]+'</h2><span class="state">'+scene[2]+'</span><a target="_blank" rel="noopener" href="'+url(scene,false)+'" aria-label="'+scene[1]+' 크게 보기">크게 ↗</a></div><div class="device"><iframe title="'+scene[1]+' 미리보기" src="'+url(scene)+'" loading="'+(index<3?'eager':'lazy')+'"></iframe></div><div class="screen-footer"><span class="size-label">390 × 780</span><button type="button" disabled>처음 상태로</button></div>';
+ article.querySelector('iframe').addEventListener('load',()=>{article.querySelector('button').disabled=false;});
+ article.querySelector('button').onclick=()=>article.querySelector('iframe').contentWindow.postMessage({type:'damatda-reset'},location.origin);
+ grid.append(article);
+});
+function resize(){document.querySelectorAll('.device').forEach(device=>{const available=device.parentElement.clientWidth,fit=innerWidth>580?Math.max(400,innerHeight-245)/780:1,scale=Math.min(available/width,fit),frame=device.querySelector('iframe');frame.style.width=width+'px';frame.style.height='780px';frame.style.transform='scale('+scale+')';device.style.width=(width*scale)+'px';device.style.height=(780*scale)+'px';device.style.margin='0 auto';});document.querySelectorAll('.size-label').forEach(el=>el.textContent=width+' × 780');}
+new ResizeObserver(resize).observe(grid);resize();markCurrent();
+addEventListener('resize',resize);
+function setPalette(value){palette=value;localStorage.setItem('damatda-palette',value);document.querySelectorAll('[data-theme]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.theme===palette)));document.querySelectorAll('iframe').forEach(frame=>{if(frame.contentWindow)frame.contentWindow.postMessage({type:'damatda-palette',palette},location.origin);});scenes.forEach(scene=>document.querySelector('#screen-'+scene[0]+' .screen-head a').href=url(scene,false));}
+document.querySelectorAll('[data-theme]').forEach(button=>button.onclick=()=>setPalette(button.dataset.theme));
+document.querySelectorAll('iframe').forEach(frame=>frame.addEventListener('load',()=>frame.contentWindow.postMessage({type:'damatda-palette',palette},location.origin)));
+document.querySelector('[aria-label="화면 너비"]').onchange=event=>{width=Number(event.target.value);resize();};setPalette(palette);
+</script></body></html>

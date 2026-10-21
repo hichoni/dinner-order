@@ -1,1 +1,22 @@
-{"name": "메뉴 모으기", "short_name": "메뉴 모으기", "start_url": "./", "display": "standalone", "background_color": "#e8f7f3", "theme_color": "#e8f7f3", "lang": "ko", "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]}
+{
+  "name": "다맛다",
+  "short_name": "다맛다",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6fafc",
+  "theme_color": "#f6fafc",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
