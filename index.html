@@ -1005,6 +1005,9 @@ body::after{display:none}body::before{background:#e8f7f3}
 .mm .sent-note{border:1px solid #cfe2d4;background:#eaf4ed;border-radius:10px;box-shadow:none;font-size:13px;padding:10px 12px;min-height:44px}.mm .sent-note.unsent{background:#fff2d9;border-color:#e7d9b9}
 
 /* 작성과 제출: 안내를 줄이고 내용이 중심이 되게. */
+.mm .menu-search{margin:0 16px 12px}.menu-search>label{display:block;font-size:13px;font-weight:700;color:var(--sub);margin:0 0 6px}.menu-search-row{display:flex;gap:8px;align-items:center}.menu-search-row .input{min-width:0;flex:1;width:100%;min-height:46px}.mm .menu-search-row .small-btn{flex:0 0 44px;min-height:44px;font-size:22px;padding:0}.menu-search-row button:disabled{opacity:.45;cursor:default}.menu-search input::-webkit-search-cancel-button{display:none}
+.search-count{font-size:13px;color:var(--mint-d);font-weight:650;margin:8px 0 0}.search-count:empty{display:none}.search-store-title{margin:18px 18px 10px;font-size:17px;color:var(--ink)}.search-store-title small{font-size:12px;color:var(--sub);font-weight:500}.menu-search-empty{margin:0 16px;padding:36px 20px;text-align:center;background:var(--glass-hi);border:1px solid #fff;border-radius:22px;box-shadow:var(--clay-s)}.menu-search-empty h3{font-size:18px;margin:0 0 8px}.menu-search-empty p{font-size:14px;color:var(--sub);margin:0 0 18px}
+.store-request{border-top:1px solid var(--line);margin-top:12px;padding-top:16px}.store-request>label{display:block;font-size:15px;font-weight:700;overflow-wrap:anywhere}.mm .store-request .hint{font-size:12px;margin:6px 0 12px}.mm .store-request .quick{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.mm .store-request .quick button{min-height:44px}.store-request .input{display:block;width:100%;resize:vertical}.store-request .muted{font-weight:400;font-size:13px}.mm .t-req p,.mm .req-line,.mm .group-requests p,.mm .unassigned-requests p{white-space:pre-wrap;overflow-wrap:anywhere}.mm .legacy-request{background:#fff6e5;border:1px solid #e8d4ae}.legacy-request small{display:block;color:#75572e;font-size:12px;line-height:1.6}.mm .unassigned-requests{margin-bottom:14px;background:#fff6e5;border-color:#e8d4ae}.unassigned-requests h3{font-size:15px}.unassigned-requests>p{font-size:13px;margin:10px 0 0}
 .mm .room-head{background:linear-gradient(130deg,#ffffffe6,#d9f7eecf);border:1px solid #fff;padding:22px;margin:16px}.mm .room-head h1{font-size:26px;line-height:1.4}.mm .rh-chip,.mm .host-badge{box-shadow:var(--clay-s);background:#fff;font-size:12px}.mm .host-badge{color:var(--mint-d)}
 .who-content{padding-top:20px}.who-content .sec-title{margin:4px 0 18px;font-size:24px}.mm .who-btn{border-radius:12px;min-height:80px}.mm .name-in{gap:8px}.mm .name-in .input{min-width:0}.mm .name-in .btn{min-height:50px}
 .mm .f-sec,.mm .a-sec{border-radius:22px;padding:20px 18px;border:1px solid #fff}.mm .f-sec h2{font-size:17px;gap:10px}.mm .f-sec h2 i{width:26px;height:26px;border-radius:9px;background:var(--grad);color:var(--action-ink);box-shadow:var(--clay-s)}
@@ -1118,10 +1121,18 @@ function tidyRoom(d) {
   };
 }
 const answerId = name => encodeURIComponent(name).slice(0, 400);
+function tidyStoreReqs(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  return Object.fromEntries(Object.entries(value).filter(([id, text]) => id.length > 0 && id.length <= 40 && typeof text === 'string').slice(0, 20).map(([id, text]) => [id, text.slice(0, 200)]));
+}
+function requestsForItems(value, items) {
+  const ids = new Set(items.map(i => i.s));
+  return Object.fromEntries(Object.entries(tidyStoreReqs(value)).filter(([id, text]) => ids.has(id) && text.trim()).map(([id, text]) => [id, text.trim()]).sort(([a], [b]) => a.localeCompare(b)));
+}
 function tidyAnswer(id, d) {
   d = d && typeof d === 'object' ? d : {};
   return {
-    id, name: str(d.name, 20, '이름 없음'), req: str(d.req, 200), uid: str(d.uid, 128),
+    id, name: str(d.name, 20, '이름 없음'), req: str(d.req, 200), storeReqs: tidyStoreReqs(d.storeReqs), uid: str(d.uid, 128),
     at: d.at && typeof d.at.toMillis === 'function' ? d.at.toMillis() : Date.now(),
     items: (Array.isArray(d.items) ? d.items : []).slice(0, 60).filter(x => x && x.m).map(x => ({m: str(x.m, 40), n: Math.min(30, num(x.n)) || 1, name: str(x.name, 40, '메뉴'), price: num(x.price), s: str(x.s, 40)})),
   };
@@ -1130,8 +1141,8 @@ function tidyAnswer(id, d) {
 // ---------- 상태 ----------
 const S = {
   route: 'home', roomId: '', room: null, answers: new Map(), host: false, loading: false, error: '',
-  tab: 'menu', store: null, mfilter: 'all',
-  who: '', cart: {}, req: '', sentAt: 0,
+  tab: 'menu', store: null, mfilter: 'all', menuQuery: '',
+  who: '', cart: {}, req: '', storeReqs: {}, sentAt: 0,
   draft: null, catFor: 'create', catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(),
   edit: null, sumBy: 'store', byPerson: true, sending: false, createError: '',
   homeTab: '', sums: {}, sumsLoading: false,
@@ -1146,7 +1157,7 @@ function rememberRoom(id, patch) {
 const sentNames = id => load('mm-sent', {})[id] || [];
 function setSentNames(id, names) { const all = load('mm-sent', {}); if (names.length) all[id] = names; else delete all[id]; save('mm-sent', all); }
 const roomLocal = () => load('mm-room-' + S.roomId, {});
-function persistRoom() { save('mm-room-' + S.roomId, {who: S.who, cart: S.cart, req: S.req, sentAt: S.sentAt}); }
+function persistRoom() { save('mm-room-' + S.roomId, {who: S.who, cart: S.cart, req: S.req, storeReqs: S.storeReqs, sentAt: S.sentAt}); }
 function persistDraft() { if (S.draft) save('mm-create-draft', S.draft); }
 
 function toast(msg) {
@@ -1184,9 +1195,9 @@ function stopListening() { for (const u of unsub) try { u(); } catch {} unsub = 
 
 async function openRoom(id, key, want = '') {
   stopListening();
-  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), host: false, loading: true, error: '', store: null, edit: null});
+  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all'});
   const local = roomLocal();
-  Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: local.req || '', sentAt: local.sentAt || 0, tab: local.who ? 'menu' : 'who'});
+  Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), sentAt: local.sentAt || 0, tab: local.who ? 'menu' : 'who'});
   render();
   try {
     await boot();
@@ -1262,7 +1273,15 @@ function cartIsSent() {
   if (!a) return false;
   const signature = items => JSON.stringify(items.map(i => [i.m, i.n, i.name, i.price, i.s]).sort((x, y) => x[0].localeCompare(y[0])));
   const now = cartLines().map(l => ({m: l.item.id, n: l.n, name: l.item.name, price: l.item.price, s: l.item.store.id}));
-  return signature(a.items) === signature(now) && a.req.trim() === S.req.trim();
+  return signature(a.items) === signature(now) && a.req.trim() === S.req.trim()
+    && JSON.stringify(requestsForItems(a.storeReqs, a.items)) === JSON.stringify(requestsForItems(S.storeReqs, now));
+}
+function draftStoreReqs() { return requestsForItems(S.storeReqs, cartLines().map(l => ({s: l.item.store.id}))); }
+function setStoreRequest(id, text) { S.storeReqs = {...S.storeReqs, [id]: str(text, 200)}; }
+function captureRequests() {
+  S.req = (document.getElementById('req')?.value ?? S.req).trim().slice(0, 200);
+  for (const input of document.querySelectorAll('[data-store-req]')) setStoreRequest(input.dataset.storeReq, input.value);
+  persistRoom();
 }
 function selectionStatus() {
   const a = myAnswer(), same = cartIsSent();
@@ -1647,12 +1666,41 @@ function menuRow(m, s) {
 }
 const MENU_FILTERS = [['all', '전체'], ['best', '인기'], ['kid', '아이 추천'], ['hot', '매운 것']];
 const canOpenLinks = location.origin !== 'null';
+const searchWords = value => str(value, 200).normalize('NFKC').toLocaleLowerCase('ko').trim().split(/\s+/).filter(Boolean);
+function menuGroups(query = S.menuQuery, filter = S.mfilter) {
+  const words = searchWords(query), stores = words.length ? S.room.stores : [storeOf(S.store)].filter(Boolean);
+  return stores.map(store => ({store, menu: store.menu.filter(m => {
+    const hay = `${m.name} ${m.desc}`.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, '');
+    return (filter === 'all' || (m.tags || []).includes(filter)) && words.every(word => hay.includes(word));
+  })})).filter(g => g.menu.length);
+}
+function menuFiltersHtml() {
+  const menus = searchWords(S.menuQuery).length ? S.room.stores.flatMap(s => s.menu) : (storeOf(S.store)?.menu || []);
+  const filters = MENU_FILTERS.filter(([k]) => k === 'all' || menus.some(m => (m.tags || []).includes(k)));
+  if (!filters.some(([k]) => k === S.mfilter)) S.mfilter = 'all';
+  return filters.length > 1 ? `<div class="tabs-line" role="group" aria-label="메뉴 필터">${filters.map(([k, l]) => `<button class="${S.mfilter === k ? 'on' : ''}" data-act="mfilter" data-f="${k}" aria-pressed="${S.mfilter === k}">${l}</button>`).join('')}</div>` : '';
+}
+function menuResultsHtml() {
+  const searching = searchWords(S.menuQuery).length > 0, groups = menuGroups();
+  if (!groups.length) return `<div class="menu-search-empty"><h3>${searching ? '찾는 메뉴가 없어요' : '이 필터에 맞는 메뉴가 없어요'}</h3><p>${searching ? '다른 검색어를 입력하거나 검색·필터를 초기화해 보세요.' : '다른 필터를 선택해 보세요.'}</p><button class="btn gray" data-act="menu-search-reset">${searching ? '검색·필터 초기화' : '전체 메뉴 보기'}</button></div>`;
+  return groups.map(({store, menu}) => `${searching ? `<h2 class="search-store-title">${esc(store.name)} <small>${menu.length}개</small></h2>` : ''}<div class="menus">${menu.map(m => menuRow(m, store)).join('')}</div>`).join('');
+}
+function menuSearchCount() {
+  const groups = menuGroups(), n = groups.reduce((sum, g) => sum + g.menu.length, 0);
+  return searchWords(S.menuQuery).length ? `검색 결과 ${n}개 · ${groups.length}곳` : '';
+}
+function refreshMenuSearch() {
+  // 검색 입력칸은 그대로 두어 한글 조합·커서·키보드 초점을 유지한다.
+  document.getElementById('menuFilters').innerHTML = menuFiltersHtml();
+  document.getElementById('menuResults').innerHTML = menuResultsHtml();
+  document.getElementById('menuSearchCount').textContent = menuSearchCount();
+  document.getElementById('storeBrowse').hidden = searchWords(S.menuQuery).length > 0;
+  document.getElementById('clearMenuSearch').disabled = !S.menuQuery;
+}
 function roomStore() {
   const s = storeOf(S.store);
   if (!s) { S.tab = 'menu'; return roomMenu(); }
-  const filters = MENU_FILTERS.filter(([k]) => k === 'all' || s.menu.some(m => (m.tags || []).includes(k)));
-  if (!filters.some(([k]) => k === S.mfilter)) S.mfilter = 'all';
-  const menu = s.menu.filter(m => S.mfilter === 'all' || (m.tags || []).includes(S.mfilter));
+  const filters = menuFiltersHtml();
   const q = encodeURIComponent((s.address || s.name).split(',')[0].replace(/\s*\([^)]*\)/g, '').trim());
   const acts = [
     s.phone ? `<button data-act="copy" data-text="${esc(s.phone)}" data-msg="📞 전화번호를 복사했어요">${ICON.phone}<span>${esc(s.phone)}</span></button>` : '',
@@ -1662,19 +1710,31 @@ function roomStore() {
   const dl = deadlineInfo(S.room.deadline);
   return `${topBar(esc(S.room.title), 'home', whoChip())}
   <div class="menu-context"><span>${S.room.closed ? '수합 마감' : dl ? esc(dl.text) : '수합 중'}</span><span><b id="liveCount">${S.answers.size}</b>명 제출</span></div>
+  <div class="menu-search"><label for="menuSearch">이 방 메뉴 검색</label><div class="menu-search-row"><input class="input" type="search" id="menuSearch" value="${esc(S.menuQuery)}" maxlength="80" placeholder="모든 가게의 메뉴 이름·설명 검색" autocomplete="off" aria-controls="menuResults"><button id="clearMenuSearch" class="small-btn" data-act="menu-search-clear" aria-label="검색어 지우기"${S.menuQuery ? '' : ' disabled'}>×</button></div><p id="menuSearchCount" class="search-count" role="status" aria-live="polite" aria-atomic="true">${menuSearchCount()}</p></div>
+  <div id="storeBrowse"${searchWords(S.menuQuery).length ? ' hidden' : ''}>
   ${S.room.stores.length > 1 ? `<div class="store-tabs" role="group" aria-label="가게 선택">${S.room.stores.map(x => `<button class="${x.id === s.id ? 'on' : ''}" data-act="store" data-id="${esc(x.id)}" aria-pressed="${x.id === s.id}">${esc(x.name)}</button>`).join('')}</div>` : ''}
   <section class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div><h2>${esc(s.name)}</h2><span>메뉴 ${s.menu.length}개</span></div></div>
     ${acts.length || s.hours || s.note ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
-  </section>
+  </section></div>
   <div class="wrap menu-notices">${closedNote()}${sentNote()}</div>
-  ${filters.length > 1 ? `<div class="tabs-line" role="group" aria-label="메뉴 고르기">${filters.map(([k, l]) => `<button class="${S.mfilter === k ? 'on' : ''}" data-act="mfilter" data-f="${k}">${l}</button>`).join('')}</div>` : '<div class="band thin"></div>'}
-  <div class="menus">${menu.map(m => menuRow(m, s)).join('') || '<p class="muted empty-line">메뉴가 없어요.</p>'}</div>
+  <div id="menuFilters">${filters}</div>
+  <div id="menuResults">${menuResultsHtml()}</div>
   ${cartBar()}${roomNav()}`;
 }
-function quickRequests() {
-  const lines = cartLines();
+function quickRequests(storeId) {
+  const lines = cartLines().filter(l => !storeId || l.item.store.id === storeId);
   const drinks = lines.length && lines.every(l => /카페|커피|음료|아메리카노|라떼|에이드|콜드브루|스무디|차$|주스/.test(l.item.store.category + ' ' + l.item.name));
   return drinks ? ['얼음 적게', '시럽 빼고', '따로 담아 주세요'] : ['덜 맵게', '수저 넉넉히', '따로 담아 주세요'];
+}
+function storeRequestInput(s) {
+  const value = str(S.storeReqs[s.id], 200), id = `storeReq-${encodeURIComponent(s.id)}`;
+  return `<div class="store-request"><label for="${id}">${esc(s.name)} 요청사항 <span class="muted">(선택)</span></label>
+    <p class="hint" id="${id}-help">이 가게에 전달할 요청이에요. 총무와 참여자가 볼 수 있어요.</p>
+    <div class="quick">${quickRequests(s.id).map(t => `<button class="${value.split(/\s*,\s*/).includes(t) ? 'on' : ''}" data-act="quick-req" data-id="${esc(s.id)}" data-t="${esc(t)}" aria-pressed="${value.split(/\s*,\s*/).includes(t)}">${esc(t)}</button>`).join('')}</div>
+    <textarea class="input" id="${id}" data-store-req="${esc(s.id)}" aria-describedby="${id}-help" maxlength="200" rows="2" placeholder="예: ${esc(s.menu[0]?.name || '메뉴')}는 ${quickRequests(s.id)[0]}">${esc(value)}</textarea></div>`;
+}
+function legacyRequestHtml(a) {
+  return a.req ? `<div class="t-req legacy-request"><b>가게 미지정 요청 · 이전 방식</b><p>${esc(a.req)}</p><small>가게 주문 메시지에는 자동으로 넣지 않아요. 해당 가게를 확인해 주세요.</small></div>` : '';
 }
 function roomCart() {
   const lines = cartLines(), a = myAnswer();
@@ -1689,12 +1749,10 @@ function roomCart() {
   <div class="wrap who-line"><i>${avatar(S.who)}</i><span><b>${esc(S.who)}</b>의 선택${a ? '<span class="muted"> · 고쳐서 다시 보내면 바뀌어요</span>' : ''}</span></div>
   ${[...byStore].map(([s, ls]) => `<div class="band thin"></div><section class="wrap cart-store"><div class="cs-head">${thumb(s, 'sm')}<div><b>${esc(s.name)}</b></div></div>
     ${ls.map(l => `<div class="line"><div><div class="nm">${esc(l.item.name)}</div><div class="muted">${l.item.price ? won(l.item.price * l.n) : '가격 확인'}</div></div>${qtyCtl(l.item.id, l.item.name)}</div>`).join('')}
-    <button class="more" data-act="store" data-id="${esc(s.id)}">+ 더 고르기</button></section>`).join('')}
-  <div class="band thin"></div>
-  <section class="wrap cart-req"><label for="req" class="h3">내 제출 전체 요청 <span class="muted">(선택)</span></label>
-    <p class="hint" id="reqHelp">총무와 참여자가 함께 볼 수 있어요. 특정 메뉴 요청은 가게·메뉴 이름을 함께 적어 주세요.</p>
-    <div class="quick">${quickRequests().map(t => `<button class="${S.req.includes(t) ? 'on' : ''}" data-act="quick-req" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
-    <textarea class="input" id="req" maxlength="200" rows="3" aria-describedby="reqHelp" placeholder="예: ○○카페 아메리카노는 얼음 적게">${esc(S.req)}</textarea></section>
+    <button class="more" data-act="store" data-id="${esc(s.id)}">+ 더 고르기</button>${storeRequestInput(s)}</section>`).join('')}
+  ${S.req ? `<div class="band thin"></div><section class="wrap cart-req legacy-request"><label for="req" class="h3">가게 미지정 요청 · 이전 방식</label>
+    <p class="hint" id="reqHelp">기존 내용을 보존했어요. 필요한 요청은 위 가게별 칸으로 옮겨 주세요. 이 칸은 가게 주문 메시지에 자동으로 들어가지 않아요.</p>
+    <textarea class="input" id="req" maxlength="200" rows="3" aria-describedby="reqHelp">${esc(S.req)}</textarea></section>` : ''}
   <div class="band thin"></div>
   <section class="wrap summary"><div class="total"><span>합계</span><span>${won(cartSum())}</span></div>
     ${budget() ? `<div class="budget${budgetLeft() < 0 ? ' over' : ''}"><div class="bd-top"><span>🎁 ${esc(S.room.treat.by)} 쏘는 1인 예산 ${won(budget())}</span><b>${budgetLeft() < 0 ? `${won(-budgetLeft())} 넘었어요` : `남은 ${won(budgetLeft())}`}</b></div><div class="bar"><i style="width:${Math.min(100, Math.round(cartSum() / budget() * 100))}%"></i></div>${budgetLeft() < 0 ? '<p>예산 안으로 줄여야 보낼 수 있어요.</p>' : ''}</div>` : ''}
@@ -1705,7 +1763,7 @@ function roomReview() {
   const lines = cartLines();
   if (!lines.length) return roomCart();
   const a = myAnswer();
-  const draft = {name: S.who, at: Date.now(), req: S.req.trim(), items: lines.map(l => ({m: l.item.id, n: l.n, name: l.item.name, price: l.item.price, s: l.item.store.id}))};
+  const draft = {name: S.who, at: Date.now(), req: S.req.trim(), storeReqs: draftStoreReqs(), items: lines.map(l => ({m: l.item.id, n: l.n, name: l.item.name, price: l.item.price, s: l.item.store.id}))};
   return `${topBar('보내기 전 확인', 'tab" data-t="cart', whoChip())}<div class="wrap review">
     ${closedNote()}${selectionStatus()}<h2 class="sec-title">${esc(S.who)} 님, 이렇게 보낼까요?</h2>
     ${ticket(draft, true)}
@@ -1718,8 +1776,8 @@ function ticket(a, preview = false) {
   for (const it of a.items) { const k = it.s; if (!byStore.has(k)) byStore.set(k, []); byStore.get(k).push(it); }
   const sum = a.items.reduce((x, i) => x + i.price * i.n, 0);
   return `<div class="ticket"><div class="t-head"><span>🍽 ${esc(S.room.title)}</span><b>${avatar(a.name)} ${esc(a.name)}</b><small>${preview ? '아직 제출 전 · 최종 확인' : `${new Date(a.at).toLocaleString('ko-KR', {month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})} 제출 완료`}</small></div>
-    ${[...byStore].map(([sid, ls]) => `<div class="t-store">${esc(storeOf(sid)?.name || '가게')}</div>${ls.map(i => `<div class="t-line"><span>${esc(i.name)} × ${i.n}</span><span>${i.price ? won(i.price * i.n) : '가격 확인'}</span></div>`).join('')}`).join('')}
-    <div class="t-req"><b>내 제출 전체 요청</b><p>${a.req ? esc(a.req) : '요청사항 없음'}</p></div>
+    ${[...byStore].map(([sid, ls]) => `<div class="t-store">${esc(storeOf(sid)?.name || '(지운 가게)')}</div>${ls.map(i => `<div class="t-line"><span>${esc(i.name)} × ${i.n}</span><span>${i.price ? won(i.price * i.n) : '가격 확인'}</span></div>`).join('')}<div class="t-req"><b>이 가게 요청사항</b><p>${esc(str(a.storeReqs?.[sid], 200).trim()) || '요청사항 없음'}</p></div>`).join('')}
+    ${legacyRequestHtml(a)}
     <div class="t-total"><span>합계</span><b>${won(sum)}</b></div></div>`;
 }
 function roomMine() {
@@ -1750,7 +1808,7 @@ function totals() {
       const g = groups.get(it.s);
       const k = it.m, row = g.items.get(k) || {name: it.name, n: 0, price: it.price};
       row.n += it.n; g.items.set(k, row); g.sum += it.price * it.n;
-      if (!g.who.has(a.name)) g.who.set(a.name, {ls: [], r: a.req});
+      if (!g.who.has(a.name)) g.who.set(a.name, {ls: [], r: str(a.storeReqs?.[it.s], 200).trim()});
       g.who.get(a.name).ls.push(`${it.name} ${it.n}`);
     }
   }
@@ -1786,11 +1844,13 @@ function byStoreHtml(host) {
   const groups = totals();
   if (!groups.length) return '<p class="muted empty-line">아직 아무도 안 골랐어요.</p>';
   const total = groups.reduce((a, g) => a + g.sum, 0);
-  return `${host ? `<label class="toggle no-print"><input type="checkbox" data-act="by-person" ${S.byPerson ? 'checked' : ''}> 가게 주문 메시지에 사람별로 나눠 적기</label>` : ''}
+  const unassigned = [...S.answers.values()].filter(a => a.req);
+  return `${unassigned.length ? `<section class="card unassigned-requests"><h3>가게 미지정 요청 · 이전 방식</h3><p class="hint">어느 가게의 요청인지 확인해 주세요. 아래 가게 주문 메시지에는 자동으로 넣지 않아요.</p>${unassigned.map(a => `<p><strong>${esc(a.name)}</strong><br>${esc(a.req)}</p>`).join('')}</section>` : ''}
+  ${host ? `<label class="toggle no-print"><input type="checkbox" data-act="by-person" ${S.byPerson ? 'checked' : ''}> 가게 주문 메시지에 사람별로 나눠 적기</label>` : ''}
   <div class="stack">${groups.map((g, i) => `<section class="card sum-card"><div class="sum-head">${thumb(g.store, 'sm')}<div><b>${esc(g.store.name)}</b>${g.store.phone ? `<span>${esc(g.store.phone)}</span>` : ''}</div><b class="sum-won">${won(g.sum)}</b></div>
     ${[...g.items.values()].map(it => `<div class="line"><span>${esc(it.name)}</span><b>${it.n}개</b></div>`).join('')}
     <p class="muted">${g.who.size}명: ${[...g.who.keys()].map(esc).join(', ')}</p>
-    ${[...g.who].some(([, x]) => x.r) ? `<div class="group-requests"><b>요청사항 · 제출 전체에 대한 요청</b>${[...g.who].filter(([, x]) => x.r).map(([w, x]) => `<p><strong>${esc(w)}</strong> · ${esc(x.ls.join(', '))}<br>${esc(x.r)}</p>`).join('')}</div>` : ''}
+    ${[...g.who].some(([, x]) => x.r) ? `<div class="group-requests"><b>이 가게 요청사항</b>${[...g.who].filter(([, x]) => x.r).map(([w, x]) => `<p><strong>${esc(w)}</strong> · ${esc(x.ls.join(', '))}<br>${esc(x.r)}</p>`).join('')}</div>` : ''}
     ${host ? `<details class="message-preview no-print"><summary>가게 주문 메시지 미리보기</summary><pre>${esc(ownerMessage(g))}</pre></details>` : ''}
     ${host ? `<div class="row no-print">${g.store.phone ? `<button class="btn gray" data-act="copy" data-text="${esc(g.store.phone)}" data-msg="📞 번호를 복사했어요">번호 복사</button>` : ''}<button class="btn" style="flex:1" data-act="copy-owner" data-i="${i}">가게 주문 메시지 복사</button></div>
     <div id="ownerBox${i}" hidden class="copy-box"><textarea class="input code-box" readonly></textarea></div>` : ''}</section>`).join('')}
@@ -1802,7 +1862,8 @@ function byPersonHtml(host) {
   if (!list.length) return '<p class="muted empty-line">아직 아무도 안 골랐어요.</p>';
   return `<div class="stack">${list.map(a => `<section class="card sum-card"><div class="sum-head"><i class="who-ava">${avatar(a.name)}</i><div><b>${esc(a.name)}</b><span>${new Date(a.at).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'})}</span></div><b class="sum-won">${won(a.items.reduce((x, i) => x + i.price * i.n, 0))}</b></div>
     ${a.items.map(i => `<div class="line"><span>${esc(i.name)} <small class="muted">${esc(storeOf(i.s)?.name || '')}</small></span><b>${i.n}개</b></div>`).join('')}
-    ${a.req ? `<p class="req-line">💬 ${esc(a.req)}</p>` : ''}
+    ${Object.entries(requestsForItems(a.storeReqs, a.items)).map(([sid, text]) => `<p class="req-line"><b>${esc(storeOf(sid)?.name || '(지운 가게)')} 요청사항</b><br>${esc(text)}</p>`).join('')}
+    ${legacyRequestHtml(a)}
     ${host ? `<button class="text-btn red no-print" data-act="answer-del-host" data-id="${esc(a.id)}">이 응답 지우기</button>` : ''}</section>`).join('')}</div>`;
 }
 function sumSeg() {
@@ -1939,11 +2000,11 @@ async function sendAnswer() {
   if (!lines.length || S.sending) return;
   if (locked()) { toast(S.room.closed ? '총무가 수합을 마감했어요' : '마감 시간이 지났어요'); return; }
   if (budget() && budgetLeft() < 0) { overBudgetToast(); return; }
-  S.req = (document.getElementById('req')?.value ?? S.req).trim().slice(0, 200);
+  captureRequests();
   S.sending = true; rerender();
   try {
     await FB.setDoc(FB.doc(DB, 'dinnerRooms', S.roomId, 'answers', answerId(S.who)), {
-      name: S.who, req: S.req, uid: UID, at: FB.serverTimestamp(),
+      name: S.who, req: S.req, storeReqs: draftStoreReqs(), uid: UID, at: FB.serverTimestamp(),
       items: lines.map(l => ({m: l.item.id, n: l.n, name: l.item.name, price: l.item.price, s: l.item.store.id})),
     });
     S.sending = false; S.sentAt = Date.now(); persistRoom();
@@ -1989,6 +2050,7 @@ function setWho(name, tab) {
     const a = S.answers.get(answerId(name));
     S.cart = a ? Object.fromEntries(a.items.filter(i => ITEMS.has(i.m)).map(i => [i.m, i.n])) : {};
     S.req = a ? a.req : '';
+    S.storeReqs = tidyStoreReqs(a?.storeReqs);
   }
   persistRoom();
   rememberRoom(S.roomId, {title: r.title});
@@ -2080,8 +2142,12 @@ document.addEventListener('click', async e => {
     }
     case 'who': setWho(el.dataset.who); break;
     case 'who-typed': setWho(document.getElementById('whoName').value); break;
-    case 'store': go({tab: 'store', store: id, mfilter: 'all'}); break;
+    case 'store': go({tab: 'store', store: id, mfilter: 'all', menuQuery: ''}); break;
     case 'mfilter': S.mfilter = el.dataset.f; rerender(); break;
+    case 'menu-search-clear': case 'menu-search-reset': {
+      S.menuQuery = ''; if (act === 'menu-search-reset') S.mfilter = 'all';
+      const input = document.getElementById('menuSearch'); input.value = ''; refreshMenuSearch(); input.focus(); break;
+    }
     case 'plus': case 'minus': {
       if (act === 'plus' && !fitsBudget(id, (S.cart[id] || 0) + 1)) { overBudgetToast(); break; }
       setQty(id, (S.cart[id] || 0) + (act === 'plus' ? 1 : -1)); rerender();
@@ -2097,12 +2163,12 @@ document.addEventListener('click', async e => {
       toast(had ? `✅ ${ITEMS.get(id).name} ${q}개로 바꿨어요` : `✅ ${ITEMS.get(id).name} ${q}개 골랐어요`); break;
     }
     case 'quick-req': {
-      S.req = (document.getElementById('req')?.value ?? S.req);
-      const t = el.dataset.t, parts = S.req.split(/\s*,\s*/).filter(Boolean);
-      S.req = (parts.includes(t) ? parts.filter(p => p !== t) : [...parts, t]).join(', ').slice(0, 200);
+      captureRequests();
+      const t = el.dataset.t, parts = str(S.storeReqs[id], 200).split(/\s*,\s*/).filter(Boolean);
+      setStoreRequest(id, (parts.includes(t) ? parts.filter(p => p !== t) : [...parts, t]).join(', '));
       persistRoom(); rerender(); break;
     }
-    case 'review': S.req = (document.getElementById('req')?.value ?? S.req).trim().slice(0, 200); persistRoom(); go({tab: 'review'}); break;
+    case 'review': captureRequests(); go({tab: 'review'}); break;
     case 'send': if (S.tab === 'review') sendAnswer(); break;
     case 'edit-mine': {
       const name = el.dataset.who;
@@ -2179,8 +2245,11 @@ document.addEventListener('input', e => {
     persistDraft(); return;
   }
   if (t.id === 'catSearch') { S.catQuery = t.value; document.getElementById('catList').innerHTML = catalogList(); return; }
-  if (t.id === 'req') {
-    S.req = t.value.slice(0, 200); persistRoom();
+  if (t.id === 'menuSearch') { S.menuQuery = t.value.slice(0, 80); refreshMenuSearch(); return; }
+  if (t.id === 'req' || t.dataset.storeReq) {
+    if (t.dataset.storeReq) setStoreRequest(t.dataset.storeReq, t.value); else S.req = t.value.slice(0, 200);
+    persistRoom();
+    if (t.dataset.storeReq) for (const b of t.closest('.store-request').querySelectorAll('[data-act="quick-req"]')) { const on = t.value.split(/\s*,\s*/).includes(b.dataset.t); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }
     const status = document.getElementById('selectionStatus'); if (status) status.outerHTML = selectionStatus();
     const nav = document.querySelector('.nav'); if (nav) nav.outerHTML = roomNav();
     const bar = document.querySelector('.cartbar');
@@ -2206,6 +2275,7 @@ function markDirtySoft() {
 }
 document.addEventListener('change', e => { if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && e.target.id === 'menuSearch') { e.preventDefault(); S.menuQuery = ''; e.target.value = ''; refreshMenuSearch(); return; }
   if (e.key === 'Escape' && document.getElementById('sheet')) { closeSheet(); return; }
   if (e.key === 'Enter' && e.target.id === 'whoName') document.querySelector('[data-act="who-typed"]')?.click();
 });
