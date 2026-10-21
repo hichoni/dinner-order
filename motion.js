@@ -1,5 +1,5 @@
 // Motion shared by the production room UI and the isolated design preview.
-function brandAsset() { return document.documentElement.dataset.palette === 'sky' ? 'assets/brand-sky.png' : 'assets/brand-mint.png'; }
+function brandAsset() { return document.documentElement.dataset.palette === 'sky' ? 'assets/brand-sky-alpha-v1.png' : 'assets/brand-mint-alpha-v1.png'; }
 function applyPalette(value) {
   const palette = value === 'sky' ? 'sky' : 'mint';
   document.documentElement.dataset.palette = palette;
