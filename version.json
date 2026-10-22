@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-22-shared-menus-compact",
+  "version": "2026-10-22-andong-catalog",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "45ac6d2eb4bfa0f6b01db45dea2c3533497e02b3",
+  "applicationCommit": "c3c0e131e29544e5453791bbf93da348eb83847d",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,9 +12,16 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "4ee9dc7c9e661a0eaf8379c0d7d545edc9af995e",
+  "sourceCommit": "096004133c894bb8416545cad7d61c5fdd9f29f4",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
-  "firestoreRulesSha256": "baba132888fb1244a78e87ae15de1976de307d82e1f0d3e1c1ef29d5e8548ac7"
+  "firestoreRulesSha256": "baba132888fb1244a78e87ae15de1976de307d82e1f0d3e1c1ef29d5e8548ac7",
+  "sourceRepository": "hichoni/app-gallery",
+  "sourceBranch": "claude/tender-tesla-aext4z",
+  "catalogueStores": 857,
+  "catalogueMenus": 16978,
+  "neighbourhoodSearch": true,
+  "splitCatalogue": true,
+  "automaticRefresh": false
 }

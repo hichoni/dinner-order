@@ -1,0 +1,886 @@
+{
+ "generatedAt": "2026-10-22",
+ "existingStoresPreserved": 226,
+ "addedStores": 631,
+ "addedThisMerge": 1,
+ "totalStores": 857,
+ "queriesChecked": 227,
+ "candidatesFound": 732,
+ "uncheckedCandidates": [],
+ "regions": {
+  "옥동": {
+   "candidates": 184,
+   "stores": 169,
+   "menus": 4459,
+   "menuPhotos": 3637,
+   "storePhotos": 167,
+   "phones": 163,
+   "atMenuLimit": 33
+  },
+  "정하·강남": {
+   "candidates": 85,
+   "stores": 79,
+   "menus": 1461,
+   "menuPhotos": 1027,
+   "storePhotos": 77,
+   "phones": 74,
+   "atMenuLimit": 9
+  },
+  "송현·노하": {
+   "candidates": 83,
+   "stores": 60,
+   "menus": 1300,
+   "menuPhotos": 907,
+   "storePhotos": 59,
+   "phones": 55,
+   "atMenuLimit": 9
+  },
+  "시내권": {
+   "candidates": 219,
+   "stores": 183,
+   "menus": 3427,
+   "menuPhotos": 2747,
+   "storePhotos": 178,
+   "phones": 159,
+   "atMenuLimit": 20
+  },
+  "이천동": {
+   "candidates": 1,
+   "stores": 1,
+   "menus": 27,
+   "menuPhotos": 27,
+   "storePhotos": 1,
+   "phones": 1,
+   "atMenuLimit": 0
+  },
+  "서후면": {
+   "candidates": 1,
+   "stores": 1,
+   "menus": 1,
+   "menuPhotos": 1,
+   "storePhotos": 1,
+   "phones": 0,
+   "atMenuLimit": 0
+  },
+  "용상·송천": {
+   "candidates": 159,
+   "stores": 138,
+   "menus": 2777,
+   "menuPhotos": 2182,
+   "storePhotos": 135,
+   "phones": 126,
+   "atMenuLimit": 12
+  }
+ },
+ "failed": {},
+ "noFixedMenu": [
+  {
+   "id": "1707744519",
+   "name": "맥도날드 안동DT점",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1707744519/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "31833532",
+   "name": "고봉민김밥인 안동옥동점",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/31833532/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1128679180",
+   "name": "김가네 안동옥동점",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1128679180/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "33148290",
+   "name": "롯데리아 안동터미널점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/33148290/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1332896905",
+   "name": "상지떡볶이튀김",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1332896905/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1133085895",
+   "name": "한양왕족발",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1133085895/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1362011240",
+   "name": "만원족발 안동점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1362011240/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "348895947",
+   "name": "김밥킹 안동용상점",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/348895947/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1593764703",
+   "name": "청춘당꽈배기 안동송현점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1593764703/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "21124885",
+   "name": "육향족발",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/21124885/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1030968419",
+   "name": "롯데리아 안동문화의거리점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1030968419/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1432828571",
+   "name": "마라순코우 마라탕",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1432828571/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "33811334",
+   "name": "신전떡볶이 안동송현점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/33811334/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1633250700",
+   "name": "파리바게뜨 안동대학교점",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1633250700/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1206971813",
+   "name": "플러스홈마트베이커리",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1206971813/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "37931365",
+   "name": "김성구의성마늘치킨 송현점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/37931365/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "32377787",
+   "name": "동성루",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/32377787/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1415764541",
+   "name": "온정",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1415764541/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "38464268",
+   "name": "무보까 국밥 안동점",
+   "area": "정하·강남",
+   "source": "https://m.place.naver.com/restaurant/38464268/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "15390676",
+   "name": "미가회초밥",
+   "area": "정하·강남",
+   "source": "https://m.place.naver.com/restaurant/15390676/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1160848525",
+   "name": "우마적 고깃집",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1160848525/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "2083242863",
+   "name": "육골난망",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/2083242863/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1368827048",
+   "name": "돈기부여돈까스전문점 안동점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1368827048/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2071952516",
+   "name": "빵떡대장 안동터미널점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/2071952516/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "20615380",
+   "name": "팬더하우스 정하점",
+   "area": "정하·강남",
+   "source": "https://m.place.naver.com/restaurant/20615380/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1959946714",
+   "name": "피자셰프",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1959946714/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "21279473",
+   "name": "대번회초밥",
+   "area": "정하·강남",
+   "source": "https://m.place.naver.com/restaurant/21279473/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1338358748",
+   "name": "뚜레쥬르 경북안동용상점",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1338358748/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "38019341",
+   "name": "정희네국밥",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/38019341/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1251397679",
+   "name": "명인 안동소주 동림직영점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1251397679/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "not_a_food_business"
+  },
+  {
+   "id": "35215504",
+   "name": "리미에르베이커리",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/35215504/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "2000476959",
+   "name": "월영교달빵",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/2000476959/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1258328664",
+   "name": "햇뜸프레시",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1258328664/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1349788752",
+   "name": "홍여사네 1인찜닭 홍찜 안동정하점",
+   "area": "정하·강남",
+   "source": "https://m.place.naver.com/restaurant/1349788752/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15385442",
+   "name": "성창반점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/15385442/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1410080483",
+   "name": "돈까스 주는 찜요리 끝판왕 찜뚝딱 안동송현점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1410080483/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1989177093",
+   "name": "쑤테이블",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1989177093/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1221863498",
+   "name": "수상한탕수육 안동1호점",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1221863498/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1050338572",
+   "name": "빵사부식빵공방 안동점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1050338572/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1270938791",
+   "name": "학교앞분식",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1270938791/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1189958613",
+   "name": "랑스튜디오&카페&샌드위치.햄버거",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/1189958613/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15384902",
+   "name": "주인손국수",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/15384902/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2042179820",
+   "name": "소화카페",
+   "area": "송현·노하",
+   "source": "https://m.place.naver.com/restaurant/2042179820/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2007992194",
+   "name": "히익",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/2007992194/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "507671438",
+   "name": "광성식당",
+   "area": "정하·강남",
+   "source": "https://m.place.naver.com/restaurant/507671438/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "15342462",
+   "name": "메차쿠차돈까스우동",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/15342462/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2055012503",
+   "name": "롯데리아 안동용상점",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/2055012503/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "32608197",
+   "name": "옛날돼지국밥",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/32608197/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "35458252",
+   "name": "준코 안동옥동점",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/35458252/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1586218944",
+   "name": "동원족발",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1586218944/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "31363722",
+   "name": "스시민",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/31363722/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1752496463",
+   "name": "더돈까스 안동점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1752496463/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1519964202",
+   "name": "솔뫼찜닭",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1519964202/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1146767401",
+   "name": "식빵공방 안동점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1146767401/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15341180",
+   "name": "명물닭갈비",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/15341180/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "848068444",
+   "name": "만찐두빵",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/848068444/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2072971226",
+   "name": "라운지 안동",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/2072971226/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1078471052",
+   "name": "파리바게뜨 안동옥동2호점",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1078471052/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15347542",
+   "name": "자금성",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/15347542/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1118420016",
+   "name": "진이나루터",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1118420016/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2057884175",
+   "name": "산책",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/2057884175/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1631102874",
+   "name": "온담",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1631102874/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "34417340",
+   "name": "탁촌장안동참마보리빵",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/34417340/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1492548902",
+   "name": "화이트리에 안동점",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1492548902/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "37107593",
+   "name": "브루클린149",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/37107593/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1699045413",
+   "name": "전주꼬부리콩나물국밥보쌈",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1699045413/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1764544512",
+   "name": "안동찜닭영가통닭송천점",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/1764544512/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2086986776",
+   "name": "태백식당",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/2086986776/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1975678383",
+   "name": "황가보쌈족발 안동점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1975678383/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "4105690551",
+   "name": "하회당",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/4105690551/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15349222",
+   "name": "목성교황가보쌈",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/15349222/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "4112150706",
+   "name": "신짜오하이퐁",
+   "area": "용상·송천",
+   "source": "https://m.place.naver.com/restaurant/4112150706/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1476203360",
+   "name": "혼밥천하",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1476203360/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1169980781",
+   "name": "바른안심탕수육",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1169980781/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1669872175",
+   "name": "바보만두",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1669872175/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1054403050",
+   "name": "안동 만두",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1054403050/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15377292",
+   "name": "만리장성",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/15377292/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1967756934",
+   "name": "안선생 도시락",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1967756934/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1756345551",
+   "name": "우향족발 & 도시락",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1756345551/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "31791525",
+   "name": "장군왕족발",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/31791525/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1299429432",
+   "name": "안동만두",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1299429432/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1375617209",
+   "name": "도가원 이마트 안동점",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1375617209/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1231517206",
+   "name": "밀양돼지국밥",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1231517206/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1351913885",
+   "name": "베희커리",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1351913885/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "32155772",
+   "name": "금동쟁반짜장",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/32155772/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1582524540",
+   "name": "소하테이블",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/1582524540/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1082028463",
+   "name": "꿔바로우주는마라탕 안동점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1082028463/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2029192410",
+   "name": "파티그리닝",
+   "area": "옥동",
+   "source": "https://m.place.naver.com/restaurant/2029192410/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "15358723",
+   "name": "남문통닭",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/15358723/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1314118606",
+   "name": "방글이김밥",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1314118606/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1549701136",
+   "name": "예전손칼국수집",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1549701136/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "37493763",
+   "name": "예천찜닭",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/37493763/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1129034296",
+   "name": "1인칭피자시점 안동점",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1129034296/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1775560839",
+   "name": "옥이네그럴만두하지",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1775560839/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "37069882",
+   "name": "길성원",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/37069882/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "4503547404",
+   "name": "유빈베트남쌀국수",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/4503547404/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2066296154",
+   "name": "구시장맛집",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/2066296154/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1014106891",
+   "name": "대박식당",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1014106891/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "12811719",
+   "name": "왕돈까스",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/12811719/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2035947622",
+   "name": "모락모락",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/2035947622/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1533373475",
+   "name": "보쌈편육의정석",
+   "area": "시내권",
+   "source": "https://m.place.naver.com/restaurant/1533373475/menu/list",
+   "checkedAt": "2026-10-22",
+   "reason": "no_fixed_menu_found"
+  }
+ ]
+}
