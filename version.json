@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-22-andong-yecheon-catalog",
+  "version": "2026-10-22-andong-yecheon-photos",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "60899cf",
+  "sourceCommit": "35de874",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -24,5 +24,6 @@
   "neighbourhoodSearch": true,
   "splitCatalogue": true,
   "automaticRefresh": false,
-  "yecheon": true
+  "yecheon": true,
+  "menuPhotoFill": "review+ref-labelled"
 }

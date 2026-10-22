@@ -38,3 +38,9 @@ python3 yecheon.py menus --cache ../yecheon-cache --delay 3
 python3 yecheon.py merge --cache ../yecheon-cache
 python3 tidy.py && python3 test_yecheon.py
 ```
+
+## 4. 사진 없는 메뉴 채우기 (`tools/naver/photos.py`, 출처 표시)
+사진 없는 메뉴 3,784개 → **643개**. 가게가 올린 메뉴 사진은 하나도 바꾸지 않았어요.
+- **손님 사진 408개**(`imgFrom: 'review'`): 그 가게 방문자 리뷰 중 그 메뉴 이름만 나오는 사진 리뷰의 첫 사진. 앱에 「손님 사진」.
+- **비슷한 메뉴 사진 3,150개**(`imgFrom: 'ref'`): 다른 가게의 같은·비슷한 이름 메뉴 사진(같은 종류 가게 먼저). 앱에 「비슷한 메뉴 사진」.
+- 코덱스 판의 「그 가게 사진만」 원칙 대신, 사용자 요청에 따라 출처를 표시해 채웠어요.
