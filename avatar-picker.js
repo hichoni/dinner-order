@@ -86,6 +86,43 @@ function migrateMyAvatar() {
   avatarMigrationAttempts.add(key);
   saveAvatarChoice(S.who,choice).catch(()=>{});
 }
+function avatarSaveMessage(error,name) {
+  const code=String(error?.code||error?.message||error);
+  if(/permission/.test(code)) {
+    if(!S.host&&S.room?.closed)return '모임이 마감되어 캐릭터를 바꿀 수 없어요. 메뉴는 확인할 수 있어요.';
+    const owner=avatarOwner(name);
+    if(!S.host&&owner&&owner!==UID)return '다른 기기에서 고른 이름이에요. 이 이름의 메뉴는 확인할 수 있어요.';
+    return '캐릭터를 저장하지 못했어요. 메뉴를 먼저 고르거나 다시 시도해 주세요.';
+  }
+  return '캐릭터를 저장하지 못했어요. 연결을 확인하거나 메뉴를 먼저 골라 주세요.';
+}
+function continueAvatarPicker(p=avatarPicker) {
+  if(!p||p!==avatarPicker||p.roomId!==S.roomId||p.saving||p.rolling)return false;
+  closeAvatarPicker(false);setWho(p.name);
+  return true;
+}
+async function confirmAvatarPicker(p=avatarPicker) {
+  if(!p||p!==avatarPicker||p.roomId!==S.roomId||p.saving||p.rolling)return;
+  const {name,draft,roomId}=p;
+  if(!S.profilesReady) {
+    if(S.profilesError)continueAvatarPicker(p);
+    else syncAvatarPicker();
+    return;
+  }
+  if(!canEditAvatar(name)){continueAvatarPicker(p);return;}
+  p.saving=true;p.error='';syncAvatarPicker();
+  try {
+    const saved=await saveAvatarChoice(name,draft);
+    if(avatarPicker!==p||S.roomId!==roomId)return;
+    p.saving=false;
+    if(!saved){closeAvatarPicker();return;}
+    continueAvatarPicker(p);
+  } catch(error) {
+    if(avatarPicker!==p||S.roomId!==roomId)return;
+    p.saving=false;p.error=avatarSaveMessage(error,name);
+    syncAvatarPicker();
+  }
+}
 const avatarDice = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="8" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/></svg>';
 function avatarPickerHTML(picker) {
   const p=picker.draft;
@@ -99,7 +136,7 @@ function avatarPickerHTML(picker) {
       <div class="ap-grid-label"><b>직접 고르기</b><span>16종</span></div>
       <div class="ap-foods" role="group" aria-label="음식 캐릭터">${FOOD_CHARACTERS.map((food,i)=>`<button class="ap-food" data-avatar-food="${i}" aria-label="${food.name}" aria-pressed="${p.food===i}"><img src="${food.src}" alt="" width="56" height="56"><span>${food.name}</span></button>`).join('')}</div>
     </div>
-    <footer class="ap-foot"><button class="ap-confirm" data-avatar-action="confirm">이 캐릭터로 담기 <span aria-hidden="true">↗</span></button><small class="ap-status" role="status" aria-live="polite">같이 먹는 사람들에게도 이렇게 보여요</small></footer>
+    <footer class="ap-foot"><button class="ap-confirm" data-avatar-action="confirm">이 캐릭터로 담기 <span aria-hidden="true">↗</span></button><button class="ap-skip" data-avatar-action="continue" hidden>캐릭터는 나중에 · 메뉴 보기</button><small class="ap-status" role="status" aria-live="polite">같이 먹는 사람들에게도 이렇게 보여요</small></footer>
   </section>`;
 }
 function openAvatarPicker(name) {
@@ -117,24 +154,8 @@ function openAvatarPicker(name) {
     if(button.dataset.avatarAction==='cancel'){closeAvatarPicker();return;}
     if(p.rolling||p.saving)return;
     if(button.dataset.avatarAction==='roll'){if(canEditAvatar(p.name))rollAvatarPicker();return;}
-    if(button.dataset.avatarAction==='confirm'){
-      const {name,draft,roomId}=p;
-      if(roomId!==S.roomId){closeAvatarPicker();return;}
-      if(!S.profilesReady){syncAvatarPicker();return;}
-      if(!canEditAvatar(name)){closeAvatarPicker(false);setWho(name);return;}
-      p.saving=true;p.error='';syncAvatarPicker();
-      try{
-        const saved=await saveAvatarChoice(name,draft);
-        if(avatarPicker!==p)return;
-        if(!saved){closeAvatarPicker();return;}
-        closeAvatarPicker(false);setWho(name);
-      }catch(error){
-        if(avatarPicker!==p)return;
-        p.saving=false;p.error=/permission/.test(String(error.code||error.message))?'이름이 이미 선택됐어요. 다른 이름으로 골라 주세요.':'저장하지 못했어요. 연결을 확인하고 다시 눌러 주세요.';
-        syncAvatarPicker();
-      }
-      return;
-    }
+    if(button.dataset.avatarAction==='continue'){continueAvatarPicker(p);return;}
+    if(button.dataset.avatarAction==='confirm'){await confirmAvatarPicker(p);return;}
     if(!canEditAvatar(p.name)||!S.profilesReady)return;
     if(button.hasAttribute('data-avatar-food'))p.draft.food=Number(button.dataset.avatarFood);
     if(button.hasAttribute('data-avatar-tone'))p.draft.tone=Number(button.dataset.avatarTone);
@@ -155,8 +176,9 @@ function syncAvatarPicker() {
   const editable=canEditAvatar(p.name),ready=S.profilesReady;
   if(!editable&&!p.rolling&&!p.saving){p.draft=avatarChoice(p.name);updateAvatarPicker();}
   for(const b of bg.querySelectorAll('[data-avatar-food],[data-avatar-tone],.ap-roll'))b.disabled=!ready||!editable||p.saving||p.rolling;
-  const confirm=bg.querySelector('.ap-confirm');confirm.disabled=!ready||p.saving||p.rolling;
-  confirm.textContent=p.saving?'같이 보는 중…':editable?'이 캐릭터로 담기 ↗':'이 이름으로 보기 ↗';
+  const confirm=bg.querySelector('.ap-confirm');confirm.disabled=(!ready&&!S.profilesError)||p.saving||p.rolling;
+  confirm.textContent=p.saving?'같이 보는 중…':!ready&&S.profilesError?'메뉴 먼저 보기 ↗':editable?'이 캐릭터로 담기 ↗':'이 이름으로 보기 ↗';
+  const skip=bg.querySelector('.ap-skip');skip.hidden=!(p.error||S.profilesError);skip.disabled=p.saving||p.rolling;
   bg.querySelector('.ap-status').textContent=p.error||S.profilesError||(!ready?'캐릭터를 불러오는 중…':p.saving?'캐릭터와 배경색을 저장하고 있어요':!editable?'이 캐릭터는 선택한 기기나 방장이 바꿀 수 있어요':'같이 먹는 사람들에게도 이렇게 보여요');
 }
 function updateAvatarPicker(announce=true) {

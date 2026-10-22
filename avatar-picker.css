@@ -48,3 +48,5 @@
 @media(prefers-reduced-motion:reduce){.avatar-picker,.avatar-picker *{animation:none!important;transition:none!important}.ap-spark{display:none}}
 
 .mm .chip-who .chip-avatar{display:inline-flex;width:28px;height:28px;flex-shrink:0;font-style:normal;background:none}.mm .chip-avatar .food-avatar{padding:1px;border-radius:10px}
+
+.ap-skip{border:0;background:transparent;color:#216b65;font:inherit;font-size:13px;padding:7px 10px;text-decoration:underline;text-underline-offset:3px}.ap-skip[hidden]{display:none}.ap-skip:disabled{opacity:.55}.ap-foot .ap-status{text-align:center;overflow-wrap:anywhere}

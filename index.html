@@ -1790,7 +1790,15 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 <meta name="twitter:title" content="다맛다 — 총무도 밥 좀 먹자.">
 <meta name="twitter:description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta name="twitter:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
-</head>
+<style id="room-updates">.missing-menu{display:flex;align-items:center;justify-content:space-between;gap:10px;width:calc(100% - 28px);max-width:760px;margin:10px auto 90px;padding:12px 14px;border:1px dashed #90bcb5;border-radius:14px;background:#ffffffa8;color:#386760;text-align:left;font:inherit;font-size:13px}.missing-menu b{font-weight:650;color:#087d75}.shared-menu-help{font-size:13px;line-height:1.5;color:#54766f;margin:8px 0 18px}.shared-menu-inputs{display:grid;grid-template-columns:1fr 90px;gap:12px}.shared-menu-error{font-size:13px;color:#ae3c33;min-height:0;margin:4px 0 12px}.shared-menu-error:empty{display:none}.shared-menu-sheet .sheet-body{padding-top:28px}.shared-menu-tag{font-size:10px;font-weight:600;color:#4a7d72;background:#e7f4ed;border-radius:5px;padding:2px 5px;white-space:nowrap;margin-right:5px}.shared-menu-sheet .field{margin-bottom:12px}
+.summary-store-line{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(70px,.85fr) 28px auto;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #dce8e5;font-size:14px;line-height:1.35}.summary-store-line>strong{font-size:15px;font-weight:650;overflow-wrap:anywhere}.summary-menu-people{font-size:12px;color:#53766c;overflow-wrap:anywhere}.summary-menu-count{font-size:12px;color:#52777a;text-align:right;white-space:nowrap}.summary-menu-price{white-space:nowrap;text-align:right;color:#254a56;font-size:14px}.store-summary-card.sum-card{padding:12px 14px}.store-summary-card .sum-head{padding-bottom:9px;margin-bottom:0}.store-summary-card .order-people{margin:8px 0;font-size:11px}.store-summary-card .group-requests{padding:8px 10px;margin:9px 0}.store-summary-card .group-requests p{margin:5px 0}.store-summary-card .sum-head img,.store-summary-card .sum-head .thumb{width:32px;height:32px}
+.person-summary-list.stack{gap:7px}.person-summary-row.card{display:grid;grid-template-columns:108px minmax(0,1fr) auto 32px;align-items:center;gap:9px;padding:9px 12px;border-radius:14px;min-height:50px}.person-summary-who{display:flex;align-items:center;gap:6px;min-width:0;font-size:12px}.person-summary-who .food-avatar{width:27px;height:27px;padding:1px;border-radius:9px;flex-shrink:0}.person-summary-who b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.person-summary-menus{min-width:0;display:grid;gap:4px}.person-summary-menu{display:flex;align-items:center;gap:8px;min-width:0;font-size:14px;line-height:1.35}.person-summary-menu>strong{min-width:0;overflow-wrap:anywhere;font-weight:650}.person-summary-menu>small{font-size:11px;color:#67817d}.person-summary-menu .person-menu-qty{margin-left:auto;color:#60817c;font-size:12px;white-space:nowrap}.person-menu-price{white-space:nowrap;font-size:12px;color:#4a6b66}.person-summary-total{font-size:13px;color:#087d7a;white-space:nowrap;text-align:right}.delete-order{display:grid;place-items:center;width:32px;height:32px;border:0;border-radius:9px;background:transparent;color:#77938c;padding:6px;cursor:pointer}.delete-order svg{width:17px;height:17px}.delete-order:hover,.delete-order.is-armed{background:#fff0eb;color:#b84339}.person-summary-requests{grid-column:2/-1;font-size:12px;line-height:1.4;color:#5b756e;padding-top:4px;border-top:1px dashed #dce8e5}.person-summary-requests p{margin:3px 0}.person-summary-row.without-delete{grid-template-columns:108px minmax(0,1fr) auto}
+@media(max-width:600px){.person-summary-row.card{grid-template-columns:76px minmax(0,1fr) auto 30px;gap:6px;padding:8px 9px}.person-summary-row.without-delete{grid-template-columns:76px minmax(0,1fr) auto}.person-summary-who{gap:4px;font-size:11px}.person-summary-who .food-avatar{width:22px;height:22px}.person-summary-menu{font-size:13px;gap:5px;flex-wrap:wrap}.person-summary-total{font-size:12px}.person-menu-qty{font-size:11px}.person-summary-menu>small{display:none}.delete-order{width:30px;height:34px}.summary-store-line{grid-template-columns:minmax(0,1fr) minmax(56px,.68fr) 24px auto;gap:6px;padding:8px 0}.summary-store-line>strong{font-size:13px}.summary-menu-people{font-size:11px}.summary-menu-price{font-size:12px}.store-summary-card.sum-card{padding:10px 11px}.summary-menu-count{font-size:11px}.missing-menu{margin-bottom:94px}}
+@media print{.person-summary-row.card{break-inside:avoid;box-shadow:none;border:1px solid #ddd}.person-summary-requests{color:#222}.summary-menu-people{color:#333}}
+@media(max-width:600px){.host-layout .host-room-title{margin:0 0 8px;padding-top:0;padding-bottom:0}.host-layout .host-room-title h2{font-size:19px;line-height:1.3;margin:0}.host-layout .host-room-title p{font-size:11px;margin:4px 0}.host-layout .host-overview{gap:8px;margin-bottom:10px}.host-overview .invite-copy{min-height:54px;padding:8px 12px}.host-overview .invite-copy small{display:none}.host-overview .invite-icon{width:28px;height:28px}.host-overview .invite-share{width:48px;min-height:54px}.host-overview .participation{padding:12px 14px;border-radius:16px}.host-overview .participation-top>b{font-size:26px}.host-overview .participation-track{margin:7px 0}.host-overview .pending-people{margin-top:6px;padding-top:6px}.person-summary-requests p{white-space:pre-wrap}}
+
+.ap-skip{border:0;background:transparent;color:#216b65;font:inherit;font-size:13px;padding:7px 10px;text-decoration:underline;text-underline-offset:3px}.ap-skip[hidden]{display:none}.ap-skip:disabled{opacity:.55}.ap-foot .ap-status{text-align:center;overflow-wrap:anywhere}
+</style></head>
 <body>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -1914,6 +1922,43 @@ function migrateMyAvatar() {
   avatarMigrationAttempts.add(key);
   saveAvatarChoice(S.who,choice).catch(()=>{});
 }
+function avatarSaveMessage(error,name) {
+  const code=String(error?.code||error?.message||error);
+  if(/permission/.test(code)) {
+    if(!S.host&&S.room?.closed)return '모임이 마감되어 캐릭터를 바꿀 수 없어요. 메뉴는 확인할 수 있어요.';
+    const owner=avatarOwner(name);
+    if(!S.host&&owner&&owner!==UID)return '다른 기기에서 고른 이름이에요. 이 이름의 메뉴는 확인할 수 있어요.';
+    return '캐릭터를 저장하지 못했어요. 메뉴를 먼저 고르거나 다시 시도해 주세요.';
+  }
+  return '캐릭터를 저장하지 못했어요. 연결을 확인하거나 메뉴를 먼저 골라 주세요.';
+}
+function continueAvatarPicker(p=avatarPicker) {
+  if(!p||p!==avatarPicker||p.roomId!==S.roomId||p.saving||p.rolling)return false;
+  closeAvatarPicker(false);setWho(p.name);
+  return true;
+}
+async function confirmAvatarPicker(p=avatarPicker) {
+  if(!p||p!==avatarPicker||p.roomId!==S.roomId||p.saving||p.rolling)return;
+  const {name,draft,roomId}=p;
+  if(!S.profilesReady) {
+    if(S.profilesError)continueAvatarPicker(p);
+    else syncAvatarPicker();
+    return;
+  }
+  if(!canEditAvatar(name)){continueAvatarPicker(p);return;}
+  p.saving=true;p.error='';syncAvatarPicker();
+  try {
+    const saved=await saveAvatarChoice(name,draft);
+    if(avatarPicker!==p||S.roomId!==roomId)return;
+    p.saving=false;
+    if(!saved){closeAvatarPicker();return;}
+    continueAvatarPicker(p);
+  } catch(error) {
+    if(avatarPicker!==p||S.roomId!==roomId)return;
+    p.saving=false;p.error=avatarSaveMessage(error,name);
+    syncAvatarPicker();
+  }
+}
 const avatarDice = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="8" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="8" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="8" cy="16" r="1" fill="currentColor"/><circle cx="16" cy="16" r="1" fill="currentColor"/></svg>';
 function avatarPickerHTML(picker) {
   const p=picker.draft;
@@ -1927,7 +1972,7 @@ function avatarPickerHTML(picker) {
       <div class="ap-grid-label"><b>직접 고르기</b><span>16종</span></div>
       <div class="ap-foods" role="group" aria-label="음식 캐릭터">${FOOD_CHARACTERS.map((food,i)=>`<button class="ap-food" data-avatar-food="${i}" aria-label="${food.name}" aria-pressed="${p.food===i}"><img src="${food.src}" alt="" width="56" height="56"><span>${food.name}</span></button>`).join('')}</div>
     </div>
-    <footer class="ap-foot"><button class="ap-confirm" data-avatar-action="confirm">이 캐릭터로 담기 <span aria-hidden="true">↗</span></button><small class="ap-status" role="status" aria-live="polite">같이 먹는 사람들에게도 이렇게 보여요</small></footer>
+    <footer class="ap-foot"><button class="ap-confirm" data-avatar-action="confirm">이 캐릭터로 담기 <span aria-hidden="true">↗</span></button><button class="ap-skip" data-avatar-action="continue" hidden>캐릭터는 나중에 · 메뉴 보기</button><small class="ap-status" role="status" aria-live="polite">같이 먹는 사람들에게도 이렇게 보여요</small></footer>
   </section>`;
 }
 function openAvatarPicker(name) {
@@ -1945,24 +1990,8 @@ function openAvatarPicker(name) {
     if(button.dataset.avatarAction==='cancel'){closeAvatarPicker();return;}
     if(p.rolling||p.saving)return;
     if(button.dataset.avatarAction==='roll'){if(canEditAvatar(p.name))rollAvatarPicker();return;}
-    if(button.dataset.avatarAction==='confirm'){
-      const {name,draft,roomId}=p;
-      if(roomId!==S.roomId){closeAvatarPicker();return;}
-      if(!S.profilesReady){syncAvatarPicker();return;}
-      if(!canEditAvatar(name)){closeAvatarPicker(false);setWho(name);return;}
-      p.saving=true;p.error='';syncAvatarPicker();
-      try{
-        const saved=await saveAvatarChoice(name,draft);
-        if(avatarPicker!==p)return;
-        if(!saved){closeAvatarPicker();return;}
-        closeAvatarPicker(false);setWho(name);
-      }catch(error){
-        if(avatarPicker!==p)return;
-        p.saving=false;p.error=/permission/.test(String(error.code||error.message))?'이름이 이미 선택됐어요. 다른 이름으로 골라 주세요.':'저장하지 못했어요. 연결을 확인하고 다시 눌러 주세요.';
-        syncAvatarPicker();
-      }
-      return;
-    }
+    if(button.dataset.avatarAction==='continue'){continueAvatarPicker(p);return;}
+    if(button.dataset.avatarAction==='confirm'){await confirmAvatarPicker(p);return;}
     if(!canEditAvatar(p.name)||!S.profilesReady)return;
     if(button.hasAttribute('data-avatar-food'))p.draft.food=Number(button.dataset.avatarFood);
     if(button.hasAttribute('data-avatar-tone'))p.draft.tone=Number(button.dataset.avatarTone);
@@ -1983,8 +2012,9 @@ function syncAvatarPicker() {
   const editable=canEditAvatar(p.name),ready=S.profilesReady;
   if(!editable&&!p.rolling&&!p.saving){p.draft=avatarChoice(p.name);updateAvatarPicker();}
   for(const b of bg.querySelectorAll('[data-avatar-food],[data-avatar-tone],.ap-roll'))b.disabled=!ready||!editable||p.saving||p.rolling;
-  const confirm=bg.querySelector('.ap-confirm');confirm.disabled=!ready||p.saving||p.rolling;
-  confirm.textContent=p.saving?'같이 보는 중…':editable?'이 캐릭터로 담기 ↗':'이 이름으로 보기 ↗';
+  const confirm=bg.querySelector('.ap-confirm');confirm.disabled=(!ready&&!S.profilesError)||p.saving||p.rolling;
+  confirm.textContent=p.saving?'같이 보는 중…':!ready&&S.profilesError?'메뉴 먼저 보기 ↗':editable?'이 캐릭터로 담기 ↗':'이 이름으로 보기 ↗';
+  const skip=bg.querySelector('.ap-skip');skip.hidden=!(p.error||S.profilesError);skip.disabled=p.saving||p.rolling;
   bg.querySelector('.ap-status').textContent=p.error||S.profilesError||(!ready?'캐릭터를 불러오는 중…':p.saving?'캐릭터와 배경색을 저장하고 있어요':!editable?'이 캐릭터는 선택한 기기나 방장이 바꿀 수 있어요':'같이 먹는 사람들에게도 이렇게 보여요');
 }
 function updateAvatarPicker(announce=true) {
@@ -2527,7 +2557,7 @@ function tidyAnswer(id, d) {
 
 // ---------- 상태 ----------
 const S = {
-  route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', host: false, loading: false, error: '',
+  route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: false, error: '',
   tab: 'menu', store: null, mfilter: 'all', menuQuery: '',
   who: '', cart: {}, req: '', storeReqs: {}, sentAt: 0,
   draft: null, catFor: 'create', catQuery: '', catArea: '도청신도시', catCat: 'all', catPicked: new Set(),
@@ -2582,7 +2612,7 @@ function stopListening() { for (const u of unsub) try { u(); } catch {} unsub = 
 
 async function openRoom(id, key, want = '') {
   stopListening();
-  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all'});
+  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all'});
   const local = roomLocal();
   Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), sentAt: local.sentAt || 0, tab: local.who ? 'menu' : 'who'});
   render();
@@ -2635,9 +2665,14 @@ async function openRoom(id, key, want = '') {
       syncAvatarPicker(); migrateMyAvatar(); keepView();
     }, e => {
       if (S.roomId !== id) return;
-      S.profilesReady = false; S.profilesError = friendly(e);
+      S.profilesReady = false; S.profilesError = avatarSaveMessage(e,S.who);
       syncAvatarPicker();
     }));
+    unsub.push(FB.onSnapshot(FB.collection(DB,'dinnerRooms',id,'sharedMenus'),snap=>{
+      if(S.roomId!==id||snap.metadata?.hasPendingWrites)return;
+      S.sharedMenus=new Map(snap.docs.map(d=>[d.id,tidySharedMenu(d.id,d.data())]).filter(([,menu])=>menu));
+      S.sharedMenusError='';reindex();keepView();
+    },error=>{if(S.roomId===id)S.sharedMenusError=friendly(error);}));
   } catch (e) { S.loading = false; S.error = friendly(e); render(); }
 }
 // 실시간으로 바뀌면 다시 그리되, 글자를 적고 있으면 방해하지 않아요.
@@ -2651,9 +2686,87 @@ function refreshLive() { const n = document.getElementById('liveCount'); if (n) 
 // 숫자가 바뀌면 톡 튀어요
 function bumpLive() { if (!S.bumpLive) return; S.bumpLive = false; for (const e of document.querySelectorAll('#liveCount, .prog-num b')) { e.classList.remove('bump'); void e.offsetWidth; e.classList.add('bump'); } }
 
+// Menus added by participants belong to this room, never to the source catalog.
+const sharedMenuKey = name => String(name||'').normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g,'');
+function tidySharedMenu(id,data) {
+  if(!/^custom-[a-f0-9]{30}$/.test(id)||!data||typeof data.name!=='string'||!data.name.trim()||data.name.length>40
+    ||typeof data.storeId!=='string'||!data.storeId||data.storeId.length>40||!Number.isInteger(data.price)||data.price<0||data.price>10000000
+    ||typeof data.uid!=='string'||!data.uid||data.uid.length>128)return null;
+  return {id,name:data.name,price:data.price,storeId:data.storeId,shared:true,by:str(data.by,20),uid:data.uid,desc:'',tags:[],img:'',emoji:''};
+}
+function mergeSharedMenus() {
+  for(const store of S.room?.stores||[]) {
+    store.menu=store.menu.filter(menu=>!menu.shared);
+    const known=new Set(store.menu.map(menu=>menu.id));
+    for(const menu of (S.sharedMenus||new Map()).values())if(menu.storeId===store.id&&!known.has(menu.id)){store.menu.push(menu);known.add(menu.id);}
+  }
+}
+function editableRoomStores() {
+  return (S.room?.stores||[]).map(store=>({...clone(store),menu:store.menu.filter(menu=>!menu.shared).map(menu=>clone(menu))}));
+}
+async function addSharedMenu(storeId,name,price) {
+  const roomId=S.roomId,store=storeOf(storeId),by=S.who,storeIndex=S.room?.stores.findIndex(s=>s.id===storeId);
+  name=String(name||'').trim().replace(/\s+/g,' ');
+  if(!UID||!S.who||!roomId||!store)throw Error('이름과 가게를 먼저 선택해 주세요.');
+  if(locked())throw Error('마감된 모임에는 메뉴를 추가할 수 없어요.');
+  if(!name||name.length>40)throw Error('메뉴 이름을 40자 이내로 적어 주세요.');
+  if(!Number.isInteger(price)||price<0||price>10000000)throw Error('메뉴판에 적힌 가격을 원 단위로 입력해 주세요.');
+  const existing=store.menu.find(menu=>sharedMenuKey(menu.name)===sharedMenuKey(name));
+  if(existing)return {item:ITEMS.get(existing.id),created:false};
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(storeId+'\n'+sharedMenuKey(name)));
+  const id='custom-'+[...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('').slice(0,30);
+  if(S.roomId!==roomId||S.who!==by)return null;
+  const ref=FB.doc(DB,'dinnerRooms',roomId,'sharedMenus',id);
+  let current=await FB.getDoc(ref),data;
+  if(current.exists())data=current.data();
+  else {
+    if(S.roomId!==roomId||S.who!==by)return null;
+    data={storeId,storeIndex,name,price,uid:UID,by,at:FB.serverTimestamp()};
+    try{await FB.setDoc(ref,data);}
+    catch(error){
+      if(!/permission/.test(String(error?.code||error?.message)))throw error;
+      current=await FB.getDoc(ref);if(!current.exists())throw error;data=current.data();
+    }
+  }
+  if(S.roomId!==roomId||S.route!=='room'||S.who!==by)return null;
+  const clean=tidySharedMenu(id,data);if(!clean||clean.storeId!==storeId)throw Error('추가된 메뉴를 확인하지 못했어요. 다시 시도해 주세요.');
+  S.sharedMenus.set(id,clean);reindex();
+  return {item:ITEMS.get(id),created:!current.exists()};
+}
+function missingMenuButton(storeId=S.store) {
+  if(!S.who||locked()||!storeOf(storeId))return '';
+  return `<button class="missing-menu" data-act="shared-menu-open" data-id="${esc(storeId)}"><span>찾는 메뉴가 없나요?</span><b>메뉴 직접 담기 ＋</b></button>`;
+}
+function openSharedMenu(storeId) {
+  const store=storeOf(storeId);if(!store||locked())return;
+  closeSheet();const roomId=S.roomId,bg=document.createElement('div');bg.id='sheet';bg.className='sheet-bg';
+  bg.innerHTML=`<section class="sheet shared-menu-sheet" role="dialog" aria-modal="true" aria-labelledby="sharedMenuTitle"><button class="sheet-x" data-act="item-close" aria-label="닫기">✕</button><div class="sheet-body"><span class="eyebrow">${esc(store.name)}</span><h2 id="sharedMenuTitle">메뉴 직접 담기</h2><p class="shared-menu-help">추가한 메뉴는 이 모임의 다른 사람도 담을 수 있어요.</p><form id="sharedMenuForm"><label class="field">메뉴 이름<input class="input" name="menuName" maxlength="40" value="${esc(S.menuQuery)}" placeholder="예: 아이스 모카 스무디" required></label><div class="shared-menu-inputs"><label class="field">가격(원)<input class="input" name="menuPrice" type="number" min="0" max="10000000" step="1" inputmode="numeric" placeholder="메뉴판 가격" required></label><label class="field">수량<input class="input" name="menuQty" type="number" min="1" max="30" step="1" value="1" inputmode="numeric" required></label></div><p class="shared-menu-error" role="alert"></p><button class="btn block" type="submit">메뉴에 추가하고 담기</button></form></div></section>`;
+  let saving=false;
+  bg.addEventListener('click',event=>{if(event.target===bg&&!saving)closeSheet();});
+  bg.querySelector('form').addEventListener('submit',async event=>{
+    event.preventDefault();if(saving||S.roomId!==roomId)return;
+    const form=event.currentTarget,button=form.querySelector('[type=submit]'),error=form.querySelector('[role=alert]');
+    const qty=Number(form.elements.menuQty.value);if(!Number.isInteger(qty)||qty<1||qty>30){error.textContent='수량은 1~30개로 입력해 주세요.';return;}
+    saving=true;button.disabled=true;button.textContent='함께 보는 메뉴에 추가 중…';error.textContent='';
+    try {
+      const result=await addSharedMenu(storeId,form.elements.menuName.value,Number(form.elements.menuPrice.value));
+      if(!result||S.roomId!==roomId||!bg.isConnected)return;
+      const item=result.item,next=Math.min(30,(S.cart[item.id]||0)+qty);
+      closeSheet();S.menuQuery='';S.mfilter='all';S.store=storeId;
+      if(!fitsBudget(item.id,next)){rerender();toast('메뉴를 공유했어요. 1인 예산을 초과해 장바구니에는 담지 못했어요.');return;}
+      setQty(item.id,next);rerender();bumpCart();
+      toast(result.created?'메뉴를 추가하고 담았어요. 다른 사람도 고를 수 있어요.':`이미 있는 메뉴로 담았어요 · ${price(item.price)}`);
+    } catch(cause) {
+      if(!bg.isConnected||S.roomId!==roomId)return;
+      error.textContent=/permission/.test(String(cause?.code||cause?.message))?'메뉴를 추가하지 못했어요. 모임 상태를 확인하고 다시 시도해 주세요.':cause?.code?friendly(cause):String(cause?.message||cause);
+    } finally {saving=false;if(bg.isConnected){button.disabled=false;button.textContent='메뉴에 추가하고 담기';}}
+  });
+  document.body.append(bg);bg.querySelector('[name=menuName]').focus();
+}
+
 // ---------- 메뉴 찾기 ----------
 const ITEMS = new Map();
-function reindex() { ITEMS.clear(); for (const s of S.room?.stores || []) for (const m of s.menu) ITEMS.set(m.id, {...m, store: s}); }
+function reindex() { mergeSharedMenus(); ITEMS.clear(); for (const s of S.room?.stores || []) for (const m of s.menu) ITEMS.set(m.id, {...m, store: s}); }
 const storeOf = id => S.room?.stores.find(s => s.id === id);
 const cartLines = () => Object.entries(S.cart).filter(([id, n]) => ITEMS.has(id) && n > 0).map(([id, n]) => ({item: ITEMS.get(id), n}));
 const cartCount = () => cartLines().reduce((a, l) => a + l.n, 0);
@@ -3066,7 +3179,7 @@ function menuRow(m, s) {
   const n = S.cart[m.id] || 0, pic = m.img || '';
   const over = budget() && m.price && !n && !fitsBudget(m.id, 1); // 이미 고른 건 흐리지 않고, 더 누르면 알려 줘요
   return `<div class="menu${n ? ' in' : ''}${pic || m.emoji ? '' : ' plain'}${over ? ' over' : ''}"><button class="menu-main" data-act="item" data-id="${esc(m.id)}">
-      <span class="info"><span class="tags">${over ? '<span class="tag over">예산 초과</span>' : ''}${tags(m)}</span><span class="name">${esc(m.name)}</span>${m.desc ? `<span class="desc">${esc(m.desc)}</span>` : ''}
+      <span class="info"><span class="tags">${over ? '<span class="tag over">예산 초과</span>' : ''}${tags(m)}</span><span class="name">${m.shared?'<small class="shared-menu-tag">직접 추가</small>':''}${esc(m.name)}</span>${m.desc ? `<span class="desc">${esc(m.desc)}</span>` : ''}
       <span class="price${m.price ? '' : ' unknown'}">${price(m.price)}</span></span>
       ${pic || m.emoji ? `<span class="m-emo" style="--c:${esc(s.color)}">${esc(m.emoji || s.emoji)}${photo(pic)}${imgNote(m)}</span>` : ''}</button>
     <div class="m-ctl">${qtyCtl(m.id, m.name)}</div></div>`;
@@ -3123,7 +3236,7 @@ function roomStore() {
   </section></div>
   <div class="wrap menu-notices">${closedNote()}${sentNote()}</div>
   <div class="menu-toolbar"><div class="menu-search"><label for="menuSearch">이 방 메뉴 검색</label><div class="menu-search-row"><input class="input" type="search" id="menuSearch" aria-label="이 방 메뉴 검색" value="${esc(S.menuQuery)}" maxlength="80" placeholder="메뉴 검색" autocomplete="off" aria-controls="menuResults"><button id="clearMenuSearch" class="small-btn" data-act="menu-search-clear" aria-label="검색어 지우기"${S.menuQuery ? '' : ' disabled'}>×</button></div><p id="menuSearchCount" class="search-count" role="status" aria-live="polite" aria-atomic="true">${menuSearchCount()}</p></div><div id="menuFilters">${filters}</div></div>
-  <div id="menuResults">${menuResultsHtml()}</div>
+  <div id="menuResults">${menuResultsHtml()}</div>${missingMenuButton()}
   ${cartBar()}${roomNav()}`;
 }
 function quickRequests(storeId) {
@@ -3225,8 +3338,8 @@ function totals() {
     for (const it of a.items) {
       if (!groups.has(it.s)) groups.set(it.s, {store: storeOf(it.s) || {id: it.s, name: '(지운 가게)', phone: '', emoji: '🍴', color: '#eef2f3', menu: []}, items: new Map(), who: new Map(), sum: 0});
       const g = groups.get(it.s);
-      const k = it.m, row = g.items.get(k) || {name: it.name, n: 0, price: it.price};
-      row.n += it.n; g.items.set(k, row); g.sum += it.price * it.n;
+      const k = it.m, row = g.items.get(k) || {id:it.m,name:it.name,n:0,price:it.price,sum:0,people:new Map()};
+      row.n += it.n; row.sum += it.price*it.n; row.people.set(a.name,(row.people.get(a.name)||0)+it.n); g.items.set(k, row); g.sum += it.price * it.n;
       if (!g.who.has(a.name)) g.who.set(a.name, {ls: [], r: str(a.storeReqs?.[it.s], 200).trim()});
       g.who.get(a.name).ls.push(`${it.name} ${it.n}`);
     }
@@ -3258,6 +3371,10 @@ function progressBlock(withRemind) {
   ${withRemind ? `<textarea id="remindText" hidden>${esc(remind)}</textarea>` : ''}</section>`;
 }
 
+function summaryMenuHtml(item) {
+  const people=[...item.people].map(([name,n])=>esc(name)+(n>1?' ×'+n:'')).join(' · ');
+  return `<div class="summary-store-line"><strong>${item.id?.startsWith('custom-')?'<small class="shared-menu-tag">직접 추가</small>':''}${esc(item.name)}</strong><span class="summary-menu-people" aria-label="고른 사람">${people}</span><span class="summary-menu-count">${item.n}개</span><b class="summary-menu-price">${won(item.sum)}</b></div>`;
+}
 function byStoreHtml(host) {
   const groups = totals();
   if (!groups.length) return '<p class="muted empty-line">아직 모인 메뉴가 없어요.</p>';
@@ -3265,9 +3382,9 @@ function byStoreHtml(host) {
   const unassigned = [...S.answers.values()].filter(a => a.req);
   return `${unassigned.length ? `<section class="card unassigned-requests"><h3>가게 미지정 요청 · 이전 방식</h3><p class="hint">어느 가게의 요청인지 확인해 주세요. 아래 가게 주문 메시지에는 자동으로 넣지 않아요.</p>${unassigned.map(a => `<p><strong>${esc(a.name)}</strong><br>${esc(a.req)}</p>`).join('')}</section>` : ''}
   
-  <div class="stack">${groups.map((g, i) => `<section class="card sum-card"><div class="sum-head">${thumb(g.store, 'sm')}<div><b>${esc(g.store.name)}</b>${g.store.phone ? `<span>${esc(g.store.phone)}</span>` : ''}</div><b class="sum-won">${won(g.sum)}</b></div>
-    ${[...g.items.values()].map(it => menuItemBox({name: it.name, n: it.n, price: it.price})).join('')}
-    <p class="order-people">${g.who.size}명: ${[...g.who.keys()].map(esc).join(', ')}</p>
+  <div class="stack">${groups.map((g, i) => `<section class="card sum-card store-summary-card"><div class="sum-head">${thumb(g.store, 'sm')}<div><b>${esc(g.store.name)}</b>${g.store.phone ? `<span>${esc(g.store.phone)}</span>` : ''}</div><b class="sum-won">${won(g.sum)}</b></div>
+    ${[...g.items.values()].map(summaryMenuHtml).join('')}
+    <p class="order-people">${g.who.size}명 · ${[...g.items.values()].reduce((sum,item)=>sum+item.n,0)}개</p>
     ${[...g.who].some(([, x]) => x.r) ? `<div class="group-requests"><b>이 가게 요청사항</b>${[...g.who].filter(([, x]) => x.r).map(([w, x]) => `<p><strong>${esc(w)}</strong> · ${esc(x.ls.join(', '))}<br>${esc(x.r)}</p>`).join('')}</div>` : ''}
     ${host ? `<details class="message-preview no-print"><summary>주문 메시지 옵션</summary><label class="toggle"><input type="checkbox" data-act="by-person" ${S.byPerson ? 'checked' : ''}> 사람별로 나눠 적기</label><pre>${esc(ownerMessage(g))}</pre></details>` : ''}
     ${host ? `<div class="row no-print">${g.store.phone ? `<button class="btn gray" data-act="copy" data-text="${esc(g.store.phone)}" data-msg="📞 번호를 복사했어요">번호 복사</button>` : ''}<button class="btn" style="flex:1" data-act="copy-owner" data-i="${i}">${ICON.copy || ICON.link} 주문 메시지 복사</button></div>
@@ -3275,13 +3392,11 @@ function byStoreHtml(host) {
   <div class="card"><div class="total" style="margin:0;padding:0;border:0"><span>전체 합계</span><span>${won(total)}</span></div></div></div>`;
 }
 function byPersonHtml(host) {
-  const order = S.room.names;
-  const list = [...S.answers.values()].sort((a, b) => ((order.indexOf(a.name) + 1 || 999) - (order.indexOf(b.name) + 1 || 999)) || a.at - b.at);
-  if (!list.length) return '<p class="muted empty-line">아직 모인 메뉴가 없어요.</p>';
-  return `<div class="stack">${list.map(a => `<section class="card sum-card"><div class="sum-head"><i class="who-ava">${avatar(a.name)}</i><div><b>${esc(a.name)}</b><span>${new Date(a.at).toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'})}</span></div><b class="sum-won">${won(a.items.reduce((x, i) => x + i.price * i.n, 0))}</b></div>
-    ${answerMenuBoxes(a)}
-    ${legacyRequestHtml(a)}
-    ${host ? `<button class="text-btn red no-print" data-act="answer-del-host" data-id="${esc(a.id)}">보낸 메뉴 삭제</button>` : ''}</section>`).join('')}</div>`;
+  const order=S.room.names;
+  const list=[...S.answers.values()].sort((a,b)=>((order.indexOf(a.name)+1||999)-(order.indexOf(b.name)+1||999))||a.at-b.at);
+  if(!list.length)return '<p class="muted empty-line">아직 모인 메뉴가 없어요.</p>';
+  const trash=svg('<path d="M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6m4-6v6"/>');
+  return `<div class="stack person-summary-list">${list.map(a=>`<section class="card person-summary-row${host?'':' without-delete'}"><div class="person-summary-who" title="${esc(a.name)} · ${new Date(a.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}">${avatar(a.name)}<b>${esc(a.name)}</b></div><div class="person-summary-menus">${a.items.map(item=>`<div class="person-summary-menu"><strong>${item.m?.startsWith('custom-')?'<small class="shared-menu-tag">직접 추가</small>':''}${esc(item.name)}</strong>${S.room.stores.length>1?`<small>${esc(storeOf(item.s)?.name||'지운 가게')}</small>`:''}<span class="person-menu-qty">×${item.n}</span>${a.items.length>1?`<span class="person-menu-price">${won(item.price*item.n)}</span>`:''}</div>`).join('')}</div><b class="person-summary-total">${won(a.items.reduce((sum,item)=>sum+item.price*item.n,0))}</b>${host?`<button class="delete-order no-print" data-act="answer-del-host" data-id="${esc(a.id)}" aria-label="${esc(a.name)} 보낸 메뉴 삭제" title="${esc(a.name)} 보낸 메뉴 삭제">${trash}</button>`:''}${a.req||Object.values(a.storeReqs||{}).some(value=>String(value).trim())?`<div class="person-summary-requests">${Object.entries(a.storeReqs||{}).filter(([,request])=>String(request).trim()).map(([sid,request])=>`<p><b>${esc(storeOf(sid)?.name||'가게')} 요청사항</b> · ${esc(request)}</p>`).join('')}${a.req?`<p><b>가게 미지정 요청</b> · ${esc(a.req)}</p>`:''}</div>`:''}</section>`).join('')}</div>`;
 }
 function sumSeg() {
   return `<div class="seg wide no-print" role="group"><button class="${S.sumBy === 'store' ? 'on' : ''}" data-act="sum-by" data-by="store">가게별</button><button class="${S.sumBy === 'person' ? 'on' : ''}" data-act="sum-by" data-by="person">사람별</button></div>`;
@@ -3314,7 +3429,7 @@ function roomAll() {
 // ---------- 방 설정 (방장) ----------
 function roomSet() {
   if (!S.host) { S.tab = 'menu'; return roomMenu(); }
-  const e = S.edit || (S.edit = {...clone(S.room), namesText: S.room.names.join('\n'), dirty: false});
+  const e = S.edit || (S.edit = {...clone(S.room), stores:editableRoomStores(), namesText: S.room.names.join('\n'), dirty: false});
   const fold = (key, title, info, body) => `<details class="settings-fold" data-settings-fold="${key}"${S.settingsOpen?.[key] ? ' open' : ''}><summary><b>${title}</b><span>${info}</span><i>⌄</i></summary><div class="settings-body">${body}</div></details>`;
   return `${topBar('방 설정', '', whoChip())}
   <div class="wrap admin form">
@@ -3455,10 +3570,11 @@ async function hostUpdate(fields, msg) {
   try { await FB.updateDoc(FB.doc(DB, 'dinnerRooms', S.roomId), {...fields, updatedAt: FB.serverTimestamp()}); if (msg) toast(msg); }
   catch (e) { toast(friendly(e)); }
 }
-function confirmTwice(el, msg) {
-  if (el.dataset.armed) return true;
-  el.dataset.armed = '1'; const old = el.textContent; el.textContent = msg;
-  setTimeout(() => { if (el.isConnected) { delete el.dataset.armed; el.textContent = old; } }, 3000);
+function confirmTwice(el,msg) {
+  if(el.dataset.armed)return true;
+  el.dataset.armed='1';const old=el.innerHTML,label=el.getAttribute('aria-label'),title=el.title,icon=el.classList.contains('delete-order');
+  if(icon){el.classList.add('is-armed');el.setAttribute('aria-label',msg);el.title=msg;}else el.textContent=msg;
+  setTimeout(()=>{if(el.isConnected){delete el.dataset.armed;el.innerHTML=old;el.classList.remove('is-armed');if(label)el.setAttribute('aria-label',label);el.title=title;}},3000);
   return false;
 }
 function setWho(name, tab) {
@@ -3561,6 +3677,7 @@ document.addEventListener('click', async e => {
       if (['menu', 'cart', 'mine'].includes(t) && !S.who) { go({tab: 'who'}); return; }
       go({tab: t, created: false}); break;
     }
+    case 'shared-menu-open': openSharedMenu(id); break;
     case 'who': openAvatarPicker(el.dataset.who); break;
     case 'who-typed': openAvatarPicker(document.getElementById('whoName').value); break;
     case 'store': go({tab: 'store', store: id, mfilter: 'all', menuQuery: ''}); break;
@@ -3737,6 +3854,8 @@ document.addEventListener('toggle', event => { const el=event.target;if(el.match
 document.addEventListener('change', event => {if(event.target.id==='storeSelect')go({tab:'store',store:event.target.value,mfilter:'all',menuQuery:''});});
 
 document.addEventListener('toggle',event=>{const el=event.target;if(el.matches?.('[data-settings-fold]')&&el.isConnected){S.settingsOpen ||= {};S.settingsOpen[el.dataset.settingsFold]=el.open;}},true);
+
+
 </script>
 </body>
 </html>
