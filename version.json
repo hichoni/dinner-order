@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-22-independent-audio",
+  "version": "2026-10-22-andong-catalog",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
@@ -11,5 +11,13 @@
   "audioDefaults": {
     "music": 25,
     "effects": 70
-  }
+  },
+  "sourceRepository": "hichoni/app-gallery",
+  "sourceBranch": "codex/damatda-andong-catalog",
+  "sourceCommit": "096004133c894bb8416545cad7d61c5fdd9f29f4",
+  "catalogueStores": 857,
+  "catalogueMenus": 16978,
+  "neighbourhoodSearch": true,
+  "splitCatalogue": true,
+  "automaticRefresh": false
 }
