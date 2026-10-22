@@ -1,0 +1,449 @@
+{
+ "generatedAt": "2026-10-23",
+ "existingStoresPreserved": 856,
+ "addedStores": 179,
+ "addedThisMerge": 179,
+ "totalStores": 1035,
+ "queriesChecked": 210,
+ "candidatesFound": 329,
+ "uncheckedCandidates": [],
+ "regions": {
+  "예천읍": {
+   "candidates": 141,
+   "stores": 115,
+   "menus": 2363,
+   "menuPhotos": 1746,
+   "storePhotos": 111,
+   "phones": 109,
+   "atMenuLimit": 14
+  },
+  "보문면": {
+   "candidates": 2,
+   "stores": 2,
+   "menus": 25,
+   "menuPhotos": 22,
+   "storePhotos": 2,
+   "phones": 2,
+   "atMenuLimit": 0
+  },
+  "도청신도시": {
+   "candidates": 58,
+   "stores": 41,
+   "menus": 635,
+   "menuPhotos": 520,
+   "storePhotos": 41,
+   "phones": 40,
+   "atMenuLimit": 1
+  },
+  "용궁면": {
+   "candidates": 10,
+   "stores": 10,
+   "menus": 137,
+   "menuPhotos": 89,
+   "storePhotos": 10,
+   "phones": 10,
+   "atMenuLimit": 0
+  },
+  "감천면": {
+   "candidates": 2,
+   "stores": 2,
+   "menus": 6,
+   "menuPhotos": 6,
+   "storePhotos": 2,
+   "phones": 1,
+   "atMenuLimit": 0
+  },
+  "유천면": {
+   "candidates": 3,
+   "stores": 3,
+   "menus": 39,
+   "menuPhotos": 39,
+   "storePhotos": 3,
+   "phones": 3,
+   "atMenuLimit": 0
+  },
+  "지보면": {
+   "candidates": 2,
+   "stores": 2,
+   "menus": 23,
+   "menuPhotos": 10,
+   "storePhotos": 2,
+   "phones": 2,
+   "atMenuLimit": 0
+  },
+  "효자면": {
+   "candidates": 1,
+   "stores": 1,
+   "menus": 39,
+   "menuPhotos": 8,
+   "storePhotos": 1,
+   "phones": 1,
+   "atMenuLimit": 0
+  },
+  "풍양면": {
+   "candidates": 2,
+   "stores": 2,
+   "menus": 29,
+   "menuPhotos": 13,
+   "storePhotos": 2,
+   "phones": 2,
+   "atMenuLimit": 0
+  },
+  "개포면": {
+   "candidates": 1,
+   "stores": 1,
+   "menus": 1,
+   "menuPhotos": 1,
+   "storePhotos": 1,
+   "phones": 0,
+   "atMenuLimit": 0
+  }
+ },
+ "failed": {},
+ "noFixedMenu": [
+  {
+   "id": "15626660",
+   "name": "예천축산농협 한우프라자 예천점",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/15626660/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1432019722",
+   "name": "파리바게뜨 도청신도시점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1432019722/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1692883840",
+   "name": "봉덕창고",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1692883840/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1003026611",
+   "name": "한상우베이커리",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1003026611/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1191308739",
+   "name": "춤추는왕만두",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1191308739/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15623461",
+   "name": "불라면전문점",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/15623461/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1941478644",
+   "name": "마라나타 커피로스터스",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1941478644/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1803536363",
+   "name": "크라운호프 경북도청호명점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1803536363/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "32160903",
+   "name": "서울왕족발",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/32160903/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1844701752",
+   "name": "굽네치킨 경북도청신도시점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1844701752/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15623889",
+   "name": "예천반점",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/15623889/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "38676937",
+   "name": "뽕뜨락피자 예천읍점",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/38676937/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "32161121",
+   "name": "길손식당",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/32161121/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1939213291",
+   "name": "베트남쌀국수전문점",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1939213291/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15918525",
+   "name": "장수왕족발",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/15918525/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1541081580",
+   "name": "삼일숙성회",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1541081580/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "1841776681",
+   "name": "오복왕족발",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1841776681/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1809901353",
+   "name": "또깡김밥",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1809901353/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1722516093",
+   "name": "진달래김밥",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1722516093/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1283271767",
+   "name": "가장맛있는족발경북도청점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1283271767/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1490509871",
+   "name": "유천",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1490509871/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "32320349",
+   "name": "예천꼬마김밥",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/32320349/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1602775304",
+   "name": "예천도시락",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1602775304/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1725128565",
+   "name": "고봉민김밥인 경북 예천점",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1725128565/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "2090333373",
+   "name": "빵아빵아 경북예천점",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/2090333373/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "variable_or_unpriced"
+  },
+  {
+   "id": "15628842",
+   "name": "어머니도시락",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/15628842/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2146617483",
+   "name": "북코끼리꽈배기",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/2146617483/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2142774630",
+   "name": "일억조",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/2142774630/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15918880",
+   "name": "보쌈총각과큰아가씨",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/15918880/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "34040376",
+   "name": "옥이네",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/34040376/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2021470428",
+   "name": "독도회초밥",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/2021470428/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2062163574",
+   "name": "그린바스켓",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/2062163574/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1957827876",
+   "name": "예천농협 하나로베이커리",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/1957827876/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1470282407",
+   "name": "명랑한찜닭 경북도청점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1470282407/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "38144287",
+   "name": "죽밭골",
+   "area": "예천읍",
+   "source": "https://m.place.naver.com/restaurant/38144287/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1636488932",
+   "name": "한끼한죽",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1636488932/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1981505377",
+   "name": "우아한 주모국밥 안동신도청점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1981505377/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "15920892",
+   "name": "호명식육식당",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/15920892/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "2062779666",
+   "name": "오늘의찬스 경북도청점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/2062779666/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1776495399",
+   "name": "피자나라치킨공주경북도청점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1776495399/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1314449137",
+   "name": "월드푸드",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1314449137/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1279908433",
+   "name": "최씨네안동찜닭",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1279908433/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  },
+  {
+   "id": "1611920027",
+   "name": "경산집 경북도청점",
+   "area": "도청신도시",
+   "source": "https://m.place.naver.com/restaurant/1611920027/menu/list",
+   "checkedAt": "2026-10-23",
+   "reason": "no_fixed_menu_found"
+  }
+ ]
+}

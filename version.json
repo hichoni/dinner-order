@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-22-andong-catalog",
+  "version": "2026-10-22-andong-yecheon-catalog",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
@@ -12,16 +12,17 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "096004133c894bb8416545cad7d61c5fdd9f29f4",
+  "sourceCommit": "60899cf",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
   "firestoreRulesSha256": "baba132888fb1244a78e87ae15de1976de307d82e1f0d3e1c1ef29d5e8548ac7",
   "sourceRepository": "hichoni/app-gallery",
   "sourceBranch": "claude/tender-tesla-aext4z",
-  "catalogueStores": 857,
-  "catalogueMenus": 16978,
+  "catalogueStores": 1034,
+  "catalogueMenus": 20214,
   "neighbourhoodSearch": true,
   "splitCatalogue": true,
-  "automaticRefresh": false
+  "automaticRefresh": false,
+  "yecheon": true
 }

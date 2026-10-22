@@ -1635,7 +1635,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 <body>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
-<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":857}</script>
+<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":1034}</script>
 <script type="module">
 // Damatda native SVG assets. Colors inherit the active app theme.
 const FOOD_ICONS = {
@@ -2365,7 +2365,7 @@ function tidyStore(s, i = 0) {
     area: str(s.area, 16), minutes: num(s.minutes), phone: str(s.phone, 20), address: str(s.address, 80), photo: safeImg(str(s.photo, 400)),
     reviews: num(s.reviews), hours: str(s.hours, 80), naver: safeImg(str(s.naver, 200)), note: str(s.note, 80),
     checkedAt: /^20\d{2}-\d{2}-\d{2}$/.test(s.checkedAt || '') ? s.checkedAt : '',
-    menuBasis: ['플레이스 메뉴판','배달 메뉴판'].includes(s.menuBasis) ? s.menuBasis : '',
+    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판'].includes(s.menuBasis) ? s.menuBasis : '',
     menu: (Array.isArray(s.menu) ? s.menu : []).slice(0, 60).filter(m => m && m.id).map(m => ({
       id: str(m.id, 40), name: str(m.name, 40, '메뉴'), emoji: str(m.emoji, 8), price: num(m.price), desc: str(m.desc, 120),
       tags: Array.isArray(m.tags) ? m.tags.filter(t => ['best', 'kid', 'hot'].includes(t)) : [], img: safeImg(str(m.img, 400)),
@@ -2916,7 +2916,7 @@ function catalogMatches(s) {
   return words.every(word => text.includes(word));
 }
 function catalogAreas() {
-  const preferred=['옥동','송현·노하','용상·송천','정하·강남','시내권','도청신도시','풍산읍'];
+  const preferred=['옥동','송현·노하','용상·송천','정하·강남','시내권','도청신도시','풍산읍','예천읍'];
   return [...new Set(CATALOG.stores.map(s=>s.area).filter(Boolean))].sort((a,b)=>(preferred.indexOf(a)<0?99:preferred.indexOf(a))-(preferred.indexOf(b)<0?99:preferred.indexOf(b)) || a.localeCompare(b,'ko'));
 }
 function catalogCount() { return `${S.catArea === 'all' ? '전체 지역' : S.catArea} · ${CATALOG.stores.filter(catalogMatches).length}곳`; }
@@ -2938,10 +2938,10 @@ function catalogList() {
 function viewCatalog() {
   const areas = catalogAreas();
   const inA = CATALOG.stores.filter(inArea);
-  const chips = ['all',...areas.slice(0,7)].map(a => [a, a==='all'?'전체':a, CATALOG.stores.filter(s=>a==='all'||s.area===a).length]);
+  const chips = ['all',...areas.slice(0,8)].map(a => [a, a==='all'?'전체':a, CATALOG.stores.filter(s=>a==='all'||s.area===a).length]);
   const cnt = {}; for (const s of inA) cnt[s.category] = (cnt[s.category] || 0) + 1;
   const cats = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
-  return `${topBar('안동 맛집 목록', 'cat-back')}
+  return `${topBar('안동·예천 맛집 목록', 'cat-back')}
   <div class="wrap admin">
     <label class="catalog-area-label" for="catalogArea">어느 동네에서 고를까요?</label><select class="input" id="catalogArea" aria-label="동네 선택"><option value="all"${S.catArea==='all'?' selected':''}>전체 지역</option>${areas.map(a=>`<option value="${esc(a)}"${S.catArea===a?' selected':''}>${esc(a)} · ${CATALOG.stores.filter(s=>s.area===a).length}곳</option>`).join('')}</select>
     <div class="region-picker andong-regions" role="group" aria-label="지역 선택">${chips.map(([k,l,c])=>`<button class="${S.catArea===k?'on':''}" data-act="cat-area" data-a="${esc(k)}" aria-pressed="${S.catArea===k}"><b>${esc(l)}</b><small>${c}</small></button>`).join('')}</div>
