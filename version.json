@@ -1,15 +1,20 @@
 {
-  "version": "2026-10-22-independent-audio",
+  "version": "2026-10-22-shared-menus-compact",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "289ff1581143f1f6cdf2974cae5f6d5afef684ab",
+  "applicationCommit": "45ac6d2eb4bfa0f6b01db45dea2c3533497e02b3",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
   "audioDefaults": {
     "music": 25,
     "effects": 70
-  }
+  },
+  "sourceCommit": "4ee9dc7c9e661a0eaf8379c0d7d545edc9af995e",
+  "sharedMenus": "room-sharedMenus-realtime",
+  "summary": "compact-person-rows-and-menu-people",
+  "nameEntry": "accurate-errors-and-menu-fallback",
+  "firestoreRulesSha256": "baba132888fb1244a78e87ae15de1976de307d82e1f0d3e1c1ef29d5e8548ac7"
 }
