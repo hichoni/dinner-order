@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-24-current-store",
+  "version": "2026-10-24-brand-icons",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "33bb5d1c0692b3844bd7ae6ea65a0990c247ceae",
+  "applicationCommit": "da80c851826f1262909f44f83b979dcbb610cdb5",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "e55b234391f77a4118b15d554e4da543d54ee8d5",
+  "sourceCommit": "7be18e3e27bf11964385fbb51cea170cdef48473",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -44,5 +44,9 @@
   "menuLayout": "grouped-by-store",
   "installation": "native-prompt-or-platform-guide",
   "storeShortcuts": "pinned-scroll-to-store-menu",
-  "currentStore": "scroll-synced-shortcut-highlight"
+  "currentStore": "scroll-synced-shortcut-highlight",
+  "appIcons": "current-three-food-cards-and-tray",
+  "favicon": "svg-png-ico",
+  "iconCacheVersion": "eb39f2bcdc79",
+  "maskableIcon": "separate-512-safe-circle"
 }

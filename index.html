@@ -13,8 +13,10 @@
 <meta property="og:image:width" content="1774">
 <meta property="og:image:height" content="887">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/svg+xml" href="assets/characters/tray-sky.svg">
-<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
+<link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="다맛다">
 <meta name="theme-color" content="#f7faf8">
@@ -3097,7 +3099,7 @@ function openInstallGuide() {
   closeSheet();
   const guide = installInstructions(), bg = document.createElement('div');
   bg.id='sheet';bg.className='sheet-bg';
-  bg.innerHTML=`<section class="sheet install-sheet" role="dialog" aria-modal="true" aria-labelledby="installTitle"><button class="sheet-x" data-act="item-close" aria-label="닫기">✕</button><div class="sheet-body"><img class="install-app-icon" src="icon-192.png" width="64" height="64" alt=""><h2 id="installTitle">${guide.title}</h2><p>홈 화면에서 다맛다를 바로 열 수 있어요.</p>${installPreview()?'<p class="install-preview-note">미리보기에서는 아래 운영 사이트를 열어 설치해 주세요.</p>':''}<ol>${guide.steps.map(step=>`<li>${esc(step)}</li>`).join('')}</ol><a class="btn gray block" href="${esc(installPageUrl())}" target="_blank" rel="noopener">브라우저에서 다맛다 열기 ↗</a><button class="text-btn block" data-act="install-copy">설치할 링크 복사</button><div id="installLinkCopy" hidden><label class="field">링크를 길게 눌러 복사해 주세요<textarea class="input" readonly rows="2"></textarea></label></div><small>설치 메뉴 이름은 브라우저에 따라 조금 다를 수 있어요.</small></div></section>`;
+  bg.innerHTML=`<section class="sheet install-sheet" role="dialog" aria-modal="true" aria-labelledby="installTitle"><button class="sheet-x" data-act="item-close" aria-label="닫기">✕</button><div class="sheet-body"><img class="install-app-icon" src="icon-192.png?v=eb39f2bcdc79" width="64" height="64" alt=""><h2 id="installTitle">${guide.title}</h2><p>홈 화면에서 다맛다를 바로 열 수 있어요.</p>${installPreview()?'<p class="install-preview-note">미리보기에서는 아래 운영 사이트를 열어 설치해 주세요.</p>':''}<ol>${guide.steps.map(step=>`<li>${esc(step)}</li>`).join('')}</ol><a class="btn gray block" href="${esc(installPageUrl())}" target="_blank" rel="noopener">브라우저에서 다맛다 열기 ↗</a><button class="text-btn block" data-act="install-copy">설치할 링크 복사</button><div id="installLinkCopy" hidden><label class="field">링크를 길게 눌러 복사해 주세요<textarea class="input" readonly rows="2"></textarea></label></div><small>설치 메뉴 이름은 브라우저에 따라 조금 다를 수 있어요.</small></div></section>`;
   bg.addEventListener('click',event=>{if(event.target===bg)closeSheet();});
   bg.addEventListener('keydown',event=>{
     if(event.key!=='Tab')return;
