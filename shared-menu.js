@@ -69,7 +69,7 @@ function openSharedMenu(storeId) {
       if(!result||S.roomId!==roomId||!bg.isConnected)return;
       const item=result.item,next=Math.min(30,(S.cart[item.id]||0)+qty);
       closeSheet();S.menuQuery='';S.mfilter='all';S.store=storeId;
-      if(!fitsBudget(item.id,next)){rerender();toast('메뉴를 공유했어요. 1인 예산을 초과해 장바구니에는 담지 못했어요.');return;}
+      if(!fitsBudget(item.id,next)){rerender();toast(`메뉴를 공유했어요. ${budgetLabel(S.room.treat)} 예산을 초과해 장바구니에는 담지 못했어요.`);return;}
       setQty(item.id,next);rerender();bumpCart();
       toast(result.created?'메뉴를 추가하고 담았어요. 다른 사람도 고를 수 있어요.':`이미 있는 메뉴로 담았어요 · ${price(item.price)}`);
     } catch(cause) {
