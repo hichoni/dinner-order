@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-23-p1-order-integrity",
+  "version": "2026-10-23-budget-thanks",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "8319a0f150bcb529ce3c66dbfe82484c9f6b18f6",
+  "applicationCommit": "9501effd6937499fcb465d9c7d6fc0c2d3b5be60",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,11 +12,11 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "ee3a346c12a65b318272edacaad12b0094e300e3",
+  "sourceCommit": "7956118f93a0540ea7bd10270ab7cd2380fdf693",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
-  "firestoreRulesSha256": "7e82da6e35c80a968663a786d12ac2e7c609d7e650bc73db76df3318193a2814",
+  "firestoreRulesSha256": "59144d9b03cdaec2d4aaa1a7590dd3e0683d4f995f6b7540ee7e90e3323e5cd5",
   "sourceRepository": "hichoni/app-gallery",
   "sourceBranch": "claude/tender-tesla-aext4z",
   "catalogueStores": 1034,
@@ -30,5 +30,13 @@
   "catalogueSourceRows": 20214,
   "orderConflict": "transaction-with-draft-baseline",
   "menuPrices": "per-menu-name-price",
-  "deliveryGuidance": "separate-nonselectable"
+  "deliveryGuidance": "separate-nonselectable",
+  "budgetUnits": "person-team-family-custom",
+  "gratitude": "room-answer-message-with-effects",
+  "gratitudeEffects": [
+    "hearts",
+    "sparkles",
+    "confetti",
+    "none"
+  ]
 }
