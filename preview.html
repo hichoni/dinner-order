@@ -1729,6 +1729,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-shortcuts button span{overflow-wrap:anywhere}.mm .store-shortcuts button i{font-size:17px;font-style:normal;flex:none}.mm .store-shortcuts button:hover{background:var(--mint-ll);border-color:var(--mint-d)}
 .mm .store-shortcuts.many button{flex:0 0 auto;min-width:120px;max-width:220px}
 .mm .store-shortcuts button:focus-visible,.mm .room-menu-store h2:focus-visible{outline:3px solid #3189a6;outline-offset:2px}
+.mm .store-shortcuts button[aria-current="location"]{background:var(--mint-d);border-color:var(--mint-d);color:#fff;box-shadow:inset 0 0 0 1px #ffffff38,0 3px 8px #236a7320}
 .mm .room-menu-store{margin:0 0 30px;min-width:0}
 .mm .room-menu-store+.room-menu-store{padding-top:22px;border-top:2px solid #bdd9d9}
 .mm .room-menu-store>.shop-compact{position:relative;margin:0 0 12px;padding:12px;border:1px solid #c7dfdd;border-radius:15px;background:#e7f4f3dc}
@@ -3115,6 +3116,7 @@ function render(enter = false) {
   $app.className = 'mm view-' + S.route + (S.route === 'room' ? ' tab-' + S.tab : '') + (content.includes('class="nav n') ? ' with-room-nav' : '') + (enter && !reduceMotion() ? ' enter' : '');
   document.title = S.route === 'room' && S.room ? `${S.room.title} · 다맛다` : '다맛다';
   DamatdaPlay.mount();
+  scheduleStoreHighlight();
 }
 function rerender() { const y = scrollY; render(); scrollTo(0, y); }
 const ROOM_TABS = ['who', 'menu', 'store', 'cart', 'review', 'mine', 'sum', 'all', 'set'];
@@ -3384,6 +3386,44 @@ function storeShortcuts() {
   if (stores.length < 2) return '';
   return `<nav class="store-shortcuts${stores.length>2?' many':''}" aria-label="가게 메뉴 바로가기">${stores.map(s=>`<button type="button" data-act="store-jump" data-id="${esc(s.id)}" aria-controls="store-heading-${encodeURIComponent(s.id)}" aria-label="${esc(s.name)} 메뉴로 이동"><span>${esc(s.name)}</span><i aria-hidden="true">↓</i></button>`).join('')}</nav>`;
 }
+// Track the store occupying most of the readable area, excluding fixed controls.
+function updateStoreHighlight() {
+  const buttons = [...document.querySelectorAll('.store-shortcuts button')];
+  if (!buttons.length) return '';
+  const entries = [...document.querySelectorAll('.room-menu-store')]
+    .map(section=>({id:section.dataset.storeId,rect:section.getBoundingClientRect()}))
+    .filter(entry=>entry.rect.bottom>entry.rect.top);
+  const top = Math.max(0,document.querySelector('.room-pinned')?.getBoundingClientRect().bottom || 0) + 12;
+  let bottom = innerHeight;
+  const bounds = entries[0]?.rect;
+  if (bounds) for (const overlay of document.querySelectorAll('.nav,.cartbar')) {
+    const rect = overlay.getBoundingClientRect();
+    if (rect.left<bounds.right && rect.right>bounds.left && rect.top>top) bottom=Math.min(bottom,rect.top);
+  }
+  let current='',largest=0;
+  for (const entry of entries) {
+    const visible = Math.max(0,Math.min(entry.rect.bottom,bottom)-Math.max(entry.rect.top,top));
+    if (visible>largest) {largest=visible;current=entry.id;}
+  }
+  // Before the menu starts or after its last row, retain the nearest store.
+  if (!current && entries.length) {
+    current=entries[0].id;
+    for (const entry of entries) if(entry.rect.top<=top)current=entry.id;
+  }
+  for (const button of buttons) {
+    const active=button.dataset.id===current;
+    if (active && button.getAttribute('aria-current')!=='location') button.setAttribute('aria-current','location');
+    else if (!active && button.hasAttribute('aria-current')) button.removeAttribute('aria-current');
+  }
+  return current;
+}
+let storeHighlightFrame = null;
+function scheduleStoreHighlight() {
+  if (storeHighlightFrame!==null) return;
+  storeHighlightFrame=requestAnimationFrame(()=>{storeHighlightFrame=null;updateStoreHighlight();});
+}
+addEventListener('scroll',scheduleStoreHighlight,{passive:true});
+addEventListener('resize',scheduleStoreHighlight,{passive:true});
 function jumpToStore(id) {
   if (!S.room?.stores.some(s=>s.id===id)) return false;
   // A shortcut always opens the store's full menu, including after a search/filter.
@@ -3512,6 +3552,7 @@ function refreshMenuSearch() {
   document.getElementById('menuResults').innerHTML = menuResultsHtml();
   document.getElementById('menuSearchCount').textContent = menuSearchCount();
   document.getElementById('clearMenuSearch').disabled = !S.menuQuery;
+  scheduleStoreHighlight();
 }
 function menuStoreHeader(s,count) {
   const q = encodeURIComponent((s.address || s.name).split(',')[0].replace(/\s*\([^)]*\)/g, '').trim());
