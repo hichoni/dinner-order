@@ -18,6 +18,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="다맛다">
 <meta name="theme-color" content="#f7faf8">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 /* 저녁에 뭐 먹을래? — 배달앱 같은 모바일 화면.
@@ -1722,16 +1723,25 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .compact-pin .pb-treat>span:last-child{overflow:visible;overflow-wrap:anywhere;font-size:12px}
 .mm .room-pinned .pb-expanded{max-height:min(30vh,240px);max-height:min(30dvh,240px);overflow-y:auto;overscroll-behavior:contain;overflow-wrap:anywhere;font-size:13px;scrollbar-width:thin}
 .mm .room-pinned .pin-disclosure{min-height:44px;padding-left:6px}
-.mm .room-stores{margin:0 0 12px}
-.mm .room-stores>p{font-size:12px;color:var(--sub);margin:0 0 7px}
-.mm .room-store-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0;overflow:visible}
-.mm .room-store-tabs button{min-width:0;min-height:62px;padding:10px;text-align:left;white-space:normal;line-height:1.45;border:1px solid #bfd8d7;background:#ffffffd9;box-shadow:none;color:var(--ink)}
-.mm .room-store-tabs button b{display:block;font-size:13px;font-weight:650;overflow-wrap:anywhere}
-.mm .room-store-tabs button small{display:block;font-size:11px;font-weight:450;margin-top:3px;color:var(--sub)}
-.mm .room-store-tabs button.on{background:var(--mint-d);border-color:var(--mint-d);color:#fff;box-shadow:inset 0 0 0 1px #ffffff38}
-.mm .room-store-tabs button.on small{color:#fff}
-@media(min-width:700px){.mm .room-store-tabs{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
 @media print{.mm .room-pinned{display:none}}
+
+/* All stores share one continuous menu, with their own details and add action. */
+.mm .room-menu-intro{margin:3px 0 10px;font-size:12px;color:var(--sub)}
+.mm .room-menu-store{margin:0 0 30px;min-width:0}
+.mm .room-menu-store+.room-menu-store{padding-top:22px;border-top:2px solid #bdd9d9}
+.mm .room-menu-store>.shop-compact{position:relative;margin:0 0 12px;padding:12px;border:1px solid #c7dfdd;border-radius:15px;background:#e7f4f3dc}
+.mm .room-menu-store .shop-choice{padding-right:72px}
+.mm .room-menu-store .shop-choice h2{font-size:17px;line-height:1.45;max-width:none;overflow-wrap:anywhere}
+.mm .room-menu-store .shop-choice>span{font-size:12px}
+.mm .room-menu-store .shop-details summary{right:12px;top:14px}
+.mm .room-menu-store .missing-menu{margin:12px 0 0;width:100%;max-width:none}
+.mm .missing-menu-store{margin-top:15px;font-size:13px}.mm .missing-menu-store .missing-menu{margin:7px 0 0;width:100%}
+.mm .home-install-promo{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:17px}
+.mm .home-install-promo[hidden]{display:none}
+.mm .home-install{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 15px;border:1px solid #b8d5d5;border-radius:13px;background:#ffffffd9;color:var(--mint-d);font-size:14px;font-weight:650;box-shadow:inset 0 1px #fff;cursor:pointer}
+.mm .home-install svg{width:19px;height:19px}.mm .home-install:hover{background:#e7f7f3}.mm .home-install:disabled{opacity:.65;cursor:wait}
+.mm .home-install-promo small{font-size:11px;color:var(--sub)}
+.install-sheet{max-width:480px}.install-sheet .sheet-body{padding:20px 22px 24px}.install-sheet .btn,.install-sheet .text-btn{display:flex;justify-content:center;width:100%}.install-app-icon{display:block;border-radius:17px;margin:0 0 16px}.install-sheet h2{font-size:22px;line-height:1.4;margin:0 0 10px}.install-sheet p{font-size:14px;color:var(--sub);line-height:1.6}.install-sheet ol{padding-left:23px;margin:20px 0 24px}.install-sheet li{padding:0 0 12px 4px;font-size:15px;line-height:1.65}.install-sheet small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:10px}.install-sheet .btn{text-decoration:none;text-align:center}.install-sheet .install-preview-note{padding:10px 12px;background:var(--mint-ll);border-radius:10px}.install-sheet .text-btn{min-height:44px;margin-top:8px}.install-sheet textarea{width:100%;margin-top:8px}
 </style>
 </head>
 <body>
@@ -3051,12 +3061,75 @@ function homeEmptyTray(joined = false) {
     ${joined ? '' : '<button class="empty-tray-action" data-act="new">이 그릇부터 채우기 <span aria-hidden="true">↗</span></button>'}
   </div>`;
 }
+// Browsers that expose beforeinstallprompt can open their native installer.
+// Other browsers get device-specific instructions instead of a dead button.
+let deferredInstallPrompt = null, installBusy = false, installedThisVisit = false;
+const installDisplay = typeof matchMedia === 'function' ? matchMedia('(display-mode: standalone)') : null;
+const appInstalled = () => installedThisVisit || !!installDisplay?.matches || navigator.standalone === true;
+const installPreview = () => /\/preview\.html$/.test(location.pathname || '');
+const installPageUrl = () => installPreview() ? 'https://hichoni.github.io/dinner-order/' : pageBase();
+function installButtonHtml() {
+  return appInstalled() ? '' : `<div class="home-install-promo"><button class="home-install" data-act="install-app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg><span>${installBusy?'설치 창 여는 중…':'앱 설치하기'}</span></button><small>홈 화면에서 다맛다를 바로 열어요</small></div>`;
+}
+function refreshInstallUI() {
+  for (const promo of document.querySelectorAll('.home-install-promo')) promo.hidden = appInstalled();
+  for (const button of document.querySelectorAll('[data-act="install-app"]')) {
+    button.disabled = installBusy;
+    button.querySelector('span').textContent = installBusy ? '설치 창 여는 중…' : '앱 설치하기';
+  }
+}
+function installInstructions(ua = navigator.userAgent || '', platform = navigator.platform || '', touchPoints = navigator.maxTouchPoints || 0) {
+  const ios = /iPad|iPhone|iPod/i.test(ua) || (/Mac/i.test(platform) && touchPoints > 1);
+  const inApp = /KAKAOTALK|Instagram|FBAN|FBAV|NAVER\(inapp|DaumApps|Line\//i.test(ua);
+  if (inApp) return {title:'브라우저에서 설치해 주세요',steps:[`이 앱의 메뉴에서 ‘외부 브라우저로 열기’를 선택해 주세요. ${ios?'Safari':'Chrome 또는 삼성 인터넷'}에서 열면 돼요.`,ios?'공유 버튼(□↑) → ‘홈 화면에 추가’를 눌러 주세요.':'다시 ‘앱 설치하기’를 누르거나, 브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요.','‘추가’ 또는 ‘설치’를 누르면 홈 화면에 다맛다가 생겨요.']};
+  if (ios) return {title:'아이폰·아이패드에 설치하기',steps:['브라우저의 공유 버튼(□↑)을 눌러 주세요.','‘홈 화면에 추가’를 선택해 주세요. 보이지 않으면 공유 메뉴를 아래로 내려보세요.','‘추가’를 누른 뒤 홈 화면의 다맛다 아이콘으로 열어 주세요.']};
+  if (/Android/i.test(ua)) return {title:'홈 화면에 다맛다 설치하기',steps:['Chrome 또는 삼성 인터넷에서 이 페이지를 열어 주세요.','브라우저 메뉴(⋮ 또는 ☰)에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택해 주세요.','‘설치’ 또는 ‘추가’를 눌러 주세요. 이미 설치했다면 홈 화면의 다맛다 아이콘으로 열면 돼요.']};
+  return {title:'컴퓨터에 다맛다 설치하기',steps:['Chrome 또는 Edge에서 이 페이지를 열어 주세요.','주소창의 설치 아이콘이나 브라우저 메뉴의 ‘앱 설치’를 선택해 주세요.','‘설치’를 누르면 다맛다를 독립된 앱 창으로 열 수 있어요.']};
+}
+function openInstallGuide() {
+  closeSheet();
+  const guide = installInstructions(), bg = document.createElement('div');
+  bg.id='sheet';bg.className='sheet-bg';
+  bg.innerHTML=`<section class="sheet install-sheet" role="dialog" aria-modal="true" aria-labelledby="installTitle"><button class="sheet-x" data-act="item-close" aria-label="닫기">✕</button><div class="sheet-body"><img class="install-app-icon" src="icon-192.png" width="64" height="64" alt=""><h2 id="installTitle">${guide.title}</h2><p>홈 화면에서 다맛다를 바로 열 수 있어요.</p>${installPreview()?'<p class="install-preview-note">미리보기에서는 아래 운영 사이트를 열어 설치해 주세요.</p>':''}<ol>${guide.steps.map(step=>`<li>${esc(step)}</li>`).join('')}</ol><a class="btn gray block" href="${esc(installPageUrl())}" target="_blank" rel="noopener">브라우저에서 다맛다 열기 ↗</a><button class="text-btn block" data-act="install-copy">설치할 링크 복사</button><div id="installLinkCopy" hidden><label class="field">링크를 길게 눌러 복사해 주세요<textarea class="input" readonly rows="2"></textarea></label></div><small>설치 메뉴 이름은 브라우저에 따라 조금 다를 수 있어요.</small></div></section>`;
+  bg.addEventListener('click',event=>{if(event.target===bg)closeSheet();});
+  bg.addEventListener('keydown',event=>{
+    if(event.key!=='Tab')return;
+    const focusable=[...bg.querySelectorAll('button,a[href],textarea')].filter(el=>el.getClientRects().length),first=focusable[0],last=focusable.at(-1);
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+  });
+  $app.inert=true;document.body.append(bg);bg.querySelector('.sheet-x').focus();
+}
+async function installApp() {
+  if (appInstalled()) { toast('이미 앱으로 열려 있어요. 홈 화면의 다맛다 아이콘을 이용해 주세요.'); return; }
+  if (installBusy) return;
+  if (!deferredInstallPrompt || installPreview()) { openInstallGuide(); return; }
+  const prompt = deferredInstallPrompt;
+  deferredInstallPrompt=null;installBusy=true;refreshInstallUI();
+  try {
+    await prompt.prompt();
+    const choice = await prompt.userChoice;
+    if (!installedThisVisit) toast(choice.outcome==='accepted'?'설치 요청을 보냈어요. 브라우저의 안내를 확인해 주세요.':'원할 때 앱 설치하기를 다시 눌러 주세요.');
+  } catch { openInstallGuide(); }
+  finally { installBusy=false;refreshInstallUI(); }
+}
+addEventListener('beforeinstallprompt',event=>{
+  if (installPreview()) return;
+  event.preventDefault();deferredInstallPrompt=event;refreshInstallUI();
+});
+addEventListener('appinstalled',()=>{
+  installedThisVisit=true;deferredInstallPrompt=null;refreshInstallUI();
+  if(document.querySelector('.install-sheet'))closeSheet();
+  toast('다맛다를 설치했어요! 홈 화면에서 만나요.');
+});
+installDisplay?.addEventListener?.('change',refreshInstallUI);
+
 function viewHome() {
   const rooms=myRooms(),made=rooms.filter(r=>r.host),joined=rooms.filter(r=>!r.host);
   const tab=S.homeTab||(made.length||!rooms.length?'made':'joined'),list=tab==='made'?made:joined;
   if(rooms.length&&!S.sumsLoading&&rooms.some(r=>!S.sums[r.id]))loadSums(rooms);
   return `<header class="home-brand"><a href="#" aria-label="다맛다 홈">${brand()}</a><nav class="home-nav"><a href="#how">어떻게 써요?</a><a href="#new" class="home-small-cta">같이 담기 ↗</a></nav></header>
-  <section class="land"><div class="land-copy"><span class="land-kicker">우리끼리, 메뉴 모으는 곳</span><h1>오늘 뭐 먹어?<br><em>각자 담아봐.</em></h1><p>커피 한 잔부터 단체 점심까지.<br>각자 고른 메뉴를 한곳에 담아요.</p><button class="btn land-go" data-act="new">${BRAND_ICONS.cart}<b>같이 담기 시작</b><span aria-hidden="true">↗</span></button><span class="land-hint">초대받았다면 받은 링크로 들어오세요.</span></div>
+  <section class="land"><div class="land-copy"><span class="land-kicker">우리끼리, 메뉴 모으는 곳</span><h1>오늘 뭐 먹어?<br><em>각자 담아봐.</em></h1><p>커피 한 잔부터 단체 점심까지.<br>각자 고른 메뉴를 한곳에 담아요.</p><button class="btn land-go" data-act="new">${BRAND_ICONS.cart}<b>같이 담기 시작</b><span aria-hidden="true">↗</span></button><span class="land-hint">초대받았다면 받은 링크로 들어오세요.</span>${installButtonHtml()}</div>
   <div class="home-brand-scene"><h1 class="mobile-home-title">다맛다</h1><div class="brand-art"><img src="${brandAsset()}" alt="다맛다" fetchpriority="high"></div><div class="brand-motto">얼른 담아! 우리끼리 먹는다?</div>${DamatdaPlay.homeHTML()}</div></section>
   <div class="wrap home-content"><section class="my-rooms"><div class="seg wide" role="tablist" aria-label="같이 담는 모임"><button class="${tab==='made'?'on':''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab==='made'}">내가 연 모임 <small>${made.length}</small></button><button class="${tab==='joined'?'on':''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab==='joined'}">참여한 모임 <small>${joined.length}</small></button></div><div class="room-cards${list.length?'':' is-empty'}">${list.map(roomCard).join('')||homeEmptyTray(tab==='joined')}</div></section>
   <ol class="how brief-how" id="how"><li><i>01</i><b>가게 고르고</b></li><li><i>02</i><b>같이 담고</b></li><li><i>03</i><b>한 번에 모으기</b></li></ol></div><footer class="brand-footer"><span>다맛다 © 2026</span><div class="theme-options" role="group" aria-label="색상 테마"><button data-palette-choice="mint" aria-pressed="${document.documentElement.dataset.palette==='mint'}"><i></i>민트 · 귤</button><button data-palette-choice="sky" aria-pressed="${document.documentElement.dataset.palette==='sky'}"><i></i>블루 · 레몬</button></div><a class="screen-tour-link" href="screens.html">화면 둘러보기 ↗</a></footer>`;
@@ -3092,7 +3165,7 @@ async function loadSums(rooms) {
     }));
   } catch {}
   S.sumsLoading = false;
-  if (S.route === 'home') rerender();
+  if (S.route === 'home' && !document.querySelector('.install-sheet')) rerender();
 }
 
 // ---------- 방 만들기 ----------
@@ -3300,22 +3373,22 @@ const MENU_FILTERS = [['all', '전체'], ['best', '인기'], ['hot', '매운 것
 const canOpenLinks = location.origin !== 'null';
 const searchWords = value => str(value, 200).normalize('NFKC').toLocaleLowerCase('ko').trim().split(/\s+/).filter(Boolean);
 function menuGroups(query = S.menuQuery, filter = S.mfilter) {
-  const words = searchWords(query), stores = words.length ? S.room.stores : [storeOf(S.store)].filter(Boolean);
-  return stores.map(store => ({store, menu: foodMenus(store).filter(m => {
+  const words = searchWords(query);
+  return S.room.stores.map(store => ({store, menu: foodMenus(store).filter(m => {
     const hay = `${m.name} ${m.desc}`.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, '');
     return (filter === 'all' || (m.tags || []).includes(filter)) && words.every(word => hay.includes(word));
-  })})).filter(g => g.menu.length);
+  })})).filter(g => g.menu.length || (!words.length && filter === 'all'));
 }
 function menuFiltersHtml() {
-  const menus = searchWords(S.menuQuery).length ? S.room.stores.flatMap(foodMenus) : foodMenus(storeOf(S.store) || {});
+  const menus = S.room.stores.flatMap(foodMenus);
   const filters = MENU_FILTERS.filter(([k]) => k === 'all' || menus.some(m => (m.tags || []).includes(k)));
   if (!filters.some(([k]) => k === S.mfilter)) S.mfilter = 'all';
   return filters.length > 1 ? `<div class="tabs-line" role="group" aria-label="메뉴 필터">${filters.map(([k, l]) => `<button class="${S.mfilter === k ? 'on' : ''}" data-act="mfilter" data-f="${k}" aria-pressed="${S.mfilter === k}">${l}</button>`).join('')}</div>` : '';
 }
 function menuResultsHtml() {
   const searching = searchWords(S.menuQuery).length > 0, groups = menuGroups();
-  if (!groups.length) return `<div class="menu-search-empty"><h3>${searching ? '찾는 메뉴가 없어요' : '이 필터에 맞는 메뉴가 없어요'}</h3><p>${searching ? '다른 검색어를 입력하거나 검색·필터를 초기화해 보세요.' : '다른 필터를 선택해 보세요.'}</p><button class="btn gray" data-act="menu-search-reset">${searching ? '검색·필터 초기화' : '전체 메뉴 보기'}</button></div>`;
-  return groups.map(({store, menu}) => `${searching ? `<h2 class="search-store-title">${esc(store.name)} <small>${menu.length}개</small></h2>` : ''}<div class="menus">${menu.map(m => menuRow(m, store)).join('')}</div>`).join('');
+  if (!groups.length) return `<div class="menu-search-empty"><h3>${searching ? '찾는 메뉴가 없어요' : '이 필터에 맞는 메뉴가 없어요'}</h3><p>${searching ? '다른 검색어를 입력하거나 검색·필터를 초기화해 보세요.' : '다른 필터를 선택해 보세요.'}</p><button class="btn gray" data-act="menu-search-reset">${searching ? '검색·필터 초기화' : '전체 메뉴 보기'}</button></div>${searching ? S.room.stores.map(s=>missingMenuButton(s.id) ? `<div class="missing-menu-store"><b>${esc(s.name)}</b>${missingMenuButton(s.id)}</div>`:'').join('') : ''}`;
+  return groups.map(({store, menu}) => `<section class="room-menu-store" data-store-id="${esc(store.id)}" aria-labelledby="store-heading-${encodeURIComponent(store.id)}">${menuStoreHeader(store,menu.length)}<div class="menus">${menu.map(m => menuRow(m, store)).join('') || '<p class="hint">아직 등록된 메뉴가 없어요.</p>'}</div>${searching ? '' : storeGuidance(store)}${missingMenuButton(store.id)}</section>`).join('');
 }
 function menuSearchCount() {
   const groups = menuGroups(), n = groups.reduce((sum, g) => sum + g.menu.length, 0);
@@ -3326,31 +3399,28 @@ function refreshMenuSearch() {
   document.getElementById('menuFilters').innerHTML = menuFiltersHtml();
   document.getElementById('menuResults').innerHTML = menuResultsHtml();
   document.getElementById('menuSearchCount').textContent = menuSearchCount();
-  document.getElementById('storeBrowse').hidden = searchWords(S.menuQuery).length > 0;
-  document.getElementById('storeGuidance').hidden = searchWords(S.menuQuery).length > 0;
   document.getElementById('clearMenuSearch').disabled = !S.menuQuery;
 }
-function roomStore() {
-  const s = storeOf(S.store);
-  if (!s) { S.tab = 'menu'; return roomMenu(); }
-  const filters = menuFiltersHtml();
+function menuStoreHeader(s,count) {
   const q = encodeURIComponent((s.address || s.name).split(',')[0].replace(/\s*\([^)]*\)/g, '').trim());
   const acts = [
     s.phone ? `<button data-act="copy" data-text="${esc(s.phone)}" data-msg="📞 전화번호를 복사했어요">${ICON.phone}<span>${esc(s.phone)}</span></button>` : '',
     canOpenLinks && (s.address || s.naver) ? `<a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">${ICON.map}<span>지도</span></a>` : '',
     canOpenLinks && s.naver ? `<a href="${esc(s.naver)}" target="_blank" rel="noopener">${ICON.ext}<span>네이버</span></a>` : '',
   ].filter(Boolean);
-  const dl = deadlineInfo(S.room.deadline);
+  return `<div class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2 id="store-heading-${encodeURIComponent(s.id)}">${esc(s.name)}</h2><span>메뉴 ${count}개${searchWords(S.menuQuery).length ? ' 검색됨' : ''}</span></div></div>
+    ${acts.length || s.hours || s.note || s.checkedAt ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>기본 메뉴판 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
+  </div>`;
+}
+function roomStore() {
+  if (!S.room.stores.length) return roomMenu();
+  const filters = menuFiltersHtml(), dl = deadlineInfo(S.room.deadline);
   return `${topBar(esc(S.room.title), 'home', whoChip())}
   <div class="menu-context"><span>${S.room.closed ? '마감' : dl ? esc(dl.text) : '메뉴 모으는 중'}</span><span>${budget() ? `남은 ${won(budgetLeft())}` : `<b id="liveCount">${S.answers.size}</b>명 보냄`}</span></div>
-  <div id="storeBrowse"${searchWords(S.menuQuery).length ? ' hidden' : ''}>
-  ${S.room.stores.length > 1 ? `<div class="room-stores"><p>가게 ${S.room.stores.length}곳 · 눌러서 메뉴 보기</p><div class="store-tabs room-store-tabs" role="group" aria-label="이 모임의 가게">${S.room.stores.map(x=>`<button class="${x.id===s.id?'on':''}" data-act="store" data-id="${esc(x.id)}" aria-pressed="${x.id===s.id}"><b>${esc(x.name)}</b><small>메뉴 ${foodMenus(x).length}개</small></button>`).join('')}</div></div>` : ''}
-  <section class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2>${esc(s.name)}</h2><span>메뉴 ${foodMenus(s).length}개</span></div></div>
-    ${acts.length || s.hours || s.note || s.checkedAt ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>기본 메뉴판 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
-  </section></div>
   <div class="wrap menu-notices">${closedNote()}${sentNote()}${answerConflictHtml()}</div>
+  <p class="room-menu-intro">가게 ${S.room.stores.length}곳 · 모든 가게의 메뉴를 함께 골라요</p>
   <div class="menu-toolbar"><div class="menu-search"><label for="menuSearch">이 방 메뉴 검색</label><div class="menu-search-row"><input class="input" type="search" id="menuSearch" aria-label="이 방 메뉴 검색" value="${esc(S.menuQuery)}" maxlength="80" placeholder="메뉴 검색" autocomplete="off" aria-controls="menuResults"><button id="clearMenuSearch" class="small-btn" data-act="menu-search-clear" aria-label="검색어 지우기"${S.menuQuery ? '' : ' disabled'}>×</button></div><p id="menuSearchCount" class="search-count" role="status" aria-live="polite" aria-atomic="true">${menuSearchCount()}</p></div><div id="menuFilters">${filters}</div></div>
-  <div id="menuResults">${menuResultsHtml()}</div><div id="storeGuidance" class="wrap"${searchWords(S.menuQuery).length ? ' hidden' : ''}>${storeGuidance(s)}</div>${missingMenuButton()}
+  <div id="menuResults">${menuResultsHtml()}</div>
   ${cartBar()}${roomNav()}`;
 }
 function quickRequests(storeId) {
@@ -3602,7 +3672,12 @@ function openItem(id) {
   document.body.append(bg);
   bg.querySelector('[data-act="sheet-add"]')?.focus();
 }
-function closeSheet() { if (avatarPicker) closeAvatarPicker(); document.getElementById('sheet')?.remove(); }
+function closeSheet() {
+  if (avatarPicker) closeAvatarPicker();
+  const install = !!document.querySelector('.install-sheet');
+  document.getElementById('sheet')?.remove();
+  if (install) { $app.inert=false;document.querySelector('[data-act="install-app"]')?.focus(); }
+}
 function bumpCart() {
   buzz(10);
   animateAddToCart();
@@ -3737,6 +3812,8 @@ document.addEventListener('click', async e => {
   if (!el) return;
   const act = el.dataset.act, id = el.dataset.id;
   switch (act) {
+    case 'install-app': await installApp(); break;
+    case 'install-copy': copyOrShow(installPageUrl(),'설치할 링크를 복사했어요. 브라우저 주소창에 붙여넣어 주세요.','installLinkCopy'); break;
     case 'home':
       e.preventDefault();
       if (S.route === 'room' && S.tab === 'set' && S.edit?.dirty) { toast('바꾼 내용을 저장하거나 되돌려 주세요'); return; }
