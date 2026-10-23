@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="6183fb4675837a99">
+<meta name="damatda-build" content="ed55104f4b42ba89">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
@@ -1760,6 +1760,11 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 @media(min-width:1000px){.app-update,#app.with-room-nav~.app-update{left:auto;right:24px;bottom:24px;transform:none}}
 @media print{.app-update{display:none}}
 @media(max-width:360px){.app-update{padding:14px}.update-actions button{flex:1;padding:10px 8px}}
+.app-update{max-height:calc(100dvh - 36px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain}
+.app-update .update-changes{margin:10px 0;padding:11px 12px 11px 28px;border-radius:11px;background:var(--mint-ll,#f2f8f8);font-size:13px;line-height:1.65;overflow-wrap:anywhere;text-align:left}
+.update-changes li+li{margin-top:5px}
+#app.with-room-nav~.app-update{max-height:calc(100dvh - 160px - env(safe-area-inset-bottom,0px))}
+@media(min-width:1000px){#app.with-room-nav~.app-update{max-height:calc(100dvh - 48px)}}
 </style>
 </head>
 <body>
@@ -2647,14 +2652,16 @@ function persistDraft() { if (S.draft) save('mm-create-draft', S.draft); }
 // Releases are fingerprinted by build.py. A newer release never reloads an open
 // order until the user accepts; this also works in installed standalone windows.
 const APP_BUILD = document.querySelector('meta[name="damatda-build"]')?.content || '';
-const appUpdate = {next:'', dismissed:'', checking:false, applying:false, checkedAt:0, error:'', markup:''};
+const appUpdate = {next:'', changes:[], dismissed:'', checking:false, applying:false, checkedAt:0, error:'', markup:''};
 const validAppBuild = value => typeof value === 'string' && /^[a-f0-9]{16}$/.test(value);
+const appReleaseChanges = value => Array.isArray(value) ? value.filter(x=>typeof x==='string').map(x=>x.trim().slice(0,80)).filter(Boolean).slice(0,3) : [];
 function renderAppUpdate() {
   const notice = document.getElementById('appUpdate');
   if (!notice) return;
   notice.hidden = !appUpdate.next || appUpdate.next === appUpdate.dismissed;
   if (notice.hidden) return;
-  const content = `<div class="update-copy" role="status"><strong>새 버전이 나왔어요 ✨</strong><p>${appUpdate.error || '담은 메뉴와 작성 중인 주문은 유지돼요.'}</p></div><div class="update-actions"><button data-act="update-later" ${appUpdate.applying?'disabled':''}>나중에</button><button class="update-apply" data-act="update-apply" ${appUpdate.applying?'disabled':''}>${appUpdate.applying?'불러오는 중…':'업데이트 적용'}</button></div>`;
+  const changes = appUpdate.changes.length ? `<ul class="update-changes" aria-label="바뀐 내용">${appUpdate.changes.map(text=>`<li>${esc(text)}</li>`).join('')}</ul>` : '';
+  const content = `<div class="update-copy" role="status"><strong>새 버전이 나왔어요 ✨</strong>${changes}<p>${appUpdate.error || '담은 메뉴와 작성 중인 주문은 유지돼요.'}</p></div><div class="update-actions"><button data-act="update-later" ${appUpdate.applying?'disabled':''}>나중에</button><button class="update-apply" data-act="update-apply" ${appUpdate.applying?'disabled':''}>${appUpdate.applying?'불러오는 중…':'업데이트 적용'}</button></div>`;
   if (appUpdate.markup !== content) { appUpdate.markup=content; notice.innerHTML=content; }
 }
 async function checkAppUpdate() {
@@ -2666,9 +2673,9 @@ async function checkAppUpdate() {
     if (!response.ok) return;
     const release = await response.json();
     if (release.schema !== 1 || !validAppBuild(release.build)) return;
-    if (release.build === APP_BUILD) { appUpdate.next=''; renderAppUpdate(); return; }
+    if (release.build === APP_BUILD) { appUpdate.next=''; appUpdate.changes=[]; renderAppUpdate(); return; }
     if (appUpdate.next !== release.build) appUpdate.error='';
-    appUpdate.next = release.build; renderAppUpdate();
+    appUpdate.next = release.build; appUpdate.changes=appReleaseChanges(release.changes); renderAppUpdate();
   } catch {} // Offline, failed or partial deployments must never interrupt ordering.
   finally { clearTimeout(timer); appUpdate.checking=false; }
 }
@@ -2703,7 +2710,7 @@ async function applyAppUpdate() {
     if (!releaseResponse.ok) throw new Error('Release check failed');
     const release = await releaseResponse.json();
     if (release.schema !== 1 || !validAppBuild(release.build)) throw new Error('Invalid release');
-    appUpdate.next=release.build;
+    appUpdate.next=release.build; appUpdate.changes=appReleaseChanges(release.changes);
     if (release.build === APP_BUILD) { appUpdate.next=''; return; }
     const target = new URL(location.href);
     target.searchParams.set('app-update',appUpdate.next);
