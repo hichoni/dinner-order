@@ -22,9 +22,13 @@ async function addSharedMenu(storeId,name,price) {
   if(!UID||!S.who||!roomId||!store)throw Error('이름과 가게를 먼저 선택해 주세요.');
   if(locked())throw Error('마감된 모임에는 메뉴를 추가할 수 없어요.');
   if(!name||name.length>40)throw Error('메뉴 이름을 40자 이내로 적어 주세요.');
+  if(menuKind({name})!=='menu')throw Error('배달 지역·추가요금 안내는 메뉴로 담을 수 없어요. 적용 금액은 가게에 확인해 주세요.');
   if(!Number.isInteger(price)||price<0||price>10000000)throw Error('메뉴판에 적힌 가격을 원 단위로 입력해 주세요.');
   const existing=store.menu.find(menu=>sharedMenuKey(menu.name)===sharedMenuKey(name));
-  if(existing)return {item:ITEMS.get(existing.id),created:false};
+  if(existing) {
+    if(menuKind(existing)!=='menu')throw Error('이 항목은 음식 메뉴가 아닌 배달·추가요금 안내예요.');
+    return {item:ITEMS.get(existing.id),created:false};
+  }
   const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(storeId+'\n'+sharedMenuKey(name)));
   const id='custom-'+[...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('').slice(0,30);
   if(S.roomId!==roomId||S.who!==by)return null;

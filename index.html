@@ -1630,6 +1630,12 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 /* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
 .catalog-area-label{display:block;font-size:15px;font-weight:650;margin:14px 0 8px}.mm #catalogArea{width:100%;min-height:48px}.region-picker.andong-regions{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 16px}.region-picker.andong-regions button{display:flex;gap:6px;min-height:42px;padding:8px 11px;border-radius:13px}.region-picker.andong-regions b{font-size:13px;white-space:nowrap}.region-picker.andong-regions small{font-size:11px;margin:0}.catalog-result-count{font-size:13px;color:var(--sub);margin:14px 0 10px}.catalog-row-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px}.catalog-row-tools .text-btn{font-size:13px;min-height:40px}.catalog-row-tools>span{color:var(--sub);font-size:11px}.catalog-menu-preview{margin:6px 0 2px;padding:12px;border:1px solid var(--line);border-radius:13px;background:#f5fcf9}.catalog-menu-preview>div{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.catalog-menu-preview b{font-weight:650;overflow-wrap:anywhere;min-width:0}.catalog-menu-preview span{flex-shrink:0;font-variant-numeric:tabular-nums}.catalog-menu-preview p{font-size:12px;line-height:1.6;color:var(--sub);margin:8px 0}.catalog-menu-preview .catalog-match-label{font-weight:700;color:var(--mint-d)}:root[data-palette=sky] .catalog-menu-preview{background:#f4f9fd}.mm.view-catalog .prow-main{cursor:pointer}.mm.view-catalog .prow-txt .menu-line{-webkit-line-clamp:2;line-clamp:2}
 @media(max-width:360px){.catalog-row-tools{flex-wrap:wrap;gap:0}.catalog-row-tools>span{padding-bottom:8px}.region-picker.andong-regions button{padding:8px 9px}}
+/* P1: compare conflicting drafts, keep guidance apart from selectable food. */
+.mm .answer-conflict{padding:18px;margin:14px 0;border:1px solid #c8dfb8;border-radius:18px;background:linear-gradient(130deg,#fffef4f5,#e8faf3ee);box-shadow:inset 0 1px #fff,0 8px 22px #337c6c13;color:var(--ink)}
+.mm .answer-conflict h2{font-size:17px;line-height:1.5}.mm .answer-conflict p,.mm .answer-conflict>small{font-size:13px;line-height:1.6}.mm .answer-conflict>small{display:block;margin-top:8px;color:var(--sub)}.mm .answer-conflict details{margin:12px 0}.mm .answer-conflict summary{cursor:pointer;font-weight:650;min-height:36px}.mm .answer-conflict h3{font-size:14px;margin:14px 0 8px}.mm .answer-conflict .ticket{margin:0 0 12px}
+.mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
+.mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
+.mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
 </style>
 </head>
 <body>
@@ -2357,6 +2363,26 @@ const num = v => (Number.isFinite(Number(v)) ? Math.max(0, Math.round(Number(v))
 // ---------- 가게 모양 다듬기 (방 문서는 아무나 만들 수 있으니 읽을 때 늘 다듬어요) ----------
 const safeImg = u => (/^https:\/\/[^\s"'<>]+$/.test(u || '') ? u : '');
 const safeColor = c => (/^#[0-9a-fA-F]{3,8}$/.test(c || '') ? c : '#eef2f3');
+// Keep source rows and IDs, but never treat delivery guidance as food.
+function menuKind(m) {
+  if (['menu', 'delivery', 'fee', 'info'].includes(m.kind)) return m.kind;
+  const name = String(m.name || '').normalize('NFKC').trim();
+  if (/배달\s*(비|료)|배송\s*(비|료)|(?:추가|원거리)\s*요금|용기\s*(값|비)/.test(name)
+    && !/세트|치킨|찜닭|피자|버거|국밥|국수|라떼|커피|아메리카노|도시락|정식/.test(name)) return 'fee';
+  if (/^(?:배달|배송)\s*(?:지역|구역|안내|가능|불가)/.test(name)
+    || /^(?:호암길,\s*1길,\s*2길,\s*3길|직곡길,\s*영주방향|서후면\s*과학대\s*방면|하이마로,\s*생명과학고\s*방면)$/.test(name)) return 'delivery';
+  return 'menu';
+}
+const foodMenus = s => (s.menu || []).filter(m => menuKind(m) === 'menu');
+const guidanceMenus = s => (s.menu || []).filter(m => menuKind(m) !== 'menu');
+function storeGuidance(s) {
+  const rows = guidanceMenus(s);
+  return rows.length ? `<details class="store-guidance"><summary>배달·추가요금 안내 <small>${rows.length}건 · 메뉴와 별도</small></summary><p>안내 금액은 장바구니·주문 합계에 포함하지 않아요. 적용 여부와 최종 금액은 가게에 확인해 주세요.</p>${rows.map(m => `<div class="guidance-row"><span>${esc(m.name)}${m.desc ? `<small>${esc(m.desc)}</small>` : ''}</span><b>${price(m.price)}</b></div>`).join('')}</details>` : '';
+}
+function menuPricePreview(s) {
+  const menus = foodMenus(s), best = menus.filter(m => (m.tags || []).includes('best'));
+  return `<span class="menu-price-preview">${(best.length ? best : menus).slice(0, 3).map(m => `<span><b>${esc(m.name)}</b><span>${price(m.price)}</span></span>`).join('')}</span>`;
+}
 function tidyStore(s, i = 0) {
   s = s && typeof s === 'object' ? s : {};
   const id = str(s.id, 40) || `s${i}`;
@@ -2370,6 +2396,7 @@ function tidyStore(s, i = 0) {
       id: str(m.id, 40), name: str(m.name, 40, '메뉴'), emoji: str(m.emoji, 8), price: num(m.price), desc: str(m.desc, 120),
       tags: Array.isArray(m.tags) ? m.tags.filter(t => ['best', 'kid', 'hot'].includes(t)) : [], img: safeImg(str(m.img, 400)),
       imgFrom: ['review', 'ref'].includes(m.imgFrom) ? m.imgFrom : '',
+      kind: menuKind(m),
     })),
   };
 }
@@ -2408,7 +2435,7 @@ function tidyAnswer(id, d) {
 const S = {
   route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: false, error: '',
   tab: 'menu', store: null, mfilter: 'all', menuQuery: '',
-  who: '', cart: {}, req: '', storeReqs: {}, sentAt: 0,
+  who: '', cart: {}, req: '', storeReqs: {}, sentAt: 0, answerBase: null, answerConflict: false,
   draft: null, catFor: 'create', catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(), catLimit: 40, catPreview: '', catDetail: null,
   edit: null, sumBy: 'store', byPerson: true, sending: false, createError: '',
   homeTab: '', sums: {}, sumsLoading: false,
@@ -2423,7 +2450,7 @@ function rememberRoom(id, patch) {
 const sentNames = id => load('mm-sent', {})[id] || [];
 function setSentNames(id, names) { const all = load('mm-sent', {}); if (names.length) all[id] = names; else delete all[id]; save('mm-sent', all); }
 const roomLocal = () => load('mm-room-' + S.roomId, {});
-function persistRoom() { save('mm-room-' + S.roomId, {who: S.who, cart: S.cart, req: S.req, storeReqs: S.storeReqs, sentAt: S.sentAt}); }
+function persistRoom() { save('mm-room-' + S.roomId, {who: S.who, cart: S.cart, req: S.req, storeReqs: S.storeReqs, sentAt: S.sentAt, answerBase: S.answerBase}); }
 function persistDraft() { if (S.draft) save('mm-create-draft', S.draft); }
 
 function toast(msg) {
@@ -2463,7 +2490,7 @@ async function openRoom(id, key, want = '') {
   stopListening();
   Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all'});
   const local = roomLocal();
-  Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), sentAt: local.sentAt || 0, tab: local.who ? 'menu' : 'who'});
+  Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), sentAt: local.sentAt || 0, answerBase: validAnswerBase(local.answerBase), answerConflict: false, tab: local.who ? 'menu' : 'who'});
   render();
   try {
     await boot();
@@ -2489,7 +2516,7 @@ async function openRoom(id, key, want = '') {
       if (first && S.created) setTimeout(() => confetti(document.querySelector('.share-card .sc-ic')), 250);
       const initialView = first;
       first = false;
-      reindex(); syncAvatarPicker(); migrateMyAvatar(); keepView();
+      reindex(); syncAnswerDraft(); syncAvatarPicker(); migrateMyAvatar(); keepView();
       if (initialView) rememberView();
     }, e => { S.loading = false; S.error = /permission/.test(String(e && e.code)) ? '방 기능이 아직 켜지지 않았어요(Firebase 규칙 게시 전이에요). 방을 관리하는 사람에게 알려 주세요.' : friendly(e); render(); }));
     let firstAnswers = true;
@@ -2502,6 +2529,7 @@ async function openRoom(id, key, want = '') {
       }
       firstAnswers = false;
       S.answers = new Map(snap.docs.map(d => [d.id, tidyAnswer(d.id, d.data())])); S.answersReady = true;
+      if (!snap.metadata?.hasPendingWrites) syncAnswerDraft();
       if (UID) setSentNames(id, [...S.answers.values()].filter(a => a.uid === UID).map(a => a.name));
       syncAvatarPicker(); migrateMyAvatar(); keepView();
     }, () => {}));
@@ -2531,7 +2559,17 @@ function keepView() {
   if (document.getElementById('sheet')) return;
   rerender(); bumpLive();
 }
-function refreshLive() { const n = document.getElementById('liveCount'); if (n) n.textContent = S.answers.size; }
+function refreshLive() {
+  const n = document.getElementById('liveCount'); if (n) n.textContent = S.answers.size;
+  const notice = document.getElementById('answerConflictNotice');
+  if (notice && S.answerConflict) {
+    const expanded = !!notice.querySelector('details[open]');
+    notice.outerHTML = answerConflictHtml();
+    if (expanded) document.querySelector('#answerConflictNotice details')?.setAttribute('open','');
+    const status = document.getElementById('selectionStatus'); if (status) status.outerHTML = selectionStatus();
+  }
+  if (S.answerConflict) { const bar = document.querySelector('.cartbar[data-act="send"]'); if (bar) bar.remove(); }
+}
 // 숫자가 바뀌면 톡 튀어요
 function bumpLive() { if (!S.bumpLive) return; S.bumpLive = false; for (const e of document.querySelectorAll('#liveCount, .prog-num b')) { e.classList.remove('bump'); void e.offsetWidth; e.classList.add('bump'); } }
 
@@ -2559,9 +2597,13 @@ async function addSharedMenu(storeId,name,price) {
   if(!UID||!S.who||!roomId||!store)throw Error('이름과 가게를 먼저 선택해 주세요.');
   if(locked())throw Error('마감된 모임에는 메뉴를 추가할 수 없어요.');
   if(!name||name.length>40)throw Error('메뉴 이름을 40자 이내로 적어 주세요.');
+  if(menuKind({name})!=='menu')throw Error('배달 지역·추가요금 안내는 메뉴로 담을 수 없어요. 적용 금액은 가게에 확인해 주세요.');
   if(!Number.isInteger(price)||price<0||price>10000000)throw Error('메뉴판에 적힌 가격을 원 단위로 입력해 주세요.');
   const existing=store.menu.find(menu=>sharedMenuKey(menu.name)===sharedMenuKey(name));
-  if(existing)return {item:ITEMS.get(existing.id),created:false};
+  if(existing) {
+    if(menuKind(existing)!=='menu')throw Error('이 항목은 음식 메뉴가 아닌 배달·추가요금 안내예요.');
+    return {item:ITEMS.get(existing.id),created:false};
+  }
   const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(storeId+'\n'+sharedMenuKey(name)));
   const id='custom-'+[...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('').slice(0,30);
   if(S.roomId!==roomId||S.who!==by)return null;
@@ -2615,13 +2657,49 @@ function openSharedMenu(storeId) {
 
 // ---------- 메뉴 찾기 ----------
 const ITEMS = new Map();
-function reindex() { mergeSharedMenus(); ITEMS.clear(); for (const s of S.room?.stores || []) for (const m of s.menu) ITEMS.set(m.id, {...m, store: s}); }
+function reindex() { mergeSharedMenus(); ITEMS.clear(); for (const s of S.room?.stores || []) for (const m of foodMenus(s)) ITEMS.set(m.id, {...m, store: s}); }
 const storeOf = id => S.room?.stores.find(s => s.id === id);
 const cartLines = () => Object.entries(S.cart).filter(([id, n]) => ITEMS.has(id) && n > 0).map(([id, n]) => ({item: ITEMS.get(id), n}));
 const cartCount = () => cartLines().reduce((a, l) => a + l.n, 0);
 const cartSum = () => cartLines().reduce((a, l) => a + l.n * l.item.price, 0);
-function setQty(id, n) { n = Math.max(0, Math.min(30, n)); if (n) S.cart[id] = n; else delete S.cart[id]; persistRoom(); }
+function setQty(id, n) { if (!ITEMS.has(id)) return; n = Math.max(0, Math.min(30, n)); if (n) S.cart[id] = n; else delete S.cart[id]; persistRoom(); }
 const myAnswer = () => (S.who ? S.answers.get(answerId(S.who)) : null);
+function orderContent(a) {
+  const items = a?.items || [];
+  return JSON.stringify([items.map(i => [i.m, i.n, i.name, i.price, i.s]).sort((x,y) => x[0].localeCompare(y[0])), str(a?.req,200).trim(), requestsForItems(a?.storeReqs,items)]);
+}
+const answerVersion = a => a ? JSON.stringify([str(a.uid,128), orderContent(a)]) : null;
+const currentDraft = () => ({req:S.req, storeReqs:draftStoreReqs(), items:cartLines().map(l => ({m:l.item.id,n:l.n,name:l.item.name,price:l.item.price,s:l.item.store.id}))});
+function validAnswerBase(base) { return base && (base.version === null || typeof base.version === 'string') && typeof base.content === 'string' ? base : null; }
+function loadLatestAnswer() {
+  const a = myAnswer();
+  S.cart = Object.fromEntries((a?.items || []).filter(i => ITEMS.has(i.m)).map(i => [i.m,i.n]));
+  S.req = a?.req || ''; S.storeReqs = tidyStoreReqs(a?.storeReqs);
+  S.answerBase = {version:answerVersion(a),content:orderContent(currentDraft())};
+  S.answerConflict = false; persistRoom();
+}
+function syncAnswerDraft() {
+  if (!S.who || !S.room || !S.answersReady || S.sending) return;
+  if (S.answerConflict) return; // Only the explicit latest-submission action resolves a conflict.
+  const a = myAnswer(), content = orderContent(currentDraft());
+  const active = document.activeElement;
+  const editingRequest = !!active?.closest?.('#app') && (active.id === 'req' || !!active.dataset?.storeReq);
+  if (!S.answerBase) {
+    if (a && editingRequest) { S.answerConflict = true; return; }
+    if (!a || content === orderContent(a) || (!cartCount() && !S.req && !Object.values(S.storeReqs).some(Boolean))) {
+      if (a) loadLatestAnswer();
+      else { S.answerBase = {version:null,content:orderContent(null)}; S.answerConflict = false; persistRoom(); }
+    } else S.answerConflict = true; // Old local drafts have no trustworthy editing baseline.
+  } else if (S.answerBase.version !== answerVersion(a)) {
+    if (content === S.answerBase.content && !editingRequest) loadLatestAnswer();
+    else S.answerConflict = true;
+  } else S.answerConflict = false;
+}
+function answerConflictHtml() {
+  if (!S.answerConflict) return '<div id="answerConflictNotice"></div>';
+  const latest = myAnswer();
+  return `<div id="answerConflictNotice"><section class="answer-conflict" role="alert"><h2>다른 화면에서 제출 내용이 바뀌었어요</h2><p>작성 중인 초안은 그대로 두었어요. 최신 제출을 확인한 뒤 다시 고쳐 주세요.</p><details><summary>최신 제출과 내 초안 비교</summary><h3>최신 제출</h3>${latest ? ticket(latest) : '<p>현재 제출된 메뉴가 없어요.</p>'}<h3>이 화면의 초안</h3>${ticket({...currentDraft(),name:S.who,at:Date.now()},true)}</details><button class="btn block" data-act="answer-latest">최신 제출 불러오기</button><small>누르면 이 화면의 초안을 최신 제출 내용으로 바꿔요.</small></section></div>`;
+}
 // 🎁 예산: 담으려는 것까지 합쳐 1인당 예산을 넘는지(가격 모르는 메뉴는 0원으로 쳐요)
 const budget = () => S.room?.treat?.cap || 0;
 const budgetLeft = () => budget() - cartSum();
@@ -2650,7 +2728,7 @@ function captureRequests() {
 function selectionStatus() {
   const a = myAnswer(), same = cartIsSent();
   const text = !a ? '아직 보내지 않았어요' : same ? '메뉴를 보냈어요' : '변경사항을 아직 보내지 않았어요';
-  return `<div id="selectionStatus" class="selection-status ${same ? 'sent' : 'draft'}" role="status"><b>${text}</b>${a && !same ? '<span>다시 보내기 전까지 보낸 메뉴는 유지돼요.</span>' : ''}</div>`;
+  return `<div id="selectionStatus" class="selection-status ${same ? 'sent' : 'draft'}" role="status"><b>${S.answerConflict ? '최신 제출 확인이 필요해요' : text}</b>${a && !same ? '<span>다시 보내기 전까지 보낸 메뉴는 유지돼요.</span>' : ''}</div>`;
 }
 
 // ---------- 시간 ----------
@@ -2695,7 +2773,7 @@ function thumb(s, cls = '') {
 }
 document.addEventListener('error', e => { const t = e.target; if (t && t.tagName === 'IMG' && t.hasAttribute('data-fb')) t.remove(); }, true);
 document.addEventListener('load', e => { const t = e.target; if (t && t.tagName === 'IMG' && t.hasAttribute('data-fb')) t.classList.add('on'); }, true);
-const minPrice = s => Math.min(...s.menu.map(m => m.price).filter(Boolean), Infinity);
+const minPrice = s => Math.min(...foodMenus(s).map(m => m.price).filter(Boolean), Infinity);
 const storeMeta = s => [s.category, s.reviews ? `리뷰 ${s.reviews.toLocaleString('ko-KR')}` : '', s.area].filter(Boolean).map(esc).join('<i>·</i>');
 const TAG_LABEL = {best: ['', '인기'], hot: ['hot', '매움']};
 const tags = m => (m.tags || []).map(t => (TAG_LABEL[t] ? `<span class="tag ${TAG_LABEL[t][0]}">${TAG_LABEL[t][1]}</span>` : '')).join('');
@@ -2868,7 +2946,7 @@ function parseMenu(text, sid) {
   });
 }
 function storeRow(s, act) {
-  return `<div class="pick-row">${thumb(s, 'sm')}<div class="pr-txt"><b>${esc(s.name)}</b><span>메뉴 ${s.menu.length}개${Number.isFinite(minPrice(s)) ? ` · ${won(minPrice(s))}~` : ''}</span></div>${act}</div>`;
+  return `<div class="pick-row">${thumb(s, 'sm')}<div class="pr-txt"><b>${esc(s.name)}</b><span>메뉴 ${foodMenus(s).length}개${guidanceMenus(s).length ? ` · 배달·추가요금 안내 ${guidanceMenus(s).length}건` : ''}</span></div>${act}</div>`;
 }
 function customForm(prefix) {
   const c = (prefix === 'c' ? S.draft.custom : S.editCustom) || {name: '', lines: ''};
@@ -2924,15 +3002,15 @@ function catalogList() {
   const list = CATALOG.stores.filter(catalogMatches).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   const visible=list.slice(0,S.catLimit);
   return visible.map(s => {
-    const on = S.catPicked.has(s.id), low = s.menuMin || minPrice(s), expanded=S.catPreview===s.id;
+    const on = S.catPicked.has(s.id), expanded=S.catPreview===s.id;
     const detail=expanded && S.catDetail?.id===s.id ? S.catDetail : null;
-    const words=searchWords(S.catQuery), matches=words.length && detail ? detail.menu.filter(m=>words.every(w=>searchText(m.name).includes(w))) : [];
-    const previewMenus=detail ? [...matches,...detail.menu.filter(m=>!matches.includes(m))] : [];
+    const words=searchWords(S.catQuery), matches=words.length && detail ? foodMenus(detail).filter(m=>words.every(w=>searchText(m.name).includes(w))) : [];
+    const previewMenus=detail ? [...matches,...foodMenus(detail).filter(m=>!matches.includes(m))] : [];
     return `<article class="prow${on ? ' on' : ''}"><label class="prow-main">${thumb(s, 'md')}
-      <div class="prow-txt"><b>${esc(s.name)}</b><div class="meta">${storeMeta({...s,minutes:0})}</div><div class="menu-line">${esc(s.menu.slice(0, 3).map(m => m.name).join(', '))}${Number.isFinite(low) ? ` · ${won(low)}~` : ''}</div></div>
+      <div class="prow-txt"><b>${esc(s.name)}</b><div class="meta">${storeMeta({...s,minutes:0})}</div>${menuPricePreview(s)}</div>
       <span class="catalog-check"><input type="checkbox" data-act="cat-pick" data-id="${esc(s.id)}"${on ? ' checked' : ''} aria-label="${esc(s.name)} 넣기"><i aria-hidden="true"></i></span></label>
       <div class="catalog-row-tools"><button class="text-btn" data-act="cat-preview" data-id="${esc(s.id)}" aria-expanded="${expanded}">메뉴 ${s.menuCount || s.menu.length}개 ${expanded?'접기':'보기'}</button>${s.checkedAt ? `<span>메뉴·가격 확인 ${esc(s.checkedAt)}</span>`:''}</div>
-      ${expanded ? `<div class="catalog-menu-preview">${S.catMenuError ? '<p role="alert">메뉴를 불러오지 못했어요. 닫고 다시 열어 주세요.</p>' : detail ? `${detail.menuBasis ? `<p>${esc(detail.menuBasis)} 기준</p>`:''}${matches.length ? '<p class="catalog-match-label">검색한 메뉴를 먼저 보여드려요.</p>':''}${previewMenus.map(m=>`<div><b>${esc(m.name)}</b><span>${price(m.price)}</span></div>`).join('')}<p>확인한 메뉴판 기준이며 실제 가격·판매 여부는 달라질 수 있어요.</p>` : '<p role="status">메뉴를 불러오는 중…</p>'}</div>`:''}</article>`;
+      ${expanded ? `<div class="catalog-menu-preview">${S.catMenuError ? '<p role="alert">메뉴를 불러오지 못했어요. 닫고 다시 열어 주세요.</p>' : detail ? `${detail.menuBasis ? `<p>${esc(detail.menuBasis)} 기준</p>`:''}${matches.length ? '<p class="catalog-match-label">검색한 메뉴를 먼저 보여드려요.</p>':''}${previewMenus.map(m=>`<div><b>${esc(m.name)}</b><span>${price(m.price)}</span></div>`).join('')}${storeGuidance(detail)}<p>확인한 메뉴판 기준이며 실제 가격·판매 여부는 달라질 수 있어요.</p>` : '<p role="status">메뉴를 불러오는 중…</p>'}</div>`:''}</article>`;
   }).join('') + (list.length>visible.length ? `<button class="btn gray block" data-act="cat-more">40곳 더 보기 (${visible.length}/${list.length})</button>`:'') || '<p class="muted empty-line">맞는 가게가 없어요. 다른 동네나 검색어로 찾아보세요.</p>';
 }
 function viewCatalog() {
@@ -2999,14 +3077,11 @@ function roomWho() {
 }
 function storeCard(s) {
   const n = s.menu.reduce((a, m) => a + (S.cart[m.id] || 0), 0);
-  const best = s.menu.filter(m => (m.tags || []).includes('best'));
-  const line = (best.length ? best : s.menu).slice(0, 3).map(m => m.name).join(', ');
-  const low = minPrice(s);
   return `<button class="store" data-act="store" data-id="${esc(s.id)}">${thumb(s)}
     <div class="body"><div class="nm"><b>${esc(s.name)}</b></div>
       ${storeMeta(s) ? `<div class="meta">${storeMeta(s)}</div>` : ''}
-      <div class="menu-line">${esc(line)}</div>
-      <div class="from">${Number.isFinite(low) ? `<b>${won(low)}~</b>` : ''}<span>메뉴 ${s.menu.length}개</span></div></div>
+      ${menuPricePreview(s)}
+      <div class="from"><span>메뉴 ${foodMenus(s).length}개</span></div></div>
     ${n ? `<span class="badge">${n}개 고름</span>` : ''}</button>`;
 }
 function cartBar(label = '', act = 'tab" data-t="cart') {
@@ -3051,13 +3126,13 @@ const canOpenLinks = location.origin !== 'null';
 const searchWords = value => str(value, 200).normalize('NFKC').toLocaleLowerCase('ko').trim().split(/\s+/).filter(Boolean);
 function menuGroups(query = S.menuQuery, filter = S.mfilter) {
   const words = searchWords(query), stores = words.length ? S.room.stores : [storeOf(S.store)].filter(Boolean);
-  return stores.map(store => ({store, menu: store.menu.filter(m => {
+  return stores.map(store => ({store, menu: foodMenus(store).filter(m => {
     const hay = `${m.name} ${m.desc}`.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, '');
     return (filter === 'all' || (m.tags || []).includes(filter)) && words.every(word => hay.includes(word));
   })})).filter(g => g.menu.length);
 }
 function menuFiltersHtml() {
-  const menus = searchWords(S.menuQuery).length ? S.room.stores.flatMap(s => s.menu) : (storeOf(S.store)?.menu || []);
+  const menus = searchWords(S.menuQuery).length ? S.room.stores.flatMap(foodMenus) : foodMenus(storeOf(S.store) || {});
   const filters = MENU_FILTERS.filter(([k]) => k === 'all' || menus.some(m => (m.tags || []).includes(k)));
   if (!filters.some(([k]) => k === S.mfilter)) S.mfilter = 'all';
   return filters.length > 1 ? `<div class="tabs-line" role="group" aria-label="메뉴 필터">${filters.map(([k, l]) => `<button class="${S.mfilter === k ? 'on' : ''}" data-act="mfilter" data-f="${k}" aria-pressed="${S.mfilter === k}">${l}</button>`).join('')}</div>` : '';
@@ -3077,6 +3152,7 @@ function refreshMenuSearch() {
   document.getElementById('menuResults').innerHTML = menuResultsHtml();
   document.getElementById('menuSearchCount').textContent = menuSearchCount();
   document.getElementById('storeBrowse').hidden = searchWords(S.menuQuery).length > 0;
+  document.getElementById('storeGuidance').hidden = searchWords(S.menuQuery).length > 0;
   document.getElementById('clearMenuSearch').disabled = !S.menuQuery;
 }
 function roomStore() {
@@ -3093,12 +3169,12 @@ function roomStore() {
   return `${topBar(esc(S.room.title), 'home', whoChip())}
   <div class="menu-context"><span>${S.room.closed ? '마감' : dl ? esc(dl.text) : '메뉴 모으는 중'}</span><span>${budget() ? `남은 ${won(budgetLeft())}` : `<b id="liveCount">${S.answers.size}</b>명 보냄`}</span></div>
   <div id="storeBrowse"${searchWords(S.menuQuery).length ? ' hidden' : ''}>
-  <section class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice">${S.room.stores.length > 1 ? `<select id="storeSelect" aria-label="가게 선택">${S.room.stores.map(x => `<option value="${esc(x.id)}"${x.id === s.id ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select>` : `<h2>${esc(s.name)}</h2>`}<span>메뉴 ${s.menu.length}개</span></div></div>
+  <section class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice">${S.room.stores.length > 1 ? `<select id="storeSelect" aria-label="가게 선택">${S.room.stores.map(x => `<option value="${esc(x.id)}"${x.id === s.id ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select>` : `<h2>${esc(s.name)}</h2>`}<span>메뉴 ${foodMenus(s).length}개</span></div></div>
     ${acts.length || s.hours || s.note || s.checkedAt ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>기본 메뉴판 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
   </section></div>
-  <div class="wrap menu-notices">${closedNote()}${sentNote()}</div>
+  <div class="wrap menu-notices">${closedNote()}${sentNote()}${answerConflictHtml()}</div>
   <div class="menu-toolbar"><div class="menu-search"><label for="menuSearch">이 방 메뉴 검색</label><div class="menu-search-row"><input class="input" type="search" id="menuSearch" aria-label="이 방 메뉴 검색" value="${esc(S.menuQuery)}" maxlength="80" placeholder="메뉴 검색" autocomplete="off" aria-controls="menuResults"><button id="clearMenuSearch" class="small-btn" data-act="menu-search-clear" aria-label="검색어 지우기"${S.menuQuery ? '' : ' disabled'}>×</button></div><p id="menuSearchCount" class="search-count" role="status" aria-live="polite" aria-atomic="true">${menuSearchCount()}</p></div><div id="menuFilters">${filters}</div></div>
-  <div id="menuResults">${menuResultsHtml()}</div>${missingMenuButton()}
+  <div id="menuResults">${menuResultsHtml()}</div><div id="storeGuidance" class="wrap"${searchWords(S.menuQuery).length ? ' hidden' : ''}>${storeGuidance(s)}</div>${missingMenuButton()}
   ${cartBar()}${roomNav()}`;
 }
 function quickRequests(storeId) {
@@ -3121,13 +3197,13 @@ function legacyRequestHtml(a) {
 function roomCart() {
   const lines = cartLines(), a = myAnswer();
   if (!lines.length) {
-    return `${topBar('장바구니', '', whoChip())}<div class="empty"><div class="empty-food" aria-hidden="true">${FOOD_ICONS.tray}</div><h2>아직 담은 메뉴가 없어요</h2>${a ? '<p class="muted">이미 보낸 메뉴는 그대로 있어요.</p>' : ''}<button class="btn" data-act="tab" data-t="menu">메뉴 고르기</button>
+    return `${topBar('장바구니', '', whoChip())}<div class="wrap">${answerConflictHtml()}</div><div class="empty"><div class="empty-food" aria-hidden="true">${FOOD_ICONS.tray}</div><h2>아직 담은 메뉴가 없어요</h2>${a ? '<p class="muted">이미 보낸 메뉴는 그대로 있어요.</p>' : ''}<button class="btn" data-act="tab" data-t="menu">메뉴 고르기</button>
     ${a ? '<button class="text-btn red" data-act="answer-del" style="margin-top:14px">보낸 메뉴 취소</button>' : ''}</div>${roomNav()}`;
   }
   const byStore = new Map();
   for (const l of lines) { if (!byStore.has(l.item.store)) byStore.set(l.item.store, []); byStore.get(l.item.store).push(l); }
   return `${topBar('장바구니', '', whoChip())}
-  <div class="wrap cart-feedback">${closedNote()}${a ? selectionStatus() : ''}</div>
+  <div class="wrap cart-feedback">${closedNote()}${answerConflictHtml()}${a ? selectionStatus() : ''}</div>
   <div class="cart-page"><div class="cart-heading"><h2>담은 메뉴 <span>${cartCount()}</span></h2><button class="text-btn" data-act="tab" data-t="menu">＋ 더 담기</button></div>
   ${[...byStore].map(([s, ls]) => `<section class="cart-store"><div class="cs-head">${thumb(s, 'sm')}<b>${esc(s.name)}</b></div>
     ${ls.map(l => menuItemBox({...l.item, n:l.n}, '', qtyCtl(l.item.id,l.item.name))).join('')}${storeRequestInput(s)}</section>`).join('')}
@@ -3135,7 +3211,7 @@ function roomCart() {
   <section class="cart-summary"><div class="total"><span>합계</span><b>${won(cartSum())}</b></div>
     ${budget() ? `<div class="cart-budget${budgetLeft() < 0 ? ' over' : ''}"><span>1인 예산 ${won(budget())}</span><b>${budgetLeft() < 0 ? `${won(-budgetLeft())} 초과` : `${won(budgetLeft())} 남음`}</b></div>` : ''}
     <p class="cart-footnote">${a ? '다시 보내면 기존 메뉴가 바뀌어요.' : '방장에게 메뉴를 보내요. 가게 주문은 별도예요.'}</p></section></div>
-  ${locked() ? '' : cartBar(S.sending ? '보내는 중…' : cartIsSent() ? '보낸 메뉴 보기' : a ? '변경사항 보내기' : '메뉴 보내기', cartIsSent() ? 'tab" data-t="mine' : 'send')}${roomNav()}`;
+  ${locked() || S.answerConflict ? '' : cartBar(S.sending ? '보내는 중…' : cartIsSent() ? '보낸 메뉴 보기' : a ? '변경사항 보내기' : '메뉴 보내기', cartIsSent() ? 'tab" data-t="mine' : 'send')}${roomNav()}`;
 }
 
 function roomReview() {
@@ -3144,11 +3220,11 @@ function roomReview() {
   const a = myAnswer();
   const draft = {name: S.who, at: Date.now(), req: S.req.trim(), storeReqs: draftStoreReqs(), items: lines.map(l => ({m: l.item.id, n: l.n, name: l.item.name, price: l.item.price, s: l.item.store.id}))};
   return `${topBar('보내기 전 확인', 'tab" data-t="cart', whoChip())}<div class="wrap review">
-    ${closedNote()}${selectionStatus()}<h2 class="sec-title">${esc(S.who)} 님, 이렇게 보낼까요?</h2>
+    ${closedNote()}${answerConflictHtml()}${selectionStatus()}<h2 class="sec-title">${esc(S.who)} 님, 이렇게 보낼까요?</h2>
     ${ticket(draft, true)}
     <p class="hint">${a ? '다시 보내면 보낸 메뉴가 이 내용으로 바뀌어요.' : '보내면 이 방의 모인 메뉴에 반영돼요. 가게 주문은 별도로 진행해요.'}</p>
     <button class="btn gray block" data-act="tab" data-t="cart">메뉴·요청사항 고치기</button>
-  </div>${locked() ? '' : cartBar(S.sending ? '보내는 중…' : a ? '변경사항 보내기' : '장바구니 보내기', 'send')}${roomNav()}`;
+  </div>${locked() || S.answerConflict ? '' : cartBar(S.sending ? '보내는 중…' : a ? '변경사항 보내기' : '장바구니 보내기', 'send')}${roomNav()}`;
 }
 // Menu names remain the primary content in cart, confirmation and both summaries.
 function menuItemBox(item, storeName = '', controls = '') {
@@ -3394,24 +3470,42 @@ async function createRoom() {
   }
 }
 async function sendAnswer() {
+  if (S.sending) return;
+  captureRequests(); syncAnswerDraft();
+  if (!S.answersReady) { toast('제출 내역을 불러오는 중이에요. 잠시 후 다시 보내 주세요.'); return; }
+  if (S.answerConflict || !S.answerBase) { S.answerConflict = true; go({tab:'cart'}); return; }
   const lines = cartLines();
-  if (!lines.length || S.sending) return;
+  if (!lines.length) return;
   if (locked()) { toast(S.room.closed ? '다맛다가 마감됐어요' : '마감 시간이 지났어요'); return; }
   if (budget() && budgetLeft() < 0) { overBudgetToast(); return; }
-  captureRequests();
+  const roomId = S.roomId, who = S.who, expected = S.answerBase.version;
+  const payload = {name:who, req:S.req, storeReqs:draftStoreReqs(), uid:UID,
+    items:lines.map(l => ({m:l.item.id,n:l.n,name:l.item.name,price:l.item.price,s:l.item.store.id}))};
   S.sending = true; rerender(); sendingCurtain();
   try {
-    await FB.setDoc(FB.doc(DB, 'dinnerRooms', S.roomId, 'answers', answerId(S.who)), {
-      name: S.who, req: S.req, storeReqs: draftStoreReqs(), uid: UID, at: FB.serverTimestamp(),
-      items: lines.map(l => ({m: l.item.id, n: l.n, name: l.item.name, price: l.item.price, s: l.item.store.id})),
+    const ref = FB.doc(DB, 'dinnerRooms', roomId, 'answers', answerId(who));
+    await FB.runTransaction(DB, async transaction => {
+      const snapshot = await transaction.get(ref);
+      const latest = snapshot.exists() ? tidyAnswer(answerId(who),snapshot.data()) : null;
+      if (answerVersion(latest) !== expected) throw Object.assign(new Error('Answer changed'), {code:'answer-changed',latest});
+      transaction.set(ref, {...payload,at:FB.serverTimestamp()});
     });
-    S.sending = false; S.sentAt = Date.now(); persistRoom();
+    if (S.roomId !== roomId || S.who !== who) { S.sending = false; dismissSendCurtain(false); return; }
+    // The content is the compare-and-set token; timestamps need not be guessed.
+    S.answerBase = {version:answerVersion(payload),content:orderContent(payload)}; S.answerConflict = false;
+    if (answerVersion(myAnswer()) === expected) S.answers.set(answerId(who),{...payload,id:answerId(who),at:Date.now()});
+    S.sending = false; S.sentAt = Date.now(); syncAnswerDraft(); persistRoom();
     setSentNames(S.roomId, [...new Set([...sentNames(S.roomId), S.who])]);
     buzz([20, 40, 20]);
     go({tab: 'mine'});
     finishSendCurtain();
   } catch (e) {
     S.sending = false; dismissSendCurtain(false); rerender();
+    if (S.roomId !== roomId || S.who !== who) return;
+    if (e.code === 'answer-changed') {
+      if (e.latest) S.answers.set(answerId(who),e.latest); else S.answers.delete(answerId(who));
+      S.answerConflict = true; go({tab:'cart'}); return;
+    }
     toast(/permission/.test(String(e && e.code)) ? (S.room.closed ? '다맛다가 마감됐어요.' : `「${S.who}」 이름으로 다른 기기에서 이미 보냈어요. 그 기기에서 고치거나 방을 관리하는 사람에게 알려 주세요.`) : friendly(e));
   }
 }
@@ -3446,11 +3540,8 @@ function setWho(name, tab) {
   if (r.names.length && !r.freeJoin && !r.names.includes(name)) { toast('명단에 있는 이름만 고를 수 있어요'); return; }
   if (name !== S.who) {
     S.who = name;
-    const a = S.answers.get(answerId(name));
-    S.cart = a ? Object.fromEntries(a.items.filter(i => ITEMS.has(i.m)).map(i => [i.m, i.n])) : {};
-    S.req = a ? a.req : '';
-    S.storeReqs = tidyStoreReqs(a?.storeReqs);
-  }
+    loadLatestAnswer();
+  } else syncAnswerDraft();
   persistRoom();
   rememberRoom(S.roomId, {title: r.title});
   go({tab: tab || (myAnswer() ? 'mine' : 'menu')});
@@ -3570,6 +3661,7 @@ document.addEventListener('click', async e => {
       const input = document.getElementById('menuSearch'); input.value = ''; refreshMenuSearch(); input.focus(); break;
     }
     case 'plus': case 'minus': {
+      if (!ITEMS.has(id)) break;
       if (act === 'plus' && !fitsBudget(id, (S.cart[id] || 0) + 1)) { overBudgetToast(); break; }
       setQty(id, (S.cart[id] || 0) + (act === 'plus' ? 1 : -1)); rerender();
       if (act === 'plus') { bumpCart(); if (S.cart[id] === 1) toast(`✅ ${ITEMS.get(id).name} 골랐어요`); }
@@ -3593,9 +3685,10 @@ document.addEventListener('click', async e => {
     case 'send': if (['cart', 'review'].includes(S.tab)) sendAnswer(); break;
     case 'edit-mine': {
       const name = el.dataset.who;
-      if (name && name !== S.who) { S.who = ''; setWho(name, 'cart'); } else go({tab: 'cart'});
+      if (name && name !== S.who) { S.who = ''; setWho(name, 'cart'); } else { syncAnswerDraft(); go({tab: 'cart'}); }
       break;
     }
+    case 'answer-latest': loadLatestAnswer(); go({tab:'cart'}); break;
     case 'answer-del': {
       if (!confirmTwice(el, '한 번 더 누르면 취소해요')) break;
       const name = el.dataset.who || S.who;
