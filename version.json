@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-23-all-menus-install",
+  "version": "2026-10-24-store-shortcuts",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "bad87a4c4fe4e873c3f231d737fe3ebf4b56af4d",
+  "applicationCommit": "c114f5224ee216a80dd64c95b25496dce8acf5b2",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "89fbb036c9845204e244a5c437c4326cec8638ec",
+  "sourceCommit": "4fe4e46218c647d40b1e4df5e308849c69093a4c",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -42,5 +42,6 @@
   "roomNotice": "expanded-and-sticky-by-default",
   "storePicker": "all-store-menus-on-one-page",
   "menuLayout": "grouped-by-store",
-  "installation": "native-prompt-or-platform-guide"
+  "installation": "native-prompt-or-platform-guide",
+  "storeShortcuts": "pinned-scroll-to-store-menu"
 }

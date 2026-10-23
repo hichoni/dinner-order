@@ -1727,6 +1727,11 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 
 /* All stores share one continuous menu, with their own details and add action. */
 .mm .room-menu-intro{margin:3px 0 10px;font-size:12px;color:var(--sub)}
+.mm .store-shortcuts{display:flex;gap:8px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:thin}
+.mm .store-shortcuts button{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:1 1 0;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #b4d3d6;border-radius:12px;background:#ffffffed;color:var(--mint-d);font:inherit;font-size:13px;font-weight:650;text-align:left;line-height:1.4;cursor:pointer;box-shadow:0 2px 6px #236a7310}
+.mm .store-shortcuts button span{overflow-wrap:anywhere}.mm .store-shortcuts button i{font-size:17px;font-style:normal;flex:none}.mm .store-shortcuts button:hover{background:var(--mint-ll);border-color:var(--mint-d)}
+.mm .store-shortcuts.many button{flex:0 0 auto;min-width:120px;max-width:220px}
+.mm .store-shortcuts button:focus-visible,.mm .room-menu-store h2:focus-visible{outline:3px solid #3189a6;outline-offset:2px}
 .mm .room-menu-store{margin:0 0 30px;min-width:0}
 .mm .room-menu-store+.room-menu-store{padding-top:22px;border-top:2px solid #bdd9d9}
 .mm .room-menu-store>.shop-compact{position:relative;margin:0 0 12px;padding:12px;border:1px solid #c7dfdd;border-radius:15px;background:#e7f4f3dc}
@@ -3286,8 +3291,31 @@ function viewRoom() {
   if (!S.who && !['sum', 'set', 'all'].includes(S.tab)) S.tab = 'who';
   const views = {who: roomWho, menu: roomMenu, store: roomStore, cart: roomCart, review: roomReview, mine: roomMine, all: roomAll, sum: roomSum, set: roomSet};
   const html = (views[S.tab] || roomMenu)();
-  const notice = ['who', 'menu', 'store'].includes(S.tab) ? pinBar() : '';
-  return notice ? '<div class="room-pinned">' + html.replace('</header>', '</header>' + notice + '</div>') : html;
+  const pinned = (['who', 'menu', 'store'].includes(S.tab) ? pinBar() : '')
+    + (['menu', 'store'].includes(S.tab) ? storeShortcuts() : '');
+  return pinned ? '<div class="room-pinned">' + html.replace('</header>', '</header>' + pinned + '</div>') : html;
+}
+function storeShortcuts() {
+  const stores = S.room.stores;
+  if (stores.length < 2) return '';
+  return `<nav class="store-shortcuts${stores.length>2?' many':''}" aria-label="가게 메뉴 바로가기">${stores.map(s=>`<button type="button" data-act="store-jump" data-id="${esc(s.id)}" aria-controls="store-heading-${encodeURIComponent(s.id)}" aria-label="${esc(s.name)} 메뉴로 이동"><span>${esc(s.name)}</span><i aria-hidden="true">↓</i></button>`).join('')}</nav>`;
+}
+function jumpToStore(id) {
+  if (!S.room?.stores.some(s=>s.id===id)) return false;
+  // A shortcut always opens the store's full menu, including after a search/filter.
+  if (S.menuQuery || S.mfilter !== 'all') {
+    S.menuQuery='';S.mfilter='all';
+    document.getElementById('menuSearch').value='';
+    refreshMenuSearch();
+  }
+  const heading = document.getElementById('store-heading-' + encodeURIComponent(id));
+  if (!heading) return false;
+  const target = heading.closest('.shop-compact') || heading;
+  const pinnedBottom = document.querySelector('.room-pinned')?.getBoundingClientRect().bottom || 0;
+  const top = Math.max(0,scrollY + target.getBoundingClientRect().top - pinnedBottom - 12);
+  heading.focus({preventScroll:true});
+  scrollTo({top,left:0,behavior:reduceMotion()?'auto':'smooth'});
+  return true;
 }
 // 메뉴를 고르는 동안 공지와 예산은 헤더와 함께 고정하고, 공지는 기본으로 펼쳐 둬요.
 function pinBar() {
@@ -3408,7 +3436,7 @@ function menuStoreHeader(s,count) {
     canOpenLinks && (s.address || s.naver) ? `<a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">${ICON.map}<span>지도</span></a>` : '',
     canOpenLinks && s.naver ? `<a href="${esc(s.naver)}" target="_blank" rel="noopener">${ICON.ext}<span>네이버</span></a>` : '',
   ].filter(Boolean);
-  return `<div class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2 id="store-heading-${encodeURIComponent(s.id)}">${esc(s.name)}</h2><span>메뉴 ${count}개${searchWords(S.menuQuery).length ? ' 검색됨' : ''}</span></div></div>
+  return `<div class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2 id="store-heading-${encodeURIComponent(s.id)}" tabindex="-1">${esc(s.name)}</h2><span>메뉴 ${count}개${searchWords(S.menuQuery).length ? ' 검색됨' : ''}</span></div></div>
     ${acts.length || s.hours || s.note || s.checkedAt ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>기본 메뉴판 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
   </div>`;
 }
@@ -3825,6 +3853,7 @@ document.addEventListener('click', async e => {
     case 'retry': openRoom(S.roomId); break;
     case 'home-tab': S.homeTab = el.dataset.t; rerender(); break;
     case 'pin-toggle': S.pinOpen = !S.pinOpen; rerender(); break;
+    case 'store-jump': jumpToStore(id); break;
     case 'treat-unit': {
       const target=el.dataset.for==='c'?S.draft?.treat:S.edit?.treat;if(!target)break;
       target.unitCustom=el.dataset.v==='custom';target.unit=target.unitCustom?(TREAT_UNITS.includes(target.unit)?'':target.unit||''):el.dataset.v;
