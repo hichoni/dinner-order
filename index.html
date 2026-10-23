@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
+<meta name="damatda-build" content="6183fb4675837a99">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
@@ -1750,11 +1751,21 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .home-install svg{width:19px;height:19px}.mm .home-install:hover{background:#e7f7f3}.mm .home-install:disabled{opacity:.65;cursor:wait}
 .mm .home-install-promo small{font-size:11px;color:var(--sub)}
 .install-sheet{max-width:480px}.install-sheet .sheet-body{padding:20px 22px 24px}.install-sheet .btn,.install-sheet .text-btn{display:flex;justify-content:center;width:100%}.install-app-icon{display:block;border-radius:17px;margin:0 0 16px}.install-sheet h2{font-size:22px;line-height:1.4;margin:0 0 10px}.install-sheet p{font-size:14px;color:var(--sub);line-height:1.6}.install-sheet ol{padding-left:23px;margin:20px 0 24px}.install-sheet li{padding:0 0 12px 4px;font-size:15px;line-height:1.65}.install-sheet small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:10px}.install-sheet .btn{text-decoration:none;text-align:center}.install-sheet .install-preview-note{padding:10px 12px;background:var(--mint-ll);border-radius:10px}.install-sheet .text-btn{min-height:44px;margin-top:8px}.install-sheet textarea{width:100%;margin-top:8px}
+
+/* An opt-in update notice stays separate from rerendered order screens. */
+.app-update{position:fixed;z-index:90;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(400px,calc(100% - 24px));padding:16px;border:1px solid #b8d7dd;border-radius:18px;background:#fff;color:var(--ink,#153d38);box-shadow:0 8px 36px #164c5638;font-family:inherit}
+.app-update[hidden]{display:none}.app-update strong{font-size:16px;line-height:1.5}.app-update p{font-size:13px;line-height:1.6;margin:5px 0 12px;color:var(--sub,#4c6863);overflow-wrap:anywhere}
+.update-actions{display:flex;justify-content:flex-end;gap:8px}.update-actions button{min-height:44px;padding:10px 16px;border:1px solid #c4dadd;border-radius:11px;background:#f2f8f8;color:var(--mint-d,#087e72);font:inherit;font-size:14px;font-weight:650;cursor:pointer}.update-actions .update-apply{background:var(--mint-d,#087e72);border-color:transparent;color:#fff}.update-actions button:focus-visible{outline:3px solid #3189a6;outline-offset:3px}.update-actions button:disabled{opacity:.65;cursor:wait}
+#app.with-room-nav~.app-update{bottom:calc(142px + env(safe-area-inset-bottom,0px))}
+@media(min-width:1000px){.app-update,#app.with-room-nav~.app-update{left:auto;right:24px;bottom:24px;transform:none}}
+@media print{.app-update{display:none}}
+@media(max-width:360px){.app-update{padding:14px}.update-actions button{flex:1;padding:10px 8px}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
+<aside id="appUpdate" class="app-update" aria-label="앱 업데이트" hidden></aside>
 <script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":1034}</script>
 <script type="module">
 // Damatda native SVG assets. Colors inherit the active app theme.
@@ -2629,8 +2640,84 @@ function rememberRoom(id, patch) {
 const sentNames = id => load('mm-sent', {})[id] || [];
 function setSentNames(id, names) { const all = load('mm-sent', {}); if (names.length) all[id] = names; else delete all[id]; save('mm-sent', all); }
 const roomLocal = () => load('mm-room-' + S.roomId, {});
-function persistRoom() { save('mm-room-' + S.roomId, {who: S.who, cart: S.cart, req: S.req, storeReqs: S.storeReqs, thanks:tidyThanks(S.thanks), sentAt: S.sentAt, answerBase: S.answerBase}); }
+const roomDraft = () => ({who: S.who, cart: S.cart, req: S.req, storeReqs: S.storeReqs, thanks:tidyThanks(S.thanks), sentAt: S.sentAt, answerBase: S.answerBase});
+function persistRoom() { save('mm-room-' + S.roomId, roomDraft()); }
 function persistDraft() { if (S.draft) save('mm-create-draft', S.draft); }
+
+// Releases are fingerprinted by build.py. A newer release never reloads an open
+// order until the user accepts; this also works in installed standalone windows.
+const APP_BUILD = document.querySelector('meta[name="damatda-build"]')?.content || '';
+const appUpdate = {next:'', dismissed:'', checking:false, applying:false, checkedAt:0, error:'', markup:''};
+const validAppBuild = value => typeof value === 'string' && /^[a-f0-9]{16}$/.test(value);
+function renderAppUpdate() {
+  const notice = document.getElementById('appUpdate');
+  if (!notice) return;
+  notice.hidden = !appUpdate.next || appUpdate.next === appUpdate.dismissed;
+  if (notice.hidden) return;
+  const content = `<div class="update-copy" role="status"><strong>새 버전이 나왔어요 ✨</strong><p>${appUpdate.error || '담은 메뉴와 작성 중인 주문은 유지돼요.'}</p></div><div class="update-actions"><button data-act="update-later" ${appUpdate.applying?'disabled':''}>나중에</button><button class="update-apply" data-act="update-apply" ${appUpdate.applying?'disabled':''}>${appUpdate.applying?'불러오는 중…':'업데이트 적용'}</button></div>`;
+  if (appUpdate.markup !== content) { appUpdate.markup=content; notice.innerHTML=content; }
+}
+async function checkAppUpdate() {
+  if (!validAppBuild(APP_BUILD) || document.visibilityState === 'hidden' || navigator.onLine === false || appUpdate.checking || appUpdate.applying || Date.now()-appUpdate.checkedAt < 60000) return;
+  appUpdate.checking = true; appUpdate.checkedAt = Date.now();
+  const controller = new AbortController(), timer = setTimeout(()=>controller.abort(),10000);
+  try {
+    const response = await fetch(`app-version.json?check=${Date.now()}`, {cache:'no-store', signal:controller.signal});
+    if (!response.ok) return;
+    const release = await response.json();
+    if (release.schema !== 1 || !validAppBuild(release.build)) return;
+    if (release.build === APP_BUILD) { appUpdate.next=''; renderAppUpdate(); return; }
+    if (appUpdate.next !== release.build) appUpdate.error='';
+    appUpdate.next = release.build; renderAppUpdate();
+  } catch {} // Offline, failed or partial deployments must never interrupt ordering.
+  finally { clearTimeout(timer); appUpdate.checking=false; }
+}
+function postponeAppUpdate() { appUpdate.dismissed=appUpdate.next; renderAppUpdate(); }
+function updateBlockReason() {
+  if (S.sending || avatarPicker?.saving) return '메뉴를 보내거나 저장하는 중이에요. 완료되면 다시 눌러 주세요.';
+  if (S.edit?.dirty) return '바꾼 방 설정을 먼저 저장하거나 되돌린 뒤 업데이트해 주세요.';
+  if (document.getElementById('sheet') || avatarPicker) return '열려 있는 창을 먼저 마무리한 뒤 업데이트해 주세요.';
+  return '';
+}
+function preserveUpdateDrafts() {
+  const snapshots = [];
+  if (S.roomId && S.room) { captureRequests(); snapshots.push(['mm-room-'+S.roomId,roomDraft()]); }
+  if (S.draft) snapshots.push(['mm-create-draft',S.draft]);
+  // Unlike routine best-effort saves, failed storage must prevent this reload.
+  for (const [k,value] of snapshots) {
+    const json = JSON.stringify(value); localStorage.setItem(k,json);
+    if (localStorage.getItem(k) !== json) throw new Error('Draft could not be saved');
+  }
+}
+async function applyAppUpdate() {
+  if (!validAppBuild(appUpdate.next) || appUpdate.applying) return;
+  const blocked = updateBlockReason();
+  if (blocked) { appUpdate.error=blocked; renderAppUpdate(); return; }
+  appUpdate.applying=true; appUpdate.error=''; renderAppUpdate();
+  let stage='draft';
+  const controller = new AbortController(), timer = setTimeout(()=>controller.abort(),15000);
+  try {
+    preserveUpdateDrafts(); stage='download';
+    // Another deployment may have happened since the notice first appeared.
+    const releaseResponse = await fetch(`app-version.json?check=${Date.now()}`, {cache:'no-store',signal:controller.signal});
+    if (!releaseResponse.ok) throw new Error('Release check failed');
+    const release = await releaseResponse.json();
+    if (release.schema !== 1 || !validAppBuild(release.build)) throw new Error('Invalid release');
+    appUpdate.next=release.build;
+    if (release.build === APP_BUILD) { appUpdate.next=''; return; }
+    const target = new URL(location.href);
+    target.searchParams.set('app-update',appUpdate.next);
+    // Check the HTML too: the version file may reach a CDN before the page does.
+    const response = await fetch(target.href, {cache:'no-store',signal:controller.signal});
+    if (!response.ok || !(await response.text()).includes(`<meta name="damatda-build" content="${appUpdate.next}">`)) throw new Error('Release is not available yet');
+    const busy = updateBlockReason();
+    if (busy) { appUpdate.error=busy; return; }
+    stage='draft'; preserveUpdateDrafts(); rememberView(); target.hash=location.hash;
+    location.replace(target.href);
+  } catch {
+    appUpdate.error = stage==='draft' ? '작성 중인 내용을 이 기기에 보관하지 못했어요. 먼저 주문을 보내거나 저장한 뒤 다시 눌러 주세요.' : '최신 버전을 불러오지 못했어요. 인터넷 연결을 확인하고 잠시 후 다시 눌러 주세요.';
+  } finally { clearTimeout(timer); appUpdate.applying=false; renderAppUpdate(); }
+}
 
 function toast(msg) {
   const t = document.getElementById('toast');
@@ -3883,6 +3970,8 @@ document.addEventListener('click', async e => {
   if (!el) return;
   const act = el.dataset.act, id = el.dataset.id;
   switch (act) {
+    case 'update-apply': await applyAppUpdate(); break;
+    case 'update-later': postponeAppUpdate(); break;
     case 'install-app': await installApp(); break;
     case 'install-copy': copyOrShow(installPageUrl(),'설치할 링크를 복사했어요. 브라우저 주소창에 붙여넣어 주세요.','installLinkCopy'); break;
     case 'home':
@@ -4174,6 +4263,11 @@ addEventListener('hashchange', route);
 // Two store views can share the same hash; popstate also restores their store/search context.
 addEventListener('popstate', route);
 route();
+checkAppUpdate();
+setInterval(checkAppUpdate,60000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='hidden')checkAppUpdate();});
+addEventListener('focus',checkAppUpdate);
+addEventListener('online',()=>{appUpdate.checkedAt=0;checkAppUpdate();});
 setInterval(() => { if (S.route === 'room' && S.room && S.room.deadline && !document.getElementById('sheet') && !document.querySelector('input:focus,textarea:focus')) { const c = document.querySelector('.rh-meta'); if (c) rerender(); } }, 60000);
 
 

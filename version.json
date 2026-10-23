@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-24-brand-icons",
+  "version": "2026-10-24-app-update-notice",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "da80c851826f1262909f44f83b979dcbb610cdb5",
+  "applicationCommit": "76a11d1cc09fce010acc6d74e223f66fe42e9aec",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "7be18e3e27bf11964385fbb51cea170cdef48473",
+  "sourceCommit": "c3dc4ea8cfffecb540fe7e36f7c846b56c07f3bc",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -48,5 +48,9 @@
   "appIcons": "current-three-food-cards-and-tray",
   "favicon": "svg-png-ico",
   "iconCacheVersion": "eb39f2bcdc79",
-  "maskableIcon": "separate-512-safe-circle"
+  "maskableIcon": "separate-512-safe-circle",
+  "appBuild": "6183fb4675837a99",
+  "appUpdates": "notice-and-user-confirmed-refresh",
+  "updateCheck": "on-open-focus-online-and-every-60s-visible",
+  "updateDrafts": "persist-before-navigation"
 }
