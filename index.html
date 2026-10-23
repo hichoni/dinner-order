@@ -1710,6 +1710,28 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 @media(max-width:380px){.thanks-composer>summary{padding:15px 12px;gap:8px}.thanks-composer>summary b{font-size:14px}.thanks-envelope{width:34px;height:36px;font-size:21px}.thanks-compose-body{padding:0 12px 12px}.thanks-presets button{font-size:12px;padding:10px 8px;gap:5px}.thanks-presets button>span{font-size:19px}.thanks-effects{grid-template-columns:repeat(2,minmax(0,1fr))}.thanks-notes{grid-template-columns:1fr}.thanks-wall{padding:14px}.treat-units{gap:5px}.treat-units button{font-size:12px;padding:6px 2px}}
 @media(prefers-reduced-motion:reduce){.thanks-particles{display:none}.thanks-moment-card,.send-thanks{animation:none}:is(.treat-units,.thanks-presets,.thanks-emojis,.thanks-effects) button,.thanks-note{transition:none;transform:none!important}}
 @media print{.thanks-moment,.thanks-compose-foot,.thanks-from small{display:none}.thanks-wall,.thanks-note,.thanks-receipt{box-shadow:none;break-inside:avoid}.thanks-wall{background:#fff}}
+
+/* Keep the room's instructions visible while browsing menus. */
+.mm .room-pinned{position:sticky;top:env(safe-area-inset-top,0px);z-index:25;padding-bottom:8px;margin-bottom:8px;background:#eff8f7f5;border-radius:0 0 16px 16px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.design-preview .mm .room-pinned{top:calc(43px + env(safe-area-inset-top,0px))}
+#app.enter>.room-pinned{animation:none}
+.mm .room-pinned>.top{position:static;margin-bottom:8px}
+.mm .room-pinned .pin-bar{position:static!important;top:auto;padding:0!important}
+.mm .room-pinned .pb-in{background:linear-gradient(130deg,#fffbef,#edf7fc)}
+.mm .compact-pin .pb-treat{white-space:normal;overflow:visible;align-items:center;line-height:1.5}
+.mm .compact-pin .pb-treat>span:last-child{overflow:visible;overflow-wrap:anywhere;font-size:12px}
+.mm .room-pinned .pb-expanded{max-height:min(30vh,240px);max-height:min(30dvh,240px);overflow-y:auto;overscroll-behavior:contain;overflow-wrap:anywhere;font-size:13px;scrollbar-width:thin}
+.mm .room-pinned .pin-disclosure{min-height:44px;padding-left:6px}
+.mm .room-stores{margin:0 0 12px}
+.mm .room-stores>p{font-size:12px;color:var(--sub);margin:0 0 7px}
+.mm .room-store-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0;overflow:visible}
+.mm .room-store-tabs button{min-width:0;min-height:62px;padding:10px;text-align:left;white-space:normal;line-height:1.45;border:1px solid #bfd8d7;background:#ffffffd9;box-shadow:none;color:var(--ink)}
+.mm .room-store-tabs button b{display:block;font-size:13px;font-weight:650;overflow-wrap:anywhere}
+.mm .room-store-tabs button small{display:block;font-size:11px;font-weight:450;margin-top:3px;color:var(--sub)}
+.mm .room-store-tabs button.on{background:var(--mint-d);border-color:var(--mint-d);color:#fff;box-shadow:inset 0 0 0 1px #ffffff38}
+.mm .room-store-tabs button.on small{color:#fff}
+@media(min-width:700px){.mm .room-store-tabs{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
+@media print{.mm .room-pinned{display:none}}
 </style>
 </head>
 <body>
@@ -2573,7 +2595,7 @@ function tidyAnswer(id, d) {
 // ---------- 상태 ----------
 const S = {
   route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: false, error: '',
-  tab: 'menu', store: null, mfilter: 'all', menuQuery: '',
+  tab: 'menu', store: null, mfilter: 'all', menuQuery: '', pinOpen: true,
   who: '', cart: {}, req: '', storeReqs: {}, thanks:null, thanksOpen:false, sentAt: 0, answerBase: null, answerConflict: false,
   draft: null, catFor: 'create', catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(), catLimit: 40, catPreview: '', catDetail: null,
   edit: null, sumBy: 'store', byPerson: true, sending: false, createError: '',
@@ -2627,7 +2649,7 @@ function stopListening() { for (const u of unsub) try { u(); } catch {} unsub = 
 
 async function openRoom(id, key, want = '') {
   stopListening();
-  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all'});
+  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all', pinOpen: true});
   const local = roomLocal();
   Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), thanks:tidyThanks(local.thanks), thanksOpen:!!tidyThanks(local.thanks), sentAt: local.sentAt || 0, answerBase: validAnswerBase(local.answerBase), answerConflict: false, tab: local.who ? 'menu' : 'who'});
   render();
@@ -3191,13 +3213,14 @@ function viewRoom() {
   if (!S.who && !['sum', 'set', 'all'].includes(S.tab)) S.tab = 'who';
   const views = {who: roomWho, menu: roomMenu, store: roomStore, cart: roomCart, review: roomReview, mine: roomMine, all: roomAll, sum: roomSum, set: roomSet};
   const html = (views[S.tab] || roomMenu)();
-  return ['who', 'menu', 'store'].includes(S.tab) ? html.replace('</header>', '</header>' + pinBar()) : html;
+  const notice = ['who', 'menu', 'store'].includes(S.tab) ? pinBar() : '';
+  return notice ? '<div class="room-pinned">' + html.replace('</header>', '</header>' + notice + '</div>') : html;
 }
-// 📢 모임 안내·🎁 내가 쏜다: 방 어느 화면에서나 위에 붙어 있어요(한마디는 눌러서 펼치기/접기)
+// 메뉴를 고르는 동안 공지와 예산은 헤더와 함께 고정하고, 공지는 기본으로 펼쳐 둬요.
 function pinBar() {
   const r=S.room,t=r.treat,note=r.note;
   if(!t&&!note)return '';
-  return `<div class="pin-bar"><div class="pb-in compact-pin">${t?`<div class="pb-treat"><span class="pb-gift">🎁</span><span><b>${esc(treatHeadline(t.by))}</b> · ${esc(budgetLabel(t))} ${won(t.cap)}</span></div>`:'<span class="pin-label">모임 안내</span>'}${note?`<button class="pin-disclosure" data-act="pin-toggle" aria-expanded="${!!S.pinOpen}" aria-controls="roomNote">${t?'안내':'보기'} ${S.pinOpen?'⌃':'⌄'}</button><p id="roomNote" class="pb-expanded"${S.pinOpen?'':' hidden'}>${esc(note)}</p>`:''}</div></div>`;
+  return `<section class="pin-bar" aria-label="모임 공지 및 예산"><div class="pb-in compact-pin">${t?`<div class="pb-treat"><span class="pb-gift">🎁</span><span><b>${esc(treatHeadline(t.by))}</b> · ${esc(budgetLabel(t))} ${won(t.cap)}</span></div>`:'<span class="pin-label">모임 공지</span>'}${note?`<button class="pin-disclosure" data-act="pin-toggle" aria-expanded="${S.pinOpen}" aria-controls="roomNote">공지 ${S.pinOpen?'접기 ⌃':'펼치기 ⌄'}</button><p id="roomNote" class="pb-expanded" tabindex="0" aria-label="모임 공지 내용"${S.pinOpen?'':' hidden'}>${esc(note)}</p>`:''}</div></section>`;
 }
 function roomNav() {
   const n = cartIsSent() ? 0 : cartCount(), sent = !!myAnswer();
@@ -3321,7 +3344,8 @@ function roomStore() {
   return `${topBar(esc(S.room.title), 'home', whoChip())}
   <div class="menu-context"><span>${S.room.closed ? '마감' : dl ? esc(dl.text) : '메뉴 모으는 중'}</span><span>${budget() ? `남은 ${won(budgetLeft())}` : `<b id="liveCount">${S.answers.size}</b>명 보냄`}</span></div>
   <div id="storeBrowse"${searchWords(S.menuQuery).length ? ' hidden' : ''}>
-  <section class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice">${S.room.stores.length > 1 ? `<select id="storeSelect" aria-label="가게 선택">${S.room.stores.map(x => `<option value="${esc(x.id)}"${x.id === s.id ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select>` : `<h2>${esc(s.name)}</h2>`}<span>메뉴 ${foodMenus(s).length}개</span></div></div>
+  ${S.room.stores.length > 1 ? `<div class="room-stores"><p>가게 ${S.room.stores.length}곳 · 눌러서 메뉴 보기</p><div class="store-tabs room-store-tabs" role="group" aria-label="이 모임의 가게">${S.room.stores.map(x=>`<button class="${x.id===s.id?'on':''}" data-act="store" data-id="${esc(x.id)}" aria-pressed="${x.id===s.id}"><b>${esc(x.name)}</b><small>메뉴 ${foodMenus(x).length}개</small></button>`).join('')}</div></div>` : ''}
+  <section class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2>${esc(s.name)}</h2><span>메뉴 ${foodMenus(s).length}개</span></div></div>
     ${acts.length || s.hours || s.note || s.checkedAt ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>기본 메뉴판 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
   </section></div>
   <div class="wrap menu-notices">${closedNote()}${sentNote()}${answerConflictHtml()}</div>
@@ -4006,7 +4030,6 @@ setInterval(() => { if (S.route === 'room' && S.room && S.room.deadline && !docu
 
 // Optional requests remain open across quantity changes and snapshot renders.
 document.addEventListener('toggle', event => { const el=event.target;if(el.matches?.('[data-request-fold]')&&el.isConnected){S.requestOpen ||= {}; S.requestOpen[el.dataset.requestFold]=el.open;} }, true);
-document.addEventListener('change', event => {if(event.target.id==='storeSelect')go({tab:'store',store:event.target.value,mfilter:'all',menuQuery:''});});
 
 document.addEventListener('toggle',event=>{const el=event.target;if(el.matches?.('[data-settings-fold]')&&el.isConnected){S.settingsOpen ||= {};S.settingsOpen[el.dataset.settingsFold]=el.open;}},true);
 document.addEventListener('toggle',event=>{const el=event.target;if(el.matches?.('[data-thanks-fold]')&&el.isConnected)S.thanksOpen=el.open;},true);

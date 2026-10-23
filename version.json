@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-23-budget-thanks",
+  "version": "2026-10-23-pinned-notice-stores",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "9501effd6937499fcb465d9c7d6fc0c2d3b5be60",
+  "applicationCommit": "067f1eacbede478fdae21528df55143000157456",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "7956118f93a0540ea7bd10270ab7cd2380fdf693",
+  "sourceCommit": "cc0c7d35f6cdeb9eaafaa0564e6bbdf8c388a152",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -38,5 +38,7 @@
     "sparkles",
     "confetti",
     "none"
-  ]
+  ],
+  "roomNotice": "expanded-and-sticky-by-default",
+  "storePicker": "visible-buttons-on-mobile"
 }
