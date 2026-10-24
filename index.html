@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="0cc6ec8c6623b883">
+<meta name="damatda-build" content="80e7ee17867a0540">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
@@ -3114,7 +3114,13 @@ async function copyOrShow(text, okMsg, boxId) {
   return false;
 }
 const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://hichoni.github.io/dinner-order/');
-const roomLink = (id = S.roomId) => `${pageBase()}${EMU ? '?emu&v=damatda2' : '?v=damatda2'}#r=${id}`;
+function roomLink(id = S.roomId) {
+  const target = new URL('invite.html',pageBase());
+  if (installPreview()) target.searchParams.set('preview','1');
+  if (EMU) target.searchParams.set('emu','');
+  target.hash = new URLSearchParams({r:id}).toString();
+  return target.href;
+}
 function managementLink() {
   if (!S.host || !S.roomId) return '';
   const key = myRooms().find(r=>r.id===S.roomId)?.key;
@@ -3141,7 +3147,7 @@ function inviteText(r = S.room, id = S.roomId) {
 async function shareOrCopy(r, id, boxId) {
   const text = inviteText(r, id);
   if (navigator.share && matchMedia('(pointer: coarse)').matches) {
-    try { await navigator.share({title: r.title, text: text.split('\n').slice(0, -1).join('\n'), url: roomLink(id)}); return; }
+    try { await navigator.share({title: '메뉴 고르러 가기 · 참여자용', text: text.split('\n').slice(0, -1).join('\n'), url: roomLink(id)}); return; }
     catch (e) { if (e && e.name === 'AbortError') return; }
   }
   copyOrShow(text, '🔗 복사했어요. 단톡방에 붙여넣어 보내 주세요', boxId);

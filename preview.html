@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="0cc6ec8c6623b883"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="80e7ee17867a0540"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -3197,7 +3197,13 @@ async function copyOrShow(text, okMsg, boxId) {
   return false;
 }
 const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://hichoni.github.io/dinner-order/');
-const roomLink = (id = S.roomId) => `${pageBase()}${EMU ? '?emu&v=damatda2' : '?v=damatda2'}#r=${id}`;
+function roomLink(id = S.roomId) {
+  const target = new URL('invite.html',pageBase());
+  if (installPreview()) target.searchParams.set('preview','1');
+  if (EMU) target.searchParams.set('emu','');
+  target.hash = new URLSearchParams({r:id}).toString();
+  return target.href;
+}
 function managementLink() {
   if (!S.host || !S.roomId) return '';
   const key = myRooms().find(r=>r.id===S.roomId)?.key;
@@ -3224,7 +3230,7 @@ function inviteText(r = S.room, id = S.roomId) {
 async function shareOrCopy(r, id, boxId) {
   const text = inviteText(r, id);
   if (navigator.share && matchMedia('(pointer: coarse)').matches) {
-    try { await navigator.share({title: r.title, text: text.split('\n').slice(0, -1).join('\n'), url: roomLink(id)}); return; }
+    try { await navigator.share({title: '메뉴 고르러 가기 · 참여자용', text: text.split('\n').slice(0, -1).join('\n'), url: roomLink(id)}); return; }
     catch (e) { if (e && e.name === 'AbortError') return; }
   }
   copyOrShow(text, '🔗 복사했어요. 단톡방에 붙여넣어 보내 주세요', boxId);
