@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-24-participant-invite-preview",
+  "version": "2026-10-24-distinct-share-images",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "48f64e28ebbd417811ed5606dc72572c30d00938",
+  "applicationCommit": "5c6c40fafddbd5c96803093b6e00951e2b27996d",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "2f6e56c149c10b2f384558808cfc93efa942a5a7",
+  "sourceCommit": "b1f62295195d1894a949533b3cc2ce304d9134f6",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -49,12 +49,14 @@
   "favicon": "svg-png-ico",
   "iconCacheVersion": "eb39f2bcdc79",
   "maskableIcon": "separate-512-safe-circle",
-  "appBuild": "80e7ee17867a0540",
+  "appBuild": "754fcae6af4167f4",
   "appUpdates": "notice-and-user-confirmed-refresh",
   "updateCheck": "on-open-focus-online-and-every-60s-visible",
   "updateDrafts": "persist-before-navigation",
   "updateReleaseNotes": "up-to-three-short-changes-per-release",
   "managementLink": "desktop-sidebar-and-mobile-settings-top",
   "managementShare": "distinct-static-manage-page-fragment-key",
-  "participantShare": "distinct-static-invite-page-menu-selection"
+  "participantShare": "distinct-static-invite-page-menu-selection",
+  "shareImages": "participant-sky-food-manager-apricot-key",
+  "sharePreviewVersion": "cards-v1"
 }
