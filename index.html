@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="ed55104f4b42ba89">
+<meta name="damatda-build" content="0cc6ec8c6623b883">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
@@ -1765,6 +1765,18 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .update-changes li+li{margin-top:5px}
 #app.with-room-nav~.app-update{max-height:calc(100dvh - 160px - env(safe-area-inset-bottom,0px))}
 @media(min-width:1000px){#app.with-room-nav~.app-update{max-height:calc(100dvh - 48px)}}
+
+/* Host tools stay visible beside every desktop room view. */
+.nav-manage{display:none}
+.mm .settings-manage{border:1px solid #bad8e6;background:linear-gradient(120deg,#f0f9ff,#f3fcf6)}
+.settings-manage .hint{margin:10px 0 14px}.settings-manage .copy-box label,.nav-manage .copy-box label{display:block;font-size:12px;line-height:1.5}.settings-manage textarea,.nav-manage textarea{width:100%;margin-top:7px;font-size:12px;overflow-wrap:anywhere}
+@media(min-width:1000px){
+ .mm .nav-manage{display:block;flex:none;margin:0 0 10px;padding:0 0 10px;border-bottom:1px solid var(--line)}
+ .nav-manage-copy{display:flex;align-items:center;gap:8px;width:100%;min-height:64px;padding:11px 10px;border:1px solid #ffffff55;border-radius:12px;background:var(--mint-d);color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 4px 12px #236a7320}
+ .nav-manage-copy .manage-key{font-size:20px;flex:none}.nav-manage-copy b{display:block;font-size:13px;line-height:1.5}.nav-manage-copy small{display:block;font-size:10px;line-height:1.6;margin-top:3px;color:#ffffffdb}.nav-manage-copy:hover{filter:brightness(.94)}.nav-manage-copy:focus-visible{outline:3px solid #3189a6;outline-offset:3px}.nav-manage p{font-size:10px;line-height:1.6;color:var(--sub);margin:7px 2px 0;overflow-wrap:anywhere}
+ .mm .settings-manage{display:none}
+}
+@media print{.nav-manage,.settings-manage{display:none!important}}
 </style>
 </head>
 <body>
@@ -3103,6 +3115,23 @@ async function copyOrShow(text, okMsg, boxId) {
 }
 const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://hichoni.github.io/dinner-order/');
 const roomLink = (id = S.roomId) => `${pageBase()}${EMU ? '?emu&v=damatda2' : '?v=damatda2'}#r=${id}`;
+function managementLink() {
+  if (!S.host || !S.roomId) return '';
+  const key = myRooms().find(r=>r.id===S.roomId)?.key;
+  if (!key) return '';
+  const target = new URL('manage.html',pageBase());
+  if (installPreview()) target.searchParams.set('preview','1');
+  if (EMU) target.searchParams.set('emu','');
+  // Management keys remain in the fragment, never in scraper requests.
+  target.hash = `r=${encodeURIComponent(S.roomId)}&t=sum&k=${encodeURIComponent(key)}`;
+  return target.href;
+}
+async function copyManagementLink(boxId='hostBox') {
+  if (!S.host) return;
+  const link=managementLink();
+  if (!link) { toast('이 기기에는 관리 키가 없어요. 방을 만든 기기에서 복사해 주세요'); return; }
+  await copyOrShow(link,'🔑 관리 링크를 복사했어요. 함께 관리할 사람에게만 보내 주세요',boxId);
+}
 function inviteText(r = S.room, id = S.roomId) {
   const dl = deadlineInfo(r.deadline);
   const t = r.treat;
@@ -3466,7 +3495,8 @@ function roomNav() {
   const items = [item('menu', '메뉴'), item('cart', '장바구니', n ? `<b class="nav-badge" id="cartBadge">${n}</b>` : ''), item('mine', '보낸 메뉴', sent ? '<b class="nav-dot done" aria-label="보내기 완료"></b>' : '')];
   items.push(S.host ? item('sum', '모인 메뉴', `<b class="nav-badge soft">${S.answers.size}</b>`) : item('all', '모인 메뉴'));
   if (S.host) items.push(item('set', '방 설정'));
-  return `<nav class="nav n${items.length}" aria-label="메뉴"><a class="nav-brand" href="#" data-act="home" aria-label="다맛다 홈">${brand()}</a><div class="nav-room"><span>${S.host ? '관리하는 방' : '함께 고르는 방'}</span><b>${esc(S.room.title)}</b></div>${items.join('')}<div class="nav-foot">가입 없이, 이름만으로.<br>얼른 담아, 같이 먹자.</div></nav>`;
+  const manage = S.host ? `<section class="nav-manage" aria-label="관리 링크"><button class="nav-manage-copy" data-act="copy-host" data-copy-box="navHostBox"><span class="manage-key" aria-hidden="true">🔑</span><span><b>관리 링크 복사</b><small>다른 기기·공동관리자에게</small></span></button><p>함께 관리할 사람에게만 보내세요.</p><div id="navHostBox" hidden class="copy-box"><label>관리 링크<textarea class="input code-box" readonly rows="3"></textarea></label></div></section>` : '';
+  return `<nav class="nav n${items.length}" aria-label="메뉴"><a class="nav-brand" href="#" data-act="home" aria-label="다맛다 홈">${brand()}</a><div class="nav-room"><span>${S.host ? '관리하는 방' : '함께 고르는 방'}</span><b>${esc(S.room.title)}</b></div>${manage}${items.join('')}<div class="nav-foot">가입 없이, 이름만으로.<br>얼른 담아, 같이 먹자.</div></nav>`;
 }
 const whoChip = () => (S.who ? `<button class="chip-who" data-act="tab" data-t="who" aria-label="내 이름 · ${esc(S.who)}, 이름 바꾸기"><i class="chip-avatar" aria-hidden="true">${avatar(S.who)}</i><span class="who-label">내 이름 ·</span><span class="who-name">${esc(S.who)}</span></button>` : '');
 function roomHead(big = false) {
@@ -3783,6 +3813,7 @@ function roomSet() {
   const fold = (key, title, info, body) => `<details class="settings-fold" data-settings-fold="${key}"${S.settingsOpen?.[key] ? ' open' : ''}><summary><b>${title}</b><span>${info}</span><i>⌄</i></summary><div class="settings-body">${body}</div></details>`;
   return `${topBar('방 설정', '', whoChip())}
   <div class="wrap admin form">
+    <section class="a-sec settings-manage"><h3>🔑 관리 링크</h3><p class="hint">다른 기기나 공동관리자에게 보내는 관리 전용 링크예요. 방 설정과 모인 메뉴를 수정할 수 있으니 <b>함께 관리할 사람에게만</b> 보내 주세요.</p><button class="btn block" data-act="copy-host">관리 링크 복사</button><div id="hostBox" hidden class="copy-box"><label>관리 링크<textarea class="input code-box" readonly rows="3"></textarea></label></div></section>
     <section class="a-sec"><h3>모임 상태</h3>
       <div class="state-row"><div><b>${S.room.closed ? '다맛다를 마감했어요' : '메뉴 모으는 중'}</b><span>${S.room.closed ? '다시 열면 고르고 고칠 수 있어요.' : '마감 후에는 방장만 수정할 수 있어요.'}</span></div><button class="btn ${S.room.closed ? '' : 'red'}" data-act="toggle-close">${S.room.closed ? '다시 열기' : '마감하기'}</button></div></section>
     ${fold('info', '방 정보', esc(e.title), `
@@ -3801,8 +3832,6 @@ function roomSet() {
         ${e.stores.length > 1 ? `<button class="text-btn red" data-act="edit-store-del" data-id="${esc(s.id)}" style="margin-left:14px">이 가게 빼기</button>` : ''}</div></details>`).join('')}
       <div class="two" style="margin-top:12px">${CATALOG.count ? `<button class="btn line-dark" data-act="catalog" data-for="room">목록에서 더 넣기</button>` : ''}<button class="btn line-dark" data-act="custom-open" data-for="e">메뉴 직접 적기</button></div>
       ${S.editCustomOpen ? customForm('e') : ''}`)}
-    ${fold('access', '관리 링크', '다른 기기에서 관리', `<p class="hint">휴대폰이나 PC에서 이 링크를 열면 이 방이 「관리하는 방」에 추가돼요. 방 설정과 모인 메뉴를 수정·삭제할 수 있으니 <b>본인 기기나 함께 관리할 사람에게만</b> 보내 주세요.</p>
-      <button class="btn gray block" data-act="copy-host">관리 링크 복사</button><div id="hostBox" hidden class="copy-box"><textarea class="input code-box" readonly></textarea></div>`)}
     ${fold('danger', '방 삭제', '되돌릴 수 없어요', `<p class="hint">방과 링크가 없어져요. 되돌릴 수 없어요.</p><button class="btn red block" data-act="room-del">방 지우기</button>`)}
   </div>
   ${e.dirty ? `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">${S.sending ? '저장 중…' : '바꾼 내용 저장'}</button></div>` : ''}
@@ -4153,11 +4182,7 @@ document.addEventListener('click', async e => {
     case 'share-invite': shareOrCopy(S.room, S.roomId, 'inviteBox'); break;
     case 'copy-remind': copyOrShow(document.getElementById('remindText').value, '📣 재촉 글을 복사했어요', 'remindBox'); break;
     case 'copy-owner': copyOrShow(ownerMessage(totals()[Number(el.dataset.i)]), '📋 가게 주문 메시지를 복사했어요. 가게에 그대로 보내면 돼요', 'ownerBox' + el.dataset.i); break;
-    case 'copy-host': {
-      const key = myRooms().find(r => r.id === S.roomId)?.key;
-      if (!key) { toast('이 기기에는 관리 키가 없어요. 방을 만든 기기에서 복사해 주세요'); return; }
-      copyOrShow(`${roomLink()}&k=${key}`, '👑 관리 링크를 복사했어요. 함께 관리할 사람에게만 보내 주세요', 'hostBox'); break;
-    }
+    case 'copy-host': await copyManagementLink(el.dataset.copyBox || 'hostBox'); break;
     case 'print': try { print(); } catch { toast('이 화면에서는 인쇄가 안 돼요'); } break;
     case 'toggle-close': hostUpdate({closed: !S.room.closed}, S.room.closed ? '다시 열었어요' : '다맛다를 마감했어요'); break;
     case 'edit-save': saveEdit(); break;
