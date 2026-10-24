@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="754fcae6af4167f4">
+<meta name="damatda-build" content="65d399366eac7099">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
@@ -3115,7 +3115,21 @@ async function copyOrShow(text, okMsg, boxId) {
 }
 const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://hichoni.github.io/dinner-order/');
 const SHARE_PREVIEW_VERSION = 'cards-v1';
-function roomLink(id = S.roomId) {
+const ROOM_SHARE_VERSION = 'rooms-v1';
+function roomShareTag(title) {
+  const text=String(title||'').trim().slice(0,40)||'다맛다';let hash=2166136261;
+  for(let i=0;i<text.length;i++) hash=Math.imul(hash ^ text.charCodeAt(i),16777619);
+  return (hash>>>0).toString(36);
+}
+function roomShareTarget(role,id,title) {
+  const target=new URL(`https://ai-invent.web.app/a/dinner/${role}/${encodeURIComponent(id)}`);
+  target.searchParams.set('v',ROOM_SHARE_VERSION);
+  target.searchParams.set('n',roomShareTag(title));
+  return target;
+}
+function roomLink(id = S.roomId,title) {
+  const name=title??(id===S.roomId?S.room?.title:null)??S.sums[id]?.title??myRooms().find(r=>r.id===id)?.title;
+  if(!installPreview()&&!EMU) return roomShareTarget('invite',id,name).href;
   const target = new URL('invite.html',pageBase());
   target.searchParams.set('v',SHARE_PREVIEW_VERSION);
   if (installPreview()) target.searchParams.set('preview','1');
@@ -3127,7 +3141,11 @@ function managementLink() {
   if (!S.host || !S.roomId) return '';
   const key = myRooms().find(r=>r.id===S.roomId)?.key;
   if (!key) return '';
-  const target = new URL('manage.html',pageBase());
+  const target = !installPreview()&&!EMU ? roomShareTarget('manage',S.roomId,S.room?.title) : new URL('manage.html',pageBase());
+  if(!installPreview()&&!EMU) {
+    target.hash=new URLSearchParams({k:key}).toString();
+    return target.href;
+  }
   target.searchParams.set('v',SHARE_PREVIEW_VERSION);
   if (installPreview()) target.searchParams.set('preview','1');
   if (EMU) target.searchParams.set('emu','');
@@ -3144,13 +3162,13 @@ async function copyManagementLink(boxId='hostBox') {
 function inviteText(r = S.room, id = S.roomId) {
   const dl = deadlineInfo(r.deadline);
   const t = r.treat;
-  return [`🍽 ${r.title}`, t ? `🎁 ${treatHeadline(t.by)} ${budgetLabel(t)} ${won(t.cap)}까지` : '', '링크를 열고 이름을 고른 뒤 먹고 싶은 메뉴를 골라 「보내기」만 누르면 돼요!', dl ? `⏰ ${dl.at}까지` : '', roomLink(id)].filter(Boolean).join('\n');
+  return [`🍽 ${r.title}`, t ? `🎁 ${treatHeadline(t.by)} ${budgetLabel(t)} ${won(t.cap)}까지` : '', '링크를 열고 이름을 고른 뒤 먹고 싶은 메뉴를 골라 「보내기」만 누르면 돼요!', dl ? `⏰ ${dl.at}까지` : '', roomLink(id,r.title)].filter(Boolean).join('\n');
 }
 // 휴대폰에서는 공유 창(카톡 바로 고르기)을, 안 되면 복사를 써요.
 async function shareOrCopy(r, id, boxId) {
   const text = inviteText(r, id);
   if (navigator.share && matchMedia('(pointer: coarse)').matches) {
-    try { await navigator.share({title: '메뉴 고르러 가기 · 참여자용', text: text.split('\n').slice(0, -1).join('\n'), url: roomLink(id)}); return; }
+    try { await navigator.share({title: `${r.title} · 메뉴 고르러 가기 · 참여자용`, text: text.split('\n').slice(0, -1).join('\n'), url: roomLink(id,r.title)}); return; }
     catch (e) { if (e && e.name === 'AbortError') return; }
   }
   copyOrShow(text, '🔗 복사했어요. 단톡방에 붙여넣어 보내 주세요', boxId);
