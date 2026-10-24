@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-24-distinct-share-images",
+  "version": "2026-10-25-room-name-previews",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "5c6c40fafddbd5c96803093b6e00951e2b27996d",
+  "applicationCommit": "72a415e11a99abfedae209ad14bdf8af50384c09",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "b1f62295195d1894a949533b3cc2ce304d9134f6",
+  "sourceCommit": "8baa35ab508f152f725b45c6e5b379798aabb5b9",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -49,14 +49,16 @@
   "favicon": "svg-png-ico",
   "iconCacheVersion": "eb39f2bcdc79",
   "maskableIcon": "separate-512-safe-circle",
-  "appBuild": "754fcae6af4167f4",
+  "appBuild": "65d399366eac7099",
   "appUpdates": "notice-and-user-confirmed-refresh",
   "updateCheck": "on-open-focus-online-and-every-60s-visible",
   "updateDrafts": "persist-before-navigation",
   "updateReleaseNotes": "up-to-three-short-changes-per-release",
   "managementLink": "desktop-sidebar-and-mobile-settings-top",
-  "managementShare": "distinct-static-manage-page-fragment-key",
-  "participantShare": "distinct-static-invite-page-menu-selection",
+  "managementShare": "room-title-server-preview-fragment-key",
+  "participantShare": "room-title-server-preview-menu-selection",
   "shareImages": "participant-sky-food-manager-apricot-key",
-  "sharePreviewVersion": "cards-v1"
+  "sharePreviewVersion": "rooms-v1",
+  "sharePreviewService": "https://ai-invent.web.app/a/dinner/",
+  "shareRoomNames": true
 }
