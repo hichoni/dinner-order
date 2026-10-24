@@ -1,10 +1,10 @@
 {
-  "version": "2026-10-24-update-release-notes",
+  "version": "2026-10-24-visible-management-link",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
   "avatarStorage": "firestore-room-profiles",
-  "applicationCommit": "0d0041b05380cbf332c380a06e3c89cad6e66891",
+  "applicationCommit": "3c45b03906752ce109655d9300c33f3e67675034",
   "logoTransparency": "RGBA PNG",
   "homeRoulette": true,
   "audio": "independent-bgm-sfx-switches-and-volume",
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "b2f25bc46c40a8c1f71af4b0b0ef334f8664f38b",
+  "sourceCommit": "bd35fddc0987b73dd15563e08b2939465cbeb6e2",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -49,9 +49,11 @@
   "favicon": "svg-png-ico",
   "iconCacheVersion": "eb39f2bcdc79",
   "maskableIcon": "separate-512-safe-circle",
-  "appBuild": "ed55104f4b42ba89",
+  "appBuild": "0cc6ec8c6623b883",
   "appUpdates": "notice-and-user-confirmed-refresh",
   "updateCheck": "on-open-focus-online-and-every-60s-visible",
   "updateDrafts": "persist-before-navigation",
-  "updateReleaseNotes": "up-to-three-short-changes-per-release"
+  "updateReleaseNotes": "up-to-three-short-changes-per-release",
+  "managementLink": "desktop-sidebar-and-mobile-settings-top",
+  "managementShare": "distinct-static-manage-page-fragment-key"
 }
