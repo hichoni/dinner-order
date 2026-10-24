@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex">
+  <title>다맛다 관리 링크 · 방장/공동관리자용</title>
+  <meta name="description" content="방장과 공동관리자를 위한 링크예요. 모임 설정과 모인 메뉴를 관리할 수 있어요.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hichoni.github.io/dinner-order/manage.html">
+  <meta property="og:site_name" content="다맛다 · 관리 링크">
+  <meta property="og:title" content="🔑 다맛다 관리 링크 · 방장/공동관리자용">
+  <meta property="og:description" content="모임 설정과 모인 메뉴를 관리하는 링크예요. 본인 기기나 함께 관리할 사람에게만 보내 주세요.">
+  <meta property="og:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
+  <meta property="og:image:width" content="1774">
+  <meta property="og:image:height" content="887">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#f7faf8">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
+<link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79">
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#e4f6ef,#e9f2ff);color:#153d38;font-family:system-ui,"Malgun Gothic",sans-serif}main{width:min(100%,460px);padding:32px 24px;border:1px solid #fff;border-radius:24px;background:#ffffffed;box-shadow:0 12px 40px #24636216;text-align:center}.brand{display:block;width:240px;max-width:100%;margin:-40px auto -32px}h1{font-size:24px;margin:0 0 16px}p{font-size:15px;line-height:1.8;color:#4c6863}small{display:block;font-size:12px;line-height:1.7;color:#4c6863;margin-top:20px}a{display:block;min-height:44px;padding:12px;border-radius:12px;background:#087e72;color:#fff;text-decoration:none;font-weight:650}a:focus-visible{outline:3px solid #3189a6;outline-offset:3px}
+  </style>
+</head>
+<body>
+  <main>
+    <img class="brand" src="assets/brand-sky-alpha-v1.png" alt="다맛다" width="240" height="160">
+    <h1>🔑 다맛다 관리 링크</h1>
+    <p id="manageStatus" role="status">모임의 관리 화면을 열고 있어요.</p>
+    <a id="manageOpen" href="./">다맛다 열기</a>
+    <small>방장·공동관리자용 링크예요.<br>본인 기기나 함께 관리할 사람에게만 보내 주세요.</small>
+    <noscript><p>관리 화면을 열려면 자바스크립트를 켜고 다시 열어 주세요.</p></noscript>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.hash.slice(1));
+    const room = params.get('r') || '', key = params.get('k') || '';
+    if (/^[a-z0-9]{1,64}$/i.test(room) && /^[a-z0-9]{1,64}$/i.test(key)) {
+      const options = new URLSearchParams(location.search);
+      const target = new URL(options.get('preview')==='1' ? 'preview.html' : './', location.href);
+      target.searchParams.set('v','damatda2');
+      if (options.has('emu')) target.searchParams.set('emu','');
+      target.hash = new URLSearchParams({r:room,t:'sum',k:key}).toString();
+      const open = document.getElementById('manageOpen');
+      open.href=target.href; open.textContent='관리 화면 열기';
+      location.replace(target.href);
+    } else {
+      document.getElementById('manageStatus').textContent='관리 링크를 확인해 주세요. 방을 만든 분에게 새 링크를 받아 열어 주세요.';
+    }
+  </script>
+</body>
+</html>
