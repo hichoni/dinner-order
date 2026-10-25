@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="30ce30126090524c">
+<meta name="damatda-build" content="7a7393d25c85a082">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -18,6 +18,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="다맛다">
 <meta name="theme-color" content="#f7faf8">
@@ -1791,6 +1792,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .management-backup{max-width:1100px;margin:18px auto;padding:22px 24px;border:2px solid #e0b56c;border-radius:20px;background:#fff7e8;box-sizing:border-box;line-height:1.7}.management-backup h3{font-size:18px;margin:0 0 8px}.management-backup p{font-size:14px;margin:8px 0 16px}.management-backup .text-btn{margin-top:12px;font-size:13px;padding:8px}.management-backup .hint{color:#76603d}.management-backup textarea{max-width:100%;overflow-wrap:anywhere}
 @media(max-width:760px){.host-account{padding:20px;gap:14px}.host-account>.btn{width:100%}.management-backup{margin:12px 16px;padding:18px}.host-gate h1{font-size:26px}.mm .host-gate{padding:32px 22px 100px}.host-account .row{width:100%;justify-content:space-between}}
 @media print{.host-account,.management-backup{display:none!important}}
+.catalog-source-tabs{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}.catalog-source-tabs button{flex:1;min-height:48px;border:1px solid #bcd9dc;border-radius:14px;padding:10px;background:#fff;color:#285562;font:inherit;font-weight:700}.catalog-source-tabs button[aria-pressed=true]{background:#087b76;color:white;border-color:#087b76}.places-intro{padding:18px;background:#eaf6f4;border-radius:18px;margin-bottom:20px}.places-intro b{font-size:20px}.places-intro p{margin:8px 0 0;line-height:1.65}.places-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.places-filters .input{width:100%;min-width:0}.place-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;margin:10px 0;background:#fff;border:1px solid #d4e5e8;border-radius:18px}.place-card>div{min-width:0;display:grid;gap:5px}.place-card b{font-size:18px;overflow-wrap:anywhere}.place-card span,.place-card small{color:#57717b;line-height:1.5}.place-card .small-btn{flex-shrink:0;min-height:44px}.place-menu-state{font-weight:700;color:#087b76!important}.places-map{height:380px;max-height:55vh;border-radius:16px;margin-top:16px;z-index:0}.places-map-tools{display:flex;gap:8px;flex-wrap:wrap}.place-editor{padding:20px;margin:16px 0;background:#f1faf6;border:2px solid #087b76;border-radius:18px;scroll-margin-top:90px}.place-editor h3{margin:8px 0}.place-editor p{line-height:1.6}.place-editor .btn{margin-top:14px}.places-source{font-size:12px;color:#60767e;line-height:1.8;margin:24px 0}.places-source a{text-decoration:underline}.places-map .leaflet-control-attribution{font-size:10px;background:#fff}.places-map .leaflet-control-zoom a{color:#23434e}#placesRoot [hidden]{display:none!important}@media(max-width:480px){.places-filters{grid-template-columns:1fr}.place-card{padding:14px;gap:10px}.catalog-source-tabs button{font-size:14px}.places-map{height:320px}}
 </style>
 </head>
 <body>
@@ -2657,7 +2659,7 @@ const S = {
   route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: false, error: '',
   tab: 'menu', store: null, mfilter: 'all', menuQuery: '', pinOpen: true,
   who: '', cart: {}, req: '', storeReqs: {}, thanks:null, thanksOpen:false, sentAt: 0, answerBase: null, answerConflict: false,
-  draft: null, catFor: 'create', catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(), catLimit: 40, catPreview: '', catDetail: null,
+  draft: null, catFor: 'create', catSource: 'menus', catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(), catLimit: 40, catPreview: '', catDetail: null,
   edit: null, sumBy: 'store', byPerson: true, sending: false, createError: '',
   homeTab: '', sums: {}, sumsLoading: false,
 };
@@ -3321,6 +3323,7 @@ async function shareOrCopy(r, id, boxId) {
 
 // ---------- 그리기 ----------
 function render(enter = false) {
+  placesCleanup?.(); placesCleanup=null;
   if (S.route === 'create' || S.route === 'catalog') persistDraft();
   closeSheet();
   const v = S.route==='host-start'?()=>hostGateHtml(false):S.route==='guest-warning'?()=>hostGateHtml(true):S.route === 'create' ? viewCreate : S.route === 'catalog' ? viewCatalog : S.route === 'room' ? viewRoom : viewHome;
@@ -3330,6 +3333,7 @@ function render(enter = false) {
   document.title = S.route === 'room' && S.room ? `${S.room.title} · 다맛다` : '다맛다';
   DamatdaPlay.mount();
   scheduleStoreHighlight();
+  if(S.route==='catalog' && S.catSource==='places') mountPlacePicker();
 }
 function rerender() { const y = scrollY; render(); scrollTo(0, y); }
 const ROOM_TABS = ['who', 'menu', 'store', 'cart', 'review', 'mine', 'sum', 'all', 'set'];
@@ -3535,6 +3539,40 @@ function viewCreate() {
 
 
 // ---------- 맛집 목록에서 고르기 (방 만들기·방 설정 둘 다) ----------
+let placesCleanup=null;
+function catalogSelectionCount() {
+  const target=S.catFor==='create'?S.draft:S.edit;
+  return S.catPicked.size+(target?.stores || []).filter(s=>!CATALOG.stores.some(c=>c.id===s.id)).length;
+}
+async function addPlaceToDraft(place, menuStore, lines, target, scope) {
+  const stillHere=()=>S.route==='catalog' && S.catFor===scope && target===(scope==='create'?S.draft:S.edit);
+  if(!stillHere()) throw new Error('가게 선택 화면에서 다시 담아 주세요.');
+  const id=menuStore?.id || place.id;
+  if(target.stores.some(s=>s.id===id)) return;
+  if(catalogSelectionCount()>=20) throw new Error('한 모임에는 가게를 20곳까지 담을 수 있어요.');
+  const store=menuStore ? fromCatalog(await loadCatalogStore(menuStore)) : tidyStore({...place,emoji:'🍽️',color:'#eaf6f4',menu:parseMenu(lines,id)});
+  if(!stillHere()) throw new Error('화면이 바뀌어 담기를 취소했어요.');
+  if(!store.menu.length) throw new Error('메뉴를 한 줄 이상 적어 주세요.');
+  if(target.stores.some(s=>s.id===id)) return;
+  if(catalogSelectionCount()>=20) throw new Error('한 모임에는 가게를 20곳까지 담을 수 있어요.');
+  target.stores.push(store);
+  if(menuStore) S.catPicked.add(id);
+  if(scope==='room') target.dirty=true;
+  else persistDraft();
+  const done=document.getElementById('catDone');if(done)done.textContent=`${catalogSelectionCount()}곳 담기 완료`;
+}
+async function mountPlacePicker() {
+  const root=document.getElementById('placesRoot'),scope=S.catFor,target=scope==='create'?S.draft:S.edit;
+  if(!root || !target)return;
+  try{
+    const {mountPlaces}=await import('./places.js');
+    if(document.getElementById('placesRoot')!==root)return;
+    placesCleanup=mountPlaces(root,{catalog:CATALOG.stores,onAdd:(place,menu,lines)=>addPlaceToDraft(place,menu,lines,target,scope),isAdded:(place,menu)=>target.stores.some(s=>s.id===(menu?.id || place.id)) || !!menu && S.catPicked.has(menu.id)});
+  }catch{if(document.getElementById('placesRoot')===root)root.textContent='가게 검색을 불러오지 못했어요. 메뉴 목록으로 전환한 뒤 다시 시도해 주세요.';}
+}
+function catalogSourceTabs() {
+  return `<div class="catalog-source-tabs" role="group" aria-label="가게 찾는 방법"><button data-act="cat-source" data-source="menus" aria-pressed="${S.catSource!=='places'}">메뉴가 있는 가게</button><button data-act="cat-source" data-source="places" aria-pressed="${S.catSource==='places'}">경북 전체 · 지도</button></div>`;
+}
 const CAT_ICON = {카페: '☕', 치킨: '🍗', 중식: '🥟', 한식: '🍚', 피자: '🍕', 분식: '🍢', 버거: '🍔', 찜닭: '🍲', 국밥: '🥣', 도시락: '🍱', 돈가스: '🍛', 족발: '🐷', 일식: '🍣', 양식: '🍝', 아시안: '🍜', 샐러드: '🥗', 마라탕: '🌶️'};
 const inArea = s => S.catArea === 'all' || s.area === S.catArea;
 const inCat = s => S.catCat === 'all' || s.category === S.catCat;
@@ -3565,20 +3603,21 @@ function catalogList() {
   }).join('') + (list.length>visible.length ? `<button class="btn gray block" data-act="cat-more">40곳 더 보기 (${visible.length}/${list.length})</button>`:'') || '<p class="muted empty-line">맞는 가게가 없어요. 다른 동네나 검색어로 찾아보세요.</p>';
 }
 function viewCatalog() {
+  if(S.catSource==='places') return `${topBar('경북 가게 찾기','cat-back')}<div class="wrap admin">${catalogSourceTabs()}<div id="placesRoot"><p role="status">가게 검색을 불러오는 중…</p></div></div><div class="bottom-bar"><button class="btn block" data-act="cat-done" id="catDone">${catalogSelectionCount()}곳 담기 완료</button></div>`;
   const areas = catalogAreas();
   const inA = CATALOG.stores.filter(inArea);
   const chips = ['all',...areas.slice(0,8)].map(a => [a, a==='all'?'전체':a, CATALOG.stores.filter(s=>a==='all'||s.area===a).length]);
   const cnt = {}; for (const s of inA) cnt[s.category] = (cnt[s.category] || 0) + 1;
   const cats = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
-  return `${topBar('안동·예천 맛집 목록', 'cat-back')}
-  <div class="wrap admin">
+  return `${topBar('경북 가게 찾기', 'cat-back')}
+  <div class="wrap admin">${catalogSourceTabs()}<p class="hint">등록 메뉴는 현재 안동·예천 중심이에요. 다른 지역은 ‘경북 전체 · 지도’에서 찾아보세요.</p>
     <label class="catalog-area-label" for="catalogArea">어느 동네에서 고를까요?</label><select class="input" id="catalogArea" aria-label="동네 선택"><option value="all"${S.catArea==='all'?' selected':''}>전체 지역</option>${areas.map(a=>`<option value="${esc(a)}"${S.catArea===a?' selected':''}>${esc(a)} · ${CATALOG.stores.filter(s=>s.area===a).length}곳</option>`).join('')}</select>
     <div class="region-picker andong-regions" role="group" aria-label="지역 선택">${chips.map(([k,l,c])=>`<button class="${S.catArea===k?'on':''}" data-act="cat-area" data-a="${esc(k)}" aria-pressed="${S.catArea===k}"><b>${esc(l)}</b><small>${c}</small></button>`).join('')}</div>
     <input class="input search" id="catSearch" type="search" placeholder="가게·메뉴 찾기" value="${esc(S.catQuery)}" aria-label="가게·메뉴 찾기">
     <div class="cat-row" role="group" aria-label="종류"><button class="${S.catCat === 'all' ? 'on' : ''}" data-act="cat-cat" data-c="all"><i>🍽️</i>전체<small>${inA.length}</small></button>${cats.map(c => `<button class="${S.catCat === c ? 'on' : ''}" data-act="cat-cat" data-c="${esc(c)}"><i>${CAT_ICON[c] || '🍴'}</i>${esc(c)}<small>${cnt[c]}</small></button>`).join('')}</div>
     <p class="catalog-result-count" id="catalogCount" role="status">${catalogCount()}</p><div class="plist" id="catList">${catalogList()}</div>
   </div>
-  <div class="bottom-bar"><button class="btn block" data-act="cat-done" id="catDone">${S.catPicked.size}곳 넣기</button></div>`;
+  <div class="bottom-bar"><button class="btn block" data-act="cat-done" id="catDone">${catalogSelectionCount()}곳 담기 완료</button></div>`;
 }
 
 // ---------- 방 ----------
@@ -4264,6 +4303,7 @@ document.addEventListener('click', async e => {
       S.catPicked = new Set(have.filter(x => CATALOG.stores.some(s => s.id === x)));
       go({route: 'catalog'}); break;
     }
+    case 'cat-source': S.catSource=el.dataset.source==='places'?'places':'menus';rerender();break;
     case 'cat-area': S.catArea = el.dataset.a; S.catCat = 'all'; S.catLimit=40; S.catPreview=''; rerender(); break;
     case 'cat-cat': S.catCat = el.dataset.c; S.catLimit=40; S.catPreview=''; rerender(); break;
     case 'cat-more': S.catLimit+=40; rerender(); break;
@@ -4276,10 +4316,10 @@ document.addEventListener('click', async e => {
       if(S.route==='catalog' && S.catPreview===id) rerender(); break;
     }
     case 'cat-pick': {
-      if(el.checked && S.catPicked.size>=20) { el.checked=false; toast('한 모임에는 가게를 20곳까지 넣을 수 있어요'); break; }
+      if(el.checked && catalogSelectionCount()>=20) { el.checked=false; toast('한 모임에는 가게를 20곳까지 넣을 수 있어요'); break; }
       if (el.checked) S.catPicked.add(id); else S.catPicked.delete(id);
       el.closest('.prow').classList.toggle('on', el.checked);
-      document.getElementById('catDone').textContent = `${S.catPicked.size}곳 넣기`; break;
+      document.getElementById('catDone').textContent = `${catalogSelectionCount()}곳 담기 완료`; break;
     }
     case 'cat-back': case 'cat-done': {
       if (act === 'cat-done') {
