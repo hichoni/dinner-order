@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="67dcc14a9db5ca5e">
+<meta name="damatda-build" content="30ce30126090524c">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2878,6 +2878,7 @@ async function initHostAccount() {
   }catch(error){hostAccount.error=error.message==='login-cancelled'?'카카오 로그인을 취소했어요. 다시 시작하거나 로그인 없이 이용할 수 있어요.':authError(error);}
   finally{hostAccount.ready=true;hostAccount.busy=false;}
   if(S.route==='home'||isCallback)rerender();
+  else if(S.route==='room')keepView();
 }
 
 // ---------- Firebase ----------
@@ -2937,6 +2938,8 @@ async function openRoom(id, key, want = '') {
       if (S.roomId !== id) return;
       if (!snap.exists()) { S.room = null; S.loading = false; S.error = 'gone'; render(); return; }
       S.room = tidyRoom(snap.data()); S.loading = false;
+      // Refresh an untouched settings draft when cached data is replaced by server data.
+      if(S.edit&&!S.edit.dirty)S.edit=null;
       rememberRoom(id, S.host ? {title: S.room.title, host: true} : {title: S.room.title});
       if (first && want && (!['sum', 'set'].includes(want) || S.host)) Object.assign(S, restoredRoomView(id), {tab: want});
       else if (first && S.host && !S.who) S.tab = 'sum';
