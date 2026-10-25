@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="ebcae1c9534bac99">
+<meta name="damatda-build" content="1fee2d578b23d6ec">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2780,7 +2780,7 @@ async function hostApi(path,body,authenticated=true) {
 function hostAccountHtml(room=false) {
   const linked=room&&hostAccount.uid&&hostAccount.synced.has(S.roomId);
   return `<section class="host-account${room?' in-room':''}" aria-label="방장 계정"><div><b>${linked?'✓ 이 방은 카카오 계정에 연결됐어요':hostAccount.uid?'카카오로 로그인했어요':room?'이 방을 다른 기기에서도 관리하세요':'어디서든 내 모임을 이어서 관리하세요'}</b><p>${linked?'같은 카카오 계정으로 로그인하면 다시 찾을 수 있어요.':room?'이 방을 계정에 연결하면 관리 링크 없이도 다시 찾을 수 있어요.':hostAccount.uid?'계정에 연결한 모임을 불러옵니다. 기존 방은 방 설정에서 연결해 주세요.':'방장은 카카오로 시작하고, 참여자는 로그인 없이 응답해요.'}</p></div>
-    ${room?linked?'':`<button class="btn kakao-btn" data-act="account-link" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'연결하는 중…':'카카오 계정에 이 방 연결하기'}</button>`:hostAccount.uid?'<div class="row"><button class="btn gray" data-act="account-refresh">내 방 새로고침</button><button class="text-btn" data-act="account-logout">로그아웃</button></div>':'<button class="btn kakao-btn" data-act="account-login">카카오로 시작하기</button>'}
+    ${room?linked?'':`<button class="btn kakao-btn" data-act="account-link" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'연결하는 중…':'카카오 계정에 이 방 연결하기'}</button>`:hostAccount.uid?'<div class="row"><button class="btn gray" data-act="account-refresh">내 방 새로고침</button><button class="text-btn" data-act="account-logout">로그아웃</button></div>':`<button class="btn kakao-btn" data-act="account-login" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'카카오로 연결하는 중…':'카카오로 시작하기'}</button>`}
     ${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}</section>`;
 }
 function hostMigrationHtml() {
@@ -4477,7 +4477,10 @@ addEventListener('hashchange', route);
 addEventListener('popstate', route);
 function launchApp() {
   const query=new URLSearchParams(location.search);
-  if(!(query.has('state')&&(query.has('code')||query.has('error'))))route();
+  if(query.has('state')&&(query.has('code')||query.has('error'))){
+    hostAccount.busy=true;
+    document.getElementById('app').innerHTML='<div class="wrap host-gate" role="status"><h1>카카오 로그인 확인 중…</h1><p>연결한 모임을 안전하게 불러오고 있어요.</p></div>';
+  }else route();
   initHostAccount();
 }
 launchApp();
