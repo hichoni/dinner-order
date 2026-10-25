@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="ac04896732a2f5c7"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="6a9be28241c655a0"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -2670,6 +2670,18 @@ function thanksWall() {
 // ---------- 가게 모양 다듬기 (방 문서는 아무나 만들 수 있으니 읽을 때 늘 다듬어요) ----------
 const safeImg = u => (/^https:\/\/[^\s"'<>]+$/.test(u || '') ? u : '');
 const safeColor = c => (/^#[0-9a-fA-F]{3,8}$/.test(c || '') ? c : '#eef2f3');
+function menuProvenance(s) {
+  const source=s.menuSource || s.source || '';
+  if(s.menuBasis==='착한가격업소 공개 메뉴' && source==='https://www.data.go.kr/data/3045247/fileData.do')
+    return {source,label:'행정안전부 착한가격업소 현황'};
+  if(s.menuBasis==='업주 등록 메뉴' && typeof source==='string' && source.length<=800 && /^https:\/\/www\.daangn\.com\/kr\/local-profile\/[a-zA-Z0-9_%가-힣-]+\/$/.test(source))
+    return {source,label:'당근 동네업체 · 업주 등록 메뉴'};
+  return null;
+}
+function menuSourceHtml(s) {
+  const info=menuProvenance(s);
+  return info?`<p><a href="${esc(info.source)}" target="_blank" rel="noopener">출처: ${esc(info.label)}</a> · 공개된 메뉴 일부를 제공해요.</p>`:'';
+}
 // Keep source rows and IDs, but never treat delivery guidance as food.
 function menuKind(m) {
   if (['menu', 'delivery', 'fee', 'info'].includes(m.kind)) return m.kind;
@@ -2698,8 +2710,8 @@ function tidyStore(s, i = 0) {
     area: str(s.area, 16), minutes: num(s.minutes), phone: str(s.phone, 20), address: str(s.address, 80), photo: safeImg(str(s.photo, 400)),
     reviews: num(s.reviews), hours: str(s.hours, 80), naver: safeImg(str(s.naver, 200)), note: str(s.note, 80),
     checkedAt: /^20\d{2}-\d{2}-\d{2}$/.test(s.checkedAt || '') ? s.checkedAt : '',
-    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴'].includes(s.menuBasis) ? s.menuBasis : '',
-    ...(s.menuBasis==='착한가격업소 공개 메뉴' && (s.menuSource || s.source)==='https://www.data.go.kr/data/3045247/fileData.do' ? {menuSource:'https://www.data.go.kr/data/3045247/fileData.do',menuDataDate:/^20\d{2}-\d{2}-\d{2}$/.test(s.menuDataDate || '')?s.menuDataDate:''} : {}),
+    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴'].includes(s.menuBasis) || (s.menuBasis==='업주 등록 메뉴' && menuProvenance(s)) ? s.menuBasis : '',
+    ...(menuProvenance(s) ? {menuSource:menuProvenance(s).source,menuDataDate:/^20\d{2}-\d{2}-\d{2}$/.test(s.menuDataDate || '')?s.menuDataDate:''} : {}),
     menu: (Array.isArray(s.menu) ? s.menu : []).slice(0, 60).filter(m => m && m.id).map(m => ({
       id: str(m.id, 40), name: str(m.name, 40, '메뉴'), emoji: str(m.emoji, 8), price: num(m.price), desc: str(m.desc, 120),
       tags: Array.isArray(m.tags) ? m.tags.filter(t => ['best', 'kid', 'hot'].includes(t)) : [], img: safeImg(str(m.img, 400)),
@@ -3706,8 +3718,8 @@ function catalogList() {
     return `<article class="prow${on ? ' on' : ''}"><label class="prow-main">${thumb(s, 'md')}
       <div class="prow-txt"><b>${esc(s.name)}</b>${S.catCity===NEW_TOWN?`<span class="catalog-jurisdiction">주소지 · ${esc(catalogCity(s))}</span>`:''}<div class="meta">${storeMeta({...s,minutes:0})}</div>${menuPricePreview(s)}</div>
       <span class="catalog-check"><input type="checkbox" data-act="cat-pick" data-id="${esc(s.id)}"${on ? ' checked' : ''} aria-label="${esc(s.name)} 넣기"><i aria-hidden="true"></i></span></label>
-      <div class="catalog-row-tools"><button class="text-btn" data-act="cat-preview" data-id="${esc(s.id)}" aria-expanded="${expanded}">${s.menuBasis==='착한가격업소 공개 메뉴'?'공개 대표 메뉴':'메뉴'} ${s.menuCount || s.menu.length}개 ${expanded?'접기':'보기'}</button>${s.checkedAt ? `<span>${s.menuBasis==='착한가격업소 공개 메뉴'?'공개자료 확인':'메뉴·가격 확인'} ${esc(s.checkedAt)}</span>`:''}</div>
-      ${expanded ? `<div class="catalog-menu-preview">${S.catMenuError ? '<p role="alert">메뉴를 불러오지 못했어요. 닫고 다시 열어 주세요.</p>' : detail ? `${detail.menuBasis ? `<p>${esc(detail.menuBasis)} 기준${detail.menuDataDate?' · '+esc(detail.menuDataDate)+' 자료':''}</p>`:''}${detail.menuSource==='https://www.data.go.kr/data/3045247/fileData.do'?`<p><a href="${esc(detail.menuSource)}" target="_blank" rel="noopener">출처: 행정안전부 착한가격업소 현황</a> · 공개된 대표 메뉴만 포함해요.</p>`:''}${matches.length ? '<p class="catalog-match-label">검색한 메뉴를 먼저 보여드려요.</p>':''}${previewMenus.map(m=>`<div><b>${esc(m.name)}</b><span>${price(m.price)}</span></div>`).join('')}${storeGuidance(detail)}<p>확인한 메뉴판 기준이며 실제 가격·판매 여부는 달라질 수 있어요.</p>` : '<p role="status">메뉴를 불러오는 중…</p>'}</div>`:''}</article>`;
+      <div class="catalog-row-tools"><button class="text-btn" data-act="cat-preview" data-id="${esc(s.id)}" aria-expanded="${expanded}">${s.menuBasis==='착한가격업소 공개 메뉴'?'공개 대표 메뉴':'메뉴'} ${s.menuCount || s.menu.length}개 ${expanded?'접기':'보기'}</button>${s.checkedAt ? `<span>${s.menuBasis==='착한가격업소 공개 메뉴'?'공개자료 확인':s.menuBasis==='업주 등록 메뉴'?'등록정보 확인':'메뉴·가격 확인'} ${esc(s.checkedAt)}</span>`:''}</div>
+      ${expanded ? `<div class="catalog-menu-preview">${S.catMenuError ? '<p role="alert">메뉴를 불러오지 못했어요. 닫고 다시 열어 주세요.</p>' : detail ? `${detail.menuBasis ? `<p>${esc(detail.menuBasis)} 기준${detail.menuDataDate?' · '+esc(detail.menuDataDate)+' 자료':''}</p>`:''}${menuSourceHtml(detail)}${matches.length ? '<p class="catalog-match-label">검색한 메뉴를 먼저 보여드려요.</p>':''}${previewMenus.map(m=>`<div><b>${esc(m.name)}</b><span>${price(m.price)}</span></div>`).join('')}${storeGuidance(detail)}<p>확인한 메뉴판 기준이며 실제 가격·판매 여부는 달라질 수 있어요.</p>` : '<p role="status">메뉴를 불러오는 중…</p>'}</div>`:''}</article>`;
   }).join('') + (list.length>visible.length ? `<button class="btn gray block" data-act="cat-more">12곳 더 보기 (${visible.length}/${list.length})</button>`:'') || '<p class="muted empty-line">맞는 가게가 없어요. 다른 동네나 검색어로 찾아보세요.</p>';
 }
 function viewCatalog() {
@@ -3927,10 +3939,10 @@ function menuStoreHeader(s,count) {
     s.phone ? `<button data-act="copy" data-text="${esc(s.phone)}" data-msg="📞 전화번호를 복사했어요">${ICON.phone}<span>${esc(s.phone)}</span></button>` : '',
     canOpenLinks && (s.address || s.naver) ? `<a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">${ICON.map}<span>지도</span></a>` : '',
     canOpenLinks && s.naver ? `<a href="${esc(s.naver)}" target="_blank" rel="noopener">${ICON.ext}<span>네이버</span></a>` : '',
-    canOpenLinks && s.menuSource==='https://www.data.go.kr/data/3045247/fileData.do' ? `<a href="${esc(s.menuSource)}" target="_blank" rel="noopener">${ICON.ext}<span>메뉴 출처</span></a>` : '',
+    canOpenLinks && menuProvenance(s) ? `<a href="${esc(s.menuSource)}" target="_blank" rel="noopener">${ICON.ext}<span>메뉴 출처</span></a>` : '',
   ].filter(Boolean);
   return `<div class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2 id="store-heading-${encodeURIComponent(s.id)}" tabindex="-1">${esc(s.name)}</h2><span>메뉴 ${count}개${searchWords(S.menuQuery).length ? ' 검색됨' : ''}</span></div></div>
-    ${acts.length || s.hours || s.note || s.checkedAt ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>${s.menuBasis==='착한가격업소 공개 메뉴'?'공개자료':'기본 메뉴판'} 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}${s.menuDataDate?' · '+esc(s.menuDataDate)+' 자료':''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
+    ${acts.length || s.hours || s.note || s.checkedAt ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>${s.menuBasis==='착한가격업소 공개 메뉴'?'공개자료':s.menuBasis==='업주 등록 메뉴'?'등록정보':'기본 메뉴판'} 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}${s.menuDataDate?' · '+esc(s.menuDataDate)+' 자료':''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}
   </div>`;
 }
 function roomStore() {
