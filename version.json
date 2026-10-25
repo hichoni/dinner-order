@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "e6d6e2680803bb992727c895dc3b00fd9b303aaf",
+  "sourceCommit": "d9f21da83b3a0dcbfd17d71c57f357ffe1230332",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -49,7 +49,7 @@
   "favicon": "svg-png-ico",
   "iconCacheVersion": "eb39f2bcdc79",
   "maskableIcon": "separate-512-safe-circle",
-  "appBuild": "ebcae1c9534bac99",
+  "appBuild": "1fee2d578b23d6ec",
   "appUpdates": "notice-and-user-confirmed-refresh",
   "updateCheck": "on-open-focus-online-and-every-60s-visible",
   "updateDrafts": "persist-before-navigation",

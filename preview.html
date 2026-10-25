@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="ebcae1c9534bac99"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="1fee2d578b23d6ec"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -2863,7 +2863,7 @@ async function hostApi(path,body,authenticated=true) {
 function hostAccountHtml(room=false) {
   const linked=room&&hostAccount.uid&&hostAccount.synced.has(S.roomId);
   return `<section class="host-account${room?' in-room':''}" aria-label="방장 계정"><div><b>${linked?'✓ 이 방은 카카오 계정에 연결됐어요':hostAccount.uid?'카카오로 로그인했어요':room?'이 방을 다른 기기에서도 관리하세요':'어디서든 내 모임을 이어서 관리하세요'}</b><p>${linked?'같은 카카오 계정으로 로그인하면 다시 찾을 수 있어요.':room?'이 방을 계정에 연결하면 관리 링크 없이도 다시 찾을 수 있어요.':hostAccount.uid?'계정에 연결한 모임을 불러옵니다. 기존 방은 방 설정에서 연결해 주세요.':'방장은 카카오로 시작하고, 참여자는 로그인 없이 응답해요.'}</p></div>
-    ${room?linked?'':`<button class="btn kakao-btn" data-act="account-link" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'연결하는 중…':'카카오 계정에 이 방 연결하기'}</button>`:hostAccount.uid?'<div class="row"><button class="btn gray" data-act="account-refresh">내 방 새로고침</button><button class="text-btn" data-act="account-logout">로그아웃</button></div>':'<button class="btn kakao-btn" data-act="account-login">카카오로 시작하기</button>'}
+    ${room?linked?'':`<button class="btn kakao-btn" data-act="account-link" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'연결하는 중…':'카카오 계정에 이 방 연결하기'}</button>`:hostAccount.uid?'<div class="row"><button class="btn gray" data-act="account-refresh">내 방 새로고침</button><button class="text-btn" data-act="account-logout">로그아웃</button></div>':`<button class="btn kakao-btn" data-act="account-login" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'카카오로 연결하는 중…':'카카오로 시작하기'}</button>`}
     ${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}</section>`;
 }
 function hostMigrationHtml() {
@@ -4560,7 +4560,10 @@ addEventListener('hashchange', route);
 addEventListener('popstate', route);
 function launchApp() {
   const query=new URLSearchParams(location.search);
-  if(!(query.has('state')&&(query.has('code')||query.has('error'))))route();
+  if(query.has('state')&&(query.has('code')||query.has('error'))){
+    hostAccount.busy=true;
+    document.getElementById('app').innerHTML='<div class="wrap host-gate" role="status"><h1>카카오 로그인 확인 중…</h1><p>연결한 모임을 안전하게 불러오고 있어요.</p></div>';
+  }else route();
   initHostAccount();
 }
 launchApp();
