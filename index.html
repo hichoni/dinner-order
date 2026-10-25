@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="1fee2d578b23d6ec">
+<meta name="damatda-build" content="67dcc14a9db5ca5e">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2888,10 +2888,13 @@ function boot() {
     const fb = await import('./firebase.js');
     const app = fb.initializeApp(EMU ? {...FB_CONFIG, projectId: 'demo-camp-arcade'} : FB_CONFIG);
     const auth = fb.getAuth(app);
-    let db;
-    try { db = fb.initializeFirestore(app, {localCache: fb.persistentLocalCache({tabManager: fb.persistentMultipleTabManager()})}); }
-    catch { db = fb.initializeFirestore(app, {}); }
-    if (EMU) { fb.connectAuthEmulator(auth, 'http://127.0.0.1:9099', {disableWarnings: true}); fb.connectFirestoreEmulator(db, '127.0.0.1', 8080); }
+    let db=DB;
+    // Signing out replaces the identity, not the already initialized Firestore client.
+    if(!db){
+      try { db = fb.initializeFirestore(app, {localCache: fb.persistentLocalCache({tabManager: fb.persistentMultipleTabManager()})}); }
+      catch { db = fb.initializeFirestore(app, {}); }
+      if (EMU) { fb.connectAuthEmulator(auth, 'http://127.0.0.1:9099', {disableWarnings: true}); fb.connectFirestoreEmulator(db, '127.0.0.1', 8080); }
+    }
     let user = await new Promise(res => { const stop = fb.onAuthStateChanged(auth, u => { stop(); res(u); }); });
     if (!user) user = (await fb.signInAnonymously(auth)).user;
     FB = fb; DB = db; UID = user.uid; AUTH=auth;
