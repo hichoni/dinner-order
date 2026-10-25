@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="7a7393d25c85a082">
+<meta name="damatda-build" content="e41569bbc86cf7e2">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2659,7 +2659,7 @@ const S = {
   route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: false, error: '',
   tab: 'menu', store: null, mfilter: 'all', menuQuery: '', pinOpen: true,
   who: '', cart: {}, req: '', storeReqs: {}, thanks:null, thanksOpen:false, sentAt: 0, answerBase: null, answerConflict: false,
-  draft: null, catFor: 'create', catSource: 'menus', catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(), catLimit: 40, catPreview: '', catDetail: null,
+  draft: null, catFor: 'create', catCity: 'all', catShowMap:false, catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(), catLimit: 40, catPreview: '', catDetail: null,
   edit: null, sumBy: 'store', byPerson: true, sending: false, createError: '',
   homeTab: '', sums: {}, sumsLoading: false,
 };
@@ -3323,7 +3323,7 @@ async function shareOrCopy(r, id, boxId) {
 
 // ---------- 그리기 ----------
 function render(enter = false) {
-  placesCleanup?.(); placesCleanup=null;
+  catalogMap?.destroy(); catalogMap=null;
   if (S.route === 'create' || S.route === 'catalog') persistDraft();
   closeSheet();
   const v = S.route==='host-start'?()=>hostGateHtml(false):S.route==='guest-warning'?()=>hostGateHtml(true):S.route === 'create' ? viewCreate : S.route === 'catalog' ? viewCatalog : S.route === 'room' ? viewRoom : viewHome;
@@ -3333,7 +3333,7 @@ function render(enter = false) {
   document.title = S.route === 'room' && S.room ? `${S.room.title} · 다맛다` : '다맛다';
   DamatdaPlay.mount();
   scheduleStoreHighlight();
-  if(S.route==='catalog' && S.catSource==='places') mountPlacePicker();
+  if(S.route==='catalog' && S.catShowMap) mountCatalogMap();
 }
 function rerender() { const y = scrollY; render(); scrollTo(0, y); }
 const ROOM_TABS = ['who', 'menu', 'store', 'cart', 'review', 'mine', 'sum', 'all', 'set'];
@@ -3539,7 +3539,7 @@ function viewCreate() {
 
 
 // ---------- 맛집 목록에서 고르기 (방 만들기·방 설정 둘 다) ----------
-let placesCleanup=null;
+let catalogMap=null;
 function catalogSelectionCount() {
   const target=S.catFor==='create'?S.draft:S.edit;
   return S.catPicked.size+(target?.stores || []).filter(s=>!CATALOG.stores.some(c=>c.id===s.id)).length;
@@ -3561,20 +3561,23 @@ async function addPlaceToDraft(place, menuStore, lines, target, scope) {
   else persistDraft();
   const done=document.getElementById('catDone');if(done)done.textContent=`${catalogSelectionCount()}곳 담기 완료`;
 }
-async function mountPlacePicker() {
-  const root=document.getElementById('placesRoot'),scope=S.catFor,target=scope==='create'?S.draft:S.edit;
-  if(!root || !target)return;
+async function mountCatalogMap() {
+  const root=document.getElementById('catalogMap');if(!root)return;
   try{
-    const {mountPlaces}=await import('./places.js');
-    if(document.getElementById('placesRoot')!==root)return;
-    placesCleanup=mountPlaces(root,{catalog:CATALOG.stores,onAdd:(place,menu,lines)=>addPlaceToDraft(place,menu,lines,target,scope),isAdded:(place,menu)=>target.stores.some(s=>s.id===(menu?.id || place.id)) || !!menu && S.catPicked.has(menu.id)});
-  }catch{if(document.getElementById('placesRoot')===root)root.textContent='가게 검색을 불러오지 못했어요. 메뉴 목록으로 전환한 뒤 다시 시도해 주세요.';}
-}
-function catalogSourceTabs() {
-  return `<div class="catalog-source-tabs" role="group" aria-label="가게 찾는 방법"><button data-act="cat-source" data-source="menus" aria-pressed="${S.catSource!=='places'}">메뉴가 있는 가게</button><button data-act="cat-source" data-source="places" aria-pressed="${S.catSource==='places'}">경북 전체 · 지도</button></div>`;
+    const {mountMenuMap}=await import('./menu-map.js');
+    if(document.getElementById('catalogMap')!==root)return;
+    catalogMap=mountMenuMap(root,CATALOG.stores.filter(catalogMatches),{isSelected:id=>S.catPicked.has(id),onToggle:id=>{
+      if(!S.catPicked.has(id) && catalogSelectionCount()>=20){toast('한 모임에는 가게를 20곳까지 담을 수 있어요.');return false;}
+      if(S.catPicked.has(id))S.catPicked.delete(id);else S.catPicked.add(id);
+      document.getElementById('catList').innerHTML=catalogList();document.getElementById('catDone').textContent=`${catalogSelectionCount()}곳 담기 완료`;
+      return true;
+    }});
+  }catch{if(document.getElementById('catalogMap')===root)root.textContent='지도를 불러오지 못했어요. 아래 목록에서 계속 고를 수 있어요.';}
 }
 const CAT_ICON = {카페: '☕', 치킨: '🍗', 중식: '🥟', 한식: '🍚', 피자: '🍕', 분식: '🍢', 버거: '🍔', 찜닭: '🍲', 국밥: '🥣', 도시락: '🍱', 돈가스: '🍛', 족발: '🐷', 일식: '🍣', 양식: '🍝', 아시안: '🍜', 샐러드: '🥗', 마라탕: '🌶️'};
-const inArea = s => S.catArea === 'all' || s.area === S.catArea;
+const catalogCity = s => s.city || /([가-힣]+[시군])(?:\s|$)/.exec(s.address || '')?.[1] || '';
+const inCity = s => S.catCity==='all' || catalogCity(s)===S.catCity;
+const inArea = s => inCity(s) && (S.catArea === 'all' || s.area === S.catArea);
 const inCat = s => S.catCat === 'all' || s.category === S.catCat;
 const searchText = value => String(value || '').normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g,'');
 function catalogMatches(s) {
@@ -3584,9 +3587,9 @@ function catalogMatches(s) {
 }
 function catalogAreas() {
   const preferred=['옥동','송현·노하','용상·송천','정하·강남','시내권','도청신도시','풍산읍','예천읍'];
-  return [...new Set(CATALOG.stores.map(s=>s.area).filter(Boolean))].sort((a,b)=>(preferred.indexOf(a)<0?99:preferred.indexOf(a))-(preferred.indexOf(b)<0?99:preferred.indexOf(b)) || a.localeCompare(b,'ko'));
+  return [...new Set(CATALOG.stores.filter(inCity).map(s=>s.area).filter(Boolean))].sort((a,b)=>(preferred.indexOf(a)<0?99:preferred.indexOf(a))-(preferred.indexOf(b)<0?99:preferred.indexOf(b)) || a.localeCompare(b,'ko'));
 }
-function catalogCount() { return `${S.catArea === 'all' ? '전체 지역' : S.catArea} · ${CATALOG.stores.filter(catalogMatches).length}곳`; }
+function catalogCount() { return `${S.catCity==='all'?'':S.catCity+' · '}${S.catArea === 'all' ? '전체 지역' : S.catArea} · ${CATALOG.stores.filter(catalogMatches).length}곳`; }
 function catalogList() {
   const list = CATALOG.stores.filter(catalogMatches).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   const visible=list.slice(0,S.catLimit);
@@ -3603,19 +3606,20 @@ function catalogList() {
   }).join('') + (list.length>visible.length ? `<button class="btn gray block" data-act="cat-more">40곳 더 보기 (${visible.length}/${list.length})</button>`:'') || '<p class="muted empty-line">맞는 가게가 없어요. 다른 동네나 검색어로 찾아보세요.</p>';
 }
 function viewCatalog() {
-  if(S.catSource==='places') return `${topBar('경북 가게 찾기','cat-back')}<div class="wrap admin">${catalogSourceTabs()}<div id="placesRoot"><p role="status">가게 검색을 불러오는 중…</p></div></div><div class="bottom-bar"><button class="btn block" data-act="cat-done" id="catDone">${catalogSelectionCount()}곳 담기 완료</button></div>`;
+  const cities=[...new Set(CATALOG.stores.map(catalogCity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko'));
   const areas = catalogAreas();
   const inA = CATALOG.stores.filter(inArea);
-  const chips = ['all',...areas.slice(0,8)].map(a => [a, a==='all'?'전체':a, CATALOG.stores.filter(s=>a==='all'||s.area===a).length]);
+  const chips = ['all',...areas.slice(0,8)].map(a => [a, a==='all'?'전체':a, CATALOG.stores.filter(s=>inCity(s) && (a==='all'||s.area===a)).length]);
   const cnt = {}; for (const s of inA) cnt[s.category] = (cnt[s.category] || 0) + 1;
   const cats = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
   return `${topBar('경북 가게 찾기', 'cat-back')}
-  <div class="wrap admin">${catalogSourceTabs()}<p class="hint">등록 메뉴는 현재 안동·예천 중심이에요. 다른 지역은 ‘경북 전체 · 지도’에서 찾아보세요.</p>
-    <label class="catalog-area-label" for="catalogArea">어느 동네에서 고를까요?</label><select class="input" id="catalogArea" aria-label="동네 선택"><option value="all"${S.catArea==='all'?' selected':''}>전체 지역</option>${areas.map(a=>`<option value="${esc(a)}"${S.catArea===a?' selected':''}>${esc(a)} · ${CATALOG.stores.filter(s=>s.area===a).length}곳</option>`).join('')}</select>
+  <div class="wrap admin"><p class="hint">메뉴와 가격을 확인한 가게를 도시별로 차근차근 추가하고 있어요.</p>
+    <label class="catalog-area-label" for="catalogCity">어느 도시에서 고를까요?</label><select class="input" id="catalogCity" aria-label="도시 선택"><option value="all"${S.catCity==='all'?' selected':''}>전체 도시</option>${cities.map(c=>`<option value="${esc(c)}"${S.catCity===c?' selected':''}>${esc(c)} · ${CATALOG.stores.filter(s=>catalogCity(s)===c).length}곳</option>`).join('')}</select>
+    <label class="catalog-area-label" for="catalogArea">어느 동네에서 고를까요?</label><select class="input" id="catalogArea" aria-label="동네 선택"><option value="all"${S.catArea==='all'?' selected':''}>전체 지역</option>${areas.map(a=>`<option value="${esc(a)}"${S.catArea===a?' selected':''}>${esc(a)} · ${CATALOG.stores.filter(s=>inCity(s) && s.area===a).length}곳</option>`).join('')}</select>
     <div class="region-picker andong-regions" role="group" aria-label="지역 선택">${chips.map(([k,l,c])=>`<button class="${S.catArea===k?'on':''}" data-act="cat-area" data-a="${esc(k)}" aria-pressed="${S.catArea===k}"><b>${esc(l)}</b><small>${c}</small></button>`).join('')}</div>
     <input class="input search" id="catSearch" type="search" placeholder="가게·메뉴 찾기" value="${esc(S.catQuery)}" aria-label="가게·메뉴 찾기">
     <div class="cat-row" role="group" aria-label="종류"><button class="${S.catCat === 'all' ? 'on' : ''}" data-act="cat-cat" data-c="all"><i>🍽️</i>전체<small>${inA.length}</small></button>${cats.map(c => `<button class="${S.catCat === c ? 'on' : ''}" data-act="cat-cat" data-c="${esc(c)}"><i>${CAT_ICON[c] || '🍴'}</i>${esc(c)}<small>${cnt[c]}</small></button>`).join('')}</div>
-    <p class="catalog-result-count" id="catalogCount" role="status">${catalogCount()}</p><div class="plist" id="catList">${catalogList()}</div>
+    <button class="small-btn" data-act="cat-map" aria-expanded="${S.catShowMap}">${S.catShowMap?'지도 접기':'지도에서 가게 고르기'}</button>${S.catShowMap?'<section id="catalogMap"></section>':''}<p class="catalog-result-count" id="catalogCount" role="status">${catalogCount()}</p><div class="plist" id="catList">${catalogList()}</div>
   </div>
   <div class="bottom-bar"><button class="btn block" data-act="cat-done" id="catDone">${catalogSelectionCount()}곳 담기 완료</button></div>`;
 }
@@ -4303,7 +4307,7 @@ document.addEventListener('click', async e => {
       S.catPicked = new Set(have.filter(x => CATALOG.stores.some(s => s.id === x)));
       go({route: 'catalog'}); break;
     }
-    case 'cat-source': S.catSource=el.dataset.source==='places'?'places':'menus';rerender();break;
+    case 'cat-map': S.catShowMap=!S.catShowMap;rerender();break;
     case 'cat-area': S.catArea = el.dataset.a; S.catCat = 'all'; S.catLimit=40; S.catPreview=''; rerender(); break;
     case 'cat-cat': S.catCat = el.dataset.c; S.catLimit=40; S.catPreview=''; rerender(); break;
     case 'cat-more': S.catLimit+=40; rerender(); break;
@@ -4319,6 +4323,7 @@ document.addEventListener('click', async e => {
       if(el.checked && catalogSelectionCount()>=20) { el.checked=false; toast('한 모임에는 가게를 20곳까지 넣을 수 있어요'); break; }
       if (el.checked) S.catPicked.add(id); else S.catPicked.delete(id);
       el.closest('.prow').classList.toggle('on', el.checked);
+      catalogMap?.update(CATALOG.stores.filter(catalogMatches));
       document.getElementById('catDone').textContent = `${catalogSelectionCount()}곳 담기 완료`; break;
     }
     case 'cat-back': case 'cat-done': {
@@ -4454,7 +4459,8 @@ document.addEventListener('input', e => {
     if (t.id === 'c-clines') S.draft.custom.lines = t.value;
     persistDraft(); return;
   }
-  if (t.id === 'catSearch') { S.catQuery = t.value; S.catLimit=40; S.catPreview=''; document.getElementById('catList').innerHTML = catalogList(); document.getElementById('catalogCount').textContent=catalogCount(); return; }
+  if (t.id === 'catSearch') { S.catQuery = t.value; S.catLimit=40; S.catPreview=''; document.getElementById('catList').innerHTML = catalogList(); document.getElementById('catalogCount').textContent=catalogCount();catalogMap?.update(CATALOG.stores.filter(catalogMatches)); return; }
+  if (t.id === 'catalogCity') { S.catCity=t.value;S.catArea='all';S.catCat='all';S.catLimit=40;S.catPreview='';rerender();return; }
   if (t.id === 'catalogArea') { S.catArea=t.value; S.catCat='all'; S.catLimit=40; S.catPreview=''; rerender(); return; }
   if (t.id === 'menuSearch') { S.menuQuery = t.value.slice(0, 80); refreshMenuSearch(); return; }
   if (t.id === 'thanksText') {

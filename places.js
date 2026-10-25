@@ -29,7 +29,7 @@ export async function loadPlaceCity(city, fetcher = fetch) {
   return cache.get(city.file);
 }
 let leafletLoading;
-function loadLeaflet() {
+export function loadLeaflet() {
   if (globalThis.L) return Promise.resolve(globalThis.L);
   if (!leafletLoading) leafletLoading = new Promise((resolve, reject) => {
     const script = document.createElement('script');
