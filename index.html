@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="387a8d013df69f85">
+<meta name="damatda-build" content="ebcae1c9534bac99">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
+<meta property="og:url" content="https://damatda.kr/?v=damatda2">
 <meta property="og:title" content="다맛다 — 총무도 밥 좀 먹자.">
 <meta property="og:description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
-<meta property="og:image" content="https://hichoni.github.io/dinner-order/assets/share-damatda-tight-v4.png">
+<meta property="og:image" content="https://damatda.kr/assets/share-damatda-tight-v4.png">
 <meta property="og:image:width" content="1774">
 <meta property="og:image:height" content="887">
 <meta name="twitter:card" content="summary_large_image">
@@ -1777,6 +1777,20 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
  .mm .settings-manage{display:none}
 }
 @media print{.nav-manage,.settings-manage{display:none!important}}
+
+/* Host identity: Kakao first, explicit guest choice and recoverable room links. */
+.host-migration{padding:18px 22px;border:1px solid var(--line);border-radius:18px;margin-bottom:24px;background:#ffffffb3;font-size:13px;line-height:1.8}.host-migration summary{cursor:pointer;font-weight:700}.host-migration p{margin:8px 0}.host-migration a{color:var(--mint-d);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.mm .btn.kakao-btn:not(.gray):not(.red){background:#fee500;color:#191919;border:1px solid #e4ce00;box-shadow:0 5px 16px #b29c1718;font-weight:800;min-height:52px}
+.mm .btn.kakao-btn:not(.gray):not(.red):hover{background:#f8df00}.mm .kakao-btn:disabled{opacity:.65;cursor:wait}
+.mm>.wrap.host-gate{margin:0 auto!important}
+.host-account{padding:22px 24px;border-radius:22px;background:#fffef5;border:1px solid #eee6b7;margin:0 0 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.host-account>div:first-child{flex:1;min-width:200px}.host-account b{font-size:17px;color:var(--text)}.host-account p{font-size:13px;line-height:1.75;margin:7px 0 0;color:var(--sub)}
+.host-account .host-error,.host-error{color:#a43831;font-size:14px;line-height:1.7;flex-basis:100%;overflow-wrap:anywhere}
+.mm .host-gate{max-width:560px;text-align:center;padding:44px 28px 64px}.host-gate-icon{display:block;font-size:42px;margin-bottom:22px}.host-gate h1{font-size:30px;line-height:1.45;letter-spacing:-1px;margin:0 0 18px}.host-gate>p{line-height:1.9;color:var(--sub);margin-bottom:28px}.host-gate small{display:block;color:var(--sub);margin-top:25px;font-size:12px}
+.mm .guest-start{padding:18px 8px;text-decoration:underline;text-underline-offset:4px;font-size:14px}.guest-warning{text-align:left;background:#fff5e5;border:1px solid #ead7ad;padding:20px;border-radius:18px;margin-bottom:25px;line-height:1.8;font-size:14px}.guest-warning p{margin:10px 0 0}
+.management-backup{max-width:1100px;margin:18px auto;padding:22px 24px;border:2px solid #e0b56c;border-radius:20px;background:#fff7e8;box-sizing:border-box;line-height:1.7}.management-backup h3{font-size:18px;margin:0 0 8px}.management-backup p{font-size:14px;margin:8px 0 16px}.management-backup .text-btn{margin-top:12px;font-size:13px;padding:8px}.management-backup .hint{color:#76603d}.management-backup textarea{max-width:100%;overflow-wrap:anywhere}
+@media(max-width:760px){.host-account{padding:20px;gap:14px}.host-account>.btn{width:100%}.management-backup{margin:12px 16px;padding:18px}.host-gate h1{font-size:26px}.mm .host-gate{padding:32px 22px 100px}.host-account .row{width:100%;justify-content:space-between}}
+@media print{.host-account,.management-backup{display:none!important}}
 </style>
 </head>
 <body>
@@ -2651,7 +2665,7 @@ const myRooms = () => load('mm-rooms', []);
 function rememberRoom(id, patch) {
   const list = myRooms().filter(r => r.id !== id), old = myRooms().find(r => r.id === id) || {};
   list.unshift({...old, id, ...patch, at: Date.now()});
-  save('mm-rooms', list.slice(0, 30));
+  save('mm-rooms', list); // Account history must not evict older managed rooms.
 }
 // 이 기기에서 보낸 주문의 이름(방마다). 방을 열면 실제 응답(uid 가 이 기기)으로 다시 맞춰요.
 const sentNames = id => load('mm-sent', {})[id] || [];
@@ -2744,8 +2758,130 @@ function toast(msg) {
   clearTimeout(toast.timer); toast.timer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
+// ---------- 방장 계정 ----------
+const HOST_AUTH_API='https://asia-northeast3-ai-invent.cloudfunctions.net/dinnerAuth';
+const hostAccount={ready:false,uid:'',busy:false,error:'',synced:new Set()};
+let guestCreateAllowed=false;
+function authError(error) {
+  const code=error?.message||'';
+  if(code==='not-configured')return '카카오 로그인 설정을 준비 중이에요. 지금은 관리 링크를 보관하고 로그인 없이 이용할 수 있어요.';
+  if(code==='expired-login'||code==='invalid-login')return '로그인 시간이 지났거나 다른 브라우저에서 열렸어요. 처음 시작한 브라우저에서 다시 시도해 주세요.';
+  if(code==='not-host')return '이 방의 관리 권한을 확인하지 못했어요. 관리 링크로 방을 연 뒤 다시 연결해 주세요.';
+  if(code==='try-later')return '잠시 후 다시 시도해 주세요.';
+  return '연결을 완료하지 못했어요. 기존 방과 관리 링크는 그대로예요. 다시 시도해 주세요.';
+}
+async function hostApi(path,body,authenticated=true) {
+  if(installPreview()||EMU)throw Error('preview-only');
+  const headers={'Content-Type':'application/json'};
+  if(authenticated){await boot();headers.Authorization='Bearer '+await AUTH.currentUser.getIdToken();}
+  const response=await fetch(HOST_AUTH_API+path,{method:body===undefined?'GET':'POST',headers,...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(20000)});
+  const result=await response.json();if(!response.ok)throw Error(result.error||'connection-failed');return result;
+}
+function hostAccountHtml(room=false) {
+  const linked=room&&hostAccount.uid&&hostAccount.synced.has(S.roomId);
+  return `<section class="host-account${room?' in-room':''}" aria-label="방장 계정"><div><b>${linked?'✓ 이 방은 카카오 계정에 연결됐어요':hostAccount.uid?'카카오로 로그인했어요':room?'이 방을 다른 기기에서도 관리하세요':'어디서든 내 모임을 이어서 관리하세요'}</b><p>${linked?'같은 카카오 계정으로 로그인하면 다시 찾을 수 있어요.':room?'이 방을 계정에 연결하면 관리 링크 없이도 다시 찾을 수 있어요.':hostAccount.uid?'계정에 연결한 모임을 불러옵니다. 기존 방은 방 설정에서 연결해 주세요.':'방장은 카카오로 시작하고, 참여자는 로그인 없이 응답해요.'}</p></div>
+    ${room?linked?'':`<button class="btn kakao-btn" data-act="account-link" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'연결하는 중…':'카카오 계정에 이 방 연결하기'}</button>`:hostAccount.uid?'<div class="row"><button class="btn gray" data-act="account-refresh">내 방 새로고침</button><button class="text-btn" data-act="account-logout">로그아웃</button></div>':'<button class="btn kakao-btn" data-act="account-login">카카오로 시작하기</button>'}
+    ${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}</section>`;
+}
+function hostMigrationHtml() {
+  if(installPreview()||EMU)return '';
+  if(location.hostname==='hichoni.github.io')return '<aside class="host-migration"><b>다맛다 새 주소 · damatda.kr</b><p>이곳에서 만든 방은 방 설정에서 카카오 계정에 연결해 주세요. 새 주소에서도 같은 계정으로 로그인하면 이어서 관리할 수 있어요.</p><a href="https://damatda.kr/">새 다맛다 열기 ↗</a></aside>';
+  if(location.hostname==='damatda.kr')return '<details class="host-migration"><summary>예전 주소에서 만든 방이 안 보이나요?</summary><p>예전에 사용한 기기·브라우저에서 기존 다맛다를 열고, 방 설정에서 카카오 계정에 연결해 주세요. 여기에서 같은 계정으로 로그인하면 방을 찾을 수 있어요. 보관한 관리 링크로도 연결할 수 있어요.</p><a href="https://hichoni.github.io/dinner-order/" target="_blank" rel="noopener">기존 다맛다에서 방 연결하기 ↗</a></details>';
+  return '';
+}
+function hostGateHtml(warning=false) {
+  return `${topBar('방 만들기','home')}<div class="wrap admin host-gate"><span class="host-gate-icon" aria-hidden="true">${warning?'🔑':'🍽️'}</span><h1>${warning?'관리 링크를 꼭 보관해 주세요':'어디서든 내 모임을<br>이어서 관리하세요'}</h1><p>${warning?'로그인 없이 만든 방은 다른 기기에서 관리할 때 <b>관리 링크</b>가 필요해요.':'카카오로 시작하면 휴대폰·PC 어디서든<br>내가 관리하는 모임을 찾을 수 있어요.'}</p>${warning?'<div class="guest-warning"><b>기기와 링크를 모두 잃으면 복구하기 어려워요.</b><p>휴대폰을 바꾸거나 브라우저 데이터를 지운 경우, 관리 링크가 없으면 방장 권한을 되찾기 어렵습니다.</p><p>관리 링크는 방을 수정·삭제할 수 있는 열쇠예요. 본인이나 함께 관리할 사람에게만 보관·전달해 주세요.</p></div>':''}<button class="btn kakao-btn block" data-act="account-start" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'카카오로 연결하는 중…':'카카오로 시작하기'}</button><button class="text-btn block guest-start" data-act="${warning?'guest-confirm':'guest-start'}">${warning?'안내를 확인했어요 · 로그인 없이 계속':'로그인 없이도 쓸 수 있어요 · 로그인 없이 시작'}</button>${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}<small>초대받은 참여자는 로그인할 필요가 없어요.</small></div>`;
+}
+async function beginCreate() {
+  S.draft=S.draft||load('mm-create-draft',null)||EMPTY_DRAFT();
+  if(!installPreview()&&!EMU) {try{await boot();}catch{}}
+  go({route:hostAccount.uid||guestCreateAllowed?'create':'host-start'});
+}
+async function startKakao(intent='home',roomId='') {
+  if(hostAccount.busy)return;
+  if(installPreview()||EMU){hostAccount.error='미리보기에서는 카카오에 연결하지 않아요. 운영 사이트에서 이용해 주세요.';rerender();return;}
+  if(S.edit?.dirty||S.sending){toast('바꾼 내용을 먼저 저장해 주세요');return;}
+  hostAccount.busy=true;hostAccount.error='';rerender();
+  try {
+    await boot();
+    if(S.roomId)persistRoom();persistDraft();
+    const verifier=[...crypto.getRandomValues(new Uint8Array(32))].map(x=>x.toString(16).padStart(2,'0')).join('');
+    const proof=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier)))].map(x=>x.toString(16).padStart(2,'0')).join('');
+    const pending={verifier,intent,roomId,returnHash:roomId?`#r=${roomId}&t=set`:'',at:Date.now()};
+    // Require session storage before leaving. A browser change must never silently link another session.
+    sessionStorage.setItem('dinner-kakao',JSON.stringify(pending));
+    const result=await hostApi('/start',{proof,roomId:roomId||undefined});
+    pending.state=result.state;sessionStorage.setItem('dinner-kakao',JSON.stringify(pending));
+    location.assign(result.url);
+  } catch(error){hostAccount.error=authError(error);hostAccount.busy=false;rerender();}
+}
+async function syncAccountRooms() {
+  if(!hostAccount.uid)return;
+  const {rooms}=await hostApi('/rooms');
+  hostAccount.synced=new Set(rooms.map(r=>r.id));
+  const current=myRooms().filter(r=>r.accountUid!==hostAccount.uid);
+  save('mm-rooms',[...rooms.map(r=>({...r,accountUid:hostAccount.uid,at:Date.now()})),...current.filter(r=>!hostAccount.synced.has(r.id))]);
+  S.sums={};hostAccount.error='';
+}
+async function linkCurrentRoom() {
+  if(!S.host||hostAccount.busy)return;
+  if(!hostAccount.uid){await startKakao('link',S.roomId);return;}
+  if(S.edit?.dirty){toast('바꾼 내용을 먼저 저장해 주세요');return;}
+  hostAccount.busy=true;hostAccount.error='';
+  try{await hostApi('/attach',{roomId:S.roomId});await syncAccountRooms();toast('이 방을 카카오 계정에 연결했어요');}
+  catch(error){hostAccount.error=authError(error);}
+  finally{hostAccount.busy=false;rerender();}
+}
+function managementBackupHtml() {
+  if(!S.host)return '';
+  const record=myRooms().find(r=>r.id===S.roomId);
+  if(record?.backupSaved||hostAccount.synced.has(S.roomId))return '';
+  return `<section class="management-backup" aria-label="관리 링크 보관 안내"><h3>🔑 내 방의 관리 링크를 보관해 주세요</h3><p>이 방은 아직 계정에 연결되지 않았어요. 다른 기기에서도 관리하려면 <b>관리 링크를 복사해 나만 볼 수 있는 곳에 저장</b>해 주세요.</p><p class="hint">참여 링크로는 관리 권한을 복구할 수 없어요. 관리 링크는 함께 관리할 사람에게만 보내세요.</p><button class="btn block" data-act="copy-host" data-copy-box="backupHostBox">관리 링크 복사</button><div id="backupHostBox" hidden class="copy-box"><label>관리 링크<textarea class="input code-box" readonly rows="3"></textarea></label></div><button class="text-btn" data-act="backup-saved">안전한 곳에 따로 보관했어요</button><button class="text-btn" data-act="account-link">카카오 계정에 연결하기</button></section>`;
+}
+async function logoutHostAccount() {
+  if(S.sending||S.edit?.dirty){toast('바꾼 내용을 먼저 저장해 주세요');return;}
+  const uid=hostAccount.uid;if(!uid)return;
+  stopListening();
+  try{
+    await FB.signOut(AUTH);
+    save('mm-rooms',myRooms().filter(r=>r.accountUid!==uid));
+    Object.assign(hostAccount,{uid:'',synced:new Set(),error:''});
+    UID='';booting=null;S.sums={};guestCreateAllowed=false;
+    Object.assign(S,{roomId:'',room:null,host:false,edit:null});location.hash='';go({route:'home'});
+  }catch{hostAccount.error='로그아웃하지 못했어요. 다시 시도해 주세요.';rerender();}
+}
+async function initHostAccount() {
+  if(installPreview()||EMU)return;
+  const query=new URLSearchParams(location.search),isCallback=query.has('state')&&(query.has('code')||query.has('error'));
+  let pending=null;
+  if(isCallback){
+    try{pending=JSON.parse(sessionStorage.getItem('dinner-kakao'));}catch{}
+    // Remove authorization data before rendering or issuing any requests.
+    history.replaceState(null,'',location.pathname+(pending?.returnHash||''));
+  }
+  try{
+    if(isCallback){
+      if(query.has('error'))throw Error('login-cancelled');
+      if(!pending||pending.state!==query.get('state')||Date.now()-pending.at>600000)throw Error('expired-login');
+      const result=await hostApi('/complete',{code:query.get('code'),state:pending.state,verifier:pending.verifier},false);
+      await boot();stopListening();
+      const credential=await FB.signInWithCustomToken(AUTH,result.customToken);
+      UID=credential.user.uid;hostAccount.uid=UID;
+      await syncAccountRooms();
+      if(result.linkError)hostAccount.error='로그인은 완료했지만 이 방의 연결을 완료하지 못했어요. 관리 링크로 다시 열어 연결해 주세요.';
+      sessionStorage.removeItem('dinner-kakao');
+      if(pending.intent==='new'){guestCreateAllowed=false;location.hash='new';await beginCreate();return;}
+      if(pending.roomId){await openRoom(pending.roomId,undefined,'set');return;}
+      go({route:'home'});return;
+    }
+    await boot();if(hostAccount.uid)await syncAccountRooms();
+  }catch(error){hostAccount.error=error.message==='login-cancelled'?'카카오 로그인을 취소했어요. 다시 시작하거나 로그인 없이 이용할 수 있어요.':authError(error);}
+  finally{hostAccount.ready=true;hostAccount.busy=false;}
+  if(S.route==='home'||isCallback)rerender();
+}
+
 // ---------- Firebase ----------
-let FB = null, DB = null, UID = '';
+let FB = null, DB = null, UID = '', AUTH = null;
 let booting = null;
 function boot() {
   return booting ??= (async () => {
@@ -2758,7 +2894,9 @@ function boot() {
     if (EMU) { fb.connectAuthEmulator(auth, 'http://127.0.0.1:9099', {disableWarnings: true}); fb.connectFirestoreEmulator(db, '127.0.0.1', 8080); }
     let user = await new Promise(res => { const stop = fb.onAuthStateChanged(auth, u => { stop(); res(u); }); });
     if (!user) user = (await fb.signInAnonymously(auth)).user;
-    FB = fb; DB = db; UID = user.uid;
+    FB = fb; DB = db; UID = user.uid; AUTH=auth;
+    const token=installPreview()?{claims:{}}:await user.getIdTokenResult();
+    hostAccount.uid=token.claims.dinnerKakao===true?user.uid:'';
   })().catch(e => { booting = null; throw e; });
 }
 function friendly(e) {
@@ -2773,22 +2911,23 @@ function stopListening() { for (const u of unsub) try { u(); } catch {} unsub = 
 
 async function openRoom(id, key, want = '') {
   stopListening();
-  Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all', pinOpen: true});
+    Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, hostKey:'', loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all', pinOpen: true});
   const local = roomLocal();
   Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), thanks:tidyThanks(local.thanks), thanksOpen:!!tidyThanks(local.thanks), sentAt: local.sentAt || 0, answerBase: validAnswerBase(local.answerBase), answerConflict: false, tab: local.who ? 'menu' : 'who'});
   render();
   try {
     await boot();
     const hostRef = FB.doc(DB, 'dinnerRooms', id, 'hosts', UID);
-    let isHost = false;
-    try { isHost = (await FB.getDoc(hostRef)).exists(); } catch {}
+    let isHost = false,registeredKey='';
+    try { const hostSnap=await FB.getDoc(hostRef);isHost=hostSnap.exists();if(isHost)registeredKey=hostSnap.data().key||''; } catch {}
     const mine = myRooms().find(r => r.id === id);
-    key = key || (mine && mine.key) || '';
+    key = registeredKey || key || (mine && mine.key) || '';
     if (!isHost && key) {
       try { await FB.setDoc(hostRef, {key, at: FB.serverTimestamp()}); isHost = true; } catch {}
     }
     if (S.roomId !== id || S.route !== 'room') return;
     S.host = isHost;
+    S.hostKey=isHost?key:'';
     if (isHost && key) rememberRoom(id, {key, host: true});
     let first = true;
     unsub.push(FB.onSnapshot(FB.doc(DB, 'dinnerRooms', id), snap => {
@@ -3113,7 +3252,7 @@ async function copyOrShow(text, okMsg, boxId) {
   toast('글자를 길게 눌러 "전체 선택 → 복사" 해 주세요');
   return false;
 }
-const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://hichoni.github.io/dinner-order/');
+const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://damatda.kr/');
 const SHARE_PREVIEW_VERSION = 'cards-v1';
 const ROOM_SHARE_VERSION = 'room-cards-v1';
 function roomShareTag(title) {
@@ -3139,7 +3278,7 @@ function roomLink(id = S.roomId,title) {
 }
 function managementLink() {
   if (!S.host || !S.roomId) return '';
-  const key = myRooms().find(r=>r.id===S.roomId)?.key;
+  const key = S.hostKey || myRooms().find(r=>r.id===S.roomId)?.key;
   if (!key) return '';
   const target = !installPreview()&&!EMU ? roomShareTarget('manage',S.roomId,S.room?.title) : new URL('manage.html',pageBase());
   if(!installPreview()&&!EMU) {
@@ -3178,7 +3317,7 @@ async function shareOrCopy(r, id, boxId) {
 function render(enter = false) {
   if (S.route === 'create' || S.route === 'catalog') persistDraft();
   closeSheet();
-  const v = S.route === 'create' ? viewCreate : S.route === 'catalog' ? viewCatalog : S.route === 'room' ? viewRoom : viewHome;
+  const v = S.route==='host-start'?()=>hostGateHtml(false):S.route==='guest-warning'?()=>hostGateHtml(true):S.route === 'create' ? viewCreate : S.route === 'catalog' ? viewCatalog : S.route === 'room' ? viewRoom : viewHome;
   const content = v();
   $app.innerHTML = content;
   $app.className = 'mm view-' + S.route + (S.route === 'room' ? ' tab-' + S.tab : '') + (content.includes('class="nav n') ? ' with-room-nav' : '') + (enter && !reduceMotion() ? ' enter' : '');
@@ -3226,7 +3365,7 @@ let deferredInstallPrompt = null, installBusy = false, installedThisVisit = fals
 const installDisplay = typeof matchMedia === 'function' ? matchMedia('(display-mode: standalone)') : null;
 const appInstalled = () => installedThisVisit || !!installDisplay?.matches || navigator.standalone === true;
 const installPreview = () => /\/preview\.html$/.test(location.pathname || '');
-const installPageUrl = () => installPreview() ? 'https://hichoni.github.io/dinner-order/' : pageBase();
+const installPageUrl = () => installPreview() ? 'https://damatda.kr/' : pageBase();
 function installButtonHtml() {
   return appInstalled() ? '' : `<div class="home-install-promo"><button class="home-install" data-act="install-app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg><span>${installBusy?'설치 창 여는 중…':'앱 설치하기'}</span></button><small>홈 화면에서 다맛다를 바로 열어요</small></div>`;
 }
@@ -3290,7 +3429,7 @@ function viewHome() {
   return `<header class="home-brand"><a href="#" aria-label="다맛다 홈">${brand()}</a><nav class="home-nav"><a href="#how">어떻게 써요?</a><a href="#new" class="home-small-cta">같이 담기 ↗</a></nav></header>
   <section class="land"><div class="land-copy"><span class="land-kicker">우리끼리, 메뉴 모으는 곳</span><h1>오늘 뭐 먹어?<br><em>각자 담아봐.</em></h1><p>커피 한 잔부터 단체 점심까지.<br>각자 고른 메뉴를 한곳에 담아요.</p><button class="btn land-go" data-act="new">${BRAND_ICONS.cart}<b>같이 담기 시작</b><span aria-hidden="true">↗</span></button><span class="land-hint">초대받았다면 받은 링크로 들어오세요.</span>${installButtonHtml()}</div>
   <div class="home-brand-scene"><h1 class="mobile-home-title">다맛다</h1><div class="brand-art"><img src="${brandAsset()}" alt="다맛다" fetchpriority="high"></div><div class="brand-motto">얼른 담아! 우리끼리 먹는다?</div>${DamatdaPlay.homeHTML()}</div></section>
-  <div class="wrap home-content"><section class="my-rooms"><div class="seg wide" role="tablist" aria-label="같이 담는 모임"><button class="${tab==='made'?'on':''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab==='made'}">내가 연 모임 <small>${made.length}</small></button><button class="${tab==='joined'?'on':''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab==='joined'}">참여한 모임 <small>${joined.length}</small></button></div><div class="room-cards${list.length?'':' is-empty'}">${list.map(roomCard).join('')||homeEmptyTray(tab==='joined')}</div></section>
+  <div class="wrap home-content">${hostAccountHtml()}${hostMigrationHtml()}<section class="my-rooms"><div class="seg wide" role="tablist" aria-label="같이 담는 모임"><button class="${tab==='made'?'on':''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab==='made'}">내가 연 모임 <small>${made.length}</small></button><button class="${tab==='joined'?'on':''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab==='joined'}">참여한 모임 <small>${joined.length}</small></button></div><div class="room-cards${list.length?'':' is-empty'}">${list.map(roomCard).join('')||homeEmptyTray(tab==='joined')}</div></section>
   <ol class="how brief-how" id="how"><li><i>01</i><b>가게 고르고</b></li><li><i>02</i><b>같이 담고</b></li><li><i>03</i><b>한 번에 모으기</b></li></ol></div><footer class="brand-footer"><span>다맛다 © 2026</span><div class="theme-options" role="group" aria-label="색상 테마"><button data-palette-choice="mint" aria-pressed="${document.documentElement.dataset.palette==='mint'}"><i></i>민트 · 귤</button><button data-palette-choice="sky" aria-pressed="${document.documentElement.dataset.palette==='sky'}"><i></i>블루 · 레몬</button></div><a class="screen-tour-link" href="screens.html">화면 둘러보기 ↗</a></footer>`;
 }
 
@@ -3444,7 +3583,8 @@ function viewRoom() {
   }
   if (!S.who && !['sum', 'set', 'all'].includes(S.tab)) S.tab = 'who';
   const views = {who: roomWho, menu: roomMenu, store: roomStore, cart: roomCart, review: roomReview, mine: roomMine, all: roomAll, sum: roomSum, set: roomSet};
-  const html = (views[S.tab] || roomMenu)();
+  let html = (views[S.tab] || roomMenu)();
+  if(S.host)html=html.replace('</header>','</header>'+managementBackupHtml());
   const pinned = (['who', 'menu', 'store'].includes(S.tab) ? pinBar() : '')
     + (['menu', 'store'].includes(S.tab) ? storeShortcuts() : '');
   return pinned ? '<div class="room-pinned">' + html.replace('</header>', '</header>' + pinned + '</div>') : html;
@@ -3840,6 +3980,7 @@ function roomSet() {
   const fold = (key, title, info, body) => `<details class="settings-fold" data-settings-fold="${key}"${S.settingsOpen?.[key] ? ' open' : ''}><summary><b>${title}</b><span>${info}</span><i>⌄</i></summary><div class="settings-body">${body}</div></details>`;
   return `${topBar('방 설정', '', whoChip())}
   <div class="wrap admin form">
+    ${hostAccountHtml(true)}
     <section class="a-sec settings-manage"><h3>🔑 관리 링크</h3><p class="hint">다른 기기나 공동관리자에게 보내는 관리 전용 링크예요. 방 설정과 모인 메뉴를 수정할 수 있으니 <b>함께 관리할 사람에게만</b> 보내 주세요.</p><button class="btn block" data-act="copy-host">관리 링크 복사</button><div id="hostBox" hidden class="copy-box"><label>관리 링크<textarea class="input code-box" readonly rows="3"></textarea></label></div></section>
     <section class="a-sec"><h3>모임 상태</h3>
       <div class="state-row"><div><b>${S.room.closed ? '다맛다를 마감했어요' : '메뉴 모으는 중'}</b><span>${S.room.closed ? '다시 열면 고르고 고칠 수 있어요.' : '마감 후에는 방장만 수정할 수 있어요.'}</span></div><button class="btn ${S.room.closed ? '' : 'red'}" data-act="toggle-close">${S.room.closed ? '다시 열기' : '마감하기'}</button></div></section>
@@ -3919,6 +4060,7 @@ function roomDoc(d) {
 async function createRoom() {
   const d = S.draft;
   if (!d.title.trim() || !d.stores.length || S.sending) return;
+  if(!hostAccount.uid&&!guestCreateAllowed&&!installPreview()&&!EMU){go({route:'guest-warning'});return;}
   if (d.treat && d.treat.unitCustom && !str(d.treat.unit,12).trim()) { toast('예산 단위를 적어 주세요. 예: 모둠, 부서');document.getElementById('c-treat-unit')?.focus();return; }
   if (d.treat && !(num(d.treat.cap) > 0)) { toast(`🎁 ${budgetLabel(d.treat)} 예산을 적어 주세요`); document.getElementById('c-treat-cap')?.focus(); return; }
   if (d.mode === 'list' && !parseNames(d.names).length) { toast('참여할 이름을 한 명 이상 적어 주세요'); document.getElementById('c-names')?.focus(); return; }
@@ -3934,7 +4076,11 @@ async function createRoom() {
       closed: false, createdAt: FB.serverTimestamp(), updatedAt: FB.serverTimestamp(),
     });
     await b.commit();
-    rememberRoom(id, {key, host: true, title: d.title.trim()});
+    rememberRoom(id, {key, host: true, title: d.title.trim(),backupSaved:false});
+    if(hostAccount.uid) {
+      try{await hostApi('/attach',{roomId:id});await syncAccountRooms();}
+      catch{hostAccount.error='방은 만들었지만 계정에 연결하지 못했어요. 관리 링크를 보관하고 방 설정에서 다시 연결해 주세요.';}
+    }
     S.sending = false; S.draft = null; save('mm-create-draft', null); S.created = true;
     location.hash = `r=${id}`; // hashchange 가 방을 열어요
   } catch (e) {
@@ -4042,9 +4188,17 @@ document.addEventListener('click', async e => {
       if (S.route === 'room' && S.tab === 'set' && S.edit?.dirty) { toast('바꾼 내용을 저장하거나 되돌려 주세요'); return; }
       stopListening(); location.hash = ''; go({route: 'home'}); break;
     case 'new':
-      S.draft = S.draft || load('mm-create-draft', null) || EMPTY_DRAFT();
-      if (location.hash === '#new') go({route: 'create'}); else location.hash = 'new';
+      e.preventDefault();
+      if(location.hash==='#new')await beginCreate();else location.hash='new';
       break;
+    case 'guest-start': go({route:'guest-warning'}); break;
+    case 'guest-confirm': guestCreateAllowed=true;go({route:'create'});break;
+    case 'account-start': await startKakao('new');break;
+    case 'account-login': await startKakao('home');break;
+    case 'account-link': await linkCurrentRoom();break;
+    case 'account-logout': await logoutHostAccount();break;
+    case 'account-refresh': try{await syncAccountRooms();}catch(error){hostAccount.error=authError(error);}rerender();break;
+    case 'backup-saved': rememberRoom(S.roomId,{backupSaved:true});rerender();break;
     case 'retry': openRoom(S.roomId); break;
     case 'home-tab': S.homeTab = el.dataset.t; rerender(); break;
     case 'pin-toggle': S.pinOpen = !S.pinOpen; rerender(); break;
@@ -4306,7 +4460,7 @@ function route() {
   if (S.route === 'room' && S.tab === 'set' && S.edit?.dirty && (id !== S.roomId || want !== 'set')) {
     rememberView('pushState'); toast('바꾼 내용을 저장하거나 되돌려 주세요'); return;
   }
-  if (location.hash === '#new') { S.draft = S.draft || load('mm-create-draft', null) || EMPTY_DRAFT(); stopListening(); go({route: 'create'}, false); return; }
+  if (location.hash === '#new') { stopListening();beginCreate();return; }
   if (id) {
     const key = (h.get('k') || '').replace(/[^a-z0-9]/gi, '').slice(0, 64);
     // 방장 열쇠는 주소창에서 바로 지워요(실수로 그대로 공유하지 않게). 이 기기에는 기억해요.
@@ -4321,7 +4475,12 @@ function route() {
 addEventListener('hashchange', route);
 // Two store views can share the same hash; popstate also restores their store/search context.
 addEventListener('popstate', route);
-route();
+function launchApp() {
+  const query=new URLSearchParams(location.search);
+  if(!(query.has('state')&&(query.has('code')||query.has('error'))))route();
+  initHostAccount();
+}
+launchApp();
 checkAppUpdate();
 setInterval(checkAppUpdate,60000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='hidden')checkAppUpdate();});

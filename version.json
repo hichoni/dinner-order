@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-25-room-title-images",
+  "version": "2026-10-25-kakao-hosts",
   "characters": 16,
   "backdropColors": 6,
   "avatarPicker": true,
@@ -12,7 +12,7 @@
     "music": 25,
     "effects": 70
   },
-  "sourceCommit": "1212e9c6833de62518eb1f615abcaeba1bdccd3b",
+  "sourceCommit": "e6d6e2680803bb992727c895dc3b00fd9b303aaf",
   "sharedMenus": "room-sharedMenus-realtime",
   "summary": "compact-person-rows-and-menu-people",
   "nameEntry": "accurate-errors-and-menu-fallback",
@@ -49,7 +49,7 @@
   "favicon": "svg-png-ico",
   "iconCacheVersion": "eb39f2bcdc79",
   "maskableIcon": "separate-512-safe-circle",
-  "appBuild": "387a8d013df69f85",
+  "appBuild": "ebcae1c9534bac99",
   "appUpdates": "notice-and-user-confirmed-refresh",
   "updateCheck": "on-open-focus-online-and-every-60s-visible",
   "updateDrafts": "persist-before-navigation",
@@ -65,5 +65,9 @@
   "shareImageSize": [
     1200,
     630
-  ]
+  ],
+  "hostLogin": "kakao-optional-with-guest-warning",
+  "hostRooms": "server-account-index-with-host-verification",
+  "customDomain": "https://damatda.kr/",
+  "legacyOrigin": "preserved-for-room-linking"
 }
