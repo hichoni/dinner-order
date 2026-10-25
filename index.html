@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="65d399366eac7099">
+<meta name="damatda-build" content="387a8d013df69f85">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hichoni.github.io/dinner-order/?v=damatda2">
@@ -3115,7 +3115,7 @@ async function copyOrShow(text, okMsg, boxId) {
 }
 const pageBase = () => (/^https?:$/.test(location.protocol) ? location.origin + location.pathname : 'https://hichoni.github.io/dinner-order/');
 const SHARE_PREVIEW_VERSION = 'cards-v1';
-const ROOM_SHARE_VERSION = 'rooms-v1';
+const ROOM_SHARE_VERSION = 'room-cards-v1';
 function roomShareTag(title) {
   const text=String(title||'').trim().slice(0,40)||'다맛다';let hash=2166136261;
   for(let i=0;i<text.length;i++) hash=Math.imul(hash ^ text.charCodeAt(i),16777619);
