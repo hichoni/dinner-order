@@ -39,7 +39,7 @@
   <script>
     const params = new URLSearchParams(location.hash.slice(1));
     const room = params.get('r') || '', key = params.get('k') || '';
-    if (/^[a-z0-9]{1,64}$/i.test(room) && /^[a-z0-9]{1,64}$/i.test(key)) {
+    if (/^[a-z0-9]{1,64}$/i.test(room) && /^[a-z0-9_-]{1,64}$/i.test(key)) {
       const options = new URLSearchParams(location.search);
       const target = new URL(options.get('preview')==='1' ? 'preview.html' : './', location.href);
       target.searchParams.set('v','damatda2');
