@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="e361b8669b4c573e">
+<meta name="damatda-build" content="366f599af7d63ef2">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -1851,6 +1851,47 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .cart-status-privacy{font-size:12px;line-height:1.7;color:var(--sub);margin:0 0 17px}
 @media print{.cart-progress,.cart-status-privacy{display:none!important}}
 .mm .cart-progress .cart-remind-copy{min-height:44px;margin-top:13px;padding:10px;gap:7px;font-size:13px;border:1px solid #e4d5a5;background:#fff8e6;color:#775710;box-shadow:none}.mm .cart-progress-panel.editing .cart-remind-copy{background:#f0f0ff;border-color:#d0d0ed;color:#56539a}.mm .cart-remind-copy svg{width:17px;height:17px;flex:none}.mm .cart-progress .copy-box{margin-top:10px}.mm .cart-progress .copy-box label{font-size:12px;color:var(--sub)}.mm .cart-progress .copy-box textarea{margin-top:7px;line-height:1.7;overflow-wrap:anywhere}
+/* Participant choices stay readable while the choose → send → done path stays visible. */
+.mm .participant-flow ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;list-style:none;margin:0;padding:3px 0}
+.mm .participant-flow li{min-width:0}.mm .participant-flow button{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:40px;padding:6px 3px;border:0;border-radius:10px;background:transparent;color:var(--sub);font-size:13px;line-height:1.3;white-space:nowrap;box-shadow:none}
+.mm .participant-flow button i{display:grid;place-items:center;flex:none;width:20px;height:20px;border-radius:50%;background:#e4edef;color:inherit;font-size:11px;font-style:normal;font-weight:650}
+.mm .participant-flow button.current{background:#e3f2f4;color:#147780;font-weight:650}.mm .participant-flow button.current i{background:#147780;color:#fff}.mm .participant-flow button.done{color:#267258}.mm .participant-flow button.done i{background:#e0f2e8;color:#267258}.mm .participant-flow button:disabled{opacity:.45}
+.mm:is(.tab-menu,.tab-store,.tab-cart,.tab-review,.tab-mine) .room-pinned{padding-bottom:4px;margin-bottom:8px}.mm .room-pinned:has(.participant-flow)>.top{margin-bottom:0}
+.mm:is(.tab-menu,.tab-store,.tab-cart) .who-label{display:none}
+.mm:is(.tab-menu,.tab-store) .menu-context{font-size:12px;padding:1px 0 7px;gap:8px}
+.mm:is(.tab-menu,.tab-store) .menu-toolbar{align-items:flex-start;margin:0 0 9px;gap:7px}.mm:is(.tab-menu,.tab-store) .menu-search-row .input{min-height:44px;padding:10px 11px;font-size:16px}
+.mm:is(.tab-menu,.tab-store) .menu-toolbar .tabs-line button{min-height:44px;min-width:38px;padding:8px 7px;font-size:12px}.mm:is(.tab-menu,.tab-store) .search-count:empty{display:none}
+.mm:is(.tab-menu,.tab-store) .room-menu-store>.shop-compact{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;padding:8px 10px;margin:8px 0;border-radius:12px}
+.mm:is(.tab-menu,.tab-store) .shop-title{flex:1;min-width:0;gap:8px}.mm:is(.tab-menu,.tab-store) .shop-title .thumb.sm{width:32px;height:32px;flex-basis:32px;border-radius:9px}
+.mm:is(.tab-menu,.tab-store) .shop-title h2{font-size:16px;line-height:1.4;margin:0}.mm:is(.tab-menu,.tab-store) .shop-choice>span{font-size:11px;margin-top:2px}
+.mm:is(.tab-menu,.tab-store) .shop-details{flex:0 0 auto}.mm:is(.tab-menu,.tab-store) .shop-details[open]{flex-basis:100%}.mm:is(.tab-menu,.tab-store) .shop-details summary{min-height:40px;display:flex;align-items:center;font-size:12px;padding:4px 0}
+.mm:is(.tab-menu,.tab-store) .store-photo-gallery{flex:0 0 100%;margin:0;padding-top:4px}.mm:is(.tab-menu,.tab-store) .menus{gap:8px}
+.mm:is(.tab-menu,.tab-store) .menu{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;min-height:80px;margin:0;padding:10px;gap:8px;border-radius:15px}
+.mm:is(.tab-menu,.tab-store) .menu .menu-main{display:flex;align-items:center;min-width:0;min-height:0;padding:0;gap:9px}.mm:is(.tab-menu,.tab-store) .menu .info{flex:1;min-width:0;order:2}
+.mm:is(.tab-menu,.tab-store) .menu .m-emo{display:grid;order:1;width:52px;height:56px;flex:0 0 52px;margin:0;border-radius:10px;font-size:29px}
+.mm:is(.tab-menu,.tab-store) .menu .m-ctl{position:static;align-self:center;transform:none;margin:0;padding:0}
+.mm:is(.tab-menu,.tab-store) .menu .name{font-size:15px;line-height:1.4;overflow-wrap:anywhere}.mm:is(.tab-menu,.tab-store) .menu.in .name::after{content:none}
+.mm:is(.tab-menu,.tab-store) .menu .price{font-size:14px;line-height:1.4;margin-top:3px}.mm:is(.tab-menu,.tab-store) .menu .desc{font-size:12px;line-height:1.4;-webkit-line-clamp:1}
+.mm:is(.tab-menu,.tab-store) .menu .tags{position:static;gap:3px;margin:0 0 3px}.mm:is(.tab-menu,.tab-store) .menu.in .tags{display:none}
+.mm:is(.tab-menu,.tab-store) .qty button,.mm:is(.tab-menu,.tab-store) .add{width:44px;height:44px;min-width:44px;min-height:44px}.mm:is(.tab-menu,.tab-store) .qty{height:44px}
+.mm:is(.tab-menu,.tab-store) .missing-menu{width:100%;margin:8px 0 18px;padding:9px 11px;min-height:44px;font-size:12px}
+.mm.tab-cart .cart-feedback{padding-top:0}.mm.tab-cart .selection-status.compact{margin:0 0 10px;padding:9px 12px;gap:2px;border-left-width:3px}.mm.tab-cart .selection-status.compact b{font-size:14px}.mm.tab-cart .selection-status.compact span{font-size:12px;line-height:1.5}
+.mm.tab-cart .cart-heading{margin-bottom:8px}.mm.tab-cart .cart-heading h2{font-size:16px}.mm.tab-cart .cart-heading .text-btn{min-height:40px;padding:7px 0;font-size:13px}
+.mm.tab-cart .cart-store{padding:10px 12px;margin:0 0 10px;border-radius:15px}.mm.tab-cart .cs-head{gap:8px;margin-bottom:5px;padding-bottom:7px}.mm.tab-cart .cs-head b{font-size:14px;line-height:1.4}.mm.tab-cart .cs-head .thumb.sm{width:28px;height:28px;flex-basis:28px}
+.mm.tab-cart .cart-store .menu-item-box{display:flex;flex-wrap:nowrap;align-items:center;min-height:64px;padding:9px 0;margin:0;gap:12px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent!important;box-shadow:none}
+.mm.tab-cart .cart-store .menu-item-main{flex:1;min-width:0}.mm.tab-cart .menu-item-name{font-size:15px;line-height:1.4}.mm.tab-cart .menu-item-main .menu-item-price{display:block;margin-top:4px;font-size:13px;color:var(--sub);min-width:0}
+.mm.tab-cart .cart-store .menu-item-side{width:auto;flex:0 0 auto;display:block}.mm.tab-cart .cart-store .qty{height:44px}.mm.tab-cart .cart-store .qty button{width:44px;min-width:44px;height:44px;min-height:44px}
+.mm.tab-cart .store-request{padding:0 0 0;margin:7px 0 0;border:0;background:transparent}.mm.tab-cart .store-request>summary{min-height:40px;font-size:13px;padding:5px 0}.mm.tab-cart .request-value{max-width:68%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}.mm.tab-cart .request-body{padding:8px 0 0}
+.mm.tab-cart .thanks-composer.compact{margin:10px 0;border-radius:14px}.mm.tab-cart .thanks-composer.compact>summary{min-height:52px;padding:10px 12px;gap:8px}.mm.tab-cart .thanks-composer.compact .thanks-envelope{width:28px;height:28px;font-size:21px}.mm.tab-cart .thanks-composer.compact>summary b{font-size:14px}.mm.tab-cart .thanks-summary{max-width:100%;margin-top:1px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm.tab-cart .cart-summary{padding:12px 14px;margin-top:10px;border-radius:14px}.mm.tab-cart .cart-summary .total{padding:0;margin:0;font-size:16px}.mm.tab-cart .cart-summary .total>b{font-size:21px}.mm.tab-cart .cart-budget{margin-top:8px;font-size:12px}.mm.tab-cart .cart-footnote{font-size:11px;line-height:1.5;margin:8px 0 0}
+.mm.tab-cart .participant-help{border-top:1px solid var(--line);margin-top:9px;font-size:12px;color:var(--sub)}.mm.tab-cart .participant-help summary{display:flex;align-items:center;justify-content:space-between;min-height:36px;cursor:pointer;list-style:none}.mm.tab-cart .participant-help summary::-webkit-details-marker{display:none}.mm.tab-cart .participant-help summary::after{content:'＋'}.mm.tab-cart .participant-help[open] summary::after{content:'−'}.mm.tab-cart .participant-help p{font-size:12px;line-height:1.6;margin:0 0 9px}
+.mm:is(.tab-menu,.tab-store,.tab-cart) .cartbar.pending{min-height:64px;padding:9px 13px;gap:10px}.mm:is(.tab-menu,.tab-store,.tab-cart) .cartbar .sp{gap:2px}.mm:is(.tab-menu,.tab-store,.tab-cart) .cartbar .sp b{font-size:15px}.mm:is(.tab-menu,.tab-store,.tab-cart) .cartbar .sp small{font-size:11px}
+@media(max-width:999px){.mm:is(.tab-menu,.tab-store,.tab-cart):has(.cartbar.pending){padding-bottom:148px}}
+.embedded-preview .mm .room-pinned{top:env(safe-area-inset-top,0px)}
+.mm.tab-cart .cs-head{padding:0 0 7px}.mm.tab-cart .menu-item-main .menu-item-price{align-self:flex-start;text-align:left}
+.mm.tab-cart .thanks-composer.compact>summary{min-height:48px;padding:9px 12px}.mm.tab-cart .thanks-composer.compact>summary>span:nth-child(2){display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}.mm.tab-cart .thanks-composer.compact>summary b{flex:none}.mm.tab-cart .thanks-summary{flex:1;min-width:0;text-align:right;margin:0}
+.mm.tab-cart .cart-budget{flex-wrap:wrap;gap:3px 10px;line-height:1.5}.mm.tab-cart .cart-send-caption{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0 8px;margin-top:5px}
+.mm.tab-cart .cart-send-caption .cart-footnote{margin:0}.mm.tab-cart .cart-send-caption .participant-help{flex:0 0 auto;border:0;margin:0}.mm.tab-cart .cart-send-caption .participant-help summary{min-height:36px;gap:6px}.mm.tab-cart .cart-send-caption .participant-help[open]{flex-basis:100%}
 .catalog-source-tabs{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}.catalog-source-tabs button{flex:1;min-height:48px;border:1px solid #bcd9dc;border-radius:14px;padding:10px;background:#fff;color:#285562;font:inherit;font-weight:700}.catalog-source-tabs button[aria-pressed=true]{background:#087b76;color:white;border-color:#087b76}.places-intro{padding:18px;background:#eaf6f4;border-radius:18px;margin-bottom:20px}.places-intro b{font-size:20px}.places-intro p{margin:8px 0 0;line-height:1.65}.places-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.places-filters .input{width:100%;min-width:0}.place-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;margin:10px 0;background:#fff;border:1px solid #d4e5e8;border-radius:18px}.place-card>div{min-width:0;display:grid;gap:5px}.place-card b{font-size:18px;overflow-wrap:anywhere}.place-card span,.place-card small{color:#57717b;line-height:1.5}.place-card .small-btn{flex-shrink:0;min-height:44px}.place-menu-state{font-weight:700;color:#087b76!important}.places-map{height:380px;max-height:55vh;border-radius:16px;margin-top:16px;z-index:0}.places-map-tools{display:flex;gap:8px;flex-wrap:wrap}.place-editor{padding:20px;margin:16px 0;background:#f1faf6;border:2px solid #087b76;border-radius:18px;scroll-margin-top:90px}.place-editor h3{margin:8px 0}.place-editor p{line-height:1.6}.place-editor .btn{margin-top:14px}.places-source{font-size:12px;color:#60767e;line-height:1.8;margin:24px 0}.places-source a{text-decoration:underline}.places-map .leaflet-control-attribution{font-size:10px;background:#fff}.places-map .leaflet-control-zoom a{color:#23434e}#placesRoot [hidden]{display:none!important}@media(max-width:480px){.places-filters{grid-template-columns:1fr}.place-card{padding:14px;gap:10px}.catalog-source-tabs button{font-size:14px}.places-map{height:320px}}
 .catalog-cities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 18px}.catalog-cities button{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;min-height:80px;padding:14px 16px;border:1px solid #bedadc;border-radius:18px;background:#fff;color:#285562;font:inherit;text-align:left;cursor:pointer}.catalog-cities button b{font-size:20px;line-height:1.3}.catalog-cities button small{font-size:13px;line-height:1.4;color:#647e87}.catalog-cities button.on{background:#087b76;color:#fff;border-color:#087b76;box-shadow:0 4px 12px #087b761a}.catalog-cities button.on small{color:#e8fffa}.catalog-cities button:focus-visible{outline:3px solid #327fc2;outline-offset:3px}.catalog-cities .catalog-city-all{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;min-height:44px;padding:10px 16px}.catalog-cities .catalog-city-all b{font-size:15px}.catalog-city-note{padding:14px 16px;border-radius:14px;background:#eaf6f4;color:#315b64;font-size:14px;line-height:1.7;margin:0 0 18px}.catalog-jurisdiction{display:inline-block;width:fit-content;padding:3px 8px;margin:4px 0;border-radius:7px;color:#087b76;background:#eaf6f4;font-size:12px;font-weight:700}@media(max-width:600px){.catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-cities button{padding:13px;min-height:76px}.catalog-cities button b{font-size:18px}.catalog-cities button small{font-size:12px}}
 .catalog-steps{display:flex;gap:16px;list-style:none;padding:0;margin:10px 0 26px;color:#8a9c9d;font-size:13px;font-weight:700}.catalog-steps li{display:flex;gap:7px;align-items:center}.catalog-steps li span{display:grid;place-items:center;width:24px;height:24px;background:#edf3f3;border-radius:50%}.catalog-steps li[aria-current=step]{color:#087b76}.catalog-steps li[aria-current=step] span{background:#087b76;color:#fff}.catalog-region-page{max-width:780px!important}.catalog-region-intro{margin:12px 0 28px}.catalog-region-intro h2{margin:0 0 10px;font-size:28px;line-height:1.4;letter-spacing:-.04em}.catalog-region-intro p,.catalog-store-help{color:#64818a;line-height:1.65;margin:0}.catalog-region-page .catalog-area-label{display:none}.catalog-region-page .catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 12px;gap:12px}.catalog-region-page .catalog-cities button{min-height:108px;padding:20px}.catalog-all-regions{display:block;margin:18px auto 0;text-decoration:underline;text-underline-offset:4px}.catalog-region-help{text-align:center;line-height:1.7;margin-top:20px}.catalog-region-summary{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px}.catalog-region-summary small{font-size:12px;color:#718b94}.catalog-region-summary h2{font-size:27px;line-height:1.4;margin:3px 0 0;letter-spacing:-.03em}.catalog-store-help{margin-bottom:20px;font-size:14px}.catalog-store-page .catalog-city-note{font-size:13px;padding:10px 14px;margin-bottom:16px}.catalog-tools{display:flex;gap:8px;margin:10px 0 14px}.catalog-tools .small-btn{min-height:42px}.catalog-filter-panel{padding:16px;border:1px solid #d5e4e7;background:#f6faf9;border-radius:16px;margin:8px 0 18px}.catalog-filter-panel .input{width:100%;margin:7px 0 14px}.catalog-filter-panel .catalog-area-label{display:block;margin:0}.catalog-filter-panel .text-btn{display:block;margin-left:auto}@media(max-width:600px){.catalog-region-intro h2{font-size:25px}.catalog-region-page .catalog-cities{gap:10px}.catalog-region-page .catalog-cities button{padding:17px 14px;min-height:105px}.catalog-region-page .catalog-cities button b{font-size:19px}.catalog-steps{margin-bottom:22px}.catalog-region-summary h2{font-size:25px}}
@@ -2625,10 +2666,10 @@ function thanksPreview() {
   const t=tidyThanks(S.thanks);
   return `<div id="thanksPreview" class="thanks-preview" aria-live="polite">${t?thanksMessage(t):'<span class="thanks-face" aria-hidden="true">💌</span><p class="thanks-words thanks-placeholder">한마디가, 오늘을 더 따뜻하게.</p>'}<small>${esc(S.room.treat?.by?`${S.room.treat.by}님에게`:'한턱 내는 분에게')} · 메뉴와 함께 보내요</small></div>`;
 }
-function thanksComposer() {
+function thanksComposer(compact=false) {
   if (!S.room.treat && !tidyThanks(S.thanks)) return '';
   const t=S.thanks||{text:'',emoji:'💛',effect:'hearts'};
-  return `<details class="thanks-composer" data-thanks-fold${S.thanksOpen?' open':''}><summary><span class="thanks-envelope" aria-hidden="true">💌</span><span><b>고마운 마음도 함께 보낼까요?</b><small>한마디를 고르거나 내 말로 적어 주세요 · 선택</small></span><i>＋</i></summary><div class="thanks-compose-body">
+  return `<details class="thanks-composer${compact?' compact':''}" data-thanks-fold${S.thanksOpen?' open':''}><summary><span class="thanks-envelope" aria-hidden="true">💌</span><span><b>${compact?'감사 한마디':'고마운 마음도 함께 보낼까요?'}</b><small${compact?' class="thanks-summary"':''}>${compact?esc(tidyThanks(t)?.text||'선택'):'한마디를 고르거나 내 말로 적어 주세요 · 선택'}</small></span><i>＋</i></summary><div class="thanks-compose-body">
     <div class="thanks-presets" role="group" aria-label="감사 메시지 추천">${THANKS_PRESETS.map((p,i)=>`<button type="button" data-act="thanks-preset" data-i="${i}" aria-pressed="${t.text===p.text}"><span aria-hidden="true">${p.emoji}</span>${esc(p.text)}</button>`).join('')}</div>
     <label class="field" for="thanksText">내 마음 직접 쓰기<textarea class="input" id="thanksText" rows="2" maxlength="120" placeholder="예: 바쁜 하루에 따뜻한 한 끼, 정말 고마워요!">${esc(t.text||'')}</textarea></label>
     <div class="thanks-options"><div><span class="thanks-option-label">이모지</span><div class="thanks-emojis" role="group" aria-label="감사 이모지">${THANKS_EMOJI.map(emoji=>`<button type="button" data-act="thanks-emoji" data-v="${emoji}" aria-label="${emoji} 이모지" aria-pressed="${t.emoji===emoji}">${emoji}</button>`).join('')}</div></div>
@@ -3210,7 +3251,7 @@ async function openRoom(id, key, want = '') {
   resetRoomManagers(id);
     Object.assign(S, {route: 'room', roomId: id, room: null, answers: new Map(), answersReady: false, profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, hostKey:'',hostRole:'',managementNotice:'', loading: true, error: '', store: null, edit: null, menuQuery: '', mfilter: 'all', pinOpen: true});
   const local = roomLocal();
-  Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), thanks:tidyThanks(local.thanks), thanksOpen:!!tidyThanks(local.thanks), sentAt: local.sentAt || 0, answerBase: validAnswerBase(local.answerBase), answerConflict: false, tab: local.who ? 'menu' : 'who'});
+  Object.assign(S, {who: local.who || '', cart: local.cart || {}, req: str(local.req, 200), storeReqs: tidyStoreReqs(local.storeReqs), thanks:tidyThanks(local.thanks), thanksOpen:false, requestOpen:{}, sentAt: local.sentAt || 0, answerBase: validAnswerBase(local.answerBase), answerConflict: false, tab: local.who ? 'menu' : 'who'});
   render();
   try {
     await boot();
@@ -3307,13 +3348,14 @@ function keepView() {
 }
 function refreshLive() {
   refreshCartProgress();
+  const flow=document.getElementById('participantFlow');if(flow)flow.outerHTML=participantFlow();
   const n = document.getElementById('liveCount'); if (n) n.textContent = S.answers.size;
   const notice = document.getElementById('answerConflictNotice');
   if (notice && S.answerConflict) {
     const expanded = !!notice.querySelector('details[open]');
     notice.outerHTML = answerConflictHtml();
     if (expanded) document.querySelector('#answerConflictNotice details')?.setAttribute('open','');
-    const status = document.getElementById('selectionStatus'); if (status) status.outerHTML = selectionStatus();
+    const status = document.getElementById('selectionStatus'); if (status) status.outerHTML = selectionStatus(S.tab==='cart');
   }
   if (S.answerConflict) { const bar = document.querySelector('.cartbar[data-act="send"]'); if (bar) bar.remove(); }
 }
@@ -3423,7 +3465,7 @@ function validAnswerBase(base) { return base && (base.version === null || typeof
 function loadLatestAnswer() {
   const a = myAnswer();
   S.cart = Object.fromEntries((a?.items || []).filter(i => ITEMS.has(i.m)).map(i => [i.m,i.n]));
-  S.req = a?.req || ''; S.storeReqs = tidyStoreReqs(a?.storeReqs);S.thanks=tidyThanks(a?.thanks);S.thanksOpen=!!S.thanks;
+  S.req = a?.req || ''; S.storeReqs = tidyStoreReqs(a?.storeReqs);S.requestOpen={};S.thanks=tidyThanks(a?.thanks);S.thanksOpen=false;
   S.answerBase = {version:answerVersion(a),content:orderContent(currentDraft())};
   S.answerConflict = false; persistRoom();
 }
@@ -3590,15 +3632,16 @@ function captureRequests() {
   persistRoom();
 }
 function refreshDraftStatus() {
-  const status=document.getElementById('selectionStatus');if(status)status.outerHTML=selectionStatus();
+  const status=document.getElementById('selectionStatus');if(status)status.outerHTML=selectionStatus(S.tab==='cart');
+  const flow=document.getElementById('participantFlow');if(flow)flow.outerHTML=participantFlow();
   const nav=document.querySelector('.nav');if(nav)nav.outerHTML=roomNav();
   const bar=document.querySelector('.cartbar');
   if(bar&&!S.answerConflict&&['cart','review'].includes(S.tab))bar.outerHTML=cartBar(S.sending?'보내는 중…':cartIsSent()?'보낸 메뉴 보기':myAnswer()?'변경사항 보내기':'메뉴 보내기',cartIsSent()?'tab" data-t="mine':'send');
 }
-function selectionStatus() {
+function selectionStatus(compact=false) {
   const a = myAnswer(), same = cartIsSent();
   const text = !a ? '아직 보내지 않았어요' : same ? '메뉴를 보냈어요' : '변경사항을 아직 보내지 않았어요';
-  return `<div id="selectionStatus" class="selection-status ${same ? 'sent' : 'draft'}" role="status"><b>${S.answerConflict ? '최신 제출 확인이 필요해요' : text}</b>${!S.answerConflict&&!same ? `<span>${locked() ? '마감되어 보낼 수 없어요. 방장에게 알려 주세요.' : a ? '다시 보내기 전까지 보낸 메뉴는 유지돼요.' : '담기만 하면 전달되지 않아요. 아래 「메뉴 보내기」를 눌러 주세요.'}</span>` : ''}</div>`;
+  return `<div id="selectionStatus" class="selection-status ${same ? 'sent' : 'draft'}${compact?' compact':''}" role="status"><b>${S.answerConflict ? '최신 제출 확인이 필요해요' : text}</b>${!S.answerConflict&&!same ? `<span>${locked() ? '마감되어 보낼 수 없어요. 방장에게 알려 주세요.' : a ? compact?'다시 보내야 변경돼요.':'다시 보내기 전까지 보낸 메뉴는 유지돼요.' : compact?'담기만 하면 전달되지 않아요.':'담기만 하면 전달되지 않아요. 아래 「메뉴 보내기」를 눌러 주세요.'}</span>` : ''}</div>`;
 }
 
 // ---------- 시간 ----------
@@ -4095,9 +4138,17 @@ function viewRoom() {
   if(hasUnsentCart()&&!['menu','store','cart','review'].includes(S.tab))html=html.replace('</header>',`</header><aside class="pending-room-notice" role="status"><b>${esc(S.who)} · ${myAnswer()?'변경사항을 아직 보내지 않았어요':'담은 메뉴를 아직 보내지 않았어요'}</b><button class="text-btn" data-act="tab" data-t="cart">장바구니 확인 ›</button></aside>`);
   if(S.host)html=html.replace('</header>','</header>'+managementBackupHtml());
   if(S.managementNotice)html=html.replace('</header>',`</header><aside class="management-notice" role="alert">${esc(S.managementNotice)}</aside>`);
-  const pinned = (['who', 'menu', 'store'].includes(S.tab) ? pinBar() : '')
+  const pinned = (['menu','store','cart','review','mine'].includes(S.tab)?participantFlow():'')
+    + (['who', 'menu', 'store'].includes(S.tab) ? pinBar() : '')
     + (['menu', 'store'].includes(S.tab) ? storeShortcuts() : '');
   return pinned ? '<div class="room-pinned">' + html.replace('</header>', '</header>' + pinned + '</div>') : html;
+}
+function participantFlow(){
+  if(!S.who)return '';
+  const sent=!!myAnswer()&&!S.sending,same=sent&&cartIsSent();
+  const current=['menu','store'].includes(S.tab)?'menu':['cart','review'].includes(S.tab)?'cart':sent?'mine':cartCount()?'cart':'menu';
+  const steps=[['menu','고르기',false],['cart','보내기',!cartCount()],['mine',sent&&!same?'보낸 메뉴':'완료',!sent]];
+  return `<nav id="participantFlow" class="participant-flow" aria-label="메뉴 고르고 보내기"><ol>${steps.map(([tab,label,disabled],index)=>`<li><button type="button" class="${current===tab?'current ':''}${tab==='mine'&&same?'done':''}" data-act="tab" data-t="${tab}"${current===tab?' aria-current="step"':''}${disabled?' disabled':''}><i aria-hidden="true">${tab==='mine'&&same?'✓':index+1}</i><span>${label}</span></button></li>`).join('')}</ol></nav>`;
 }
 function storeShortcuts() {
   const stores = S.room.stores;
@@ -4293,9 +4344,8 @@ function roomStore() {
   const filters = menuFiltersHtml(), dl = deadlineInfo(S.room.deadline);
   return `${topBar(esc(S.room.title), 'home', whoChip())}
   <div class="menu-context"><span>${S.room.closed ? '마감' : dl ? esc(dl.text) : '메뉴 모으는 중'}</span><span>${budget() ? `남은 ${won(budgetLeft())}` : `<b id="liveCount">${S.answers.size}</b>명 보냄`}</span></div>
-  <div class="wrap menu-notices">${closedNote()}${sentNote()}${answerConflictHtml()}</div>
-  <p class="room-menu-intro">가게 ${S.room.stores.length}곳 · 모든 가게의 메뉴를 함께 골라요</p>
-  <div class="menu-toolbar"><div class="menu-search"><label for="menuSearch">이 방 메뉴 검색</label><div class="menu-search-row"><input class="input" type="search" id="menuSearch" aria-label="이 방 메뉴 검색" value="${esc(S.menuQuery)}" maxlength="80" placeholder="메뉴 검색" autocomplete="off" aria-controls="menuResults"><button id="clearMenuSearch" class="small-btn" data-act="menu-search-clear" aria-label="검색어 지우기"${S.menuQuery ? '' : ' disabled'}>×</button></div><p id="menuSearchCount" class="search-count" role="status" aria-live="polite" aria-atomic="true">${menuSearchCount()}</p></div><div id="menuFilters">${filters}</div></div>
+  <div class="wrap menu-notices">${closedNote()}${answerConflictHtml()}</div>
+  <div class="menu-toolbar"><div class="menu-search"><label class="sr-only" for="menuSearch">이 방 메뉴 검색</label><div class="menu-search-row"><input class="input" type="search" id="menuSearch" aria-label="이 방 메뉴 검색" value="${esc(S.menuQuery)}" maxlength="80" placeholder="메뉴 검색" autocomplete="off" aria-controls="menuResults"><button id="clearMenuSearch" class="small-btn" data-act="menu-search-clear" aria-label="검색어 지우기"${S.menuQuery ? '' : ' disabled'}>×</button></div><p id="menuSearchCount" class="search-count" role="status" aria-live="polite" aria-atomic="true">${menuSearchCount()}</p></div><div id="menuFilters">${filters}</div></div>
   <div id="menuResults">${menuResultsHtml()}</div>
   ${cartBar()}${roomNav()}`;
 }
@@ -4306,7 +4356,7 @@ function quickRequests(storeId) {
 }
 function storeRequestInput(s) {
   const value = str(S.storeReqs[s.id], 200), id = `storeReq-${encodeURIComponent(s.id)}`;
-  const open = S.requestOpen?.[s.id] ?? !!value;
+  const open = S.requestOpen?.[s.id] ?? false;
   return `<details class="store-request" data-request-fold="${esc(s.id)}"${open ? ' open' : ''}><summary><span>요청사항 <small>선택</small></span><span class="request-value">${value ? esc(value) : '추가하기'} <i>＋</i></span></summary><div class="request-body">
     <label class="sr-only" for="${id}">${esc(s.name)} 요청사항</label>
     <div class="quick">${quickRequests(s.id).map(t => `<button class="${value.split(/\s*,\s*/).includes(t) ? 'on' : ''}" data-act="quick-req" data-id="${esc(s.id)}" data-t="${esc(t)}" aria-pressed="${value.split(/\s*,\s*/).includes(t)}">${esc(t)}</button>`).join('')}</div>
@@ -4325,15 +4375,15 @@ function roomCart() {
   const byStore = new Map();
   for (const l of lines) { if (!byStore.has(l.item.store)) byStore.set(l.item.store, []); byStore.get(l.item.store).push(l); }
   return `${topBar('장바구니', '', whoChip())}
-  <div class="wrap cart-feedback">${closedNote()}${answerConflictHtml()}${selectionStatus()}<p class="cart-status-privacy">방장·공동 방장에게는 미전송 상태만 보여요. 담은 메뉴와 요청사항은 보내기 전까지 공개되지 않아요.</p></div>
+  <div class="wrap cart-feedback">${closedNote()}${answerConflictHtml()}${selectionStatus(true)}</div>
   <div class="cart-page"><div class="cart-heading"><h2>담은 메뉴 <span>${cartCount()}</span></h2><button class="text-btn" data-act="tab" data-t="menu">＋ 더 담기</button></div>
   ${[...byStore].map(([s, ls]) => `<section class="cart-store"><div class="cs-head">${thumb(s, 'sm')}<b>${esc(s.name)}</b></div>
-    ${ls.map(l => menuItemBox({...l.item, n:l.n}, '', qtyCtl(l.item.id,l.item.name))).join('')}${storeRequestInput(s)}</section>`).join('')}
+    ${ls.map(l => menuItemBox({...l.item, n:l.n}, '', qtyCtl(l.item.id,l.item.name),true)).join('')}${storeRequestInput(s)}</section>`).join('')}
   ${S.req ? `<section class="cart-req legacy-request"><label for="req" class="h3">가게 미지정 요청</label><p class="hint">가게별 요청으로 옮겨 주세요. 주문 메시지에 자동으로 들어가지 않아요.</p><textarea class="input" id="req" maxlength="200" rows="2">${esc(S.req)}</textarea></section>` : ''}
-  ${locked()?'':thanksComposer()}
+  ${locked()?'':thanksComposer(true)}
   <section class="cart-summary"><div class="total"><span>합계</span><b>${won(cartSum())}</b></div>
     ${budget() ? `<div class="cart-budget${budgetLeft() < 0 ? ' over' : ''}"><span>${esc(budgetLabel(S.room.treat))} 예산 ${won(budget())}</span><b>${budgetLeft() < 0 ? `${won(-budgetLeft())} 초과` : `${won(budgetLeft())} 남음`}</b></div>` : ''}
-    <p class="cart-footnote">${a ? '다시 보내면 기존 메뉴가 바뀌어요.' : '방장에게 메뉴를 보내요. 가게 주문은 별도예요.'}</p></section></div>
+    <div class="cart-send-caption"><p class="cart-footnote">방장에게 전달 · 가게 주문은 별도</p><details class="participant-help"><summary aria-label="보내기 안내">안내</summary><p>방장·공동 방장에게는 미전송 상태만 보여요. 담은 메뉴와 요청사항은 보내기 전까지 공개되지 않아요.</p>${a?'<p>다시 보내면 기존 메뉴가 바뀌어요.</p>':''}</details></div></section></div>
   ${locked() || S.answerConflict ? '' : cartBar(S.sending ? '보내는 중…' : cartIsSent() ? '보낸 메뉴 보기' : a ? '변경사항 보내기' : '메뉴 보내기', cartIsSent() ? 'tab" data-t="mine' : 'send')}${roomNav()}`;
 }
 
@@ -4350,9 +4400,10 @@ function roomReview() {
   </div>${locked() || S.answerConflict ? '' : cartBar(S.sending ? '보내는 중…' : a ? '변경사항 보내기' : '장바구니 보내기', 'send')}${roomNav()}`;
 }
 // Menu names remain the primary content in cart, confirmation and both summaries.
-function menuItemBox(item, storeName = '', controls = '') {
-  return `<div class="menu-item-box"><div class="menu-item-main"><b class="menu-item-name">${esc(item.name)}</b>${storeName ? `<span class="menu-item-store">${esc(storeName)}</span>` : ''}</div>
-    <div class="menu-item-side">${controls || `<span class="menu-item-count">${item.n}개</span>`}${item.price != null ? `<b class="menu-item-price">${item.price ? won(item.price * item.n) : '가격 확인'}</b>` : ''}</div></div>`;
+function menuItemBox(item, storeName = '', controls = '',compact=false) {
+  const itemPrice=item.price!=null?`<b class="menu-item-price">${item.price?won(item.price*item.n):'가격 확인'}</b>`:'';
+  return `<div class="menu-item-box"><div class="menu-item-main"><b class="menu-item-name">${esc(item.name)}</b>${storeName ? `<span class="menu-item-store">${esc(storeName)}</span>` : ''}${compact?itemPrice:''}</div>
+    <div class="menu-item-side">${controls || `<span class="menu-item-count">${item.n}개</span>`}${compact?'':itemPrice}</div></div>`;
 }
 function answerStoreGroups(a) {
   const groups = new Map();
@@ -4993,6 +5044,7 @@ document.addEventListener('input', e => {
   if (t.id === 'menuSearch') { S.menuQuery = t.value.slice(0, 80); refreshMenuSearch(); return; }
   if (t.id === 'thanksText') {
     S.thanks={emoji:'💛',effect:'hearts',...S.thanks,text:t.value.slice(0,120)};persistRoom();
+    const summary=document.querySelector('.thanks-summary');if(summary)summary.textContent=tidyThanks(S.thanks)?.text||'선택';
     const preview=document.getElementById('thanksPreview');if(preview)preview.outerHTML=thanksPreview();
     const count=document.getElementById('thanksCount');if(count)count.textContent=String(t.value.length);
     for(const button of document.querySelectorAll('[data-act="thanks-preset"]'))button.setAttribute('aria-pressed',String(THANKS_PRESETS[Number(button.dataset.i)]?.text===t.value));
@@ -5001,7 +5053,11 @@ document.addEventListener('input', e => {
   if (t.id === 'req' || t.dataset.storeReq) {
     if (t.dataset.storeReq) setStoreRequest(t.dataset.storeReq, t.value); else S.req = t.value.slice(0, 200);
     persistRoom();
-    if (t.dataset.storeReq) for (const b of t.closest('.store-request').querySelectorAll('[data-act="quick-req"]')) { const on = t.value.split(/\s*,\s*/).includes(b.dataset.t); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }
+    if (t.dataset.storeReq) {
+      const fold=t.closest('.store-request'),summary=fold.querySelector('.request-value');
+      if(summary)summary.innerHTML=`${t.value.trim()?esc(t.value):'추가하기'} <i>＋</i>`;
+      for (const b of fold.querySelectorAll('[data-act="quick-req"]')) { const on = t.value.split(/\s*,\s*/).includes(b.dataset.t); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }
+    }
     refreshDraftStatus();
     return;
   }
