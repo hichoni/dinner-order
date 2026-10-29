@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="ded38b23581a1475">
+<meta name="damatda-build" content="208da824fa605e28">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -1912,7 +1912,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <aside id="appUpdate" class="app-update" aria-label="앱 업데이트" hidden></aside>
-<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":1291}</script>
+<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":1292}</script>
 <script type="module">
 // Damatda native SVG assets. Colors inherit the active app theme.
 const FOOD_ICONS = {
@@ -2700,11 +2700,13 @@ function thanksWall(onlyMessages=false) {
 const safeImg = u => (/^https:\/\/[^\s"'<>]+$/.test(u || '') ? u : '');
 const safeColor = c => (/^#[0-9a-fA-F]{3,8}$/.test(c || '') ? c : '#eef2f3');
 const safePlacePhotoSource = u => (typeof u==='string' && /^https:\/\/m\.place\.naver\.com\/restaurant\/[0-9]+\/(?:home|menu\/list)$/.test(u) ? u : '');
-const safePhotoSource = u => (typeof u==='string' && u.length<=800 && (/^https:\/\/www\.daangn\.com\/kr\/local-profile\/[a-zA-Z0-9_%가-힣-]+\/$/.test(u) || safePlacePhotoSource(u)) ? u : '');
+const safePhotoSource = u => (typeof u==='string' && u.length<=800 && (/^https:\/\/www\.daangn\.com\/kr\/local-profile\/[a-zA-Z0-9_%가-힣-]+\/$/.test(u) || safePlacePhotoSource(u) || u==='https://myungcoffee.com/shopinfo/sub06.html') ? u : '');
 function menuProvenance(s) {
   const source=s.menuSource || s.source || '';
   if(s.menuBasis==='착한가격업소 공개 메뉴' && source==='https://www.data.go.kr/data/3045247/fileData.do')
     return {source,label:'행정안전부 착한가격업소 현황'};
+  if(s.menuBasis==='공개 안내 가격' && source==='https://v.daum.net/v/20261001101231839')
+    return {source,label:'경북교육청 제공 사진 · 2026-10-01 할인 안내'};
   if(s.menuBasis==='업주 등록 메뉴' && typeof source==='string' && source.length<=800 && /^https:\/\/www\.daangn\.com\/kr\/local-profile\/[a-zA-Z0-9_%가-힣-]+\/$/.test(source))
     return {source,label:'당근 동네업체 · 업주 등록 메뉴'};
   if(['플레이스 메뉴판','배달 메뉴판'].includes(s.menuBasis) && typeof source==='string' && source.length<=200 && /^https:\/\/m\.place\.naver\.com\/restaurant\/[0-9]+\/menu\/list$/.test(source))
@@ -2728,7 +2730,7 @@ function priceComparisonFields(m) {
   const info=menuPriceComparison(m);
   return info?{priceComparison:{price:info.price,priceBasis:info.basis,priceSource:info.source}}:{};
 }
-const PRICE_BASIS_LABEL={'플레이스 메뉴판':'매장 메뉴판','배달 메뉴판':'배달 메뉴판','착한가격업소 공개 메뉴':'공개자료','업주 등록 메뉴':'업주 등록'};
+const PRICE_BASIS_LABEL={'플레이스 메뉴판':'매장 메뉴판','배달 메뉴판':'배달 메뉴판','착한가격업소 공개 메뉴':'공개자료','업주 등록 메뉴':'업주 등록','공개 안내 가격':'공개 안내가'};
 function priceBasisHtml(m,s) {
   const info=menuPriceProvenance(m);
   return (info && info.basis!==s.menuBasis ? `<small class="menu-price-basis">${esc(PRICE_BASIS_LABEL[info.basis]||info.basis)}</small>` : '')+(menuPriceComparison(m)?'<small class="menu-price-basis price-check">가격 확인</small>':'');
@@ -2769,7 +2771,7 @@ function tidyStore(s, i = 0) {
     ...(safePlacePhotoSource(s.menuPhotoSource) ? {menuPhotoSource:s.menuPhotoSource} : {}),
     checkedAt: /^20\d{2}-\d{2}-\d{2}$/.test(s.checkedAt || '') ? s.checkedAt : '',
     ...(/^catalog\/[a-zA-Z0-9_-]+-[a-f0-9]{12}\.json$/.test(s.menuAsset||'')?{menuAsset:s.menuAsset}:{}),
-    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴','메뉴별 가격 기준'].includes(s.menuBasis) || (s.menuBasis==='업주 등록 메뉴' && menuProvenance(s)) ? s.menuBasis : '',
+    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴','메뉴별 가격 기준'].includes(s.menuBasis) || (['업주 등록 메뉴','공개 안내 가격'].includes(s.menuBasis) && menuProvenance(s)) ? s.menuBasis : '',
     ...(menuProvenance(s) ? {menuSource:menuProvenance(s).source,menuDataDate:/^20\d{2}-\d{2}-\d{2}$/.test(s.menuDataDate || '')?s.menuDataDate:''} : {}),
     menu: (Array.isArray(s.menu) ? s.menu : []).filter(m => m && m.id).map(m => ({
       id: str(m.id, 40), name: str(m.name, 40, '메뉴'), emoji: str(m.emoji, 8), price: num(m.price), desc: str(m.desc, 120),
