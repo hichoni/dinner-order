@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="208da824fa605e28"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="35fc16064ad01a72"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -2844,6 +2844,8 @@ function menuProvenance(s) {
     return {source,label:'행정안전부 착한가격업소 현황'};
   if(s.menuBasis==='공개 안내 가격' && source==='https://v.daum.net/v/20261001101231839')
     return {source,label:'경북교육청 제공 사진 · 2026-10-01 할인 안내'};
+  if(s.menuBasis==='공식 게시 사진 메뉴' && source==='https://myungcoffee.com/homefine/img/sub06_6.jpg')
+    return {source,label:'명커피 교육청점 · 과거 공식 사진(촬영일 미상)'};
   if(s.menuBasis==='업주 등록 메뉴' && typeof source==='string' && source.length<=800 && /^https:\/\/www\.daangn\.com\/kr\/local-profile\/[a-zA-Z0-9_%가-힣-]+\/$/.test(source))
     return {source,label:'당근 동네업체 · 업주 등록 메뉴'};
   if(['플레이스 메뉴판','배달 메뉴판'].includes(s.menuBasis) && typeof source==='string' && source.length<=200 && /^https:\/\/m\.place\.naver\.com\/restaurant\/[0-9]+\/menu\/list$/.test(source))
@@ -2867,7 +2869,7 @@ function priceComparisonFields(m) {
   const info=menuPriceComparison(m);
   return info?{priceComparison:{price:info.price,priceBasis:info.basis,priceSource:info.source}}:{};
 }
-const PRICE_BASIS_LABEL={'플레이스 메뉴판':'매장 메뉴판','배달 메뉴판':'배달 메뉴판','착한가격업소 공개 메뉴':'공개자료','업주 등록 메뉴':'업주 등록','공개 안내 가격':'공개 안내가'};
+const PRICE_BASIS_LABEL={'플레이스 메뉴판':'매장 메뉴판','배달 메뉴판':'배달 메뉴판','착한가격업소 공개 메뉴':'공개자료','업주 등록 메뉴':'업주 등록','공개 안내 가격':'공개 안내가','공식 게시 사진 메뉴':'과거 사진 가격'};
 function priceBasisHtml(m,s) {
   const info=menuPriceProvenance(m);
   return (info && info.basis!==s.menuBasis ? `<small class="menu-price-basis">${esc(PRICE_BASIS_LABEL[info.basis]||info.basis)}</small>` : '')+(menuPriceComparison(m)?'<small class="menu-price-basis price-check">가격 확인</small>':'');
@@ -2908,7 +2910,7 @@ function tidyStore(s, i = 0) {
     ...(safePlacePhotoSource(s.menuPhotoSource) ? {menuPhotoSource:s.menuPhotoSource} : {}),
     checkedAt: /^20\d{2}-\d{2}-\d{2}$/.test(s.checkedAt || '') ? s.checkedAt : '',
     ...(/^catalog\/[a-zA-Z0-9_-]+-[a-f0-9]{12}\.json$/.test(s.menuAsset||'')?{menuAsset:s.menuAsset}:{}),
-    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴','메뉴별 가격 기준'].includes(s.menuBasis) || (['업주 등록 메뉴','공개 안내 가격'].includes(s.menuBasis) && menuProvenance(s)) ? s.menuBasis : '',
+    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴','메뉴별 가격 기준'].includes(s.menuBasis) || (['업주 등록 메뉴','공개 안내 가격','공식 게시 사진 메뉴'].includes(s.menuBasis) && menuProvenance(s)) ? s.menuBasis : '',
     ...(menuProvenance(s) ? {menuSource:menuProvenance(s).source,menuDataDate:/^20\d{2}-\d{2}-\d{2}$/.test(s.menuDataDate || '')?s.menuDataDate:''} : {}),
     menu: (Array.isArray(s.menu) ? s.menu : []).filter(m => m && m.id).map(m => ({
       id: str(m.id, 40), name: str(m.name, 40, '메뉴'), emoji: str(m.emoji, 8), price: num(m.price), desc: str(m.desc, 120),
