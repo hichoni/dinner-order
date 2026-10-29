@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="d50a4a47fc54ba96">
+<meta name="damatda-build" content="6386ba8ec1e560d3">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2925,6 +2925,10 @@ const safeMenuGroupSource=value=>typeof value==='string'&&(
   ||value==='https://myungcoffee.com/homefine/img/sub06_6.jpg'
   ||value==='https://www.starbucks.co.kr/menu/drink_list.do'
   ||value==='https://www.mega-mgccoffee.com/menu/?menu_category1=1&menu_category2=1'
+  ||/^https:\/\/pncg\.co\.kr\/public\/menu\/(?:set|pizza|chicken|side)\/index$/.test(value)
+  ||value==='https://mt.bbq.co.kr/menu/menuList.asp'
+  ||/^https:\/\/www\.bhc\.co\.kr\/menu\/(?:1|22|23|47|50)$/.test(value)
+  ||/^https:\/\/www\.bonif\.co\.kr\/brand\/menu\?brdCd=BF(?:101|102|104)$/.test(value)
   ||/^https:\/\/baskinrobbins\.co\.kr\/menu\/(?:list\.php\?category=[ABEF]|view\.php\?seq=17)$/.test(value))?value:'';
 function tidyMenuGroups(store){
   const ids=new Set((Array.isArray(store.menu)?store.menu:[]).map(m=>str(m?.id,40))),seen=new Set();
@@ -2985,7 +2989,7 @@ function loadMenuCategoryIndex(){
   }).catch(error=>{menuCategoryIndexPromise=null;throw error;});
 }
 async function hydrateRoomCategories(room){
-  if(!room.stores.some(s=>s.category==='카페'&&!s.menuGroups?.length))return;
+  if(!room.stores.some(s=>!s.menuGroups?.length))return;
   try{
     const index=await loadMenuCategoryIndex();if(S.room!==room)return;let changed=false;
     for(const store of room.stores){
