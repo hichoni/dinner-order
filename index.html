@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="208da824fa605e28">
+<meta name="damatda-build" content="35fc16064ad01a72">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2707,6 +2707,8 @@ function menuProvenance(s) {
     return {source,label:'행정안전부 착한가격업소 현황'};
   if(s.menuBasis==='공개 안내 가격' && source==='https://v.daum.net/v/20261001101231839')
     return {source,label:'경북교육청 제공 사진 · 2026-10-01 할인 안내'};
+  if(s.menuBasis==='공식 게시 사진 메뉴' && source==='https://myungcoffee.com/homefine/img/sub06_6.jpg')
+    return {source,label:'명커피 교육청점 · 과거 공식 사진(촬영일 미상)'};
   if(s.menuBasis==='업주 등록 메뉴' && typeof source==='string' && source.length<=800 && /^https:\/\/www\.daangn\.com\/kr\/local-profile\/[a-zA-Z0-9_%가-힣-]+\/$/.test(source))
     return {source,label:'당근 동네업체 · 업주 등록 메뉴'};
   if(['플레이스 메뉴판','배달 메뉴판'].includes(s.menuBasis) && typeof source==='string' && source.length<=200 && /^https:\/\/m\.place\.naver\.com\/restaurant\/[0-9]+\/menu\/list$/.test(source))
@@ -2730,7 +2732,7 @@ function priceComparisonFields(m) {
   const info=menuPriceComparison(m);
   return info?{priceComparison:{price:info.price,priceBasis:info.basis,priceSource:info.source}}:{};
 }
-const PRICE_BASIS_LABEL={'플레이스 메뉴판':'매장 메뉴판','배달 메뉴판':'배달 메뉴판','착한가격업소 공개 메뉴':'공개자료','업주 등록 메뉴':'업주 등록','공개 안내 가격':'공개 안내가'};
+const PRICE_BASIS_LABEL={'플레이스 메뉴판':'매장 메뉴판','배달 메뉴판':'배달 메뉴판','착한가격업소 공개 메뉴':'공개자료','업주 등록 메뉴':'업주 등록','공개 안내 가격':'공개 안내가','공식 게시 사진 메뉴':'과거 사진 가격'};
 function priceBasisHtml(m,s) {
   const info=menuPriceProvenance(m);
   return (info && info.basis!==s.menuBasis ? `<small class="menu-price-basis">${esc(PRICE_BASIS_LABEL[info.basis]||info.basis)}</small>` : '')+(menuPriceComparison(m)?'<small class="menu-price-basis price-check">가격 확인</small>':'');
@@ -2771,7 +2773,7 @@ function tidyStore(s, i = 0) {
     ...(safePlacePhotoSource(s.menuPhotoSource) ? {menuPhotoSource:s.menuPhotoSource} : {}),
     checkedAt: /^20\d{2}-\d{2}-\d{2}$/.test(s.checkedAt || '') ? s.checkedAt : '',
     ...(/^catalog\/[a-zA-Z0-9_-]+-[a-f0-9]{12}\.json$/.test(s.menuAsset||'')?{menuAsset:s.menuAsset}:{}),
-    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴','메뉴별 가격 기준'].includes(s.menuBasis) || (['업주 등록 메뉴','공개 안내 가격'].includes(s.menuBasis) && menuProvenance(s)) ? s.menuBasis : '',
+    menuBasis: ['플레이스 메뉴판','배달 메뉴판','스마트주문 메뉴판','착한가격업소 공개 메뉴','메뉴별 가격 기준'].includes(s.menuBasis) || (['업주 등록 메뉴','공개 안내 가격','공식 게시 사진 메뉴'].includes(s.menuBasis) && menuProvenance(s)) ? s.menuBasis : '',
     ...(menuProvenance(s) ? {menuSource:menuProvenance(s).source,menuDataDate:/^20\d{2}-\d{2}-\d{2}$/.test(s.menuDataDate || '')?s.menuDataDate:''} : {}),
     menu: (Array.isArray(s.menu) ? s.menu : []).filter(m => m && m.id).map(m => ({
       id: str(m.id, 40), name: str(m.name, 40, '메뉴'), emoji: str(m.emoji, 8), price: num(m.price), desc: str(m.desc, 120),
