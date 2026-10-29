@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="3e86c58882795929">
+<meta name="damatda-build" content="d50a4a47fc54ba96">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2922,14 +2922,17 @@ function lateReviewHtml(){
 // Source sections are navigation metadata. They never change submitted items.
 const safeMenuGroupSource=value=>typeof value==='string'&&(
   /^https:\/\/m\.place\.naver\.com\/restaurant\/\d+\/(?:menu\/list|home)$/.test(value)
-  ||value==='https://myungcoffee.com/homefine/img/sub06_6.jpg')?value:'';
+  ||value==='https://myungcoffee.com/homefine/img/sub06_6.jpg'
+  ||value==='https://www.starbucks.co.kr/menu/drink_list.do'
+  ||value==='https://www.mega-mgccoffee.com/menu/?menu_category1=1&menu_category2=1'
+  ||/^https:\/\/baskinrobbins\.co\.kr\/menu\/(?:list\.php\?category=[ABEF]|view\.php\?seq=17)$/.test(value))?value:'';
 function tidyMenuGroups(store){
   const ids=new Set((Array.isArray(store.menu)?store.menu:[]).map(m=>str(m?.id,40))),seen=new Set();
   return (Array.isArray(store.menuGroups)?store.menuGroups:[]).flatMap(group=>{
     if(!group||typeof group.id!=='string'||!/^[a-zA-Z0-9_-]{1,40}$/.test(group.id)||seen.has(group.id)||!safeMenuGroupSource(group.source))return [];
     const name=str(group.name,160).trim(),menuIds=[...new Set((Array.isArray(group.menuIds)?group.menuIds:[]).filter(id=>typeof id==='string'&&ids.has(id)))];
     if(!name||!menuIds.length)return [];seen.add(group.id);
-    return [{id:group.id,name,menuIds,source:group.source,basis:['매장 메뉴판','배달 메뉴판','공식 게시 사진'].includes(group.basis)?group.basis:''}];
+    return [{id:group.id,name,menuIds,source:group.source,basis:['매장 메뉴판','배달 메뉴판','공식 게시 사진','지점 게시 메뉴판','브랜드 공식 분류'].includes(group.basis)?group.basis:''}];
   });
 }
 function menuGroupFields(store){const groups=tidyMenuGroups(store);return groups.length?{menuGroups:groups}:{};}
@@ -2954,7 +2957,9 @@ function menuCategoryButtons(store){
 }
 function menuCategorySourceHtml(store){
   const sources=[...new Map(tidyMenuGroups(store).map(g=>[g.source,g])).values()];
-  return sources.length?`<p class="menu-category-source">원본 분류 · ${sources.map(g=>`<a href="${esc(g.source)}" target="_blank" rel="noopener">${esc(g.basis||'메뉴 자료')}</a>`).join(' · ')}</p>`:'';
+  if(!sources.length)return '';
+  const links=sources.map(g=>`<a href="${esc(g.source)}" target="_blank" rel="noopener"${g.basis==='브랜드 공식 분류'?' title="브랜드의 상품 분류입니다. 지점 판매 여부와 현재 가격은 매장에 확인해 주세요."':''}>${sources.length>1?esc(g.name)+' · ':''}${esc(g.basis||'메뉴 자료')}</a>`).join(' · ');
+  return sources.length>1?`<details class="menu-category-source"><summary>원본 분류 · 자료 ${sources.length}개</summary>${links}</details>`:`<p class="menu-category-source">원본 분류 · ${links}</p>`;
 }
 function revealSelectedMenuCategories(){
   // Re-rendering the menu must not hide the selected chip off the right edge.
