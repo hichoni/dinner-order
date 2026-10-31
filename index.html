@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="c5c9e52d98654be0">
+<meta name="damatda-build" content="366503f3c2269da7">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3316,15 +3316,26 @@ async function loadApprovedCatalog(store){
   return withApprovedMenus(store,rows);
 }
 function stopApprovedRoomMenus(){approvedRoomStop?.();approvedRoomStop=null;approvedRoomKey='';}
+function applyApprovedRoomMenus(room){
+  if(S.room!==room)return;let changed=false;
+  for(const store of room.stores){
+    const merged=withApprovedMenus(store,approvedMenus.get(store.id)||[]);
+    if(merged.menu.length!==store.menu.length){store.menu=tidyStore(merged).menu;if(merged.menuGroups)store.menuGroups=merged.menuGroups;changed=true;}
+  }
+  if(changed){reindex();keepView();}
+}
 function watchApprovedRoomMenus(room){
   if(!FB?.query||!FB?.onSnapshot)return;
   const ids=[...new Set(room.stores.map(s=>s.id))].sort(),key=S.roomId+'/'+ids.join(',');
+  // A room snapshot replaces its menu arrays even when the approval query has
+  // not changed. Reapply the confirmed cache before reusing that subscription.
+  applyApprovedRoomMenus(room);
   if(!ids.length||approvedRoomKey===key)return;stopApprovedRoomMenus();approvedRoomKey=key;
   approvedRoomStop=FB.onSnapshot(FB.query(FB.collection(DB,'dinnerApprovedMenus'),FB.where('storeId','in',ids)),snapshot=>{
     if(approvedRoomKey!==key||!S.room||snapshot.metadata?.hasPendingWrites)return;
-    const all=snapshot.docs.map(d=>tidyApprovedMenu(d.id,d.data())).filter(Boolean);let changed=false;
-    for(const store of S.room.stores){const rows=all.filter(m=>m.storeId===store.id);approvedMenus.set(store.id,rows);approvedCheckedAt.set(store.id,Date.now());const merged=withApprovedMenus(store,rows);if(merged.menu.length!==store.menu.length){store.menu=tidyStore(merged).menu;if(merged.menuGroups)store.menuGroups=merged.menuGroups;changed=true;}}
-    if(changed){reindex();keepView();}
+    const all=snapshot.docs.map(d=>tidyApprovedMenu(d.id,d.data())).filter(Boolean);
+    for(const store of S.room.stores){approvedMenus.set(store.id,all.filter(m=>m.storeId===store.id));approvedCheckedAt.set(store.id,Date.now());}
+    applyApprovedRoomMenus(S.room);
   },()=>{}); // Existing selections remain usable offline.
 }
 document.addEventListener('input',event=>{const key=event.target.dataset?.operatorField;if(key&&menuOperator.draft)menuOperator.draft[key]=event.target.type==='checkbox'?event.target.checked:event.target.value;});
