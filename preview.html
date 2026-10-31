@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="c5c9e52d98654be0"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="366503f3c2269da7"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -3460,15 +3460,26 @@ async function loadApprovedCatalog(store){
   return withApprovedMenus(store,rows);
 }
 function stopApprovedRoomMenus(){approvedRoomStop?.();approvedRoomStop=null;approvedRoomKey='';}
+function applyApprovedRoomMenus(room){
+  if(S.room!==room)return;let changed=false;
+  for(const store of room.stores){
+    const merged=withApprovedMenus(store,approvedMenus.get(store.id)||[]);
+    if(merged.menu.length!==store.menu.length){store.menu=tidyStore(merged).menu;if(merged.menuGroups)store.menuGroups=merged.menuGroups;changed=true;}
+  }
+  if(changed){reindex();keepView();}
+}
 function watchApprovedRoomMenus(room){
   if(!FB?.query||!FB?.onSnapshot)return;
   const ids=[...new Set(room.stores.map(s=>s.id))].sort(),key=S.roomId+'/'+ids.join(',');
+  // A room snapshot replaces its menu arrays even when the approval query has
+  // not changed. Reapply the confirmed cache before reusing that subscription.
+  applyApprovedRoomMenus(room);
   if(!ids.length||approvedRoomKey===key)return;stopApprovedRoomMenus();approvedRoomKey=key;
   approvedRoomStop=FB.onSnapshot(FB.query(FB.collection(DB,'dinnerApprovedMenus'),FB.where('storeId','in',ids)),snapshot=>{
     if(approvedRoomKey!==key||!S.room||snapshot.metadata?.hasPendingWrites)return;
-    const all=snapshot.docs.map(d=>tidyApprovedMenu(d.id,d.data())).filter(Boolean);let changed=false;
-    for(const store of S.room.stores){const rows=all.filter(m=>m.storeId===store.id);approvedMenus.set(store.id,rows);approvedCheckedAt.set(store.id,Date.now());const merged=withApprovedMenus(store,rows);if(merged.menu.length!==store.menu.length){store.menu=tidyStore(merged).menu;if(merged.menuGroups)store.menuGroups=merged.menuGroups;changed=true;}}
-    if(changed){reindex();keepView();}
+    const all=snapshot.docs.map(d=>tidyApprovedMenu(d.id,d.data())).filter(Boolean);
+    for(const store of S.room.stores){approvedMenus.set(store.id,all.filter(m=>m.storeId===store.id));approvedCheckedAt.set(store.id,Date.now());}
+    applyApprovedRoomMenus(S.room);
   },()=>{}); // Existing selections remain usable offline.
 }
 document.addEventListener('input',event=>{const key=event.target.dataset?.operatorField;if(key&&menuOperator.draft)menuOperator.draft[key]=event.target.type==='checkbox'?event.target.checked:event.target.value;});
