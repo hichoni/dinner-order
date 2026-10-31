@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="54d3381e6e50bfcf"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="6774a126551ec397"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -1905,6 +1905,49 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-menu-categories button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mm .store-menu-categories button small{font-size:11px;opacity:.75}.mm .store-menu-categories button.on{background:var(--mint-d);border-color:var(--mint-d);color:#fff;font-weight:650}.mm .store-menu-categories button:focus-visible{outline:3px solid #75b8cb;outline-offset:2px}
 .mm .catalog-menu-category{display:flex;align-items:center;gap:10px;font-size:12px;margin:10px 0}.mm .catalog-menu-category select{flex:1;min-width:0;min-height:44px;padding:9px 11px;font-size:13px}.mm .menu-category-source{font-size:11px;color:var(--sub)}
 @media print{.mm .store-menu-categories{display:none}}
+
+/* A quick thank-you stays a single choice; extra writing and decoration are opt-in. */
+.mm .thanks-composer{margin:14px 0;padding:14px;border-radius:18px;background:linear-gradient(135deg,#fffdf6,#f5faf4);border-color:#e4dfca}
+.mm .thanks-compose-heading{display:flex;align-items:center;gap:8px;margin-bottom:10px;min-height:28px}
+.mm .thanks-compose-heading>b{font-size:14px;font-weight:650;display:flex;align-items:center;gap:7px}.mm .thanks-compose-heading>b>span{font-size:21px}
+.mm .thanks-compose-heading>small{font-size:11px;color:var(--sub)}.mm .thanks-compose-heading>.text-btn{margin-left:auto;font-size:12px;min-height:32px;padding:3px 5px}
+.mm .thanks-composer .thanks-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0}
+.mm .thanks-quick button{justify-content:center;gap:4px;padding:8px 4px;min-height:44px;border-radius:12px;font-size:12px;white-space:nowrap}
+.mm .thanks-quick button>span{font-size:19px}.mm .thanks-quick button[aria-pressed=true]{background:#fff0c7;border-color:#dcb35c;color:#735624;box-shadow:inset 0 0 0 1px #dcb35c}
+.mm .thanks-editor>summary{display:flex;align-items:center;justify-content:space-between;min-height:44px;gap:8px;cursor:pointer;list-style:none;font-size:12px;color:var(--sub)}
+.mm .thanks-editor>summary::-webkit-details-marker,.mm .thanks-decoration>summary::-webkit-details-marker{display:none}.mm .thanks-editor>summary>i{font-style:normal;font-size:19px}.mm .thanks-editor[open]>summary>i{transform:rotate(45deg)}
+.mm .thanks-compose-body{padding:0}.mm .thanks-tones{display:flex;gap:6px;padding:4px;background:#eaf0eb;border-radius:12px;margin:0 0 10px}
+.mm .thanks-tones button{flex:1;min-width:0;min-height:40px;border:0;border-radius:9px;background:transparent;color:var(--sub);font:inherit;font-size:12px;cursor:pointer}
+.mm .thanks-tones button[aria-pressed=true]{background:#fff;color:#245f4b;box-shadow:0 1px 5px #49645414;font-weight:650}
+.mm .thanks-editor .thanks-presets{margin-bottom:12px;gap:6px}.mm .thanks-editor .thanks-presets button{padding:9px;font-size:12px;line-height:1.5;min-height:54px}.mm .thanks-editor .thanks-presets button>span{font-size:21px}
+.mm .thanks-write>span{display:flex;align-items:center;justify-content:space-between;gap:8px}.mm .thanks-write small{font-size:11px;color:var(--sub);font-weight:400}
+.mm .thanks-compose-body .thanks-write{margin:0 0 8px}.mm .thanks-compose-body textarea.input{padding:10px 12px;margin-top:6px;min-height:74px;line-height:1.5}
+.mm .thanks-decoration{border-top:1px dashed #d8dfcf}.mm .thanks-decoration>summary{display:flex;justify-content:space-between;align-items:center;gap:8px;list-style:none;cursor:pointer;min-height:44px;font-size:12px;color:var(--sub)}
+.mm .thanks-decoration-value{font-size:11px}.mm .thanks-decoration-value>i{font-style:normal}.mm .thanks-options{gap:10px;margin:0 0 12px}.mm .thanks-effects{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mm .thanks-compose-hint{margin:1px 0 0;font-size:11px;line-height:1.6;color:var(--sub)}
+.mm .thanks-preview.thanks-card{display:grid;grid-template-columns:42px minmax(0,1fr);align-items:center;gap:8px 10px;padding:14px;margin:10px 0 0;text-align:left;border:1px solid #e9d6cd;border-radius:14px;background:linear-gradient(130deg,#fff8f2,#fff0ee)}
+.mm .thanks-preview[hidden],.mm .thanks-composer [hidden]{display:none!important}.mm .thanks-card>.thanks-face{font-size:32px;grid-row:1/3;justify-self:center}.mm .thanks-card>.thanks-words{font-size:14px;line-height:1.6;font-weight:600}
+.mm .thanks-card-footer{display:flex;flex-wrap:wrap;align-items:center;gap:4px 9px;min-width:0}.mm .thanks-card-footer>small{font-size:10px;color:#826959;overflow-wrap:anywhere}.mm .thanks-card-footer>.text-btn{font-size:10px;min-height:32px;padding:2px 0;margin-left:auto;color:#826959}
+.mm .thanks-card[data-effect=sparkles],.thanks-moment[data-effect=sparkles] .thanks-moment-card,.mm .thanks-note[data-effect=sparkles]{background:linear-gradient(135deg,#fbf8ff,#f0edff);border-color:#dcd1ef}
+.mm .thanks-card[data-effect=confetti],.thanks-moment[data-effect=confetti] .thanks-moment-card,.mm .thanks-note[data-effect=confetti]{background:linear-gradient(135deg,#fffdf4,#fff1cc);border-color:#e8d7a3}
+.mm .thanks-card[data-effect=none],.thanks-moment[data-effect=none] .thanks-moment-card,.mm .thanks-note[data-effect=none]{background:linear-gradient(135deg,#f9fcf8,#eaf5ee);border-color:#cfded0}
+.thanks-moment[data-effect=hearts] .thanks-moment-card,.mm .thanks-note[data-effect=hearts]{background:linear-gradient(135deg,#fff9f4,#ffeded);border-color:#ecd0c8}
+.thanks-moment-card>.thanks-face{font-size:54px}.thanks-moment-card>.thanks-words{font-size:19px;line-height:1.7}.thanks-moment-card>small{padding:0 14px;font-size:11px}.thanks-moment-card>button{width:44px;height:44px;top:2px;right:2px}.thanks-moment-card>b{border-top:1px dashed #82967e44;padding-top:9px;width:100%;font-weight:550}
+.thanks-particles[data-effect=sparkles]>i{animation:thanks-twinkle 1.8s var(--delay) ease-in-out both}.thanks-particles[data-effect=confetti]>i{animation:thanks-confetti 1.9s var(--delay) cubic-bezier(.15,.4,.3,1) both}
+.thanks-moment[data-preview=true] .thanks-moment-card{animation:none}
+@media(max-width:999px){body:has(.cartbar) .thanks-moment{bottom:max(164px,calc(env(safe-area-inset-bottom) + 154px))}}
+.mm .thanks-wall{padding:14px;margin-bottom:16px;min-width:0}.mm .thanks-wall>header{margin-bottom:11px}.mm .thanks-wall>header h2{font-size:15px}.mm .thanks-wall>header small{font-size:10px}
+.mm .thanks-notes{display:flex;gap:10px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;padding:2px 2px 8px;max-width:100%}
+.mm .thanks-note{flex:0 0 clamp(200px,68%,260px);min-width:0;padding:13px 12px 10px;border-radius:15px;scroll-snap-align:start;box-shadow:none;gap:6px;text-align:left;align-items:flex-start}
+.mm .thanks-note:only-child{flex-basis:100%}.mm .thanks-note .thanks-face{font-size:28px}.mm .thanks-note .thanks-words{font-size:13px;line-height:1.6;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}.mm .thanks-from{justify-content:flex-start;gap:5px;margin-top:auto;padding-top:8px}.mm .thanks-from small{flex-basis:auto;margin-left:auto}
+.mm .thanks-wall-tools{display:flex;justify-content:space-between;align-items:center;gap:8px}.mm .thanks-wall-tools>.text-btn{font-size:11px;min-height:40px;padding:6px 0}.mm .thanks-wall-tools>div{display:flex;gap:6px}.mm .thanks-wall-tools>div>button{width:44px;height:40px;border:1px solid #d2ddd1;border-radius:10px;background:#ffffffa6;font:inherit;color:#526c53;cursor:pointer}
+.mm :is(.thanks-tones,.thanks-editor,.thanks-wall-tools) :is(button,summary):focus-visible{outline:3px solid #3189a6;outline-offset:2px}
+@keyframes thanks-twinkle{0%,100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2) rotate(-40deg)}40%,65%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1.2) rotate(30deg)}}
+@keyframes thanks-confetti{0%{opacity:0;transform:translate(-50%,-40px) scale(.6) rotate(0)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),110px) scale(.9) rotate(calc(var(--turn)*8))}}
+@media(min-width:1000px){.mm .thanks-note{flex-basis:230px}.mm .thanks-notes{scroll-padding-inline:2px}}
+@media(max-width:360px){.mm .thanks-composer{padding:11px}.mm .thanks-quick button{font-size:11px;gap:3px}.mm .thanks-quick button>span{font-size:17px}.mm .thanks-card-footer>.text-btn{margin-left:0}.mm .thanks-decoration>summary{flex-wrap:wrap;gap:0}.mm .thanks-note{flex-basis:85%}}
+@media(prefers-reduced-motion:reduce){.thanks-particles{display:none}.thanks-moment-card{animation:none}}
+@media print{.mm .thanks-notes{display:grid;overflow:visible;grid-template-columns:repeat(2,minmax(0,1fr))}.mm .thanks-note .thanks-words{display:block;overflow:visible}.mm .thanks-wall-tools{display:none}}
 .catalog-source-tabs{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}.catalog-source-tabs button{flex:1;min-height:48px;border:1px solid #bcd9dc;border-radius:14px;padding:10px;background:#fff;color:#285562;font:inherit;font-weight:700}.catalog-source-tabs button[aria-pressed=true]{background:#087b76;color:white;border-color:#087b76}.places-intro{padding:18px;background:#eaf6f4;border-radius:18px;margin-bottom:20px}.places-intro b{font-size:20px}.places-intro p{margin:8px 0 0;line-height:1.65}.places-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.places-filters .input{width:100%;min-width:0}.place-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;margin:10px 0;background:#fff;border:1px solid #d4e5e8;border-radius:18px}.place-card>div{min-width:0;display:grid;gap:5px}.place-card b{font-size:18px;overflow-wrap:anywhere}.place-card span,.place-card small{color:#57717b;line-height:1.5}.place-card .small-btn{flex-shrink:0;min-height:44px}.place-menu-state{font-weight:700;color:#087b76!important}.places-map{height:380px;max-height:55vh;border-radius:16px;margin-top:16px;z-index:0}.places-map-tools{display:flex;gap:8px;flex-wrap:wrap}.place-editor{padding:20px;margin:16px 0;background:#f1faf6;border:2px solid #087b76;border-radius:18px;scroll-margin-top:90px}.place-editor h3{margin:8px 0}.place-editor p{line-height:1.6}.place-editor .btn{margin-top:14px}.places-source{font-size:12px;color:#60767e;line-height:1.8;margin:24px 0}.places-source a{text-decoration:underline}.places-map .leaflet-control-attribution{font-size:10px;background:#fff}.places-map .leaflet-control-zoom a{color:#23434e}#placesRoot [hidden]{display:none!important}@media(max-width:480px){.places-filters{grid-template-columns:1fr}.place-card{padding:14px;gap:10px}.catalog-source-tabs button{font-size:14px}.places-map{height:320px}}
 .catalog-cities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 18px}.catalog-cities button{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;min-height:80px;padding:14px 16px;border:1px solid #bedadc;border-radius:18px;background:#fff;color:#285562;font:inherit;text-align:left;cursor:pointer}.catalog-cities button b{font-size:20px;line-height:1.3}.catalog-cities button small{font-size:13px;line-height:1.4;color:#647e87}.catalog-cities button.on{background:#087b76;color:#fff;border-color:#087b76;box-shadow:0 4px 12px #087b761a}.catalog-cities button.on small{color:#e8fffa}.catalog-cities button:focus-visible{outline:3px solid #327fc2;outline-offset:3px}.catalog-cities .catalog-city-all{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;min-height:44px;padding:10px 16px}.catalog-cities .catalog-city-all b{font-size:15px}.catalog-city-note{padding:14px 16px;border-radius:14px;background:#eaf6f4;color:#315b64;font-size:14px;line-height:1.7;margin:0 0 18px}.catalog-jurisdiction{display:inline-block;width:fit-content;padding:3px 8px;margin:4px 0;border-radius:7px;color:#087b76;background:#eaf6f4;font-size:12px;font-weight:700}@media(max-width:600px){.catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-cities button{padding:13px;min-height:76px}.catalog-cities button b{font-size:18px}.catalog-cities button small{font-size:12px}}
 .catalog-steps{display:flex;gap:16px;list-style:none;padding:0;margin:10px 0 26px;color:#8a9c9d;font-size:13px;font-weight:700}.catalog-steps li{display:flex;gap:7px;align-items:center}.catalog-steps li span{display:grid;place-items:center;width:24px;height:24px;background:#edf3f3;border-radius:50%}.catalog-steps li[aria-current=step]{color:#087b76}.catalog-steps li[aria-current=step] span{background:#087b76;color:#fff}.catalog-region-page{max-width:780px!important}.catalog-region-intro{margin:12px 0 28px}.catalog-region-intro h2{margin:0 0 10px;font-size:28px;line-height:1.4;letter-spacing:-.04em}.catalog-region-intro p,.catalog-store-help{color:#64818a;line-height:1.65;margin:0}.catalog-region-page .catalog-area-label{display:none}.catalog-region-page .catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 12px;gap:12px}.catalog-region-page .catalog-cities button{min-height:108px;padding:20px}.catalog-all-regions{display:block;margin:18px auto 0;text-decoration:underline;text-underline-offset:4px}.catalog-region-help{text-align:center;line-height:1.7;margin-top:20px}.catalog-region-summary{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px}.catalog-region-summary small{font-size:12px;color:#718b94}.catalog-region-summary h2{font-size:27px;line-height:1.4;margin:3px 0 0;letter-spacing:-.03em}.catalog-store-help{margin-bottom:20px;font-size:14px}.catalog-store-page .catalog-city-note{font-size:13px;padding:10px 14px;margin-bottom:16px}.catalog-tools{display:flex;gap:8px;margin:10px 0 14px}.catalog-tools .small-btn{min-height:42px}.catalog-filter-panel{padding:16px;border:1px solid #d5e4e7;background:#f6faf9;border-radius:16px;margin:8px 0 18px}.catalog-filter-panel .input{width:100%;margin:7px 0 14px}.catalog-filter-panel .catalog-area-label{display:block;margin:0}.catalog-filter-panel .text-btn{display:block;margin-left:auto}@media(max-width:600px){.catalog-region-intro h2{font-size:25px}.catalog-region-page .catalog-cities{gap:10px}.catalog-region-page .catalog-cities button{padding:17px 14px;min-height:105px}.catalog-region-page .catalog-cities button b{font-size:19px}.catalog-steps{margin-bottom:22px}.catalog-region-summary h2{font-size:25px}}
@@ -2783,13 +2826,20 @@ const treatUnit = t => str(t?.unit, 12).trim().replace(/\s+/g, ' ') || '인';
 const budgetLabel = t => `1${treatUnit(t)}당`;
 const THANKS_EMOJI = ['💛', '😋', '🥹', '🙌', '🌷', '🏆'];
 const THANKS_EFFECTS = {hearts:'하트 퐁퐁', sparkles:'반짝반짝', confetti:'축하 팡팡', none:'잔잔하게'};
+const THANKS_TONES = {cute:'귀엽게', warm:'따뜻하게', polite:'정중하게'};
 const THANKS_PRESETS = [
-  {text:'잘먹을게!', emoji:'😋', effect:'confetti'},
-  {text:'고마워!', emoji:'💛', effect:'hearts'},
-  {text:'감사합니당!!', emoji:'🥹', effect:'sparkles'},
-  {text:'최고 최고!!', emoji:'🏆', effect:'confetti'},
-  {text:'덕분에 오늘이 더 맛있어요', emoji:'🌷', effect:'hearts'},
-  {text:'한 끼보다 큰 마음, 고맙습니다', emoji:'🥹', effect:'sparkles'},
+  {text:'잘먹을게!', emoji:'😋', effect:'confetti', tone:'cute'},
+  {text:'고마워!', emoji:'💛', effect:'hearts', tone:'cute'},
+  {text:'감사합니당!!', emoji:'🥹', effect:'sparkles', tone:'cute'},
+  {text:'최고 최고!!', emoji:'🏆', effect:'confetti', tone:'cute'},
+  {text:'덕분에 오늘이 더 맛있어요', emoji:'🌷', effect:'hearts', tone:'warm'},
+  {text:'한 끼보다 큰 마음, 고맙습니다', emoji:'🥹', effect:'sparkles', tone:'warm'},
+  {text:'배도 마음도 든든해졌어요', emoji:'💛', effect:'hearts', tone:'warm'},
+  {text:'오늘 받은 따뜻함, 저도 나눌게요', emoji:'🌷', effect:'sparkles', tone:'warm'},
+  {text:'맛있는 식사 감사합니다. 잘 먹겠습니다!', emoji:'🙌', effect:'sparkles', tone:'polite'},
+  {text:'챙겨 주신 마음까지 감사히 받겠습니다', emoji:'🌷', effect:'hearts', tone:'polite'},
+  {text:'덕분에 즐거운 시간 보냅니다. 감사합니다!', emoji:'💛', effect:'hearts', tone:'polite'},
+  {text:'함께할 수 있어 감사합니다', emoji:'🙌', effect:'none', tone:'polite'},
 ];
 function tidyThanks(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -2805,38 +2855,47 @@ function thanksMessage(value) {
 function thanksParticles(value) {
   const t=tidyThanks(value);if(!t||t.effect==='none'||reduceMotion())return '';
   const symbols={hearts:['💛','💗','💕'],sparkles:['✨','⭐','✦'],confetti:['🎉','🎊','✦']};
-  return `<span class="thanks-particles" aria-hidden="true">${Array.from({length:12},(_,i)=>`<i style="--dx:${(i%5-2)*52}px;--dy:${-55-(i%4)*32}px;--turn:${i%2?24:-24}deg;--delay:${i*35}ms">${symbols[t.effect][i%3]}</i>`).join('')}</span>`;
+  return `<span class="thanks-particles" data-effect="${t.effect}" aria-hidden="true">${Array.from({length:12},(_,i)=>`<i style="--dx:${(i%5-2)*52}px;--dy:${-55-(i%4)*32}px;--turn:${i%2?24:-24}deg;--delay:${i*35}ms">${symbols[t.effect][i%3]}</i>`).join('')}</span>`;
 }
 let thanksTimer;
-function showThanksMoment(value, from, to = S.room?.treat?.by) {
+function showThanksMoment(value, from, to = S.room?.treat?.by, preview = false) {
   const t=tidyThanks(value);if(!t)return;
   document.getElementById('thanksMoment')?.remove();clearTimeout(thanksTimer);
-  const el=document.createElement('section');el.id='thanksMoment';el.className='thanks-moment';el.dataset.effect=t.effect;el.setAttribute('role','status');el.setAttribute('aria-live','polite');
-  el.innerHTML=`<div class="thanks-moment-card"><small>${esc(to?`${to}님에게 도착한 마음`:'고마운 마음이 도착했어요')}</small>${thanksMessage(t)}<b>from. ${esc(from)}</b><button type="button" aria-label="감사 메시지 알림 닫기">×</button>${thanksParticles(t)}</div>`;
+  const el=document.createElement('section');el.id='thanksMoment';el.className='thanks-moment';el.dataset.effect=t.effect;el.dataset.preview=String(preview);el.setAttribute('role','status');el.setAttribute('aria-live','polite');
+  el.innerHTML=`<div class="thanks-moment-card"><small>${preview?'미리보기 · 아직 보내지 않았어요':esc(to?`${to}님에게 도착한 마음`:'고마운 마음이 도착했어요')}</small>${thanksMessage(t)}<b>${esc(from?`${from}의 마음`:'함께하는 마음')}</b><button type="button" aria-label="감사 메시지 알림 닫기">×</button>${thanksParticles(t)}</div>`;
   el.querySelector('button').onclick=()=>el.remove();document.body.append(el);
-  thanksTimer=setTimeout(()=>el.remove(),5500);
+  thanksTimer=setTimeout(()=>el.remove(),preview?12000:Math.min(12000,Math.max(6500,t.text.length*90)));
 }
 function thanksPreview() {
   const t=tidyThanks(S.thanks);
-  return `<div id="thanksPreview" class="thanks-preview" aria-live="polite">${t?thanksMessage(t):'<span class="thanks-face" aria-hidden="true">💌</span><p class="thanks-words thanks-placeholder">한마디가, 오늘을 더 따뜻하게.</p>'}<small>${esc(S.room.treat?.by?`${S.room.treat.by}님에게`:'한턱 내는 분에게')} · 메뉴와 함께 보내요</small></div>`;
+  return `<div id="thanksPreview" class="thanks-preview thanks-card"${t?` data-effect="${t.effect}"`:' hidden'}>${t?`${thanksMessage(t)}<div class="thanks-card-footer"><small>${esc(S.room?.treat?.by?`${S.room.treat.by}님에게`:'함께한 모두에게')} · 메뉴와 함께</small><button type="button" class="text-btn" data-act="thanks-preview" aria-label="감사 메시지 효과 미리보기">${THANKS_EFFECTS[t.effect]} ↗</button></div>`:''}</div>`;
+}
+function thanksPresetButton(p,i,quick=false) {
+  return `<button type="button" data-act="thanks-preset" data-i="${i}"${quick?' data-quick="true"':''} aria-pressed="${S.thanks?.text===p.text}"><span aria-hidden="true">${p.emoji}</span>${esc(p.text)}</button>`;
 }
 function thanksComposer(compact=false) {
-  if (!S.room.treat && !tidyThanks(S.thanks)) return '';
+  if (!S.room) return '';
   const t=S.thanks||{text:'',emoji:'💛',effect:'hearts'};
-  return `<details class="thanks-composer${compact?' compact':''}" data-thanks-fold${S.thanksOpen?' open':''}><summary><span class="thanks-envelope" aria-hidden="true">💌</span><span><b>${compact?'감사 한마디':'고마운 마음도 함께 보낼까요?'}</b><small${compact?' class="thanks-summary"':''}>${compact?esc(tidyThanks(t)?.text||'선택'):'한마디를 고르거나 내 말로 적어 주세요 · 선택'}</small></span><i>＋</i></summary><div class="thanks-compose-body">
-    <div class="thanks-presets" role="group" aria-label="감사 메시지 추천">${THANKS_PRESETS.map((p,i)=>`<button type="button" data-act="thanks-preset" data-i="${i}" aria-pressed="${t.text===p.text}"><span aria-hidden="true">${p.emoji}</span>${esc(p.text)}</button>`).join('')}</div>
-    <label class="field" for="thanksText">내 마음 직접 쓰기<textarea class="input" id="thanksText" rows="2" maxlength="120" placeholder="예: 바쁜 하루에 따뜻한 한 끼, 정말 고마워요!">${esc(t.text||'')}</textarea></label>
-    <div class="thanks-options"><div><span class="thanks-option-label">이모지</span><div class="thanks-emojis" role="group" aria-label="감사 이모지">${THANKS_EMOJI.map(emoji=>`<button type="button" data-act="thanks-emoji" data-v="${emoji}" aria-label="${emoji} 이모지" aria-pressed="${t.emoji===emoji}">${emoji}</button>`).join('')}</div></div>
-    <div><span class="thanks-option-label">마음이 도착하는 효과</span><div class="thanks-effects" role="group" aria-label="감사 메시지 효과">${Object.entries(THANKS_EFFECTS).map(([effect,label])=>`<button type="button" data-act="thanks-effect" data-v="${effect}" aria-pressed="${t.effect===effect}">${label}</button>`).join('')}</div></div></div>
-    ${thanksPreview()}<div class="thanks-compose-foot"><small>모인 메뉴에 함께 보여요. <span id="thanksCount">${(t.text||'').length}</span>/120</small><button type="button" class="text-btn" data-act="thanks-clear">메뉴만 보낼게요</button></div></div></details>`;
+  const tone=Object.hasOwn(THANKS_TONES,S.thanksTone)?S.thanksTone:'cute';
+  return `<section class="thanks-composer${compact?' compact':''}" aria-label="감사 한마디"><header class="thanks-compose-heading"><b><span aria-hidden="true">💌</span> 마음도 함께</b><small>선택</small><button type="button" class="text-btn" data-act="thanks-clear"${tidyThanks(t)?'':' hidden'} aria-label="감사인사 빼기">빼기</button></header>
+    <div class="thanks-quick thanks-presets" role="group" aria-label="감사인사 바로 고르기">${[0,1,3].map(i=>thanksPresetButton(THANKS_PRESETS[i],i,true)).join('')}</div>${thanksPreview()}
+    <details class="thanks-editor" data-thanks-fold${S.thanksOpen?' open':''}><summary><span>다른 문구 · 직접 쓰기</span><i aria-hidden="true">＋</i></summary><div class="thanks-compose-body">
+    <div class="thanks-tones" role="group" aria-label="감사인사 말투">${Object.entries(THANKS_TONES).map(([key,label])=>`<button type="button" data-act="thanks-tone" data-v="${key}" aria-pressed="${tone===key}">${label}</button>`).join('')}</div>
+    <div class="thanks-presets" role="group" aria-label="감사 메시지 추천">${THANKS_PRESETS.flatMap((p,i)=>p.tone===tone?[thanksPresetButton(p,i)]:[]).join('')}</div>
+    <label class="field thanks-write" for="thanksText"><span>내 말로 쓰기 <small><span id="thanksCount">${(t.text||'').length}</span>/120</small></span><textarea class="input" id="thanksText" rows="2" maxlength="120" placeholder="이 한 끼가 오늘의 힘이 됐어요. 고마워요!">${esc(t.text||'')}</textarea></label>
+    <details class="thanks-decoration" data-thanks-decor${S.thanksDecorOpen?' open':''}><summary><span>이모지 · 효과 꾸미기</span><span class="thanks-decoration-value">${t.emoji} ${THANKS_EFFECTS[t.effect]||THANKS_EFFECTS.hearts} <i aria-hidden="true">⌄</i></span></summary><div class="thanks-options"><div class="thanks-emojis" role="group" aria-label="감사 이모지">${THANKS_EMOJI.map(emoji=>`<button type="button" data-act="thanks-emoji" data-v="${emoji}" aria-label="${emoji} 이모지" aria-pressed="${t.emoji===emoji}">${emoji}</button>`).join('')}</div>
+    <div class="thanks-effects" role="group" aria-label="감사 메시지 효과">${Object.entries(THANKS_EFFECTS).map(([effect,label])=>`<button type="button" data-act="thanks-effect" data-v="${effect}" aria-pressed="${t.effect===effect}">${label}</button>`).join('')}</div></div></details>
+    <p class="thanks-compose-hint">보내기를 누르면 메뉴와 함께 전해져요.</p></div></details></section>`;
 }
 function thanksReceipt(value) {
-  const t=tidyThanks(value);return t?`<div class="thanks-receipt"><small>함께 보낸 마음</small>${thanksMessage(t)}</div>`:'';
+  const t=tidyThanks(value);return t?`<div class="thanks-receipt" data-effect="${t.effect}"><small>함께 보낸 마음</small>${thanksMessage(t)}</div>`:'';
 }
+function thanksAnswers(){return [...S.answers.values()].filter(a=>tidyThanks(a.thanks)).sort((a,b)=>b.at-a.at);}
+function thanksWallText(){return [`💌 ${S.room.title}에 모인 마음`,...thanksAnswers().map(a=>`${tidyThanks(a.thanks).emoji} ${a.name}\n${tidyThanks(a.thanks).text}`)].join('\n\n');}
 function thanksWall(onlyMessages=false) {
-  const list=[...S.answers.values()].filter(a=>tidyThanks(a.thanks)).sort((a,b)=>b.at-a.at);
+  const list=thanksAnswers();
   if(!list.length&&(onlyMessages||!S.room.treat))return '';
-  return `<section class="thanks-wall"><header><span aria-hidden="true">💌</span><div><small>한 끼에 담긴 마음들</small><h2>${esc(S.room.treat?.by?`${S.room.treat.by}님, 고마워요!`:'고마운 마음이 모였어요')}</h2></div><b>${list.length}</b></header>${list.length?`<div class="thanks-notes">${list.map(a=>`<button type="button" class="thanks-note" data-act="thanks-replay" data-id="${esc(a.id)}" aria-label="${esc(a.name)}님의 감사 메시지와 효과 다시 보기">${thanksMessage(a.thanks)}<span class="thanks-from">${avatar(a.name)}<b>${esc(a.name)}</b><small>눌러서 마음 열기 ↗</small></span></button>`).join('')}</div>`:'<p class="thanks-empty">맛있는 한 끼를 선물한 마음에,<br>고마운 한마디가 차곡차곡 모일 거예요.</p>'}</section>`;
+  return `<section class="thanks-wall"><header><span aria-hidden="true">💌</span><div><small>한 끼에 담긴 마음들</small><h2>${esc(S.room.treat?.by?`${S.room.treat.by}님, 고마워요!`:'고마운 마음이 모였어요')}</h2></div><b aria-label="감사인사 ${list.length}개">${list.length}</b></header>${list.length?`<div class="thanks-notes" role="group" aria-label="감사 카드 모음">${list.map(a=>`<button type="button" class="thanks-note" data-act="thanks-replay" data-effect="${tidyThanks(a.thanks).effect}" data-id="${esc(a.id)}" aria-label="${esc(a.name)}님의 감사 메시지와 효과 다시 보기">${thanksMessage(a.thanks)}<span class="thanks-from">${avatar(a.name)}<b>${esc(a.name)}</b><small>마음 열기 ↗</small></span></button>`).join('')}</div><div class="thanks-wall-tools"><button type="button" class="text-btn" data-act="thanks-copy">마음 모아 복사</button>${list.length>1?'<div><button type="button" data-act="thanks-scroll" data-v="-1" aria-label="이전 감사 카드">←</button><button type="button" data-act="thanks-scroll" data-v="1" aria-label="다음 감사 카드">→</button></div>':''}</div>`:'<p class="thanks-empty">첫 번째 고마운 마음을 기다려요.</p>'}</section>`;
 }
 
 // ---------- 가게 모양 다듬기 (방 문서는 아무나 만들 수 있으니 읽을 때 늘 다듬어요) ----------
@@ -3153,7 +3212,7 @@ async function hydrateRoomCategories(room){
 const S = {
   route: 'home', roomId: '', room: null, answers: new Map(), answersReady: false, cartStates:new Map(),cartStatesReady:false,cartStatesError:'', profiles: new Map(), profilesReady: false, profilesError: '', sharedMenus: new Map(), sharedMenusError: '', host: false, loading: false, error: '',
   tab: 'menu', store: null, mfilter: 'all', menuQuery: '',menuCategoryView:{}, pinOpen: true,cartProgressTab:'auto',cartProgressExpanded:false,cartProgressHelpOpen:false,
-  who: '', cart: {}, req: '', storeReqs: {}, thanks:null, thanksOpen:false, sentAt: 0, answerBase: null, answerConflict: false,
+  who: '', cart: {}, req: '', storeReqs: {}, thanks:null, thanksOpen:false, thanksTone:'cute', thanksDecorOpen:false, sentAt: 0, answerBase: null, answerConflict: false,
   draft: null, catFor: 'create', catStep:'region', catCity: 'all', catFilters:false, catShowMap:false, catQuery: '', catArea: 'all', catCat: 'all', catPicked: new Set(), catLimit: 12, catPreview: '', catDetail: null,
   edit: null, sumBy: 'store', byPerson: true, sending: false, createError: '',
   homeTab: '', sums: {}, sumsLoading: false,lateAnswers:new Map(),lateReady:false,lateError:'',lateBusy:false,
@@ -5240,14 +5299,26 @@ document.addEventListener('click', async e => {
       if(target.unitCustom)document.getElementById(`${el.dataset.for}-treat-unit`)?.focus();break;
     }
     case 'thanks-preset': case 'thanks-emoji': case 'thanks-effect': case 'thanks-clear': {
-      if(locked()||S.sending)break;captureRequests();
-      if(act==='thanks-preset') { const preset=THANKS_PRESETS[Number(el.dataset.i)];if(!preset)break;S.thanks={...preset}; }
+      if(locked()||S.sending||S.answerConflict)break;captureRequests();
+      if(act==='thanks-preset') { const preset=THANKS_PRESETS[Number(el.dataset.i)];if(!preset)break;S.thanks={text:preset.text,emoji:preset.emoji,effect:preset.effect}; }
       if(act==='thanks-emoji'&&THANKS_EMOJI.includes(el.dataset.v))S.thanks={text:'',effect:'hearts',...S.thanks,emoji:el.dataset.v};
       if(act==='thanks-effect'&&Object.hasOwn(THANKS_EFFECTS,el.dataset.v))S.thanks={text:'',emoji:'💛',...S.thanks,effect:el.dataset.v};
       if(act==='thanks-clear')S.thanks=null;
-      S.thanksOpen=true;persistRoom();rerender();break;
+      if(act==='thanks-clear')S.thanksOpen=false;
+      else if(!el.dataset.quick)S.thanksOpen=true;
+      persistRoom();rerender();break;
     }
+    case 'thanks-tone': {
+      if(locked()||S.sending||S.answerConflict||!Object.hasOwn(THANKS_TONES,el.dataset.v))break;
+      captureRequests();S.thanksTone=el.dataset.v;S.thanksOpen=true;rerender();break;
+    }
+    case 'thanks-preview': { const t=tidyThanks(S.thanks);if(t)showThanksMoment(t,S.who,S.room?.treat?.by,true);break; }
     case 'thanks-replay': { const a=S.answers.get(id);if(a)showThanksMoment(a.thanks,a.name);break; }
+    case 'thanks-copy': if(thanksAnswers().length)await copyOrShow(thanksWallText(),'고마운 마음을 모아 복사했어요');break;
+    case 'thanks-scroll': {
+      const rail=el.closest('.thanks-wall')?.querySelector('.thanks-notes');
+      if(rail)rail.scrollBy({left:(el.dataset.v==='-1'?-1:1)*rail.clientWidth*.85,behavior:reduceMotion()?'auto':'smooth'});break;
+    }
     case 'cap-chip': {
       const target = el.dataset.for === 'c' ? S.draft.treat : S.edit && S.edit.treat;
       if (!target) break;
@@ -5466,6 +5537,7 @@ document.addEventListener('input', e => {
     const summary=document.querySelector('.thanks-summary');if(summary)summary.textContent=tidyThanks(S.thanks)?.text||'선택';
     const preview=document.getElementById('thanksPreview');if(preview)preview.outerHTML=thanksPreview();
     const count=document.getElementById('thanksCount');if(count)count.textContent=String(t.value.length);
+    const clear=document.querySelector('[data-act="thanks-clear"]');if(clear)clear.hidden=!tidyThanks(S.thanks);
     for(const button of document.querySelectorAll('[data-act="thanks-preset"]'))button.setAttribute('aria-pressed',String(THANKS_PRESETS[Number(button.dataset.i)]?.text===t.value));
     refreshDraftStatus();return;
   }
@@ -5500,6 +5572,7 @@ function markDirtySoft() {
 }
 document.addEventListener('change', e => { if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
 document.addEventListener('keydown', e => {
+  if(e.key==='Escape'&&document.getElementById('thanksMoment')){document.getElementById('thanksMoment').remove();clearTimeout(thanksTimer);e.preventDefault();return;}
   if(e.target.matches?.('[data-cart-status]')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){
     e.preventDefault();const tabs=[...document.querySelectorAll('[data-cart-status]')],at=tabs.indexOf(e.target),next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(at+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[next]?.click();return;
   }
@@ -5564,7 +5637,7 @@ setInterval(() => { if(S.route==='room'&&S.room?.deadline&&!document.getElementB
 document.addEventListener('toggle', event => { const el=event.target;if(el.matches?.('[data-request-fold]')&&el.isConnected){S.requestOpen ||= {}; S.requestOpen[el.dataset.requestFold]=el.open;} }, true);
 
 document.addEventListener('toggle',event=>{const el=event.target;if(el.matches?.('[data-settings-fold]')&&el.isConnected){S.settingsOpen ||= {};S.settingsOpen[el.dataset.settingsFold]=el.open;}},true);
-document.addEventListener('toggle',event=>{const el=event.target;if(el.matches?.('[data-thanks-fold]')&&el.isConnected)S.thanksOpen=el.open;},true);
+document.addEventListener('toggle',event=>{const el=event.target;if(!el.isConnected)return;if(el.matches?.('[data-thanks-fold]'))S.thanksOpen=el.open;if(el.matches?.('[data-thanks-decor]'))S.thanksDecorOpen=el.open;},true);
 document.addEventListener('toggle',event=>{const el=event.target;if(!el.isConnected)return;if(el.matches?.('[data-cart-help]'))S.cartProgressHelpOpen=el.open;if(el.matches?.('[data-mine-fold]')){S.mineOpen ||= {};S.mineOpen[el.dataset.mineFold]=el.open;}},true);
 if(PREVIEW_SCENE==='catalog'){S.draft=S.draft||EMPTY_DRAFT();S.catFor='create';S.catPicked=new Set(S.draft.stores.map(s=>s.id));go({route:'catalog'},false);}
 if(PREVIEW_SCENE==='migration'){
