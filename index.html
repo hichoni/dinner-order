@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="047e903a394d3df9">
+<meta name="damatda-build" content="c5c9e52d98654be0">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3280,7 +3280,7 @@ function operatorReviewHtml(row){
 function viewMenuOperator(){
   const m=menuOperator,row=m.rows.find(r=>r.id===m.selected);
   let body;
-  if(!hostAccount.uid)body=`<section class="operator-empty"><h2>운영자 계정으로 로그인</h2><p>제보 검토는 등록된 카카오 계정으로만 할 수 있어요.</p><button class="btn kakao-btn" data-act="operator-login">카카오로 로그인</button></section>`;
+  if(!hostAccount.uid)body=`<section class="operator-empty"><h2>운영자 계정으로 로그인</h2><p>제보 검토는 등록된 카카오 계정으로만 할 수 있어요.</p><button class="btn kakao-btn" data-act="operator-login" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'카카오로 연결하는 중…':'카카오로 로그인'}</button>${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}</section>`;
   else if(!m.ready)body='<p role="status">운영자 권한을 확인하고 있어요…</p>';
   else if(!m.allowed)body=`<section class="operator-empty"><h2>운영자 등록이 필요해요</h2><p>이 계정은 제보함을 열 수 없어요.</p><label class="field">운영자 연결 코드<input class="input code-box" readonly value="${esc(operatorCode())}" aria-label="운영자 연결 코드"></label><small>서비스 관리자에게 이 코드를 전달해 주세요.</small><button class="btn gray" data-act="operator-permission">권한 다시 확인</button></section>`;
   else {

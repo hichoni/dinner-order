@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="047e903a394d3df9"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="c5c9e52d98654be0"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -3424,7 +3424,7 @@ function operatorReviewHtml(row){
 function viewMenuOperator(){
   const m=menuOperator,row=m.rows.find(r=>r.id===m.selected);
   let body;
-  if(!hostAccount.uid)body=`<section class="operator-empty"><h2>운영자 계정으로 로그인</h2><p>제보 검토는 등록된 카카오 계정으로만 할 수 있어요.</p><button class="btn kakao-btn" data-act="operator-login">카카오로 로그인</button></section>`;
+  if(!hostAccount.uid)body=`<section class="operator-empty"><h2>운영자 계정으로 로그인</h2><p>제보 검토는 등록된 카카오 계정으로만 할 수 있어요.</p><button class="btn kakao-btn" data-act="operator-login" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'카카오로 연결하는 중…':'카카오로 로그인'}</button>${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}</section>`;
   else if(!m.ready)body='<p role="status">운영자 권한을 확인하고 있어요…</p>';
   else if(!m.allowed)body=`<section class="operator-empty"><h2>운영자 등록이 필요해요</h2><p>이 계정은 제보함을 열 수 없어요.</p><label class="field">운영자 연결 코드<input class="input code-box" readonly value="${esc(operatorCode())}" aria-label="운영자 연결 코드"></label><small>서비스 관리자에게 이 코드를 전달해 주세요.</small><button class="btn gray" data-act="operator-permission">권한 다시 확인</button></section>`;
   else {
