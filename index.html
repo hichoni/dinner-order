@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="783f57edce185211">
+<meta name="damatda-build" content="e3e3786c6801e22f">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3422,7 +3422,7 @@ async function startKakao(intent='home',roomId='',migrationRooms) {
   try {
     await boot();
     if(S.roomId)persistRoom();persistDraft();
-    if(!hostAccount.uid&&!migrationRooms&&(legacySite()||intent==='arrival')){
+    if(!hostAccount.uid&&!migrationRooms){
       // Signing in replaces an anonymous identity. Preserve every known managed room first.
       const ids=[...new Set([...myRooms().map(r=>r.id),roomId].filter(id=>/^[a-z0-9]{1,64}$/i.test(id||'')))],owned=[];
       for(let offset=0;offset<ids.length;offset+=5)await Promise.all(ids.slice(offset,offset+5).map(async id=>{
