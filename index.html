@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="3af1acbdaa072511">
+<meta name="damatda-build" content="6bd78e3e581410ee">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3336,7 +3336,9 @@ async function loadApprovedCatalog(store,applyChanges=true){
 function stopApprovedRoomMenus(){approvedRoomStop?.();approvedRoomStop=null;approvedRoomKey='';}
 function applyApprovedRoomMenus(room){
   if(S.room!==room)return;
-  reindex();keepView();
+  reindex();
+  if(S.route==='room'&&S.tab==='menu'&&document.activeElement?.id==='menuSearch'){scheduleSearchRefresh('menu');refreshLive();}
+  else keepView();
 }
 function watchApprovedRoomMenus(room){
   if(!FB?.query||!FB?.onSnapshot)return;
@@ -3421,7 +3423,7 @@ async function refreshMenuCatalogIndex(){
   const byId=new Map(updated.filter(Boolean).map(s=>[s.id,s]));
   CATALOG.stores=CATALOG.stores.map(s=>byId.get(s.id)||catalogBaseStores.get(s.id)||s);
   if(S.catDetail){const raw=await loadRawCatalogStore(catalogBaseStores.get(S.catDetail.id)||S.catDetail);if(sequence!==menuFeedSequence)return;S.catDetail=withMenuChanges(withApprovedMenus(raw,approvedMenus.get(raw.id)||[]));}
-  if(S.route==='catalog')keepView();
+  if(S.route==='catalog'){if(S.catStep==='stores')scheduleSearchRefresh('catalog');else keepView();}
 }
 function startMenuCatalogFeed(){
   if(menuFeedPromise||!FB?.onSnapshot||!FB?.collection)return menuFeedPromise||Promise.resolve();
