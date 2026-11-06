@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="60b4c0f739dfc794">
+<meta name="damatda-build" content="188df3b9983d60ca">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2010,7 +2010,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <aside id="appUpdate" class="app-update" aria-label="앱 업데이트" hidden></aside>
-<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":1292}</script>
+<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":1742}</script>
 <script type="module">
 // Damatda native SVG assets. Colors inherit the active app theme.
 const FOOD_ICONS = {
@@ -2888,7 +2888,7 @@ function menuPriceComparison(m) {
 }
 function priceComparisonFields(m) {
   const info=menuPriceComparison(m);
-  return info?{priceComparison:{price:info.price,priceBasis:info.basis,priceSource:info.source}}:{};
+  return info?{priceComparison:{price:info.price,priceBasis:info.basis,priceSource:info.source,...(info.dataDate?{priceDataDate:info.dataDate}:{})}}:{};
 }
 const PRICE_BASIS_LABEL={'플레이스 메뉴판':'매장 메뉴판','배달 메뉴판':'배달 메뉴판','착한가격업소 공개 메뉴':'공개자료','업주 등록 메뉴':'업주 등록','공개 안내 가격':'공개 안내가','공식 게시 사진 메뉴':'과거 사진 가격'};
 function priceBasisHtml(m,s) {
@@ -4835,7 +4835,7 @@ function catalogSteps() {
 }
 function catalogCityButtons() {
   const cities=[...new Set(CATALOG.stores.map(catalogCity).filter(Boolean))];
-  const preferred=['예천군','안동시','영주시'];
+  const preferred=['예천군','안동시','영주시','포항시'];
   cities.sort((a,b)=>(preferred.includes(a)?preferred.indexOf(a):99)-(preferred.includes(b)?preferred.indexOf(b):99)||a.localeCompare(b,'ko'));
   const scopes=[...cities,...(CATALOG.stores.some(inNewTown)?[NEW_TOWN]:[])];
   return `<p class="catalog-area-label" id="catalogCityLabel">어느 지역에서 고를까요?</p><div class="catalog-cities" role="group" aria-label="도시 선택" aria-labelledby="catalogCityLabel">${scopes.map(scope=>{
@@ -4844,7 +4844,8 @@ function catalogCityButtons() {
     return `<button type="button" class="${scope==='all'?'catalog-city-all ':''}${S.catCity===scope?'on':''}" data-act="cat-city" data-city="${esc(scope)}" aria-pressed="${S.catCity===scope}"><b>${esc(label)}</b><small>${count}곳${scope===NEW_TOWN?' · 안동·예천 함께':''}</small></button>`;
   }).join('')}</div><button class="text-btn catalog-all-regions" data-act="cat-city" data-city="all">전체 지역에서 가게 찾기</button>`;
 }
-const inArea = s => inCity(s) && (S.catArea === 'all' || s.area === S.catArea);
+const matchesCatalogArea = (s,area) => area==='all' || (S.catCity==='포항시' && ['남구 전체','북구 전체'].includes(area) ? new RegExp('포항시\\s+'+area.slice(0,2)+'(?:\\s|$)').test(s.address||'') : s.area===area);
+const inArea = s => inCity(s) && matchesCatalogArea(s,S.catArea);
 const inCat = s => S.catCat === 'all' || s.category === S.catCat;
 const searchText = value => String(value || '').normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g,'');
 const catalogSearchText = new WeakMap();
@@ -4863,7 +4864,8 @@ function catalogMatches(s) {
 }
 function catalogAreas() {
   const preferred=['옥동','송현·노하','용상·송천','정하·강남','시내권','도청신도시','풍산읍','예천읍'];
-  return [...new Set(CATALOG.stores.filter(inCity).map(s=>s.area).filter(Boolean))].sort((a,b)=>(preferred.indexOf(a)<0?99:preferred.indexOf(a))-(preferred.indexOf(b)<0?99:preferred.indexOf(b)) || a.localeCompare(b,'ko'));
+  const areas=[...new Set(CATALOG.stores.filter(inCity).map(s=>s.area).filter(Boolean))].sort((a,b)=>(preferred.indexOf(a)<0?99:preferred.indexOf(a))-(preferred.indexOf(b)<0?99:preferred.indexOf(b)) || a.localeCompare(b,'ko'));
+  return S.catCity==='포항시'?[...['남구 전체','북구 전체'].filter(area=>CATALOG.stores.some(s=>inCity(s)&&matchesCatalogArea(s,area))),...areas]:areas;
 }
 function catalogCount() { return `${S.catCity==='all'?'':S.catCity+' · '}${S.catCity===NEW_TOWN?'함께 보기':S.catArea === 'all' ? '전체 지역' : S.catArea} · ${CATALOG.stores.filter(catalogMatches).length}곳`; }
 function catalogList() {
@@ -4889,15 +4891,15 @@ function viewCatalog() {
   const inA = CATALOG.stores.filter(inArea);
   const cnt = {}; for (const s of inA) cnt[s.category] = (cnt[s.category] || 0) + 1;
   const cats = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
-  const region=S.catCity==='all'?'전체 지역':['예천군','안동시','영주시'].includes(S.catCity)?S.catCity.slice(0,-1):S.catCity;
+  const region=S.catCity==='all'?'전체 지역':['예천군','안동시','영주시','포항시'].includes(S.catCity)?S.catCity.slice(0,-1):S.catCity;
   const filterCount=Number(S.catArea!=='all')+Number(S.catCat!=='all');
   return `${topBar('가게 고르기', 'cat-region')}
   <div class="wrap admin catalog-store-page">${catalogSteps()}<div class="catalog-region-summary"><div><small>선택한 지역</small><h2>${esc(region)}</h2></div><button class="small-btn" data-act="cat-region">지역 변경</button></div><p class="catalog-store-help">함께 고를 가게를 담아 주세요. 여러 곳을 골라도 돼요.</p>
-    ${S.catCity===NEW_TOWN?'<p class="catalog-city-note">안동·예천의 도청신도시 가게를 함께 보여드려요. 가게 소속은 주소를 기준으로 구분해요.</p>':S.catCity==='영주시'?'<p class="catalog-city-note">가게별 등록 메뉴를 모았어요. 매장·배달 등 메뉴 가격의 기준도 확인해 주세요.</p>':''}
+    ${S.catCity===NEW_TOWN?'<p class="catalog-city-note">안동·예천의 도청신도시 가게를 함께 보여드려요. 가게 소속은 주소를 기준으로 구분해요.</p>':['영주시','포항시'].includes(S.catCity)?'<p class="catalog-city-note">가게별 등록 메뉴를 모았어요. 매장·배달 등 메뉴 가격의 기준도 확인해 주세요.</p>':''}
     <input class="input search" id="catSearch" type="search" placeholder="가게 이름이나 먹고 싶은 메뉴" value="${esc(S.catQuery)}" aria-label="가게·메뉴 찾기">
     <div class="catalog-tools"><button class="small-btn" data-act="cat-filters" aria-expanded="${S.catFilters}" aria-controls="catalogFilters">동네·음식 종류${filterCount?' · '+filterCount:''}</button><button class="small-btn" data-act="cat-map" aria-expanded="${S.catShowMap}">${S.catShowMap?'지도 접기':'지도로 보기'}</button></div>
     ${S.catFilters?`<section id="catalogFilters" class="catalog-filter-panel" aria-label="세부 필터">${S.catCity!==NEW_TOWN?`
-    <label class="catalog-area-label" for="catalogArea">어느 동네에서 고를까요?</label><select class="input" id="catalogArea" aria-label="동네 선택"><option value="all"${S.catArea==='all'?' selected':''}>전체 지역</option>${areas.map(a=>`<option value="${esc(a)}"${S.catArea===a?' selected':''}>${esc(a)} · ${CATALOG.stores.filter(s=>inCity(s) && s.area===a).length}곳</option>`).join('')}</select>
+    <label class="catalog-area-label" for="catalogArea">어느 동네에서 고를까요?</label><select class="input" id="catalogArea" aria-label="동네 선택"><option value="all"${S.catArea==='all'?' selected':''}>전체 지역</option>${areas.map(a=>`<option value="${esc(a)}"${S.catArea===a?' selected':''}>${esc(a)} · ${CATALOG.stores.filter(s=>inCity(s) && matchesCatalogArea(s,a)).length}곳</option>`).join('')}</select>
     `:''}
     <label class="catalog-area-label" for="catalogCategory">어떤 음식이 좋으세요?</label><select class="input" id="catalogCategory" aria-label="음식 종류"><option value="all"${S.catCat==='all'?' selected':''}>전체 음식</option>${cats.map(c=>`<option value="${esc(c)}"${S.catCat===c?' selected':''}>${esc(c)} · ${cnt[c]}곳</option>`).join('')}</select><button class="text-btn" data-act="cat-clear-filters">필터 초기화</button></section>`:''}
     ${S.catShowMap?'<section id="catalogMap"></section>':''}<p class="catalog-result-count" id="catalogCount" role="status">${catalogCount()}</p><div class="plist" id="catList">${catalogList()}</div>
@@ -5468,7 +5470,7 @@ function openItem(id) {
       <div class="sheet-store">${esc(s.name)}</div>
       <div class="sheet-price">${price(it.price)}${priceBasisHtml(it,s)}</div>
       ${menuPriceProvenance(it)?`<p class="menu-price-source"><a href="${esc(menuPriceProvenance(it).source)}" target="_blank" rel="noopener">가격 출처 · ${esc(menuPriceProvenance(it).label)}</a>${menuPriceProvenance(it).dataDate?' · '+esc(menuPriceProvenance(it).dataDate)+' 자료':''}</p>`:''}
-      ${menuPriceComparison(it)?`<p class="menu-price-comparison">다른 메뉴판에는 <a href="${esc(menuPriceComparison(it).source)}" target="_blank" rel="noopener">${price(menuPriceComparison(it).price)} · ${esc(PRICE_BASIS_LABEL[menuPriceComparison(it).basis]||menuPriceComparison(it).basis)}</a>으로 등록돼 있어요. 주문 전 가게에 가격을 확인해 주세요.</p>`:''}
+      ${menuPriceComparison(it)?`<p class="menu-price-comparison">다른 메뉴판에는 <a href="${esc(menuPriceComparison(it).source)}" target="_blank" rel="noopener">${price(menuPriceComparison(it).price)} · ${esc(PRICE_BASIS_LABEL[menuPriceComparison(it).basis]||menuPriceComparison(it).basis)}${menuPriceComparison(it).dataDate?' · '+esc(menuPriceComparison(it).dataDate)+' 자료':''}</a>으로 등록돼 있어요. 주문 전 가게에 가격을 확인해 주세요.</p>`:''}
       <div class="sheet-qty"><span>수량</span><div class="qty big"><button data-act="sq" data-d="-1" aria-label="하나 빼기">−</button><b>${q}</b><button data-act="sq" data-d="1" aria-label="하나 더">+</button></div></div>
       <button class="btn block" data-act="sheet-add" data-id="${esc(id)}">${it.price ? `${won(it.price * q)} ` : ''}${S.cart[id] ? `${q}개로 바꾸기` : `${q}개 고르기`}</button></div></div>`;
   };
