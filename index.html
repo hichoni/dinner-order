@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="22f0c128f678c6d9">
+<meta name="damatda-build" content="436a4e472519327f">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2010,7 +2010,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <aside id="appUpdate" class="app-update" aria-label="앱 업데이트" hidden></aside>
-<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":3892}</script>
+<script id="dn-catalog" type="application/json">{"camp":{"title":"가족캠프 저녁","place":"안동시청소년수련원","mealTime":"18:00","deadline":"17:00","date":"2026-10-24","families":["1번 가족","2번 가족","3번 가족","4번 가족","5번 가족","6번 가족","7번 가족","8번 가족","9번 가족","10번 가족","11번 가족","12번 가족","13번 가족","14번 가족","15번 가족","16번 가족","17번 가족","18번 가족","19번 가족","20번 가족"],"areaLabel":"안동 맛집"},"count":4198}</script>
 <script type="module">
 // Damatda native SVG assets. Colors inherit the active app theme.
 const FOOD_ICONS = {
@@ -4835,7 +4835,7 @@ function catalogSteps() {
 }
 function catalogCityButtons() {
   const cities=[...new Set(CATALOG.stores.map(catalogCity).filter(Boolean))];
-  const preferred=['예천군','안동시','영주시','포항시','구미시','경주시','경산시','김천시','영천시','고령군','성주군','칠곡군'];
+  const preferred=['예천군','안동시','영주시','포항시','구미시','경주시','경산시','김천시','영천시','고령군','성주군','칠곡군','상주시'];
   cities.sort((a,b)=>(preferred.includes(a)?preferred.indexOf(a):99)-(preferred.includes(b)?preferred.indexOf(b):99)||a.localeCompare(b,'ko'));
   const scopes=[...cities,...(CATALOG.stores.some(inNewTown)?[NEW_TOWN]:[])];
   return `<p class="catalog-area-label" id="catalogCityLabel">어느 지역에서 고를까요?</p><div class="catalog-cities" role="group" aria-label="도시 선택" aria-labelledby="catalogCityLabel">${scopes.map(scope=>{
@@ -4891,11 +4891,11 @@ function viewCatalog() {
   const inA = CATALOG.stores.filter(inArea);
   const cnt = {}; for (const s of inA) cnt[s.category] = (cnt[s.category] || 0) + 1;
   const cats = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
-  const region=S.catCity==='all'?'전체 지역':['예천군','안동시','영주시','포항시','구미시','경주시','경산시','김천시','영천시','고령군','성주군','칠곡군'].includes(S.catCity)?S.catCity.slice(0,-1):S.catCity;
+  const region=S.catCity==='all'?'전체 지역':['예천군','안동시','영주시','포항시','구미시','경주시','경산시','김천시','영천시','고령군','성주군','칠곡군','상주시'].includes(S.catCity)?S.catCity.slice(0,-1):S.catCity;
   const filterCount=Number(S.catArea!=='all')+Number(S.catCat!=='all');
   return `${topBar('가게 고르기', 'cat-region')}
   <div class="wrap admin catalog-store-page">${catalogSteps()}<div class="catalog-region-summary"><div><small>선택한 지역</small><h2>${esc(region)}</h2></div><button class="small-btn" data-act="cat-region">지역 변경</button></div><p class="catalog-store-help">함께 고를 가게를 담아 주세요. 여러 곳을 골라도 돼요.</p>
-    ${S.catCity===NEW_TOWN?'<p class="catalog-city-note">안동·예천의 도청신도시 가게를 함께 보여드려요. 가게 소속은 주소를 기준으로 구분해요.</p>':['영주시','포항시','구미시','경주시','경산시','김천시','영천시','고령군','성주군','칠곡군'].includes(S.catCity)?'<p class="catalog-city-note">가게별 등록 메뉴를 모았어요. 매장·배달 등 메뉴 가격의 기준도 확인해 주세요.</p>':''}
+    ${S.catCity===NEW_TOWN?'<p class="catalog-city-note">안동·예천의 도청신도시 가게를 함께 보여드려요. 가게 소속은 주소를 기준으로 구분해요.</p>':['영주시','포항시','구미시','경주시','경산시','김천시','영천시','고령군','성주군','칠곡군','상주시'].includes(S.catCity)?'<p class="catalog-city-note">가게별 등록 메뉴를 모았어요. 매장·배달 등 메뉴 가격의 기준도 확인해 주세요.</p>':''}
     <input class="input search" id="catSearch" type="search" placeholder="가게 이름이나 먹고 싶은 메뉴" value="${esc(S.catQuery)}" aria-label="가게·메뉴 찾기">
     <div class="catalog-tools"><button class="small-btn" data-act="cat-filters" aria-expanded="${S.catFilters}" aria-controls="catalogFilters">동네·음식 종류${filterCount?' · '+filterCount:''}</button><button class="small-btn" data-act="cat-map" aria-expanded="${S.catShowMap}">${S.catShowMap?'지도 접기':'지도로 보기'}</button></div>
     ${S.catFilters?`<section id="catalogFilters" class="catalog-filter-panel" aria-label="세부 필터">${S.catCity!==NEW_TOWN?`
