@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="f0ed68225463cadc">
+<meta name="damatda-build" content="18f1d3a4e731bc68">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -1182,7 +1182,7 @@ body::after{display:none}body::before{background:#e8f7f3}
 .create-label i{font-style:normal;font-size:10px;font-weight:550;letter-spacing:.02em;min-width:23px;color:#739f8c}
 .create-label small{margin-left:auto;font-size:10px;font-weight:450;color:#8b9c90}
 .mm .create-section>.input{height:45px;min-height:45px;padding:11px 13px;font-size:14px;border-radius:11px}
-.create-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.create-choices{display:grid;grid-template-columns:minmax(0,1fr);gap:9px}
 .create-choice{display:flex;align-items:center;gap:9px;min-height:62px;padding:12px 13px;background:#f1f9f4;border:1px solid #d8e9df;border-radius:12px;color:var(--mint-d);text-align:left;font-size:13px}
 .create-choice.direct{background:#fff9ef;border-color:#eee5d5;color:#8b6c42}
 .create-choice b{font-weight:550}.create-choice svg{display:block;width:26px;height:26px}
@@ -4724,7 +4724,7 @@ async function loadSums(rooms) {
 }
 
 // ---------- 방 만들기 ----------
-const EMPTY_DRAFT = () => ({title: '', note: '', deadline: '', stores: [], mode: 'free', names: '', freeJoin: false, custom: {name: '', lines: ''}, treat: null});
+const EMPTY_DRAFT = () => ({title: '', note: '', deadline: '', stores: [], mode: 'free', names: '', freeJoin: false, treat: null});
 // 🎁 One response spends one configured person/team/family budget.
 const CAP_CHIPS = [5000, 10000, 15000, 20000, 30000];
 function treatForm(p, t) {
@@ -4739,22 +4739,8 @@ function treatForm(p, t) {
   </section>`;
 }
 const parseNames = t => [...new Set(String(t).split(/[\n,]+/).map(x => x.trim().replace(/\s+/g, ' ').slice(0, 20)).filter(Boolean))].slice(0, 120);
-// "아메리카노 4500" / "카페라떼 5,000원" / "녹차" 한 줄에 하나
-function parseMenu(text, sid) {
-  return String(text).split('\n').map(l => l.trim()).filter(Boolean).map((l, i) => {
-    const m = /^(.*?)[\s:·-]*([\d,]+)\s*원?$/.exec(l);
-    const name = (m && m[1].trim() ? m[1].trim() : l).slice(0, 40), p = m && m[1].trim() ? num(m[2].replace(/,/g, '')) : 0;
-    return {id: `${sid}-${i + 1}`, name, emoji: '', price: p, desc: '', tags: [], img: ''};
-  });
-}
 function storeRow(s, act) {
   return `<div class="pick-row">${thumb(s, 'sm')}<div class="pr-txt"><b>${esc(s.name)}</b><span>메뉴 ${foodMenus(s).length}개${guidanceMenus(s).length ? ` · 배달·추가요금 안내 ${guidanceMenus(s).length}건` : ''}</span></div>${act}</div>`;
-}
-function customForm(prefix) {
-  const c = (prefix === 'c' ? S.draft.custom : S.editCustom) || {name: '', lines: ''};
-  return `<div class="custom-box"><label class="field">가게 이름<input class="input" id="${prefix}-cname" maxlength="40" placeholder="예: 스타벅스 안동점" value="${esc(c.name)}"></label>
-    <label class="field">메뉴 <span class="hint">한 줄에 하나 · 이름 뒤에 가격</span><textarea class="input" id="${prefix}-clines" rows="5" placeholder="아메리카노 4500&#10;카페라떼 5000&#10;자몽에이드 6000">${esc(c.lines)}</textarea></label>
-    <button class="btn gray block" data-act="custom-add" data-for="${prefix}">이 가게 넣기</button></div>`;
 }
 function viewCreate() {
   const d = S.draft, can = d.title.trim() && d.stores.length;
@@ -4766,8 +4752,7 @@ function viewCreate() {
       <section class="create-section"><label class="field" for="c-title"><span class="create-label"><i>01</i>모임 이름</span></label><input class="input" id="c-title" maxlength="40" placeholder="예: 오늘 커피는 내가 쏜다!" value="${esc(d.title)}"></section>
       <section class="create-section"><h2 class="create-label"><i>02</i>메뉴 고를 가게 <small>${d.stores.length ? `${d.stores.length}곳 담음` : '1곳 이상'}</small></h2>
         ${d.stores.length ? `<div class="create-picked">${d.stores.map(s => storeRow(s, `<button class="x-btn" data-act="draft-del" data-id="${esc(s.id)}" aria-label="${esc(s.name)} 빼기">✕</button>`)).join('')}</div>` : ''}
-        <div class="create-choices">${CATALOG.count ? `<button class="create-choice" data-act="catalog" data-for="create"><span aria-hidden="true">${FOOD_ICONS.bowl}</span><b>주변 맛집 목록</b><span class="choice-arrow" aria-hidden="true">＋</span></button>` : ''}<button class="create-choice direct" data-act="custom-open" data-for="c" aria-expanded="${!!d.customOpen}"><span aria-hidden="true">${FOOD_ICONS.cup}</span><b>직접 적기</b><span class="choice-arrow" aria-hidden="true">＋</span></button></div>
-        ${d.customOpen ? customForm('c') : ''}
+        <div class="create-choices"><button class="create-choice" data-act="catalog" data-for="create"><span aria-hidden="true">${FOOD_ICONS.bowl}</span><b>주변 맛집 목록</b><span class="choice-arrow" aria-hidden="true">＋</span></button></div>
       </section>
       <section class="create-section"><h2 class="create-label"><i>03</i>같이 고를 사람</h2>
         <div class="create-people" role="group" aria-label="참여 방식"><button class="${d.mode === 'free' ? 'on' : ''}" data-act="mode" data-m="free" aria-pressed="${d.mode === 'free'}"><span aria-hidden="true">${d.mode === 'free' ? '✓' : '○'}</span> 링크 받은 누구나</button><button class="${d.mode === 'list' ? 'on' : ''}" data-act="mode" data-m="list" aria-pressed="${d.mode === 'list'}"><span aria-hidden="true">${d.mode === 'list' ? '✓' : '○'}</span> 정해진 명단</button></div>
@@ -4789,21 +4774,23 @@ function viewCreate() {
 let catalogMap=null;
 function catalogSelectionCount() {
   const target=S.catFor==='create'?S.draft:S.edit;
-  return S.catPicked.size+(target?.stores || []).filter(s=>!CATALOG.stores.some(c=>c.id===s.id)).length;
+  return S.catPicked.size+(S.catFor==='room'?(target?.stores || []).filter(s=>!CATALOG.stores.some(c=>c.id===s.id)).length:0);
 }
 async function addPlaceToDraft(place, menuStore, lines, target, scope) {
   const stillHere=()=>S.route==='catalog' && S.catFor===scope && target===(scope==='create'?S.draft:S.edit);
   if(!stillHere()) throw new Error('가게 선택 화면에서 다시 담아 주세요.');
-  const id=menuStore?.id || place.id;
+  const entry=CATALOG.stores.find(s=>s.id===menuStore?.id);
+  if(!entry)throw new Error('주변 맛집 목록에서 등록된 가게를 골라 주세요.');
+  const id=entry.id;
   if(target.stores.some(s=>s.id===id)) return;
   if(catalogSelectionCount()>=20) throw new Error('한 모임에는 가게를 20곳까지 담을 수 있어요.');
-  const store=menuStore ? fromCatalog(await loadCatalogStore(menuStore)) : tidyStore({...place,emoji:'🍽️',color:'#eaf6f4',menu:parseMenu(lines,id)});
+  const store=fromCatalog(await loadCatalogStore(entry));
   if(!stillHere()) throw new Error('화면이 바뀌어 담기를 취소했어요.');
-  if(!store.menu.length) throw new Error('메뉴를 한 줄 이상 적어 주세요.');
+  if(!store.menu.length) throw new Error('등록 메뉴를 불러오지 못했어요. 다시 골라 주세요.');
   if(target.stores.some(s=>s.id===id)) return;
   if(catalogSelectionCount()>=20) throw new Error('한 모임에는 가게를 20곳까지 담을 수 있어요.');
   target.stores.push(store);
-  if(menuStore) S.catPicked.add(id);
+  S.catPicked.add(id);
   if(scope==='room') target.dirty=true;
   else persistDraft();
   const done=document.getElementById('catDone');if(done)done.textContent=`${catalogSelectionCount()}곳 담기 완료`;
@@ -4886,7 +4873,7 @@ function catalogList() {
 }
 function viewCatalog() {
   const done=`<div class="bottom-bar"><button class="btn block" data-act="cat-done" id="catDone">${catalogSelectionCount()}곳 담기 완료</button></div>`;
-  if(S.catStep!=='stores')return `${topBar('가게 찾기','cat-back')}<div class="wrap admin catalog-region-page">${catalogSteps()}<div class="catalog-region-intro"><h2>지금 어느 지역에 계신가요?</h2><p>가게를 찾을 지역을 먼저 골라 주세요.</p></div>${catalogCityButtons()}<p class="hint catalog-region-help">도청신도시는 안동·예천 양쪽 가게를 함께 볼 수 있어요.</p></div>${catalogSelectionCount()>0?done:''}`;
+  if(S.catStep!=='stores')return `${topBar('주변 맛집 목록','cat-back')}<div class="wrap admin catalog-region-page">${catalogSteps()}<div class="catalog-region-intro"><h2>지금 어느 지역에 계신가요?</h2><p>메뉴가 준비된 가게만 보여드려요. 지역을 골라 주세요.</p></div>${catalogCityButtons()}<p class="hint catalog-region-help">도청신도시는 안동·예천 양쪽 가게를 함께 볼 수 있어요.</p></div>${catalogSelectionCount()>0?done:''}`;
   const areas = catalogAreas();
   const inA = CATALOG.stores.filter(inArea);
   const cnt = {}; for (const s of inA) cnt[s.category] = (cnt[s.category] || 0) + 1;
@@ -5445,8 +5432,7 @@ function roomSet() {
         <div class="edit-box">${s.menu.map(m => `<div class="edit-row"><input class="input" data-em="${esc(m.id)}" data-f="name" value="${esc(m.name)}" maxlength="40" aria-label="메뉴 이름"><input class="input" data-em="${esc(m.id)}" data-f="price" type="number" min="0" step="100" inputmode="numeric" value="${m.price || ''}" placeholder="원" aria-label="가격"><button class="x-btn" data-act="edit-menu-del" data-id="${esc(m.id)}" aria-label="메뉴 지우기">✕</button></div>`).join('')}
         <button class="text-btn" data-act="edit-menu-add" data-id="${esc(s.id)}">＋ 메뉴 추가</button><button class="text-btn" data-act="refresh-store-menu" data-id="${esc(s.id)}">최신 메뉴·분류에서 누락분 추가</button>
         ${e.stores.length > 1 ? `<button class="text-btn red" data-act="edit-store-del" data-id="${esc(s.id)}" style="margin-left:14px">이 가게 빼기</button>` : ''}</div></details>`).join('')}
-      <div class="two" style="margin-top:12px">${CATALOG.count ? `<button class="btn line-dark" data-act="catalog" data-for="room">목록에서 더 넣기</button>` : ''}<button class="btn line-dark" data-act="custom-open" data-for="e">메뉴 직접 적기</button></div>
-      ${S.editCustomOpen ? customForm('e') : ''}`)}
+      <button class="btn line-dark block" style="margin-top:12px" data-act="catalog" data-for="room">주변 맛집 목록</button>`)}
     ${isPrimaryOwner()?fold('danger', '방 삭제', '되돌릴 수 없어요', `<p class="hint">방과 링크가 없어져요. 되돌릴 수 없어요.</p><button class="btn red block" data-act="room-del">방 지우기</button>`):'<p class="hint">방 삭제는 최초·대표 방장만 할 수 있어요.</p>'}
   </div>
   ${e.dirty ? `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">${S.sending ? '저장 중…' : '바꾼 내용 저장'}</button></div>` : ''}
@@ -5520,6 +5506,11 @@ async function createRoom() {
   if (d.mode === 'list' && !parseNames(d.names).length) { toast('참여할 이름을 한 명 이상 적어 주세요'); document.getElementById('c-names')?.focus(); return; }
   S.sending = true; S.createError = ''; persistDraft(); rerender();
   try {
+    if(d.stores.some(s=>!CATALOG.stores.some(c=>c.id===s.id)))await loadCatalog();
+    if(S.draft!==d||S.route!=='create'){S.sending=false;return;}
+    if(d.stores.some(s=>!CATALOG.stores.some(c=>c.id===s.id))){
+      S.sending=false;S.createError='주변 맛집 목록에서 등록된 가게를 다시 골라 주세요.';persistDraft();rerender();return;
+    }
     await boot();
     const id = rand(12), key = rand(32);
     const b = FB.writeBatch(DB);
@@ -5778,21 +5769,8 @@ document.addEventListener('click', async e => {
     case 'mode': S.draft.mode = el.dataset.m; rerender(); break;
     case 'names-camp': S.draft.names = (CAMP.families || []).join('\n'); rerender(); break;
     case 'draft-del': S.draft.stores = S.draft.stores.filter(s => s.id !== id); rerender(); break;
-    case 'custom-open':
-      if (el.dataset.for === 'c') S.draft.customOpen = !S.draft.customOpen; else S.editCustomOpen = !S.editCustomOpen;
-      rerender(); document.getElementById(`${el.dataset.for}-cname`)?.focus(); break;
-    case 'custom-add': {
-      const p = el.dataset.for, name = document.getElementById(`${p}-cname`).value.trim(), text = document.getElementById(`${p}-clines`).value;
-      const sid = 'c' + rand(6), menu = parseMenu(text, sid);
-      if (!name) { toast('가게 이름을 적어 주세요'); return; }
-      if (!menu.length) { toast('메뉴를 한 줄에 하나씩 적어 주세요'); return; }
-      const s = tidyStore({id: sid, name, emoji: /카페|커피|cafe|coffee|스타벅스|투썸|이디야|메가|빽다방|컴포즈/i.test(name) ? '☕' : '🍽️', color: '#eaf6f4', category: '', menu});
-      if (p === 'c') { S.draft.stores.push(s); S.draft.custom = {name: '', lines: ''}; S.draft.customOpen = false; }
-      else { S.edit.stores.push(s); S.editCustom = {name: '', lines: ''}; S.editCustomOpen = false; S.edit.dirty = true; }
-      rerender(); toast(`${name} 메뉴 ${menu.length}개를 넣었어요`); break;
-    }
-    case 'catalog': {
-      const label=el.textContent, scope=el.dataset.for, target=scope==='create'?S.draft:S.edit, route=S.route, tab=S.tab, roomId=S.roomId;
+    case 'custom-open': case 'custom-add': case 'catalog': {
+      const label=el.textContent, scope=el.dataset.for==='c'?'create':el.dataset.for==='e'?'room':el.dataset.for, target=scope==='create'?S.draft:S.edit, route=S.route, tab=S.tab, roomId=S.roomId;
       if(!target) break;
       const stillHere=()=>S.route===route && S.tab===tab && S.roomId===roomId && target===(scope==='create'?S.draft:S.edit);
       try { el.disabled = true; el.textContent = '불러오는 중…'; await loadCatalog(); }
@@ -5834,7 +5812,7 @@ document.addEventListener('click', async e => {
       if (act === 'cat-done') {
         const target = S.catFor === 'create' ? S.draft : S.edit;
         const scope=S.catFor, picked=[...S.catPicked], stamp=JSON.stringify(picked.slice().sort());
-        const custom = target.stores.filter(s => !CATALOG.stores.some(c => c.id === s.id));
+        const custom = scope==='room'?target.stores.filter(s => !CATALOG.stores.some(c => c.id === s.id)):[];
         if(picked.length+custom.length>20) { toast(`직접 넣은 가게 ${custom.length}곳을 포함해 한 모임에는 20곳까지 넣을 수 있어요`); break; }
         const kept = target.stores.filter(s => S.catPicked.has(s.id)); // 이미 넣은 가게는 고친 그대로
         let selected;
@@ -5844,6 +5822,7 @@ document.addEventListener('click', async e => {
         if(stamp!==JSON.stringify([...S.catPicked].sort())) { rerender(); toast('선택이 바뀌었어요. 가게를 확인하고 다시 넣어 주세요'); break; }
         const added = selected.filter(s => !kept.some(k => k.id === s.id));
         target.stores = [...kept, ...added, ...custom];
+        if(scope==='create')S.createError='';
         if (S.catFor === 'room') S.edit.dirty = true;
       }
       if(history.state?.dinnerCatalog)history.replaceState(null,'',location.hash);
@@ -5967,8 +5946,6 @@ document.addEventListener('input', e => {
     if (t.id === 'c-treat-by') S.draft.treat.by = t.value;
     if (t.id === 'c-treat-unit') { S.draft.treat.unit=t.value.slice(0,12);const label=document.getElementById('c-budget-label');if(label)label.textContent=budgetLabel(S.draft.treat)+' 예산'; }
     if (t.id === 'c-treat-cap') { S.draft.treat.cap = num(t.value); for (const b of document.querySelectorAll('.cap-chips button')) b.classList.toggle('on', Number(b.dataset.v) === S.draft.treat.cap); }
-    if (t.id === 'c-cname') S.draft.custom.name = t.value;
-    if (t.id === 'c-clines') S.draft.custom.lines = t.value;
     persistDraft(); return;
   }
   if (t.id === 'catSearch') { S.catQuery = t.value; S.catLimit=12; S.catPreview='';scheduleSearchRefresh('catalog');return; }
@@ -5996,7 +5973,6 @@ document.addEventListener('input', e => {
     refreshDraftStatus();
     return;
   }
-  if (t.id === 'e-cname' || t.id === 'e-clines') { S.editCustom = S.editCustom || {name: '', lines: ''}; S.editCustom[t.id === 'e-cname' ? 'name' : 'lines'] = t.value; return; }
   if (S.edit && t.id === 'e-treat') { S.edit.treat = t.checked ? (S.room.treat ? {...S.room.treat} : {by: '', cap: 10000}) : null; S.edit.dirty = true; rerender(); return; }
   if (S.edit && t.id === 'e-treat-by') { S.edit.treat.by = t.value; markDirtySoft(); return; }
   if (S.edit && t.id === 'e-treat-unit') { S.edit.treat.unit=t.value.slice(0,12);const label=document.getElementById('e-budget-label');if(label)label.textContent=budgetLabel(S.edit.treat)+' 예산';markDirtySoft();return; }
