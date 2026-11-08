@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="2bd20643b65ca03f"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="9b27fbfbabe1b844"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -2049,6 +2049,13 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 
 /* Keep the receipt link stable when a resend editor loses keyboard focus. */
 .mm.participant-resend-editing .room-pinned{position:static}
+
+/* Optional setup is reviewed before the final invitation step. */
+.create-guide-actions{display:none;align-items:center;gap:8px;margin-top:10px}.create-form[data-guide-step="3"] .guide-actions-3,.create-form[data-guide-step="4"] .guide-actions-4,.create-form[data-guide-step="5"] .guide-actions-5{display:flex}
+.mm .create-guide-actions>.btn{min-height:36px;padding:7px 16px;font-size:12px}.mm .create-guide-actions>.text-btn{font-size:12px}.create-treat-option{grid-column:1/-1;min-width:0}.setting-note .guide-target,.setting-deadline .guide-target{margin-top:8px}.setting-note .guide-target.is-guided,.setting-deadline .guide-target.is-guided{margin-top:25px}
+.is-guided.guide-target::before{content:'';position:absolute;inset:-3px;z-index:0;border:2px solid #28b7a0;border-radius:17px;pointer-events:none;animation:guide-glow 2.4s ease-in-out infinite}.guide-treat>.cap-in,.guide-treat>.treat-toggle{position:relative;z-index:1}.guide-treat{margin-top:0}.guide-treat.is-guided{margin-top:23px}.guide-treat>.guide-cue{right:6px}.mm .create-guide-copy>.text-btn{font-size:12px;padding:4px 0;margin-top:3px}.mm .setting-note .setting-label,.mm .setting-deadline .setting-label{font-size:15px;font-weight:600}
+.thanks-after-send{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:10px 0 15px}.mm .thanks-after-send>.btn{min-height:40px;font-size:13px;padding:9px 14px}.thanks-after-send>small{font-size:11px;color:var(--sub)}.mm .thanks-write-shortcut{font-size:12px;margin-left:auto}
+@media(prefers-reduced-motion:reduce){.is-guided.guide-target::before{animation:none;box-shadow:0 0 0 3px #46cda022}}
 .catalog-source-tabs{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}.catalog-source-tabs button{flex:1;min-height:48px;border:1px solid #bcd9dc;border-radius:14px;padding:10px;background:#fff;color:#285562;font:inherit;font-weight:700}.catalog-source-tabs button[aria-pressed=true]{background:#087b76;color:white;border-color:#087b76}.places-intro{padding:18px;background:#eaf6f4;border-radius:18px;margin-bottom:20px}.places-intro b{font-size:20px}.places-intro p{margin:8px 0 0;line-height:1.65}.places-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.places-filters .input{width:100%;min-width:0}.place-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;margin:10px 0;background:#fff;border:1px solid #d4e5e8;border-radius:18px}.place-card>div{min-width:0;display:grid;gap:5px}.place-card b{font-size:18px;overflow-wrap:anywhere}.place-card span,.place-card small{color:#57717b;line-height:1.5}.place-card .small-btn{flex-shrink:0;min-height:44px}.place-menu-state{font-weight:700;color:#087b76!important}.places-map{height:380px;max-height:55vh;border-radius:16px;margin-top:16px;z-index:0}.places-map-tools{display:flex;gap:8px;flex-wrap:wrap}.place-editor{padding:20px;margin:16px 0;background:#f1faf6;border:2px solid #087b76;border-radius:18px;scroll-margin-top:90px}.place-editor h3{margin:8px 0}.place-editor p{line-height:1.6}.place-editor .btn{margin-top:14px}.places-source{font-size:12px;color:#60767e;line-height:1.8;margin:24px 0}.places-source a{text-decoration:underline}.places-map .leaflet-control-attribution{font-size:10px;background:#fff}.places-map .leaflet-control-zoom a{color:#23434e}#placesRoot [hidden]{display:none!important}@media(max-width:480px){.places-filters{grid-template-columns:1fr}.place-card{padding:14px;gap:10px}.catalog-source-tabs button{font-size:14px}.places-map{height:320px}}
 .catalog-cities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 18px}.catalog-cities button{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;min-height:80px;padding:14px 16px;border:1px solid #bedadc;border-radius:18px;background:#fff;color:#285562;font:inherit;text-align:left;cursor:pointer}.catalog-cities button b{font-size:20px;line-height:1.3}.catalog-cities button small{font-size:13px;line-height:1.4;color:#647e87}.catalog-cities button.on{background:#087b76;color:#fff;border-color:#087b76;box-shadow:0 4px 12px #087b761a}.catalog-cities button.on small{color:#e8fffa}.catalog-cities button:focus-visible{outline:3px solid #327fc2;outline-offset:3px}.catalog-cities .catalog-city-all{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;min-height:44px;padding:10px 16px}.catalog-cities .catalog-city-all b{font-size:15px}.catalog-city-note{padding:14px 16px;border-radius:14px;background:#eaf6f4;color:#315b64;font-size:14px;line-height:1.7;margin:0 0 18px}.catalog-jurisdiction{display:inline-block;width:fit-content;padding:3px 8px;margin:4px 0;border-radius:7px;color:#087b76;background:#eaf6f4;font-size:12px;font-weight:700}@media(max-width:600px){.catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-cities button{padding:13px;min-height:76px}.catalog-cities button b{font-size:18px}.catalog-cities button small{font-size:12px}}
 .catalog-steps{display:flex;gap:16px;list-style:none;padding:0;margin:10px 0 26px;color:#8a9c9d;font-size:13px;font-weight:700}.catalog-steps li{display:flex;gap:7px;align-items:center}.catalog-steps li span{display:grid;place-items:center;width:24px;height:24px;background:#edf3f3;border-radius:50%}.catalog-steps li[aria-current=step]{color:#087b76}.catalog-steps li[aria-current=step] span{background:#087b76;color:#fff}.catalog-region-page{max-width:780px!important}.catalog-region-intro{margin:12px 0 28px}.catalog-region-intro h2{margin:0 0 10px;font-size:28px;line-height:1.4;letter-spacing:-.04em}.catalog-region-intro p,.catalog-store-help{color:#64818a;line-height:1.65;margin:0}.catalog-region-page .catalog-area-label{display:none}.catalog-region-page .catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 12px;gap:12px}.catalog-region-page .catalog-cities button{min-height:108px;padding:20px}.catalog-all-regions{display:block;margin:18px auto 0;text-decoration:underline;text-underline-offset:4px}.catalog-region-help{text-align:center;line-height:1.7;margin-top:20px}.catalog-region-summary{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px}.catalog-region-summary small{font-size:12px;color:#718b94}.catalog-region-summary h2{font-size:27px;line-height:1.4;margin:3px 0 0;letter-spacing:-.03em}.catalog-store-help{margin-bottom:20px;font-size:14px}.catalog-store-page .catalog-city-note{font-size:13px;padding:10px 14px;margin-bottom:16px}.catalog-tools{display:flex;gap:8px;margin:10px 0 14px}.catalog-tools .small-btn{min-height:42px}.catalog-filter-panel{padding:16px;border:1px solid #d5e4e7;background:#f6faf9;border-radius:16px;margin:8px 0 18px}.catalog-filter-panel .input{width:100%;margin:7px 0 14px}.catalog-filter-panel .catalog-area-label{display:block;margin:0}.catalog-filter-panel .text-btn{display:block;margin-left:auto}@media(max-width:600px){.catalog-region-intro h2{font-size:25px}.catalog-region-page .catalog-cities{gap:10px}.catalog-region-page .catalog-cities button{padding:17px 14px;min-height:105px}.catalog-region-page .catalog-cities button b{font-size:19px}.catalog-steps{margin-bottom:22px}.catalog-region-summary h2{font-size:25px}}
@@ -3033,7 +3040,7 @@ function thanksComposer(compact=false) {
   if (!S.room) return '';
   const t=S.thanks||{text:'',emoji:'💛',effect:'hearts'};
   const tone=Object.hasOwn(THANKS_TONES,S.thanksTone)?S.thanksTone:'cute';
-  return `<section class="thanks-composer${compact?' compact':''}" aria-label="감사 한마디"><header class="thanks-compose-heading"><b><span aria-hidden="true">💌</span> 마음도 함께</b><small>선택</small><button type="button" class="text-btn" data-act="thanks-clear"${tidyThanks(t)?'':' hidden'} aria-label="감사인사 빼기">빼기</button></header>
+  return `<section class="thanks-composer${compact?' compact':''}" aria-label="감사 한마디"><header class="thanks-compose-heading"><b><span aria-hidden="true">💌</span> 마음도 함께</b><small>선택</small><button type="button" class="text-btn thanks-write-shortcut" data-act="thanks-write">직접 쓰기</button><button type="button" class="text-btn" data-act="thanks-clear"${tidyThanks(t)?'':' hidden'} aria-label="감사인사 빼기">빼기</button></header>
     <div class="thanks-quick thanks-presets" role="group" aria-label="감사인사 바로 고르기">${[0,1,3].map(i=>thanksPresetButton(THANKS_PRESETS[i],i,true)).join('')}</div>${thanksPreview()}
     <details class="thanks-editor" data-thanks-fold${S.thanksOpen?' open':''}><summary><span>다른 문구 · 직접 쓰기</span><i aria-hidden="true">＋</i></summary><div class="thanks-compose-body">
     <div class="thanks-tones" role="group" aria-label="감사인사 말투">${Object.entries(THANKS_TONES).map(([key,label])=>`<button type="button" data-act="thanks-tone" data-v="${key}" aria-pressed="${tone===key}">${label}</button>`).join('')}</div>
@@ -3042,6 +3049,15 @@ function thanksComposer(compact=false) {
     <details class="thanks-decoration" data-thanks-decor${S.thanksDecorOpen?' open':''}><summary><span>이모지 · 효과 꾸미기</span><span class="thanks-decoration-value">${t.emoji} ${THANKS_EFFECTS[t.effect]||THANKS_EFFECTS.hearts} <i aria-hidden="true">⌄</i></span></summary><div class="thanks-options"><div class="thanks-emojis" role="group" aria-label="감사 이모지">${THANKS_EMOJI.map(emoji=>`<button type="button" data-act="thanks-emoji" data-v="${emoji}" aria-label="${emoji} 이모지" aria-pressed="${t.emoji===emoji}">${emoji}</button>`).join('')}</div>
     <div class="thanks-effects" role="group" aria-label="감사 메시지 효과">${Object.entries(THANKS_EFFECTS).map(([effect,label])=>`<button type="button" data-act="thanks-effect" data-v="${effect}" aria-pressed="${t.effect===effect}">${label}</button>`).join('')}</div></div></details>
     <p class="thanks-compose-hint">보내기를 누르면 메뉴와 함께 전해져요.</p></div></details></section>`;
+}
+function openThanksComposer(){
+  const a=myAnswer();
+  if(S.route!=='room'||!S.room||!S.who||S.sending||S.answerConflict||locked()||(a&&a.uid!==UID&&!S.host))return;
+  captureRequests();const roomId=S.roomId,who=S.who;S.thanksOpen=true;go({tab:'cart'});
+  requestAnimationFrame(()=>{
+    if(S.roomId!==roomId||S.who!==who||S.tab!=='cart')return;
+    const input=document.getElementById('thanksText');input?.scrollIntoView({block:'center',behavior:reduceMotion()?'auto':'smooth'});input?.focus({preventScroll:true});refreshParticipantGuide();
+  });
 }
 function thanksReceipt(value) {
   const t=tidyThanks(value);return t?`<div class="thanks-receipt" data-effect="${t.effect}"><small>함께 보낸 마음</small>${thanksMessage(t)}</div>`:'';
@@ -4933,19 +4949,38 @@ async function loadSums(rooms) {
 
 // ---------- 방 만들기 ----------
 const EMPTY_DRAFT = () => ({title: '', note: '', deadline: '', stores: [], mode: 'free', names: '', freeJoin: false, treat: null});
-const CREATE_GUIDE_KEY='mm-create-guide-seen-v1';
+const CREATE_GUIDE_KEY='mm-create-guide-seen-v2';
 function createGuideIsOpen(){return S.createGuideOpen ?? (load(CREATE_GUIDE_KEY,false)!==true);}
-function createGuideStep(){return !S.draft?.title?.trim()?1:!S.draft.stores.length?2:3;}
+function createGuideStep(){
+  const d=S.draft;if(!d?.title?.trim())return 1;if(!d.stores.length)return 2;
+  const reviewed=d.guideReviewed||{};return !reviewed.note?3:!reviewed.deadline?4:!reviewed.treat?5:6;
+}
+function createSubmitText(){
+  const d=S.draft;if(S.sending)return '만드는 중…';if(!d.title.trim())return '모임 이름을 적어 주세요';if(!d.stores.length)return '가게를 넣어 주세요';
+  return createGuideIsOpen()&&createGuideStep()<6?['다음: 마감 시간','다음: 한턱 설정','설정 확인하고 계속'][createGuideStep()-3]:S.createError?'다시 시작하기':'시작하고 초대 링크 받기';
+}
+function focusCreateGuide(step,focus=true){
+  const id=['','c-title','','c-note','c-deadline',S.draft?.treat?'c-treat-cap':'c-treat','createSubmit'][step];
+  const target=id?document.getElementById(id):null;target?.scrollIntoView({block:'center',behavior:reduceMotion()?'auto':'smooth'});if(focus)target?.focus({preventScroll:true});
+}
+function advanceCreateGuide(step){
+  if(S.route!=='create'||![3,4,5].includes(step)||step!==createGuideStep())return;
+  const t=S.draft.treat;
+  if(step===5&&t&&(!(num(t.cap)>0)||(t.unitCustom&&!str(t.unit,12).trim()))){toast('한턱 예산과 단위를 확인해 주세요');focusCreateGuide(5);return;}
+  S.draft.guideReviewed={...S.draft.guideReviewed,[['note','deadline','treat'][step-3]]:true};persistDraft();refreshCreateGuide();focusCreateGuide(createGuideStep());
+}
+function createGuideActions(step){return `<div class="create-guide-actions guide-actions-${step}"><button type="button" class="btn" data-act="create-guide-next" data-step="${step}">${step===5?'설정 끝':'다음'}</button><button type="button" class="text-btn" data-act="create-guide-next" data-step="${step}">건너뛰기</button></div>`;}
 function createGuideHtml(){
   if(!createGuideIsOpen())return '<button class="text-btn create-guide-reopen" data-act="create-guide-open">만드는 방법 보기</button>';
   const step=createGuideStep();
-  const title=['모임 이름부터 적어요','함께 고를 가게를 담아요','준비 끝! 링크로 초대해요'][step-1];
-  const hint=['예: 우리 팀 점심 · 오늘 커피','반짝이는 ‘주변 맛집 목록’을 눌러 주세요.','아래 반짝이는 시작 버튼을 눌러 주세요.'][step-1];
-  return `<aside class="create-guide" aria-label="모임 만들기 안내"><span class="create-guide-progress">${step}/3<span class="create-guide-track" aria-hidden="true">${[1,2,3].map(n=>`<i class="${n<=step?'on':''}"></i>`).join('')}</span></span><div class="create-guide-copy" aria-live="polite" aria-atomic="true"><b>${title}</b><p id="createGuideHint">${hint}</p></div><button class="create-guide-close" data-act="create-guide-close" aria-label="만들기 안내 닫기">×</button></aside>`;
+  const title=['모임 이름부터 적어요','함께 고를 가게를 담아요','모임 안내를 남겨요','언제까지 받을까요?','오늘은 누가 쏘나요?','준비 끝! 링크로 초대해요'][step-1];
+  const hint=['예: 우리 팀 점심 · 오늘 커피','반짝이는 ‘주변 맛집 목록’을 눌러 주세요.','고르는 방법·전달할 말을 적어요. 없어도 괜찮아요.','마감 시간을 정하거나 건너뛸 수 있어요.','한턱이면 켜고 1인·팀·가족당 예산을 정해요.','아래 반짝이는 시작 버튼을 눌러 주세요.'][step-1];
+  return `<aside class="create-guide" aria-label="모임 만들기 안내"><span class="create-guide-progress">${step}/6<span class="create-guide-track" aria-hidden="true">${[1,2,3,4,5,6].map(n=>`<i class="${n<=step?'on':''}"></i>`).join('')}</span></span><div class="create-guide-copy" aria-live="polite" aria-atomic="true"><b>${title}</b><p id="createGuideHint">${hint}</p>${step>=3&&step<=5?`<button class="text-btn" type="button" data-act="create-guide-focus" data-step="${step}">설정 보기 ↓</button>`:''}</div><button class="create-guide-close" data-act="create-guide-close" aria-label="만들기 안내 닫기">×</button></aside>`;
 }
 function createGuideCue(step){
-  const tag=step===1?'label':'span',text=['여기에 모임 이름 입력','여기를 눌러 가게 선택','이 버튼으로 초대 링크 만들기'][step-1];
-  return `<${tag} class="guide-cue"${step===1?' for="c-title"':''} aria-hidden="true"><span class="guide-hand">👇</span>${text}</${tag}>`;
+  const id=({1:'c-title',3:'c-note',4:'c-deadline',5:S.draft?.treat?'c-treat-cap':'c-treat'})[step],tag=id?'label':'span';
+  const text=['여기에 모임 이름 입력','여기를 눌러 가게 선택','모임 안내를 적어요 · 선택','마감 시간을 정해요 · 선택',S.draft?.treat?'예산과 단위를 확인해요':'한턱이면 이 스위치를 켜요','이 버튼으로 초대 링크 만들기'][step-1];
+  return `<${tag} class="guide-cue"${id?` for="${id}"`:''} aria-hidden="true"><span class="guide-hand">👇</span>${text}</${tag}>`;
 }
 function createGuideEffects(){return '<span class="guide-sheen" aria-hidden="true"></span><span class="guide-sparkles" aria-hidden="true"><i>✦</i><i>✦</i></span>';}
 function refreshCreateGuide(){
@@ -4954,18 +4989,23 @@ function refreshCreateGuide(){
   if(root.dataset.guideState===stamp)return;
   root.innerHTML=createGuideHtml();root.dataset.guideState=stamp;
   for(const el of document.querySelectorAll('[data-create-guide-step]'))el.classList.toggle('is-guided',open&&Number(el.dataset.createGuideStep)===step);
+  const form=document.querySelector('.create-form');if(form)form.dataset.guideStep=String(open?step:0);
+  const label=document.getElementById('createSubmitLabel');if(label)label.textContent=createSubmitText();
 }
-function finishCreateGuide(){save(CREATE_GUIDE_KEY,true);S.createGuideOpen=false;}
+function finishCreateGuide(){save(CREATE_GUIDE_KEY,true);save('mm-create-guide-seen-v1',true);S.createGuideOpen=false;}
 // 🎁 One response spends one configured person/team/family budget.
 const CAP_CHIPS = [5000, 10000, 15000, 20000, 30000];
 function treatForm(p, t) {
   const on = !!t;
   const unit=treatUnit(t),custom=!!t?.unitCustom||!TREAT_UNITS.includes(unit);
+  const guided=p==='c'&&createGuideIsOpen()&&createGuideStep()===5;
+  const toggle=`<label class="treat-toggle"><input type="checkbox" id="${p}-treat" ${on?'checked':''}><span class="tt-ic">🎁</span><span class="tt-txt"><b>오늘은 한턱!</b><small>한턱 내는 사람 · 예산과 단위</small></span><span class="switch"><i></i></span></label>`;
+  const cap=`<div class="cap-in"><input class="input" id="${p}-treat-cap" type="number" min="0" step="500" inputmode="numeric" placeholder="10000" value="${t?.cap||''}"><span>원</span></div>`;
   return `<section class="${p === 'c' ? 'f-sec' : 'a-sec'} treat-sec${on ? ' on' : ''}">${p === 'c' ? '' : '<h3>🎁 오늘은 한턱!</h3>'}
-    <label class="treat-toggle"><input type="checkbox" id="${p}-treat" ${on ? 'checked' : ''}><span class="tt-ic">🎁</span><span class="tt-txt"><b>오늘은 한턱!</b><small>한턱 내는 사람 · 예산과 단위</small></span><span class="switch"><i></i></span></label>
+    ${p==='c'&&!on?`<div class="guide-target guide-treat${guided?' is-guided':''}" data-create-guide-step="5">${createGuideCue(5)}${toggle}${createGuideEffects()}</div>`:toggle}
     ${on ? `<div class="treat-fields"><label class="field">한턱 내는 사람 (선택)<input class="input" id="${p}-treat-by" maxlength="20" placeholder="예: 연구부장, 민수" value="${esc(t.by || '')}"></label>
       <div class="field"><span class="treat-unit-label">어떤 단위로 쏠까요?</span><div class="treat-units" role="group" aria-label="예산 단위">${TREAT_UNITS.map(u=>`<button type="button" data-act="treat-unit" data-for="${p}" data-v="${u}" aria-pressed="${!custom&&unit===u}">1${u}당</button>`).join('')}<button type="button" data-act="treat-unit" data-for="${p}" data-v="custom" aria-pressed="${custom}">직접 입력</button></div>${custom?`<label class="treat-unit-custom" for="${p}-treat-unit">1<input class="input" id="${p}-treat-unit" aria-label="직접 입력 예산 단위" maxlength="12" placeholder="예: 모둠" value="${esc(t.unit||'')}">당</label>`:''}<small class="hint">팀·가족 단위라면 참여할 때 팀·가족 이름 하나로 담아 주세요.</small></div>
-      <label class="field"><span id="${p}-budget-label">${esc(budgetLabel(t))} 예산</span> <span class="hint">이 금액까지 골라요</span><div class="cap-in"><input class="input" id="${p}-treat-cap" type="number" min="0" step="500" inputmode="numeric" placeholder="10000" value="${t.cap || ''}"><span>원</span></div></label>
+      <div class="field"><label id="${p}-budget-label" for="${p}-treat-cap">${esc(budgetLabel(t))} 예산</label> <span class="hint">이 금액까지 골라요</span>${p==='c'?`<div class="guide-target guide-treat${guided?' is-guided':''}" data-create-guide-step="5">${createGuideCue(5)}${cap}${createGuideEffects()}</div>`:cap}</div>
       <div class="cap-chips">${CAP_CHIPS.map(v => `<button class="${num(t.cap) === v ? 'on' : ''}" data-act="cap-chip" data-for="${p}" data-v="${v}">${v >= 10000 ? `${v / 10000}만` : `${v / 1000}천`}원</button>`).join('')}</div></div>` : ''}
   </section>`;
 }
@@ -4976,7 +5016,7 @@ function storeRow(s, act) {
 function viewCreate() {
   const d = S.draft, can = d.title.trim() && d.stores.length,guide=createGuideIsOpen(),step=createGuideStep();
   return `${topBar('같이 담기', 'home')}
-  <div class="wrap form create-form">
+  <div class="wrap form create-form" data-guide-step="${guide?step:0}">
     <div id="createGuideSlot" class="create-guide-slot" data-guide-state="${guide}:${step}">${createGuideHtml()}</div>
     ${S.createError ? `<div class="notice red" role="alert"><b>담기를 시작하지 못했어요.</b><p>${esc(S.createError)}</p><span>적은 내용은 남아 있어요. 다시 시도해 주세요.</span></div>` : ''}
     <div class="create-board">
@@ -4991,12 +5031,12 @@ function viewCreate() {
       </section>
     </div>
     <section class="create-options visible-options" aria-label="모임 설정"><h2 class="create-label"><i>04</i>모임 설정 <small>선택</small></h2><div class="create-options-body">
-      <label class="field setting-note"><span class="setting-label">${ICON.msg}모임 안내</span><textarea class="input" id="c-note" rows="2" maxlength="300" placeholder="예: 한 사람당 음료 한 잔씩 골라주세요">${esc(d.note)}</textarea></label>
-      <label class="field setting-deadline"><span class="setting-label">${ICON.clock || ICON.menu}마감 시간</span><input class="input" id="c-deadline" type="datetime-local" value="${esc(d.deadline)}"></label>
-      ${treatForm('c', d.treat)}
+      <div class="field setting-note${guide&&step===3?' is-guided':''}" data-create-guide-step="3"><label class="setting-label" for="c-note">${ICON.msg}모임 안내</label><div class="guide-target">${createGuideCue(3)}<textarea class="input" id="c-note" rows="2" maxlength="300" placeholder="예: 한 사람당 음료 한 잔씩 골라주세요">${esc(d.note)}</textarea>${createGuideEffects()}</div>${createGuideActions(3)}</div>
+      <div class="field setting-deadline${guide&&step===4?' is-guided':''}" data-create-guide-step="4"><label class="setting-label" for="c-deadline">${ICON.clock || ICON.menu}마감 시간</label><div class="guide-target">${createGuideCue(4)}<input class="input" id="c-deadline" type="datetime-local" value="${esc(d.deadline)}">${createGuideEffects()}</div>${createGuideActions(4)}</div>
+      <div class="create-treat-option">${treatForm('c', d.treat)}${createGuideActions(5)}</div>
     </div></section>
   </div>
-  <div class="bottom-bar create-submit${guide&&step===3?' is-guided':''}" data-create-guide-step="3"><div class="guide-target"><button class="btn block" id="createSubmit" aria-labelledby="createSubmitLabel" data-act="create"${can && !S.sending ? '' : ' disabled'}>${createGuideCue(3)}<span id="createSubmitLabel">${S.sending ? '만드는 중…' : can ? S.createError ? '다시 시작하기' : '시작하고 초대 링크 받기' : d.title.trim() ? '가게를 넣어 주세요' : '모임 이름을 적어 주세요'}</span></button>${createGuideEffects()}</div></div>`;
+  <div class="bottom-bar create-submit${guide&&step===6?' is-guided':''}" data-create-guide-step="6"><div class="guide-target"><button class="btn block" id="createSubmit" aria-labelledby="createSubmitLabel" data-act="create"${can && !S.sending ? '' : ' disabled'}>${createGuideCue(6)}<span id="createSubmitLabel">${createSubmitText()}</span></button>${createGuideEffects()}</div></div>`;
 }
 
 
@@ -5667,6 +5707,7 @@ function mineReceipt(a,editable=true,label='마지막 전송') {
   const time=Number.isFinite(a.at)&&a.at>0?new Date(a.at):null;
   return `<section class="ticket mine-receipt" aria-label="${esc(a.name)} ${esc(label)} 메뉴"><header class="mine-receipt-head"><div><h2>${esc(a.name)}</h2><span>${count}개 · ${esc(label)}</span><time class="mine-sent-at"${time?` datetime="${time.toISOString()}"`:''}>${time?esc(time.toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}))+' 전송':'전송 시간 확인 중'}</time></div><b>${won(total)}</b></header>
     ${thanks?`<div class="mine-sent-thanks">${thanksReceipt(thanks)}${label==='방장 승인 대기'?'':`<button type="button" class="text-btn" data-act="thanks-replay" data-id="${esc(a.id)}" aria-label="내가 보낸 감사인사 다시 보기">효과 다시 보기 ↗</button>`}</div>`:'<p class="mine-no-thanks">감사인사 없이 메뉴만 보냈어요.</p>'}
+    ${editable&&a.name===S.who&&!locked()&&!S.answerConflict&&myLateAnswer()?.status!=='pending'?`<div class="thanks-after-send"><button type="button" class="btn line-dark" data-act="thanks-write">💌 ${thanks?'감사인사 더 쓰기·수정':'감사인사 추가하기'}</button><small>${hasUnsentCart()?'아직 안 보낸 변경사항과 함께 보내요.':'작성 후 다시 보내면 전해져요.'}</small></div>`:''}
     ${answerStoreGroups(a).map(([sid,items])=>`<section class="mine-store"><h3>${esc(storeOf(sid)?.name||'(지운 가게)')}</h3>${items.map(i=>`<div class="mine-menu-line"><span>${i.m?.startsWith('custom-')?'<small class="shared-menu-tag">직접 추가</small>':''}${esc(i.name)}</span><small>${i.n}개</small><b>${won(i.price*i.n)}</b></div>`).join('')}</section>`).join('')}
     <details class="mine-details" data-mine-fold="${esc(key)}"${S.mineOpen?.[key]?' open':''}><summary><span>${requests.length||a.req?'요청사항 · ':''}전송 관리</span><i aria-hidden="true">＋</i></summary><div class="mine-detail-body">${requests.map(([sid,text])=>`<p class="mine-request"><b>${esc(storeOf(sid)?.name||'(지운 가게)')} 요청</b><span>${esc(text)}</span></p>`).join('')}${legacyRequestHtml(a)}${editable?`<button class="text-btn red" data-act="answer-del" data-who="${esc(a.name)}"${locked()?' disabled':''}>보낸 메뉴 취소</button>`:''}</div></details></section>`;
 }
@@ -6072,7 +6113,9 @@ document.addEventListener('click', async e => {
     case 'participant-guide-open':participantGuideOpenState();if(resendDraft())S.resendGuideOpen=true;else{S.participantGuideScope=`${S.roomId}/${S.who}`;S.participantGuideOpen=true;}rerender();break;
     case 'create-guide-close':finishCreateGuide();rerender();break;
     case 'create-guide-open':S.createGuideOpen=true;rerender();break;
+    case 'create-guide-next':advanceCreateGuide(Number(el.dataset.step));break;
     case 'create-guide-focus':{
+      if(el.dataset.step){focusCreateGuide(Number(el.dataset.step));break;}
       if(!['c-title','createSubmit'].includes(el.dataset.target))break;
       const target=document.getElementById(el.dataset.target);
       target?.scrollIntoView({block:'center',behavior:reduceMotion()?'auto':'smooth'});target?.focus({preventScroll:true});break;
@@ -6120,6 +6163,7 @@ document.addEventListener('click', async e => {
       if(el.dataset.for==='e')S.edit.dirty=true;rerender();
       if(target.unitCustom)document.getElementById(`${el.dataset.for}-treat-unit`)?.focus();break;
     }
+    case 'thanks-write':openThanksComposer();break;
     case 'thanks-preset': case 'thanks-emoji': case 'thanks-effect': case 'thanks-clear': {
       if(locked()||S.sending||S.answerConflict)break;captureRequests();
       if(act==='thanks-preset') { const preset=THANKS_PRESETS[Number(el.dataset.i)];if(!preset)break;S.thanks={text:preset.text,emoji:preset.emoji,effect:preset.effect}; }
@@ -6215,7 +6259,7 @@ document.addEventListener('click', async e => {
       if(history.state?.dinnerCatalog)history.replaceState(null,'',location.hash);
       go(S.catFor === 'create' ? {route: 'create'} : {route: 'room', tab: 'set'}); break;
     }
-    case 'create': createRoom(); break;
+    case 'create': if(createGuideIsOpen()&&[3,4,5].includes(createGuideStep()))advanceCreateGuide(createGuideStep());else createRoom();break;
     // 방 안
     case 'tab': {
       const t = el.dataset.t;
@@ -6325,7 +6369,7 @@ document.addEventListener('input', e => {
   if(t.id==='whoName'){S.participantNameDraft={roomId:S.roomId,value:t.value.slice(0,20)};if(S.route==='room'&&S.room)persistRoom();refreshParticipantGuide();return;}
   if(t.id==='managerDisplayName'){roomManagers.draftName=str(t.value,20);roomManagers.nameDirty=true;return;}
   if (S.route === 'create' && S.draft) {
-    if (t.id === 'c-title') { S.draft.title = t.value; const b = document.querySelector('[data-act=create]'); const can = t.value.trim() && S.draft.stores.length; b.disabled = !can; const label=document.getElementById('createSubmitLabel')||b;label.textContent = can ? '방 만들고 링크 받기' : t.value.trim() ? '가게를 넣어 주세요' : '방 이름을 적어 주세요'; }
+    if (t.id === 'c-title') { S.draft.title = t.value; const b = document.querySelector('[data-act=create]'); const can = t.value.trim() && S.draft.stores.length; b.disabled = !can; const label=document.getElementById('createSubmitLabel')||b;label.textContent = createSubmitText(); }
     if (t.id === 'c-note') S.draft.note = t.value;
     if (t.id === 'c-deadline') S.draft.deadline = t.value;
     if (t.id === 'c-names') { S.draft.names = t.value; const h = document.querySelector('.name-tools .hint'); if (h) h.textContent = `${parseNames(t.value).length}명`; }
