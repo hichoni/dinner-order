@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="4a0f904e18ac8378"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="51d157122c10f9a9"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -2028,6 +2028,14 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .menu .add.participant-guided{border:2px solid #28a98f;background:linear-gradient(115deg,#fff,#e8fbef);color:#08776d}.mm .participant-guided.cartbar{z-index:55}.participant-guided.cartbar>.guide-cue{top:-29px;right:12px}
 @media(max-width:390px){.mm .participant-guide{font-size:11px;padding-left:7px;gap:5px}.participant-guided>.guide-cue{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.participant-guided::before,.participant-guided>.guide-cue{animation:none}.participant-guided::before{box-shadow:0 0 0 3px #46cda022}}
+
+/* Start the same guide at identity entry, without choosing a person's name for them. */
+.mm .participant-guide>button{flex:0 0 28px;width:28px;min-width:28px;height:28px;min-height:28px;padding:0;border:0;background:transparent;color:#577b72;font-size:20px;cursor:pointer}
+.participant-name-guide:not(:empty){margin-bottom:31px}.participant-name-guide .participant-guide{margin-top:0}.participant-name-guide .participant-guide-reopen .text-btn{font-size:11px;min-height:27px;padding:2px 5px}
+.mm .name-in .participant-name-field{flex:1 1 auto;min-width:0;border-radius:13px}.participant-name-field>.input{position:relative;z-index:1;width:100%}.participant-name-list{position:relative;border-radius:16px}.participant-name-list>.who-grid{margin-top:0;margin-bottom:0}
+.participant-name-field.participant-guided>.guide-cue,.participant-name-list.participant-guided>.guide-cue{top:-25px;right:7px}.mm .name-in .participant-guided>.guide-cue{font-size:11px;right:0}.mm .name-in .participant-guided>.input{border-color:#28a98f;background:linear-gradient(115deg,#fff,#edfcf4)}
+.avatar-picker .ap-confirm.participant-guided>.guide-cue{top:-26px;right:9px}.participant-name-field:focus-within>.guide-cue{animation:none}
+@media(max-width:390px){.participant-name-guide .participant-guide{font-size:10px;gap:4px;padding-right:4px}.participant-name-guide .participant-guide>b{letter-spacing:-.025em}}
 .catalog-source-tabs{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}.catalog-source-tabs button{flex:1;min-height:48px;border:1px solid #bcd9dc;border-radius:14px;padding:10px;background:#fff;color:#285562;font:inherit;font-weight:700}.catalog-source-tabs button[aria-pressed=true]{background:#087b76;color:white;border-color:#087b76}.places-intro{padding:18px;background:#eaf6f4;border-radius:18px;margin-bottom:20px}.places-intro b{font-size:20px}.places-intro p{margin:8px 0 0;line-height:1.65}.places-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px}.places-filters .input{width:100%;min-width:0}.place-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;margin:10px 0;background:#fff;border:1px solid #d4e5e8;border-radius:18px}.place-card>div{min-width:0;display:grid;gap:5px}.place-card b{font-size:18px;overflow-wrap:anywhere}.place-card span,.place-card small{color:#57717b;line-height:1.5}.place-card .small-btn{flex-shrink:0;min-height:44px}.place-menu-state{font-weight:700;color:#087b76!important}.places-map{height:380px;max-height:55vh;border-radius:16px;margin-top:16px;z-index:0}.places-map-tools{display:flex;gap:8px;flex-wrap:wrap}.place-editor{padding:20px;margin:16px 0;background:#f1faf6;border:2px solid #087b76;border-radius:18px;scroll-margin-top:90px}.place-editor h3{margin:8px 0}.place-editor p{line-height:1.6}.place-editor .btn{margin-top:14px}.places-source{font-size:12px;color:#60767e;line-height:1.8;margin:24px 0}.places-source a{text-decoration:underline}.places-map .leaflet-control-attribution{font-size:10px;background:#fff}.places-map .leaflet-control-zoom a{color:#23434e}#placesRoot [hidden]{display:none!important}@media(max-width:480px){.places-filters{grid-template-columns:1fr}.place-card{padding:14px;gap:10px}.catalog-source-tabs button{font-size:14px}.places-map{height:320px}}
 .catalog-cities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 18px}.catalog-cities button{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;min-height:80px;padding:14px 16px;border:1px solid #bedadc;border-radius:18px;background:#fff;color:#285562;font:inherit;text-align:left;cursor:pointer}.catalog-cities button b{font-size:20px;line-height:1.3}.catalog-cities button small{font-size:13px;line-height:1.4;color:#647e87}.catalog-cities button.on{background:#087b76;color:#fff;border-color:#087b76;box-shadow:0 4px 12px #087b761a}.catalog-cities button.on small{color:#e8fffa}.catalog-cities button:focus-visible{outline:3px solid #327fc2;outline-offset:3px}.catalog-cities .catalog-city-all{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;min-height:44px;padding:10px 16px}.catalog-cities .catalog-city-all b{font-size:15px}.catalog-city-note{padding:14px 16px;border-radius:14px;background:#eaf6f4;color:#315b64;font-size:14px;line-height:1.7;margin:0 0 18px}.catalog-jurisdiction{display:inline-block;width:fit-content;padding:3px 8px;margin:4px 0;border-radius:7px;color:#087b76;background:#eaf6f4;font-size:12px;font-weight:700}@media(max-width:600px){.catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-cities button{padding:13px;min-height:76px}.catalog-cities button b{font-size:18px}.catalog-cities button small{font-size:12px}}
 .catalog-steps{display:flex;gap:16px;list-style:none;padding:0;margin:10px 0 26px;color:#8a9c9d;font-size:13px;font-weight:700}.catalog-steps li{display:flex;gap:7px;align-items:center}.catalog-steps li span{display:grid;place-items:center;width:24px;height:24px;background:#edf3f3;border-radius:50%}.catalog-steps li[aria-current=step]{color:#087b76}.catalog-steps li[aria-current=step] span{background:#087b76;color:#fff}.catalog-region-page{max-width:780px!important}.catalog-region-intro{margin:12px 0 28px}.catalog-region-intro h2{margin:0 0 10px;font-size:28px;line-height:1.4;letter-spacing:-.04em}.catalog-region-intro p,.catalog-store-help{color:#64818a;line-height:1.65;margin:0}.catalog-region-page .catalog-area-label{display:none}.catalog-region-page .catalog-cities{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 12px;gap:12px}.catalog-region-page .catalog-cities button{min-height:108px;padding:20px}.catalog-all-regions{display:block;margin:18px auto 0;text-decoration:underline;text-underline-offset:4px}.catalog-region-help{text-align:center;line-height:1.7;margin-top:20px}.catalog-region-summary{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px}.catalog-region-summary small{font-size:12px;color:#718b94}.catalog-region-summary h2{font-size:27px;line-height:1.4;margin:3px 0 0;letter-spacing:-.03em}.catalog-store-help{margin-bottom:20px;font-size:14px}.catalog-store-page .catalog-city-note{font-size:13px;padding:10px 14px;margin-bottom:16px}.catalog-tools{display:flex;gap:8px;margin:10px 0 14px}.catalog-tools .small-btn{min-height:42px}.catalog-filter-panel{padding:16px;border:1px solid #d5e4e7;background:#f6faf9;border-radius:16px;margin:8px 0 18px}.catalog-filter-panel .input{width:100%;margin:7px 0 14px}.catalog-filter-panel .catalog-area-label{display:block;margin:0}.catalog-filter-panel .text-btn{display:block;margin-left:auto}@media(max-width:600px){.catalog-region-intro h2{font-size:25px}.catalog-region-page .catalog-cities{gap:10px}.catalog-region-page .catalog-cities button{padding:17px 14px;min-height:105px}.catalog-region-page .catalog-cities button b{font-size:19px}.catalog-steps{margin-bottom:22px}.catalog-region-summary h2{font-size:25px}}
@@ -2395,10 +2403,13 @@ function syncAvatarPicker() {
   const editable=canEditAvatar(p.name),ready=S.profilesReady;
   if(!editable&&!p.rolling&&!p.saving){p.draft=avatarChoice(p.name);updateAvatarPicker();}
   for(const b of bg.querySelectorAll('[data-avatar-food],[data-avatar-tone],.ap-roll'))b.disabled=!ready||!editable||p.saving||p.rolling;
-  const confirm=bg.querySelector('.ap-confirm');confirm.disabled=(!ready&&!S.profilesError)||p.saving||p.rolling;
+  const confirm=bg.querySelector('.ap-confirm');
+  if(confirm.hasAttribute('data-participant-guide-target'))clearParticipantGuideTarget();
+  confirm.disabled=(!ready&&!S.profilesError)||p.saving||p.rolling;
   confirm.textContent=p.saving?'같이 보는 중…':!ready&&S.profilesError?'메뉴 먼저 보기 ↗':editable?'이 캐릭터로 담기 ↗':'이 이름으로 보기 ↗';
   const skip=bg.querySelector('.ap-skip');skip.hidden=!(p.error||S.profilesError);skip.disabled=p.saving||p.rolling;
   bg.querySelector('.ap-status').textContent=p.error||S.profilesError||(!ready?'캐릭터를 불러오는 중…':p.saving?'캐릭터와 배경색을 저장하고 있어요':!editable?'이 캐릭터는 선택한 기기나 방장이 바꿀 수 있어요':'같이 먹는 사람들에게도 이렇게 보여요');
+  refreshParticipantGuide();
 }
 function updateAvatarPicker(announce=true) {
   const p=avatarPicker,bg=document.querySelector('.avatar-picker-bg');if(!p||!bg)return;
@@ -2413,6 +2424,7 @@ function rollAvatarPicker() {
   const panel=bg.querySelector('.avatar-picker');panel.classList.remove('is-revealed');panel.classList.add('is-rolling');panel.setAttribute('aria-busy','true');
   bg.querySelector('.ap-result').textContent='두구두구…';bg.querySelector('.ap-roll span').textContent='뽑는 중';
   for(const b of bg.querySelectorAll('button:not(.ap-close)'))b.disabled=true;
+  refreshParticipantGuide();
   const finish=()=>{
     if(avatarPicker!==p||!bg.isConnected)return;
     p.draft=result;p.rolling=false;updateAvatarPicker();
@@ -2435,6 +2447,7 @@ function closeAvatarPicker(restoreFocus=true) {
   clearTimeout(p.timer);avatarPicker=null;document.querySelector('.avatar-picker-bg')?.remove();
   document.body.style.overflow=p.overflow;$app.inert=p.inert;
   if(restoreFocus&&p.trigger?.isConnected)p.trigger.focus();
+  refreshParticipantGuide();
 }
 
 // Resolution-independent food artwork. No cropped bitmap images.
@@ -4280,6 +4293,7 @@ function refreshLive() {
   refreshCartProgress();
   refreshMineStatus();
   const flow=document.getElementById('participantFlow');if(flow)flow.outerHTML=participantFlow();
+  const nameGuide=document.getElementById('participantNameGuide');if(nameGuide)nameGuide.innerHTML=participantGuideHtml();
   const n = document.getElementById('liveCount'); if (n) n.textContent = S.answers.size;
   const notice = document.getElementById('answerConflictNotice');
   if (notice && S.answerConflict) {
@@ -5114,14 +5128,16 @@ function viewRoom() {
 }
 const PARTICIPANT_GUIDE_KEY='mm-participant-guide-seen-v1';
 function participantGuideEligible(){
-  return S.route==='room'&&!!S.room&&!!S.who&&S.answersReady&&!S.sending&&!S.answerConflict
-    &&['menu','store','cart','review'].includes(S.tab)&&!locked()&&!myAnswer()&&!myLateAnswer()
-    &&(!isLate()||S.lateReady)&&S.room.stores.some(s=>foodMenus(s).length>0);
+  if(S.route!=='room'||!S.room||S.loading||!S.answersReady||S.sending||S.answerConflict||locked()
+    ||(isLate()&&!S.lateReady)||!S.room.stores.some(s=>foodMenus(s).length>0))return false;
+  if(S.tab==='who')return !S.who;
+  return !!S.who&&['menu','store','cart','review'].includes(S.tab)&&!myAnswer()&&!myLateAnswer();
 }
 function participantGuideStep(){
   const scope=`${S.roomId}/${S.who}`;
   if(S.participantGuideScope!==scope){S.participantGuideScope=scope;S.participantGuideOpen=undefined;}
   if(!participantGuideEligible()||!(S.participantGuideOpen??(load(PARTICIPANT_GUIDE_KEY,false)!==true)))return 0;
+  if(S.tab==='who')return 'name';
   if(!cartCount())return 1;
   if(['menu','store'].includes(S.tab))return 2;
   if((budget()&&budgetLeft()<0)||menuDraftChanges().length)return 0;
@@ -5132,7 +5148,7 @@ function participantGuideHtml(){
   if(!participantGuideEligible())return '';
   const step=participantGuideStep();
   if(!step)return (S.participantGuideOpen??(load(PARTICIPANT_GUIDE_KEY,false)!==true))?'':'<div class="participant-guide-reopen"><button class="text-btn" data-act="participant-guide-open">메뉴 보내는 방법</button></div>';
-  const text=step===1?'원하는 메뉴의 +를 눌러요':step===2?'담았어요! 장바구니를 확인해요':inLateWindow()?'내용 확인 후 추가 응답 보내기':'내용 확인 후 메뉴를 보내요';
+  const text=step==='name'?'이름 입력 → 메뉴 담기 → 장바구니 → 보내기':step===1?'원하는 메뉴의 +를 눌러요':step===2?'담았어요! 장바구니를 확인해요':inLateWindow()?'내용 확인 후 추가 응답 보내기':'내용 확인 후 메뉴를 보내요';
   return `<aside class="participant-guide" aria-label="처음 메뉴 보내기 안내"><span aria-hidden="true">✦</span><b>${text}</b><button type="button" data-act="participant-guide-close" aria-label="메뉴 안내 닫기">×</button></aside>`;
 }
 function clearParticipantGuideTarget(){
@@ -5143,8 +5159,18 @@ function clearParticipantGuideTarget(){
   }
 }
 function refreshParticipantGuide(){
-  const step=document.getElementById('participantFlow')?participantGuideStep():0;let target=null;
-  if(step===1){
+  const step=document.getElementById('participantFlow')||document.getElementById('participantNameGuide')?participantGuideStep():0;let target=null;
+  if(step==='name'){
+    const sheet=document.getElementById('sheet');
+    if(sheet){
+      if(avatarPicker&&avatarPicker.roomId===S.roomId&&!S.answers.has(answerId(avatarPicker.name))&&!S.lateAnswers.has(answerId(avatarPicker.name)))target=sheet.querySelector('.ap-confirm');
+    }else{
+      const input=document.getElementById('whoName');
+      target=input?.value.trim()?document.querySelector('[data-act="who-typed"]')
+        :document.querySelector('.participant-name-list')&&document.activeElement!==input?document.querySelector('.participant-name-list')
+        :document.querySelector('.participant-name-field');
+    }
+  }else if(step===1){
     const sheet=document.getElementById('sheet');
     if(sheet){
       const button=sheet.querySelector('[data-act="sheet-add"]'),q=Number(sheet.querySelector('.sheet-qty b')?.textContent)||1;
@@ -5163,10 +5189,11 @@ function refreshParticipantGuide(){
   const previous=document.querySelector('[data-participant-guide-target]');
   if(target&&previous===target&&target.getAttribute('data-participant-guide-target')===String(step))return;
   clearParticipantGuideTarget();if(!target)return;
-  if(!target.hasAttribute('aria-label')&&!target.hasAttribute('aria-labelledby')){target.setAttribute('aria-label',(target.innerText||target.textContent||'').replace(/\s+/g,' ').trim());target.setAttribute('data-participant-guide-label','');}
+  const nameField=step==='name'&&target.classList.contains('participant-name-field'),nameList=step==='name'&&target.classList.contains('participant-name-list');
+  if(!nameField&&!nameList&&!target.hasAttribute('aria-label')&&!target.hasAttribute('aria-labelledby')){target.setAttribute('aria-label',(target.innerText||target.textContent||'').replace(/\s+/g,' ').trim());target.setAttribute('data-participant-guide-label','');}
   target.classList.add('participant-guided');target.setAttribute('data-participant-guide-target',String(step));
-  const text=step===1?target.dataset.act==='menu-search-reset'?'메뉴 다시 보기':target.dataset.act==='tab'?'여기서 메뉴 담기':'여기를 눌러 담기':step===2?'다음은 장바구니':inLateWindow()?'추가 응답 보내기':'마지막! 메뉴 보내기';
-  const cue=`<span class="guide-cue" data-participant-guide-decor aria-hidden="true"><span class="guide-hand">👇</span>${text}</span>`;
+  const text=step==='name'?nameField?'여기에 이름 입력':nameList?'내 이름을 눌러요':avatarPicker?'메뉴 고르러 가기':'이름 입력했으면 다음':step===1?target.dataset.act==='menu-search-reset'?'메뉴 다시 보기':target.dataset.act==='tab'?'여기서 메뉴 담기':'여기를 눌러 담기':step===2?'다음은 장바구니':inLateWindow()?'추가 응답 보내기':'마지막! 메뉴 보내기';
+  const tag=nameField?'label':'span',cue=`<${tag} class="guide-cue"${nameField?' for="whoName"':''}${nameList?' style="pointer-events:none"':''} data-participant-guide-decor aria-hidden="true"><span class="guide-hand">👇</span>${text}</${tag}>`;
   target.insertAdjacentHTML('beforeend',cue+createGuideEffects().replaceAll('aria-hidden="true"','data-participant-guide-decor aria-hidden="true"'));
 }
 function participantFlow(){
@@ -5275,11 +5302,12 @@ function roomHead(big = false) {
 // 이름 고르기
 function roomWho() {
   const r = S.room, answered = new Set([...S.answers.values()].map(a => a.name));
+  const typed=S.participantNameDraft?.roomId===S.roomId?S.participantNameDraft.value:S.who&&!r.names.includes(S.who)?S.who:'';
   return `${topBar('', 'home')}${roomHead(true)}
   <div class="wrap who-content"><span class="eyebrow">가입은 생략, 이름만 부탁해요.</span><h2 class="sec-title">이름부터 알려 주세요</h2>
-    ${r.names.length ? `<div class="who-grid">${r.names.map(n => `<button class="who-btn${answered.has(n) ? ' did' : ''}${S.who === n ? ' me' : ''}" data-act="who" data-who="${esc(n)}"><i aria-hidden="true">${avatar(n)}</i><span>${esc(n)}</span>${answered.has(n) ? '<small>✓ 보냄</small>' : ''}</button>`).join('')}</div>` : ''}
-    ${!r.names.length || r.freeJoin ? `${r.names.length ? '<p class="hint" style="margin-top:16px">명단에 없으면 이름을 적어 주세요.</p>' : ''}<div class="row name-in"><input class="input" id="whoName" maxlength="20" placeholder="함께하는 사람들이 알아볼 이름" aria-label="이름" value="${S.who && !r.names.includes(S.who) ? esc(S.who) : ''}"><button class="btn" data-act="who-typed">캐릭터 고르기</button></div>` : ''}
-    <p class="hint" style="margin-top:14px">이름을 누르면 캐릭터와 배경색을 고를 수 있어요.</p>
+    <div id="participantNameGuide" class="participant-name-guide">${participantGuideHtml()}</div>
+    ${r.names.length ? `<div class="participant-name-list"><div class="who-grid">${r.names.map(n => `<button class="who-btn${answered.has(n) ? ' did' : ''}${S.who === n ? ' me' : ''}" data-act="who" data-who="${esc(n)}"><i aria-hidden="true">${avatar(n)}</i><span>${esc(n)}</span>${answered.has(n) ? '<small>✓ 보냄</small>' : ''}</button>`).join('')}</div></div>` : ''}
+    ${!r.names.length || r.freeJoin ? `${r.names.length ? '<p class="hint" style="margin-top:16px">명단에 없으면 이름을 적어 주세요.</p>' : ''}<div class="row name-in"><div class="participant-name-field"><input class="input" id="whoName" maxlength="20" placeholder="함께하는 사람들이 알아볼 이름" aria-label="이름" value="${esc(typed)}"></div><button class="btn" data-act="who-typed">다음 →</button></div>` : ''}
   </div>${S.host ? roomNav() : ''}`;
 }
 function storeCard(s) {
@@ -5868,10 +5896,13 @@ function setWho(name, tab) {
   if (!name) { toast('이름을 적어 주세요'); return; }
   const r = S.room;
   if (r.names.length && !r.freeJoin && !r.names.includes(name)) { toast('명단에 있는 이름만 고를 수 있어요'); return; }
+  const continueGuide=participantGuideStep()==='name';
   if (name !== S.who) {
     S.who = name;
     loadLatestAnswer();
   } else syncAnswerDraft();
+  if(continueGuide){S.participantGuideScope=`${S.roomId}/${S.who}`;S.participantGuideOpen=true;}
+  delete S.participantNameDraft;
   persistRoom();
   watchLateAnswers();
   rememberRoom(S.roomId, {title: r.title});
@@ -6204,6 +6235,7 @@ document.addEventListener('click', async e => {
 // 입력칸
 document.addEventListener('input', e => {
   const t = e.target;
+  if(t.id==='whoName'){S.participantNameDraft={roomId:S.roomId,value:t.value.slice(0,20)};refreshParticipantGuide();return;}
   if(t.id==='managerDisplayName'){roomManagers.draftName=str(t.value,20);roomManagers.nameDirty=true;return;}
   if (S.route === 'create' && S.draft) {
     if (t.id === 'c-title') { S.draft.title = t.value; const b = document.querySelector('[data-act=create]'); const can = t.value.trim() && S.draft.stores.length; b.disabled = !can; const label=document.getElementById('createSubmitLabel')||b;label.textContent = can ? '방 만들고 링크 받기' : t.value.trim() ? '가게를 넣어 주세요' : '방 이름을 적어 주세요'; }
@@ -6260,6 +6292,7 @@ function markDirtySoft() {
   (nav || $app).insertAdjacentHTML(nav ? 'beforebegin' : 'beforeend', `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">바꾼 내용 저장</button></div>`);
 }
 document.addEventListener('change', e => { if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
+document.addEventListener('focusin', e => { if(e.target.id==='whoName')refreshParticipantGuide(); });
 document.addEventListener('keydown', e => {
   if(e.key==='Escape'&&document.getElementById('thanksMoment')){document.getElementById('thanksMoment').remove();clearTimeout(thanksTimer);e.preventDefault();return;}
   if(e.target.matches?.('[data-cart-status]')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){
