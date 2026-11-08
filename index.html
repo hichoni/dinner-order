@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="18f1d3a4e731bc68">
+<meta name="damatda-build" content="b0823c2b2cba48a5">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -1183,6 +1183,7 @@ body::after{display:none}body::before{background:#e8f7f3}
 .create-label small{margin-left:auto;font-size:10px;font-weight:450;color:#8b9c90}
 .mm .create-section>.input{height:45px;min-height:45px;padding:11px 13px;font-size:14px;border-radius:11px}
 .create-choices{display:grid;grid-template-columns:minmax(0,1fr);gap:9px}
+.create-guide-slot{grid-column:1/-1;min-width:0;margin-bottom:10px}.create-guide{position:relative;display:flex;align-items:center;gap:10px;padding:13px 35px 13px 12px;border:1px solid #9dcfc8;border-radius:16px;background:#f2fcf8;box-shadow:0 4px 14px #187e7310}.create-guide-progress{flex:none;font-size:11px;font-weight:700;color:#08776f;background:#dcefeb;padding:7px;border-radius:9px}.create-guide-copy{flex:1;min-width:0}.create-guide-copy b{display:block;font-size:14px;line-height:1.4;color:#155f5b}.create-guide-copy p{font-size:12px;line-height:1.45;color:#567b77;margin:4px 0 0}.create-guide .small-btn{flex:none;font-size:12px;min-height:36px;background:#fff;white-space:nowrap}.create-guide-close{position:absolute;right:5px;top:5px;width:28px;height:28px;border:0;background:transparent;color:#647e7a;font-size:21px;cursor:pointer}.create-guide-reopen{display:block;margin-left:auto;font-size:12px;min-height:30px}.create-section.is-guided{border-radius:13px;box-shadow:0 0 0 2px #56b5aa;background:#e9f8f344;outline-offset:4px}.create-section.is-guided>.field,.create-section.is-guided>.create-label{padding-left:7px}.create-submit.is-guided{outline:2px solid #56b5aa;outline-offset:4px}@media(max-width:480px){.create-guide{gap:7px;padding-left:9px}.create-guide-copy b{font-size:13px}.create-guide-copy p{font-size:11px}.create-guide .small-btn{padding:7px;font-size:11px}}@media(min-width:700px){.create-guide-slot{margin-bottom:0}}
 .create-choice{display:flex;align-items:center;gap:9px;min-height:62px;padding:12px 13px;background:#f1f9f4;border:1px solid #d8e9df;border-radius:12px;color:var(--mint-d);text-align:left;font-size:13px}
 .create-choice.direct{background:#fff9ef;border-color:#eee5d5;color:#8b6c42}
 .create-choice b{font-weight:550}.create-choice svg{display:block;width:26px;height:26px}
@@ -4725,6 +4726,25 @@ async function loadSums(rooms) {
 
 // ---------- 방 만들기 ----------
 const EMPTY_DRAFT = () => ({title: '', note: '', deadline: '', stores: [], mode: 'free', names: '', freeJoin: false, treat: null});
+const CREATE_GUIDE_KEY='mm-create-guide-seen-v1';
+function createGuideIsOpen(){return S.createGuideOpen ?? (load(CREATE_GUIDE_KEY,false)!==true);}
+function createGuideStep(){return !S.draft?.title?.trim()?1:!S.draft.stores.length?2:3;}
+function createGuideHtml(){
+  if(!createGuideIsOpen())return '<button class="text-btn create-guide-reopen" data-act="create-guide-open">만드는 방법 보기</button>';
+  const step=createGuideStep();
+  const title=['모임 이름부터 적어요','함께 고를 가게를 담아요','준비 끝! 링크로 초대해요'][step-1];
+  const hint=['예: 우리 팀 점심 · 오늘 커피','목록에서 지역과 가게만 고르세요.','명단·마감·한턱은 필요할 때만 설정하세요.'][step-1];
+  const action=step===2?'data-act="catalog" data-for="create"':`data-act="create-guide-focus" data-target="${step===1?'c-title':'createSubmit'}"`;
+  return `<aside class="create-guide" aria-label="모임 만들기 안내"><span class="create-guide-progress">${step}/3</span><div class="create-guide-copy" aria-live="polite" aria-atomic="true"><b>${title}</b><p id="createGuideHint">${hint}</p></div><button class="small-btn" ${action}>${step===1?'이름 입력':step===2?'가게 고르기':'시작 버튼 보기'} →</button><button class="create-guide-close" data-act="create-guide-close" aria-label="만들기 안내 닫기">×</button></aside>`;
+}
+function refreshCreateGuide(){
+  const root=document.getElementById('createGuideSlot');if(!root)return;
+  const open=createGuideIsOpen(),step=createGuideStep(),stamp=`${open}:${step}`;
+  if(root.dataset.guideState===stamp)return;
+  root.innerHTML=createGuideHtml();root.dataset.guideState=stamp;
+  for(const el of document.querySelectorAll('[data-create-guide-step]'))el.classList.toggle('is-guided',open&&Number(el.dataset.createGuideStep)===step);
+}
+function finishCreateGuide(){save(CREATE_GUIDE_KEY,true);S.createGuideOpen=false;}
 // 🎁 One response spends one configured person/team/family budget.
 const CAP_CHIPS = [5000, 10000, 15000, 20000, 30000];
 function treatForm(p, t) {
@@ -4743,14 +4763,14 @@ function storeRow(s, act) {
   return `<div class="pick-row">${thumb(s, 'sm')}<div class="pr-txt"><b>${esc(s.name)}</b><span>메뉴 ${foodMenus(s).length}개${guidanceMenus(s).length ? ` · 배달·추가요금 안내 ${guidanceMenus(s).length}건` : ''}</span></div>${act}</div>`;
 }
 function viewCreate() {
-  const d = S.draft, can = d.title.trim() && d.stores.length;
+  const d = S.draft, can = d.title.trim() && d.stores.length,guide=createGuideIsOpen(),step=createGuideStep();
   return `${topBar('같이 담기', 'home')}
   <div class="wrap form create-form">
-
+    <div id="createGuideSlot" class="create-guide-slot" data-guide-state="${guide}:${step}">${createGuideHtml()}</div>
     ${S.createError ? `<div class="notice red" role="alert"><b>담기를 시작하지 못했어요.</b><p>${esc(S.createError)}</p><span>적은 내용은 남아 있어요. 다시 시도해 주세요.</span></div>` : ''}
     <div class="create-board">
-      <section class="create-section"><label class="field" for="c-title"><span class="create-label"><i>01</i>모임 이름</span></label><input class="input" id="c-title" maxlength="40" placeholder="예: 오늘 커피는 내가 쏜다!" value="${esc(d.title)}"></section>
-      <section class="create-section"><h2 class="create-label"><i>02</i>메뉴 고를 가게 <small>${d.stores.length ? `${d.stores.length}곳 담음` : '1곳 이상'}</small></h2>
+      <section class="create-section${guide&&step===1?' is-guided':''}" data-create-guide-step="1"><label class="field" for="c-title"><span class="create-label"><i>01</i>모임 이름</span></label><input class="input" id="c-title" maxlength="40" placeholder="예: 오늘 커피는 내가 쏜다!" value="${esc(d.title)}"></section>
+      <section class="create-section${guide&&step===2?' is-guided':''}" data-create-guide-step="2"><h2 class="create-label"><i>02</i>메뉴 고를 가게 <small>${d.stores.length ? `${d.stores.length}곳 담음` : '1곳 이상'}</small></h2>
         ${d.stores.length ? `<div class="create-picked">${d.stores.map(s => storeRow(s, `<button class="x-btn" data-act="draft-del" data-id="${esc(s.id)}" aria-label="${esc(s.name)} 빼기">✕</button>`)).join('')}</div>` : ''}
         <div class="create-choices"><button class="create-choice" data-act="catalog" data-for="create"><span aria-hidden="true">${FOOD_ICONS.bowl}</span><b>주변 맛집 목록</b><span class="choice-arrow" aria-hidden="true">＋</span></button></div>
       </section>
@@ -4765,7 +4785,7 @@ function viewCreate() {
       ${treatForm('c', d.treat)}
     </div></section>
   </div>
-  <div class="bottom-bar create-submit"><button class="btn block" data-act="create"${can && !S.sending ? '' : ' disabled'}>${S.sending ? '만드는 중…' : can ? S.createError ? '다시 시작하기' : '시작하고 초대 링크 받기' : d.title.trim() ? '가게를 넣어 주세요' : '모임 이름을 적어 주세요'}</button></div>`;
+  <div class="bottom-bar create-submit${guide&&step===3?' is-guided':''}" data-create-guide-step="3"><button class="btn block" id="createSubmit" data-act="create"${can && !S.sending ? '' : ' disabled'}>${S.sending ? '만드는 중…' : can ? S.createError ? '다시 시작하기' : '시작하고 초대 링크 받기' : d.title.trim() ? '가게를 넣어 주세요' : '모임 이름을 적어 주세요'}</button></div>`;
 }
 
 
@@ -4824,7 +4844,7 @@ function catalogCityButtons() {
   const cities=[...new Set(CATALOG.stores.map(catalogCity).filter(Boolean))];
   const preferred=['예천군','안동시','영주시','포항시','구미시','경주시','경산시','김천시','영천시','고령군','성주군','칠곡군','상주시','문경시','의성군'];
   cities.sort((a,b)=>(preferred.includes(a)?preferred.indexOf(a):99)-(preferred.includes(b)?preferred.indexOf(b):99)||a.localeCompare(b,'ko'));
-  const scopes=[...cities,...(CATALOG.stores.some(inNewTown)?[NEW_TOWN]:[])];
+  const scopes=[...(CATALOG.stores.some(inNewTown)?[NEW_TOWN]:[]),...cities];
   return `<p class="catalog-area-label" id="catalogCityLabel">어느 지역에서 고를까요?</p><div class="catalog-cities" role="group" aria-label="도시 선택" aria-labelledby="catalogCityLabel">${scopes.map(scope=>{
     const label=scope==='all'?'전체':preferred.includes(scope)?scope.slice(0,-1):scope;
     const count=CATALOG.stores.filter(s=>inCityScope(s,scope)).length;
@@ -5526,7 +5546,7 @@ async function createRoom() {
       try{await hostApi('/attach',{roomId:id});await syncAccountRooms();}
       catch{hostAccount.error='방은 만들었지만 계정에 연결하지 못했어요. 관리 링크를 보관하고 방 설정에서 다시 연결해 주세요.';}
     }
-    S.sending = false; S.draft = null; save('mm-create-draft', null); S.created = true;
+    finishCreateGuide();S.sending = false; S.draft = null; save('mm-create-draft', null); S.created = true;
     location.hash = `r=${id}`; // hashchange 가 방을 열어요
   } catch (e) {
     S.sending = false;
@@ -5690,6 +5710,13 @@ document.addEventListener('click', async e => {
       break;
     case 'guest-start': go({route:'guest-warning'}); break;
     case 'guest-confirm': guestCreateAllowed=true;go({route:'create'});break;
+    case 'create-guide-close':finishCreateGuide();rerender();break;
+    case 'create-guide-open':S.createGuideOpen=true;rerender();break;
+    case 'create-guide-focus':{
+      if(!['c-title','createSubmit'].includes(el.dataset.target))break;
+      const target=document.getElementById(el.dataset.target);
+      target?.scrollIntoView({block:'center',behavior:reduceMotion()?'auto':'smooth'});target?.focus({preventScroll:true});break;
+    }
     case 'account-start': await startKakao('new');break;
     case 'account-login': await startKakao('home');break;
     case 'account-link': await linkCurrentRoom();break;
@@ -5946,7 +5973,7 @@ document.addEventListener('input', e => {
     if (t.id === 'c-treat-by') S.draft.treat.by = t.value;
     if (t.id === 'c-treat-unit') { S.draft.treat.unit=t.value.slice(0,12);const label=document.getElementById('c-budget-label');if(label)label.textContent=budgetLabel(S.draft.treat)+' 예산'; }
     if (t.id === 'c-treat-cap') { S.draft.treat.cap = num(t.value); for (const b of document.querySelectorAll('.cap-chips button')) b.classList.toggle('on', Number(b.dataset.v) === S.draft.treat.cap); }
-    persistDraft(); return;
+    refreshCreateGuide();persistDraft(); return;
   }
   if (t.id === 'catSearch') { S.catQuery = t.value; S.catLimit=12; S.catPreview='';scheduleSearchRefresh('catalog');return; }
   if (t.id === 'catalogArea') { S.catArea=t.value; S.catCat='all'; S.catLimit=12; S.catPreview=''; rerender(); return; }
