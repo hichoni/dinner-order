@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="ba18cef86d7a5513">
+<meta name="damatda-build" content="8972950977f31528">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2932,7 +2932,7 @@ async function sendThanks(){
     const current=myAnswer(),updated={...latest,thanks:message};
     if(answerVersion(current)!==expected&&answerVersion(current)!==answerVersion(updated)){S.answerConflict=true;persistRoom();toast('감사인사를 보냈어요. 다른 화면에서 바뀐 메뉴는 최신 내역을 확인해 주세요.');return;}
     S.answers.set(id,updated);S.answerBase={version:answerVersion(updated),content:JSON.stringify([...JSON.parse(baseContent).slice(0,3),message])};
-    S.answerConflict=false;S.thanksSent={roomId,who,signature:thanksSignature(message)};persistRoom();queueCartState();
+    S.answerConflict=false;S.thanksSent={roomId,who,version:answerVersion(updated),signature:thanksSignature(message)};persistRoom();queueCartState();
     if(menuContent(currentDraft())===menuContent(updated))go({tab:'mine'});
     toast('💌 감사인사를 보냈어요. 메뉴는 그대로예요.');buzz([15,30,15]);
   }catch(e){
@@ -5616,7 +5616,7 @@ function mineReceipt(a,editable=true,label='마지막 전송') {
   const time=Number.isFinite(a.at)&&a.at>0?new Date(a.at):null;
   return `<section class="ticket mine-receipt" aria-label="${esc(a.name)} ${esc(label)} 메뉴"><header class="mine-receipt-head"><div><h2>${esc(a.name)}</h2><span>${count}개 · ${esc(label)}</span><time class="mine-sent-at"${time?` datetime="${time.toISOString()}"`:''}>${time?esc(time.toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}))+' 전송':'전송 시간 확인 중'}</time></div><b>${won(total)}</b></header>
     ${thanks?`<div class="mine-sent-thanks">${thanksReceipt(thanks)}${label==='방장 승인 대기'?'':`<button type="button" class="text-btn" data-act="thanks-replay" data-id="${esc(a.id)}" aria-label="내가 보낸 감사인사 다시 보기">효과 다시 보기 ↗</button>`}</div>`:'<p class="mine-no-thanks">감사인사 없이 메뉴만 보냈어요.</p>'}
-    ${S.thanksSent?.roomId===S.roomId&&S.thanksSent.who===a.name&&S.thanksSent.signature===thanksSignature(a.thanks)?'<p class="thanks-sent-notice" role="status">💌 감사인사 전달 완료 · 메뉴는 그대로예요.</p>':''}
+    ${S.thanksSent?.roomId===S.roomId&&S.thanksSent.who===a.name&&S.thanksSent.version===answerVersion(a)&&S.thanksSent.signature===thanksSignature(a.thanks)?'<p class="thanks-sent-notice" role="status">💌 감사인사 전달 완료 · 메뉴는 그대로예요.</p>':''}
     ${editable&&a.name===S.who&&!locked()&&!S.answerConflict&&myLateAnswer()?.status!=='pending'?`<div class="thanks-after-send"><button type="button" class="btn line-dark" data-act="thanks-write">💌 ${thanks?'감사인사 더 쓰기·수정':'감사인사 추가하기'}</button><small>메뉴는 그대로 두고 감사인사만 보낼 수 있어요.</small></div>`:''}
     ${answerStoreGroups(a).map(([sid,items])=>`<section class="mine-store"><h3>${esc(storeOf(sid)?.name||'(지운 가게)')}</h3>${items.map(i=>`<div class="mine-menu-line"><span>${i.m?.startsWith('custom-')?'<small class="shared-menu-tag">직접 추가</small>':''}${esc(i.name)}</span><small>${i.n}개</small><b>${won(i.price*i.n)}</b></div>`).join('')}</section>`).join('')}
     <details class="mine-details" data-mine-fold="${esc(key)}"${S.mineOpen?.[key]?' open':''}><summary><span>${requests.length||a.req?'요청사항 · ':''}전송 관리</span><i aria-hidden="true">＋</i></summary><div class="mine-detail-body">${requests.map(([sid,text])=>`<p class="mine-request"><b>${esc(storeOf(sid)?.name||'(지운 가게)')} 요청</b><span>${esc(text)}</span></p>`).join('')}${legacyRequestHtml(a)}${editable?`<button class="text-btn red" data-act="answer-del" data-who="${esc(a.name)}"${locked()?' disabled':''}>보낸 메뉴 취소</button>`:''}</div></details></section>`;
