@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="b5c127371596f1b0">
+<meta name="damatda-build" content="d09367de0d59eab9">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3940,7 +3940,7 @@ function chooseCatalogTown(town) {
 function catalogPreviousStep(target) {
   cancelNearbyRequest();
   const step=target==='region'||S.catCity==='all'?'region':'neighborhoods';
-  if(history.state?.dinnerCatalog?.step===S.catStep&&S.catStep!==step){history.back();return;}
+  if(history.state?.dinnerCatalog?.step===S.catStep&&!history.state.dinnerCatalog.recovered&&S.catStep!==step){history.back();return;}
   S.catStep=step;rememberCatalogStep();rerender();scrollTo(0,0);
 }
 
@@ -4299,7 +4299,7 @@ async function resumeActiveCatalog(scope,historyView=null) {
     if(generation!==catalogMemory.generation||S.route!==route||S.tab!==tab||S.roomId!==roomId||(scope==='room'&&UID!==identity)||!sameCatalogContext(context,catalogContext(scope,false))||(scope==='create'&&S.draft!==target))return false;
     if(scope==='room'){if(!S.host||(S.edit&&S.edit!==target&&S.edit.dirty))return false;S.edit ||= freshRoomSettingsDraft();context.target=S.edit;}
     const latest=readCatalogProgress(context);if(!latest||(!catalogHistoryMatches(historyView,context)&&(!latest.active||(!catalogAddressMatches(context)&&!catalogPointerMatches(load(CATALOG_ACTIVE_KEY,null),context))))||!applyCatalogProgress(context,latest))return false;
-    go({route:'catalog'});rememberCatalogStep();toast('고르던 가게·지역을 불러왔어요');void refreshRestoredCatalogLocation(context,latest);return true;
+    go({route:'catalog'});rememberCatalogStep('replaceState',true);toast('고르던 가게·지역을 불러왔어요');void refreshRestoredCatalogLocation(context,latest);return true;
   }catch{toast('저장한 선택은 남아 있어요. 맛집 목록을 다시 열어 주세요.');return false;}
   finally{if(catalogMemory.pending===context.key)catalogMemory.pending='';}
 }
@@ -5665,8 +5665,9 @@ const catalogCity = s => /([가-힣]+[시군])(?:\s|$)/.exec(s.address || '')?.[
 const inNewTown = s => s.area===NEW_TOWN && ['안동시','예천군'].includes(catalogCity(s));
 const inCityScope = (s, scope) => scope==='all' || (scope===NEW_TOWN ? inNewTown(s) : catalogCity(s)===scope);
 const inCity = s => inCityScope(s,S.catCity);
-function rememberCatalogStep(method='replaceState') {
-  history[method]({dinnerCatalog:{...catalogSavedView(),scope:S.catFor,roomId:S.catFor==='room'?S.roomId:''}},'',location.hash);persistCatalogProgress();
+function rememberCatalogStep(method='replaceState',recovered=false) {
+  const restored=recovered||(method==='replaceState'&&history.state?.dinnerCatalog?.recovered===true);
+  history[method]({dinnerCatalog:{...catalogSavedView(),scope:S.catFor,roomId:S.catFor==='room'?S.roomId:'',recovered:restored}},'',location.hash);persistCatalogProgress();
 }
 function catalogSteps() {
   return `<ol class="catalog-steps" aria-label="가게 선택 순서"><li${S.catStep==='region'?' aria-current="step"':''}><span>1</span>지역 선택</li><li${S.catStep==='neighborhoods'?' aria-current="step"':''}><span>2</span>동네 선택</li><li${S.catStep==='stores'?' aria-current="step"':''}><span>3</span>가게 선택</li></ol>`;
