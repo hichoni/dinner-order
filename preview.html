@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="b5c127371596f1b0"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="d09367de0d59eab9"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -4083,7 +4083,7 @@ function chooseCatalogTown(town) {
 function catalogPreviousStep(target) {
   cancelNearbyRequest();
   const step=target==='region'||S.catCity==='all'?'region':'neighborhoods';
-  if(history.state?.dinnerCatalog?.step===S.catStep&&S.catStep!==step){history.back();return;}
+  if(history.state?.dinnerCatalog?.step===S.catStep&&!history.state.dinnerCatalog.recovered&&S.catStep!==step){history.back();return;}
   S.catStep=step;rememberCatalogStep();rerender();scrollTo(0,0);
 }
 
@@ -4442,7 +4442,7 @@ async function resumeActiveCatalog(scope,historyView=null) {
     if(generation!==catalogMemory.generation||S.route!==route||S.tab!==tab||S.roomId!==roomId||(scope==='room'&&UID!==identity)||!sameCatalogContext(context,catalogContext(scope,false))||(scope==='create'&&S.draft!==target))return false;
     if(scope==='room'){if(!S.host||(S.edit&&S.edit!==target&&S.edit.dirty))return false;S.edit ||= freshRoomSettingsDraft();context.target=S.edit;}
     const latest=readCatalogProgress(context);if(!latest||(!catalogHistoryMatches(historyView,context)&&(!latest.active||(!catalogAddressMatches(context)&&!catalogPointerMatches(load(CATALOG_ACTIVE_KEY,null),context))))||!applyCatalogProgress(context,latest))return false;
-    go({route:'catalog'});rememberCatalogStep();toast('고르던 가게·지역을 불러왔어요');void refreshRestoredCatalogLocation(context,latest);return true;
+    go({route:'catalog'});rememberCatalogStep('replaceState',true);toast('고르던 가게·지역을 불러왔어요');void refreshRestoredCatalogLocation(context,latest);return true;
   }catch{toast('저장한 선택은 남아 있어요. 맛집 목록을 다시 열어 주세요.');return false;}
   finally{if(catalogMemory.pending===context.key)catalogMemory.pending='';}
 }
@@ -5808,8 +5808,9 @@ const catalogCity = s => /([가-힣]+[시군])(?:\s|$)/.exec(s.address || '')?.[
 const inNewTown = s => s.area===NEW_TOWN && ['안동시','예천군'].includes(catalogCity(s));
 const inCityScope = (s, scope) => scope==='all' || (scope===NEW_TOWN ? inNewTown(s) : catalogCity(s)===scope);
 const inCity = s => inCityScope(s,S.catCity);
-function rememberCatalogStep(method='replaceState') {
-  history[method]({dinnerCatalog:{...catalogSavedView(),scope:S.catFor,roomId:S.catFor==='room'?S.roomId:''}},'',location.hash);persistCatalogProgress();
+function rememberCatalogStep(method='replaceState',recovered=false) {
+  const restored=recovered||(method==='replaceState'&&history.state?.dinnerCatalog?.recovered===true);
+  history[method]({dinnerCatalog:{...catalogSavedView(),scope:S.catFor,roomId:S.catFor==='room'?S.roomId:'',recovered:restored}},'',location.hash);persistCatalogProgress();
 }
 function catalogSteps() {
   return `<ol class="catalog-steps" aria-label="가게 선택 순서"><li${S.catStep==='region'?' aria-current="step"':''}><span>1</span>지역 선택</li><li${S.catStep==='neighborhoods'?' aria-current="step"':''}><span>2</span>동네 선택</li><li${S.catStep==='stores'?' aria-current="step"':''}><span>3</span>가게 선택</li></ol>`;
