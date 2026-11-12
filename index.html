@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="bfbb9eef2b5bfc74">
+<meta name="damatda-build" content="904c4c5a7e5da1b0">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3930,6 +3930,7 @@ function viewNeighborhoods(done) {
 }
 function chooseCatalogTown(town) {
   if(town!=='all'&&!catalogNeighborhoods().some(unit=>unit.code===town))return;
+  cancelNearbyRequest();
   S.catTown=town;rememberCatalogStep();
   S.catStep='stores';S.catArea='all';S.catCat='all';S.catQuery='';S.catFilters=false;S.catShowMap=false;S.catLimit=12;S.catPreview='';
   rememberCatalogStep('pushState');rerender();scrollTo(0,0);
@@ -3994,6 +3995,58 @@ matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',event
 const catalogNearby={point:null,status:'idle',error:'',help:false,request:0,timer:0,version:0,demo:false};
 const NEARBY_PREVIEW_POINT = /* nearby-preview-point */null;
 const NEARBY_RADII=[1,3,5,10,30];
+// One foreground retry per user-initiated location attempt/help visit. Context
+// references and permission listeners stay in memory, alongside the location.
+let nearbyReturn=null;
+function clearNearbyReturn() {
+  const old=nearbyReturn;nearbyReturn=null;
+  old?.permission?.removeEventListener?.('change',old.change);
+}
+function makeNearbyReturn() {
+  const scope=S.catFor,target=scope==='room'?S.edit:S.draft,room=S.roomId;
+  return {scope,target,room,step:S.catStep,city:S.catCity,town:S.catTown,departed:false,returned:false,blurred:false,checking:false,permission:null,change:null};
+}
+function sameNearbyReturn(record) {
+  const current=record&&nearbyReturn===record&&S.route==='catalog'&&S.catFor===record.scope&&record.target===(record.scope==='room'?S.edit:S.draft)&&(record.scope!=='room'||S.roomId===record.room)&&S.catStep===record.step&&S.catCity===record.city&&S.catTown===record.town;
+  if(record&&nearbyReturn===record&&!current)clearNearbyReturn();
+  return current;
+}
+function readNearbyPermission() {
+  if(typeof navigator.permissions?.query!=='function')return Promise.resolve(null);
+  // A broken WebView permission query must not stall the foreground recovery.
+  return new Promise(resolve=>{let settled=false;const finish=value=>{if(settled)return;settled=true;clearTimeout(timer);resolve(value);};const timer=setTimeout(()=>finish(null),800);
+    try{Promise.resolve(navigator.permissions.query({name:'geolocation'})).then(finish,()=>finish(null));}catch{finish(null);}
+  });
+}
+async function watchNearbyPermission(record) {
+  const permission=await readNearbyPermission();if(!sameNearbyReturn(record))return;
+  record.permission=permission;record.change=()=>{if(permission.state==='granted'){record.returned=true;void resumeNearbyStores();}};
+  permission?.addEventListener?.('change',record.change);
+  if(record.returned)void resumeNearbyStores();
+}
+async function resumeNearbyStores() {
+  const record=nearbyReturn;
+  if(!sameNearbyReturn(record)||!record.returned||record.blurred||document.visibilityState==='hidden'||catalogNearby.status!=='error'||record.checking)return;
+  record.checking=true;const permission=await readNearbyPermission();
+  if(!sameNearbyReturn(record))return;
+  record.checking=false;
+  if(record.blurred||document.visibilityState==='hidden'||catalogNearby.status!=='error')return;
+  if(permission?.state==='denied'){record.returned=false;return;}
+  clearNearbyReturn();requestNearbyStores(true);
+}
+function nearbyWentAway(kind) {
+  const record=nearbyReturn;if(!sameNearbyReturn(record))return;
+  // A permission popup can blur the window. Only track that fallback after a
+  // failure; a real hidden/pagehide transition also counts during a request.
+  if(kind==='blur'&&catalogNearby.status!=='error')return;
+  record.departed=true;record.blurred=true;
+}
+function nearbyCameBack(persisted=false) {
+  const record=nearbyReturn;if(!sameNearbyReturn(record)||document.visibilityState==='hidden')return;
+  if(persisted)record.departed=true;
+  record.blurred=false;if(record.departed)record.returned=true;
+  void resumeNearbyStores();
+}
 const DISCOVERY_FOOD_ICONS={'한식':'🍚','카페':'☕','중식':'🥟','분식':'🍢','치킨':'🍗','일식':'🍣','국밥':'🍲','양식':'🍝','족발':'🐷','버거':'🍔','찜닭':'🥘','피자':'🍕','돈가스':'🍽️','아시안':'🍜','주점':'🍻','마라탕':'🌶️','도시락':'🍱','샐러드':'🥗','기타':'🍴'};
 let nearbyExclusionSource=null,nearbyExcludedIds=new Set();
 const nearbyDistances=new WeakMap();
@@ -4024,8 +4077,9 @@ function nearbyDistanceLabel(metres) {
 function catalogStoreOrder(a,b) {
   return (S.catMode==='nearby'?nearbyStoreDistance(a)-nearbyStoreDistance(b):0)||a.name.localeCompare(b.name,'ko')||String(a.id).localeCompare(String(b.id));
 }
-function cancelNearbyRequest(forget=false) {
+function cancelNearbyRequest(forget=false,keepReturn=false) {
   clearTimeout(catalogNearby.timer);catalogNearby.timer=0;catalogNearby.request++;
+  if(!keepReturn)clearNearbyReturn();
   if(catalogNearby.status==='busy')catalogNearby.status='idle';
   if(forget){catalogNearby.point=null;catalogNearby.error='';catalogNearby.help=false;catalogNearby.status='idle';catalogNearby.demo=false;catalogNearby.version++;}
 }
@@ -4037,6 +4091,7 @@ function nearbyPosition(position) {
   return {point:{lat:c.latitude,lng:c.longitude,accuracy:c.accuracy,at:timestamp}};
 }
 function showNearbyResults(point,demo=false) {
+  clearNearbyReturn();
   clearTimeout(catalogNearby.timer);catalogNearby.timer=0;catalogNearby.point=point;catalogNearby.demo=demo;catalogNearby.version++;catalogNearby.status='ready';catalogNearby.error='';catalogNearby.help=false;
   if(!history.state?.dinnerCatalog)rememberCatalogStep();
   const refreshing=S.catMode==='nearby';
@@ -4044,14 +4099,15 @@ function showNearbyResults(point,demo=false) {
   rememberCatalogStep(refreshing?'replaceState':'pushState');rerender();scrollTo(0,0);
   requestAnimationFrame(()=>document.getElementById('catalogRegionTitle')?.focus({preventScroll:true}));
 }
-function requestNearbyStores() {
+function requestNearbyStores(automatic=false) {
   if(catalogNearby.status==='busy'||S.route!=='catalog')return;
   const scope=S.catFor,target=scope==='room'?S.edit:S.draft,room=S.roomId;
   const stillHere=()=>S.route==='catalog'&&S.catFor===scope&&target===(scope==='room'?S.edit:S.draft)&&(scope!=='room'||S.roomId===room);
   if(!target)return;
   cancelNearbyRequest();catalogNearby.status='busy';catalogNearby.error='';catalogNearby.help=false;
+  if(!automatic)nearbyReturn=makeNearbyReturn();
   const request=catalogNearby.request;
-  const fail=message=>{if(request!==catalogNearby.request)return;cancelNearbyRequest();catalogNearby.status='error';catalogNearby.error=message;if(stillHere())rerender();};
+  const fail=message=>{if(request!==catalogNearby.request)return;if(!stillHere()){cancelNearbyRequest();return;}cancelNearbyRequest(false,!automatic);catalogNearby.status='error';catalogNearby.error=message;if(nearbyReturn)void watchNearbyPermission(nearbyReturn);rerender();};
   if(typeof navigator.geolocation?.getCurrentPosition!=='function'){fail('이 브라우저에서는 위치를 확인할 수 없어요. 지역을 직접 골라 주세요.');return;}
   rerender();
   // Browser timeout does not necessarily include time spent on a permission
@@ -4067,11 +4123,13 @@ function requestNearbyStores() {
 }
 function nearbyRecovery(previous=false) {
   if(!catalogNearby.error)return '';
-  return `<div class="nearby-recovery"><p role="alert">${esc(catalogNearby.error)}${previous?' 지금 목록은 이전에 확인한 위치 기준이에요.':''}</p><div class="nearby-recovery-actions"><button type="button" data-act="cat-nearby-help" aria-expanded="${catalogNearby.help}" aria-controls="nearbyPermissionHelp">위치 허용 방법 <span aria-hidden="true">${catalogNearby.help?'⌃':'⌄'}</span></button><button type="button" class="nearby-manual" data-act="cat-nearby-region">지역 직접 고르기 <span aria-hidden="true">→</span></button></div>${catalogNearby.help?`<section class="nearby-permission-help" id="nearbyPermissionHelp" aria-label="위치 허용 안내"><p><b>카톡에서 열었나요?</b> 휴대폰 설정에서 카카오톡의 위치 권한을 확인해 주세요.</p><div class="nearby-help-step"><b>안드로이드</b><p>카카오톡 아이콘 길게 누르기 → 앱 정보 → 권한 → 위치 → 앱 사용 중에만 허용</p></div><div class="nearby-help-step"><b>아이폰</b><p>설정 → 개인정보 보호 및 보안 → 위치 서비스 → 카카오톡 → 앱을 사용하는 동안</p></div><p>휴대폰의 위치 서비스도 켜져 있어야 해요. 메뉴 이름은 기기에 따라 다를 수 있어요.</p><p>설정 후 돌아와 <b>위치 다시 확인</b>을 누르고, 위치 요청이 뜨면 허용해 주세요.</p><button type="button" class="nearby-help-retry" data-act="cat-nearby">위치 다시 확인</button><p>계속 안 되면 카톡 메뉴에서 외부 브라우저로 열어 보세요. 그 브라우저에서도 damatda.kr의 위치 요청을 허용해 주세요.</p><div class="nearby-help-sources"><a href="https://support.google.com/android/answer/6179507?hl=ko" target="_blank" rel="noopener noreferrer">Android 도움말 ↗</a><a href="https://support.apple.com/ko-kr/102647" target="_blank" rel="noopener noreferrer">iPhone 도움말 ↗</a></div></section>`:''}</div>`;
+  return `<div class="nearby-recovery"><p role="alert">${esc(catalogNearby.error)}${previous?' 지금 목록은 이전에 확인한 위치 기준이에요.':''}</p><div class="nearby-recovery-actions"><button type="button" data-act="cat-nearby-help" aria-expanded="${catalogNearby.help}" aria-controls="nearbyPermissionHelp">위치 허용 방법 <span aria-hidden="true">${catalogNearby.help?'⌃':'⌄'}</span></button><button type="button" class="nearby-manual" data-act="cat-nearby-region">지역 직접 고르기 <span aria-hidden="true">→</span></button></div>${catalogNearby.help?`<section class="nearby-permission-help" id="nearbyPermissionHelp" aria-label="위치 허용 안내"><p><b>카톡에서 열었나요?</b> 휴대폰 설정에서 카카오톡의 위치 권한을 확인해 주세요.</p><div class="nearby-help-step"><b>안드로이드</b><p>카카오톡 아이콘 길게 누르기 → 앱 정보 → 권한 → 위치 → 앱 사용 중에만 허용</p></div><div class="nearby-help-step"><b>아이폰</b><p>설정 → 개인정보 보호 및 보안 → 위치 서비스 → 카카오톡 → 앱을 사용하는 동안</p></div><p>휴대폰의 위치 서비스도 켜져 있어야 해요. 메뉴 이름은 기기에 따라 다를 수 있어요.</p><p>위치를 허용하고 이 화면으로 돌아오면 <b>가까운 가게를 자동으로 찾아요.</b> 자동 확인이 안 되면 아래 버튼을 눌러 주세요.</p><button type="button" class="nearby-help-retry" data-act="cat-nearby">위치 다시 확인</button><p>계속 안 되면 카톡 메뉴에서 외부 브라우저로 열어 보세요. 그 브라우저에서도 damatda.kr의 위치 요청을 허용해 주세요.</p><div class="nearby-help-sources"><a href="https://support.google.com/android/answer/6179507?hl=ko" target="_blank" rel="noopener noreferrer">Android 도움말 ↗</a><a href="https://support.apple.com/ko-kr/102647" target="_blank" rel="noopener noreferrer">iPhone 도움말 ↗</a></div></section>`:''}</div>`;
 }
 function toggleNearbyHelp() {
   if(!catalogNearby.error||S.route!=='catalog')return;
-  catalogNearby.help=!catalogNearby.help;rerender();
+  catalogNearby.help=!catalogNearby.help;
+  if(catalogNearby.help&&!nearbyReturn){nearbyReturn=makeNearbyReturn();void watchNearbyPermission(nearbyReturn);}
+  rerender();
   document.querySelector('[data-act="cat-nearby-help"]')?.focus({preventScroll:true});
 }
 function chooseRegionWithoutLocation() {
@@ -6881,9 +6939,11 @@ function launchApp() {
 launchApp();
 checkAppUpdate();
 setInterval(checkAppUpdate,60000);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='hidden'){checkAppUpdate();resumeParticipantGuide();}});
-addEventListener('focus',()=>{checkAppUpdate();resumeParticipantGuide();});
-addEventListener('pageshow',resumeParticipantGuide);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')nearbyWentAway('hidden');else{nearbyCameBack();checkAppUpdate();resumeParticipantGuide();}});
+addEventListener('blur',()=>nearbyWentAway('blur'));
+addEventListener('pagehide',()=>nearbyWentAway('pagehide'));
+addEventListener('focus',()=>{nearbyCameBack();checkAppUpdate();resumeParticipantGuide();});
+addEventListener('pageshow',event=>{nearbyCameBack(!!event?.persisted);resumeParticipantGuide();});
 addEventListener('online',()=>{appUpdate.checkedAt=0;checkAppUpdate();});
 setInterval(() => { if(S.route==='room'&&S.room?.deadline&&!document.getElementById('sheet')){const phase=S.room.closed?'closed':inLateWindow()?'late':isLate()?'ended':'open';if(S.clockPhase!==phase){S.clockPhase=phase;keepView();refreshDraftStatus();}} },1000);
 
