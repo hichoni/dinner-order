@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="d09367de0d59eab9">
+<meta name="damatda-build" content="f41e0ed80836fa9f">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2137,6 +2137,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .catalog-region-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:14px 0 18px}.catalog-region-page .catalog-region-head .catalog-region-intro{padding:0;margin:0;flex:1}.catalog-region-page .catalog-region-head .region-view-switch{position:static;margin:0;flex-shrink:0}
 .nearby-distance{width:fit-content;align-self:flex-start}.quick-filter-scroll{scrollbar-width:none}.quick-filter-scroll::-webkit-scrollbar{display:none}
 .catalog-memory-notice{margin:12px auto;padding:12px 16px;max-width:760px;border:1px solid #e9d8bf;border-radius:12px;background:#fffaf1;color:#805035;font-size:12px;line-height:1.6}
+.catalog-cloud-status{max-width:760px;margin:8px auto;padding:8px 14px;border-radius:12px;background:#e7f4f1;color:#36776e;font-size:12px;line-height:1.5;display:flex;gap:10px;justify-content:space-between;align-items:center}.catalog-cloud-status.needs-attention{background:#fff5e7;color:#865b25}.catalog-cloud-status button{border:1px solid currentColor;border-radius:9px;background:transparent;color:inherit;padding:7px 9px;cursor:pointer;font:inherit;white-space:nowrap}.catalog-cloud-status>div{display:flex;gap:6px}.catalog-cloud-home{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0;padding:18px;border:1px solid #b9d8d2;border-radius:18px;background:#f2fbf8}.catalog-cloud-home small,.catalog-cloud-home b{display:block}.catalog-cloud-home small{color:#63867f;font-size:11px;margin-bottom:4px}.catalog-cloud-home .btn{white-space:nowrap}@media(max-width:600px){.catalog-cloud-status{margin:7px 16px;font-size:11px;flex-wrap:wrap}.catalog-cloud-status>div{width:100%;flex-wrap:wrap}.catalog-cloud-home{flex-wrap:wrap}}
 @media(max-width:600px){.nearby-entry{margin-bottom:14px}.nearby-start{min-height:67px;padding:13px 15px}.nearby-start b{font-size:17px}.quick-filter-scroll button{padding:9px 12px}.catalog-store-page .catalog-region-summary h2{font-size:22px}.catalog-store-page .catalog-region-summary .small-btn{font-size:12px;min-height:40px}.catalog-store-page .search{font-size:14px}}
 @media(max-width:600px){.catalog-region-head{display:block;margin:14px 0 10px}.catalog-region-page .catalog-region-head .region-view-switch{margin:12px 0 0 auto}}
 </style>
@@ -4186,20 +4187,20 @@ function catalogStorageRead(k) {return localStorage.getItem(k);}
 function catalogStorageWrite(k,value) {localStorage.setItem(k,value);}
 function catalogStorageRemove(k) {localStorage.removeItem(k);}
 const CATALOG_PROGRESS_KEY='mm-catalog-progress-v1:',CATALOG_ACTIVE_KEY='mm-catalog-active-v1',CATALOG_CREATE_ID='mm-catalog-create-id-v1';
-const catalogMemory={current:null,pending:'',generation:0,failed:false,createTarget:null,createId:'',writer:[...crypto.getRandomValues(new Uint8Array(8))].map(n=>n.toString(16).padStart(2,'0')).join('')};
+const catalogMemory={current:null,pending:'',generation:0,failed:false,createTarget:null,createId:'',draftAccount:null,writer:[...crypto.getRandomValues(new Uint8Array(8))].map(n=>n.toString(16).padStart(2,'0')).join('')};
 function catalogContext(scope=S.catFor,createIdentity=true) {
   if(scope==='create'){
     if(!S.draft)return null;
-    if(catalogMemory.createTarget!==S.draft){catalogMemory.createTarget=S.draft;catalogMemory.createId=load(CATALOG_CREATE_ID,'');}
+    if(catalogMemory.createTarget!==S.draft){catalogMemory.createTarget=S.draft;catalogMemory.createId=load(catalogAccountKey(CATALOG_CREATE_ID),'');}
     if(!/^[a-f0-9]{24}$/.test(catalogMemory.createId)){
       if(!createIdentity)return null;
       catalogMemory.createId=[...crypto.getRandomValues(new Uint8Array(12))].map(n=>n.toString(16).padStart(2,'0')).join('');
-      try{catalogStorageWrite(CATALOG_CREATE_ID,JSON.stringify(catalogMemory.createId));}catch{catalogMemory.failed=true;}
+      try{catalogStorageWrite(catalogAccountKey(CATALOG_CREATE_ID),JSON.stringify(catalogMemory.createId));}catch{catalogMemory.failed=true;}
     }
-    return {key:CATALOG_PROGRESS_KEY+'create',scope,identity:catalogMemory.createId,roomId:'',target:S.draft};
+    return {key:catalogAccountKey(CATALOG_PROGRESS_KEY+'create'),scope,identity:catalogMemory.createId,roomId:'',target:S.draft};
   }
   if(scope!=='room'||!S.host||!UID||!S.roomId||!S.room)return null;
-  return {key:CATALOG_PROGRESS_KEY+'room:'+S.roomId+':'+encodeURIComponent(UID),scope,identity:UID,roomId:S.roomId,target:S.edit};
+  return {key:catalogAccountKey(CATALOG_PROGRESS_KEY+'room:'+S.roomId+':'+encodeURIComponent(UID)),scope,identity:UID,roomId:S.roomId,target:S.edit};
 }
 function sameCatalogContext(a,b) {return !!a&&!!b&&a.key===b.key&&a.identity===b.identity&&a.roomId===b.roomId;}
 function catalogPointerMatches(pointer,context) {return !!context&&pointer?.schema===1&&pointer.scope===context.scope&&pointer.identity===context.identity&&pointer.roomId===context.roomId;}
@@ -4225,35 +4226,36 @@ function persistCatalogProgress() {
     // Background renders/closing an older tab must not replace a newer tab's
     // selection. A real selection/filter change may take ownership again.
     if(current.body===body&&!catalogMemory.failed&&existing?.writer&&existing.writer!==catalogMemory.writer)return true;
-    if(current.body===body&&!catalogMemory.failed&&catalogStorageRead(context.key)===current.raw&&catalogStorageRead(CATALOG_ACTIVE_KEY)===pointerRaw&&(context.scope!=='create'||load(CATALOG_CREATE_ID,'')===context.identity))return true;
-    if(context.scope==='create')catalogStorageWrite(CATALOG_CREATE_ID,JSON.stringify(context.identity));
+    if(current.body===body&&!catalogMemory.failed&&catalogStorageRead(context.key)===current.raw&&catalogStorageRead(catalogAccountKey(CATALOG_ACTIVE_KEY))===pointerRaw&&(context.scope!=='create'||load(catalogAccountKey(CATALOG_CREATE_ID),'')===context.identity))return true;
+    if(context.scope==='create')catalogStorageWrite(catalogAccountKey(CATALOG_CREATE_ID),JSON.stringify(context.identity));
     data.at=Date.now();const raw=JSON.stringify(data);catalogStorageWrite(context.key,raw);
-    catalogStorageWrite(CATALOG_ACTIVE_KEY,pointerRaw);
-    current.body=body;current.raw=raw;current.data=data;catalogMemory.failed=false;refreshCatalogMemoryStatus();return true;
+    catalogStorageWrite(catalogAccountKey(CATALOG_ACTIVE_KEY),pointerRaw);
+    current.body=body;current.raw=raw;current.data=data;queueCatalogCloud(data);catalogMemory.failed=false;refreshCatalogMemoryStatus();return true;
   }catch{catalogMemory.failed=true;refreshCatalogMemoryStatus();return false;}
 }
 function deactivateCatalogProgress() {
   const current=catalogMemory.current;if(!current)return;
   catalogMemory.current=null;catalogMemory.generation++;
   try{
-    const data=readCatalogProgress(current),pointer=load(CATALOG_ACTIVE_KEY,null);
-    if(data?.writer===catalogMemory.writer&&current.data)catalogStorageWrite(current.key,JSON.stringify({...current.data,active:false}));
-    if(catalogPointerMatches(pointer,current)&&pointer.writer===catalogMemory.writer)catalogStorageRemove(CATALOG_ACTIVE_KEY);
+    const data=readCatalogProgress(current),pointer=load(catalogAccountKey(CATALOG_ACTIVE_KEY),null);
+    if(data?.writer===catalogMemory.writer&&current.data){const inactive={...current.data,active:false};catalogStorageWrite(current.key,JSON.stringify(inactive));queueCatalogCloud(inactive);}
+    if(catalogPointerMatches(pointer,current)&&pointer.writer===catalogMemory.writer)catalogStorageRemove(catalogAccountKey(CATALOG_ACTIVE_KEY));
   }catch{catalogMemory.failed=true;}
 }
 function clearCatalogProgress(scope=S.catFor) {
   const context=catalogContext(scope,false);if(!context)return;
+  queueCatalogCloud(null,catalogCloudKey(scope,context.roomId));
   try{
     if(readCatalogProgress(context))catalogStorageRemove(context.key);
-    if(catalogPointerMatches(load(CATALOG_ACTIVE_KEY,null),context))catalogStorageRemove(CATALOG_ACTIVE_KEY);
-    if(scope==='create'){catalogStorageRemove(CATALOG_CREATE_ID);catalogMemory.createId='';catalogMemory.createTarget=null;}
+    if(catalogPointerMatches(load(catalogAccountKey(CATALOG_ACTIVE_KEY),null),context))catalogStorageRemove(catalogAccountKey(CATALOG_ACTIVE_KEY));
+    if(scope==='create'){catalogStorageRemove(catalogAccountKey(CATALOG_CREATE_ID));catalogMemory.createId='';catalogMemory.createTarget=null;}
   }catch{catalogMemory.failed=true;}
   if(sameCatalogContext(context,catalogMemory.current))catalogMemory.current=null;
   catalogMemory.generation++;
 }
 function forgetCatalogStore(scope,id) {
   const context=catalogContext(scope,false),data=readCatalogProgress(context);if(!data)return;
-  try{catalogStorageWrite(context.key,JSON.stringify({...data,picked:data.picked.filter(picked=>picked!==id),at:Date.now()}));}
+  try{const next={...data,picked:data.picked.filter(picked=>picked!==id),at:Date.now()};catalogStorageWrite(context.key,JSON.stringify(next));queueCatalogCloud(next);}
   catch{catalogMemory.failed=true;}
 }
 function applyCatalogProgress(context,data=readCatalogProgress(context)) {
@@ -4289,8 +4291,12 @@ function catalogAddressMatches(context) {
   const hash=new URLSearchParams(location.hash.slice(1));return hash.get('r')===context.roomId&&hash.get('t')==='set';
 }
 async function resumeActiveCatalog(scope,historyView=null) {
+  if(scope==='room'&&!S.host||scope==='create'&&!S.draft)return false;
+  const opening={route:S.route,tab:S.tab,roomId:S.roomId,uid:UID};
+  if(catalogCloudEnabled())await pullCatalogCloud(catalogCloudKey(scope));
+  if(opening.route!==S.route||opening.tab!==S.tab||opening.roomId!==S.roomId||opening.uid!==UID)return false;
   const context=catalogContext(scope,false),data=readCatalogProgress(context);
-  if(!data||(!catalogHistoryMatches(historyView,context)&&(!data.active||(!catalogAddressMatches(context)&&!catalogPointerMatches(load(CATALOG_ACTIVE_KEY,null),context))))||catalogMemory.pending===context.key)return false;
+  if(!data||(!catalogHistoryMatches(historyView,context)&&(!data.active||(!catalogAddressMatches(context)&&!catalogPointerMatches(load(catalogAccountKey(CATALOG_ACTIVE_KEY),null),context))))||catalogMemory.pending===context.key)return false;
   const route=S.route,tab=S.tab,target=context.target,roomId=S.roomId,identity=UID,generation=++catalogMemory.generation;
   if(scope==='create'?route!=='create':route!=='room'||tab!=='set'||!S.host)return false;
   catalogMemory.pending=context.key;
@@ -4298,15 +4304,26 @@ async function resumeActiveCatalog(scope,historyView=null) {
     await loadCatalog();
     if(generation!==catalogMemory.generation||S.route!==route||S.tab!==tab||S.roomId!==roomId||(scope==='room'&&UID!==identity)||!sameCatalogContext(context,catalogContext(scope,false))||(scope==='create'&&S.draft!==target))return false;
     if(scope==='room'){if(!S.host||(S.edit&&S.edit!==target&&S.edit.dirty))return false;S.edit ||= freshRoomSettingsDraft();context.target=S.edit;}
-    const latest=readCatalogProgress(context);if(!latest||(!catalogHistoryMatches(historyView,context)&&(!latest.active||(!catalogAddressMatches(context)&&!catalogPointerMatches(load(CATALOG_ACTIVE_KEY,null),context))))||!applyCatalogProgress(context,latest))return false;
+    const latest=readCatalogProgress(context);if(!latest||(!catalogHistoryMatches(historyView,context)&&(!latest.active||(!catalogAddressMatches(context)&&!catalogPointerMatches(load(catalogAccountKey(CATALOG_ACTIVE_KEY),null),context))))||!applyCatalogProgress(context,latest))return false;
     go({route:'catalog'});rememberCatalogStep('replaceState',true);toast('고르던 가게·지역을 불러왔어요');void refreshRestoredCatalogLocation(context,latest);return true;
   }catch{toast('저장한 선택은 남아 있어요. 맛집 목록을 다시 열어 주세요.');return false;}
   finally{if(catalogMemory.pending===context.key)catalogMemory.pending='';}
 }
 async function resumeCatalogLanding() {
-  const pointer=load(CATALOG_ACTIVE_KEY,null);if(pointer?.schema!==1||location.hash||S.route!=='home')return;
+  if(location.hash||S.route!=='home')return;
+  if(!installPreview()&&!EMU){try{
+    await boot();
+    if(catalogCloudEnabled()){
+      const latest=await loadCatalogCloudHead();
+      if(latest&&!latest.state?.active){
+        const local=load(catalogAccountKey(CATALOG_ACTIVE_KEY),null),key=local?catalogCloudKey(local.scope,local.roomId):'';
+        if(latest.state||!key||!catalogCloudEntry(key).pending)return;
+      }
+    }
+  }catch{}}
+  const pointer=load(catalogAccountKey(CATALOG_ACTIVE_KEY),null);if(pointer?.schema!==1||location.hash||S.route!=='home')return;
   if(pointer.scope==='create'){
-    if(pointer.identity!==load(CATALOG_CREATE_ID,'')||!load('mm-create-draft',null))return;
+    if(pointer.identity!==load(catalogAccountKey(CATALOG_CREATE_ID),'')||!load(createDraftKey(),null))return;
     history.replaceState(null,'','#new');await beginCreate();return;
   }
   if(pointer.scope!=='room'||!/^[a-z0-9]{1,40}$/i.test(pointer.roomId||''))return;
@@ -4319,6 +4336,208 @@ function refreshCatalogMemoryStatus() {
   if(S.route!=='catalog')return;const notice=document.getElementById('catalogMemoryStatus');
   if(!catalogMemory.failed){notice?.remove?.();return;}
   if(!notice)document.querySelector('#app .top')?.insertAdjacentHTML?.('afterend',catalogMemoryStatus());
+}
+
+// Private account checkpoints use the existing verified Kakao server API.
+// Anonymous drafts never call it. Coordinates and manager credentials are omitted.
+const catalogCloud={uid:'',epoch:0,entries:new Map(),head:null,headRequest:null,timer:0,running:null,error:'',conflict:null,importing:0};
+const catalogCloudRandom=bytes=>[...crypto.getRandomValues(new Uint8Array(bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');
+function catalogAccountKey(key) {return hostAccount.uid?'mm-account-'+hostAccount.uid+':'+key:key;}
+function createDraftKey() {return catalogAccountKey('mm-create-draft');}
+function catalogCloudEnabled() {return !!hostAccount.uid&&UID===hostAccount.uid&&!installPreview()&&!EMU;}
+function bindCatalogDraft() {
+  const account=hostAccount.uid||'';
+  if(catalogMemory.draftAccount!==null&&catalogMemory.draftAccount!==account)S.draft=null;
+  catalogMemory.draftAccount=account;
+  S.draft ||= load(createDraftKey(),null)||EMPTY_DRAFT();
+}
+function resetCatalogCloud() {
+  clearTimeout(catalogCloud.timer);catalogCloud.timer=0;catalogCloud.epoch++;catalogCloud.uid=hostAccount.uid||'';catalogCloud.entries.clear();catalogCloud.head=null;catalogCloud.headRequest=null;catalogCloud.running=null;catalogCloud.error='';catalogCloud.conflict=null;
+}
+function ensureCatalogCloud() {if(catalogCloud.uid!==(hostAccount.uid||''))resetCatalogCloud();}
+function catalogCloudKey(scope=S.catFor,id=S.roomId) {return scope==='create'?'create':'room-'+id;}
+function catalogCloudEntry(key) {
+  ensureCatalogCloud();let entry=catalogCloud.entries.get(key);
+  if(!entry){const saved=load(catalogAccountKey('mm-catalog-cloud-v1:'+key),null);entry={key,revision:Number.isSafeInteger(saved?.revision)?saved.revision:0,acked:saved?.acked||'null',pending:saved?.pending||null,loaded:false,request:null,edit:0,remote:null};catalogCloud.entries.set(key,entry);}
+  return entry;
+}
+function saveCatalogCloudEntry(entry) {save(catalogAccountKey('mm-catalog-cloud-v1:'+entry.key),{revision:entry.revision,acked:entry.acked,pending:entry.pending});}
+function catalogCloudDraft(d=S.draft) {
+  if(!d)return null;
+  return {title:str(d.title,40),note:str(d.note,1000),deadline:str(d.deadline,24),mode:d.mode==='list'?'list':'free',names:str(d.names,10000),freeJoin:d.freeJoin===true,treat:d.treat?{by:str(d.treat.by,20),cap:Math.max(0,Math.min(10000000,Math.floor(num(d.treat.cap)))),unit:str(d.treat.unit||'인',12),unitCustom:d.treat.unitCustom===true}:null,stores:[...new Set((d.stores||[]).map(s=>s.id))].slice(0,20)};
+}
+function catalogCloudPayload(data) {
+  if(!data)return null;
+  return {schema:1,scope:data.scope,identity:data.identity,roomId:data.roomId,active:data.active===true,base:[...data.base],picked:[...data.picked],view:{...data.view},needsLocation:data.needsLocation===true,draft:data.scope==='create'?catalogCloudDraft():null};
+}
+function queueCatalogCloud(data,key=data?catalogCloudKey(data.scope,data.roomId):'create') {
+  if(!catalogCloudEnabled()||catalogCloud.importing)return;
+  const entry=catalogCloudEntry(key),state=data===null?null:catalogCloudPayload(data),raw=JSON.stringify(state);
+  if(raw===JSON.stringify(entry.pending?.state)||(!entry.pending&&raw===entry.acked))return;
+  entry.edit++;entry.pending={state,mutation:catalogCloudRandom(12)};saveCatalogCloudEntry(entry);catalogCloud.error='';refreshCatalogCloudStatus();
+  clearTimeout(catalogCloud.timer);catalogCloud.timer=setTimeout(()=>void flushCatalogCloud(),450);
+}
+function queueCatalogCreateForm() {
+  if(!catalogCloudEnabled()||!S.draft||catalogCloud.importing)return;
+  const previous=catalogContext('create',false),existing=readCatalogProgress(previous);
+  if(!existing&&!S.draft.title&&!S.draft.note&&!S.draft.stores?.length&&!S.draft.names&&!S.draft.deadline&&!S.draft.treat&&S.draft.mode!=='list'&&!S.draft.freeJoin)return;
+  const context=previous||catalogContext('create'),ids=(S.draft.stores||[]).map(s=>s.id);
+  const data=existing||{schema:1,scope:'create',identity:context.identity,roomId:'',active:false,base:ids,picked:ids,view:{step:'region',city:'all',town:'all',regionView:'map',mode:'region',radius:5,area:'all',category:'all',query:'',townQuery:'',limit:12,showMap:false},needsLocation:false};
+  if(!existing)save(context.key,data);queueCatalogCloud(data,'create');
+}
+function cloudCheckpointContext(state) {
+  return {key:catalogAccountKey(CATALOG_PROGRESS_KEY+(state.scope==='create'?'create':'room:'+state.roomId+':'+encodeURIComponent(UID))),scope:state.scope,identity:state.identity,roomId:state.roomId};
+}
+async function installCatalogCloud(result,{force=false,unchanged=()=>true}={}) {
+  const state=result.state;
+  if(!state){
+    if(!result.revision||!unchanged())return false;
+    const create=result.key==='create',roomId=create?'':result.key.slice(5),key=catalogAccountKey(CATALOG_PROGRESS_KEY+(create?'create':'room:'+roomId+':'+encodeURIComponent(UID)));
+    catalogStorageRemove(key);
+    const pointer=load(catalogAccountKey(CATALOG_ACTIVE_KEY),null);
+    if(pointer?.scope===(create?'create':'room')&&pointer.roomId===roomId)catalogStorageRemove(catalogAccountKey(CATALOG_ACTIVE_KEY));
+    if(create){catalogStorageRemove(catalogAccountKey(CATALOG_CREATE_ID));save(createDraftKey(),null);S.draft=EMPTY_DRAFT();catalogMemory.draftAccount=hostAccount.uid;catalogMemory.createTarget=null;catalogMemory.createId='';}
+    if(force&&S.route==='catalog'&&S.catFor===(create?'create':'room')&&(create||S.roomId===roomId)){
+      catalogMemory.current=null;S.catPicked=new Set(create?[]:catalogMappedIds(S.room.stores.map(s=>s.id)));go(create?{route:'create'}:{route:'room',tab:'set'});
+    }
+    return true;
+  }
+  const uid=hostAccount.uid,epoch=catalogCloud.epoch,context=cloudCheckpointContext(state);
+  if(state.scope==='room'&&(!S.host||S.roomId!==state.roomId)){
+    // The server already checked membership; the app will check it again before opening settings.
+    save(context.key,{...state,writer:'account',at:result.updatedAt});return true;
+  }
+  let draft=null;
+  if(state.scope==='create'){
+    await loadCatalog();
+    const known=catalogMappedIds(state.draft.stores),old=new Map((S.draft?.stores||[]).map(s=>[s.id,s]));
+    const missing=known.filter(id=>!old.has(id)),loaded=await pickedFromCatalog(missing);
+    draft={...state.draft,stores:known.map(id=>old.get(id)||loaded.find(s=>s.id===id)).filter(Boolean)};
+  }
+  if(!catalogCloudEnabled()||uid!==hostAccount.uid||epoch!==catalogCloud.epoch||!unchanged())return false;
+  catalogCloud.importing++;
+  try{
+    if(draft){S.draft=draft;catalogMemory.draftAccount=uid;catalogMemory.createTarget=null;save(createDraftKey(),draft);save(catalogAccountKey(CATALOG_CREATE_ID),state.identity);}
+    save(context.key,{...state,writer:'account',at:result.updatedAt});
+    if(state.active)save(catalogAccountKey(CATALOG_ACTIVE_KEY),{schema:1,scope:state.scope,identity:state.identity,roomId:state.roomId,writer:'account'});
+    else if(catalogPointerMatches(load(catalogAccountKey(CATALOG_ACTIVE_KEY),null),context))catalogStorageRemove(catalogAccountKey(CATALOG_ACTIVE_KEY));
+    if(force&&S.route==='catalog'&&S.catFor===state.scope&&(state.scope==='create'||S.roomId===state.roomId)){
+      const current=catalogContext(state.scope);current.target=state.scope==='create'?S.draft:S.edit;
+      applyCatalogProgress(current,state);rememberCatalogStep('replaceState',true);rerender();void refreshRestoredCatalogLocation(current,state);
+    }
+    return true;
+  }finally{catalogCloud.importing--;}
+}
+async function pullCatalogCloud(key,{force=false}={}) {
+  if(!catalogCloudEnabled())return null;
+  const entry=catalogCloudEntry(key);if(entry.request)return entry.request;
+  const uid=hostAccount.uid,epoch=catalogCloud.epoch,edit=entry.edit,base=entry.revision,wasLoaded=entry.loaded;
+  entry.request=(async()=>{
+    try{
+      const result=await hostApi('/catalog-progress?key='+encodeURIComponent(key));
+      if(!catalogCloudEnabled()||uid!==hostAccount.uid||epoch!==catalogCloud.epoch)return null;
+      const raw=JSON.stringify(result.state),pending=entry.pending;
+      entry.loaded=true;entry.remote=result;
+      if(pending&&raw===JSON.stringify(pending.state)){entry.pending=null;entry.revision=result.revision;entry.acked=raw;}
+      else if(pending&&!force&&(result.revision!==base||entry.edit!==edit&&result.revision>0)){
+        catalogCloud.conflict={key,result};saveCatalogCloudEntry(entry);refreshCatalogCloudStatus();return result;
+      }else if(!pending||force){
+        // Loading is asynchronous. Never replace typing/selection made during the read.
+        if(entry.edit!==edit&&!force&&result.revision>0){catalogCloud.conflict={key,result};refreshCatalogCloudStatus();return result;}
+        const same=wasLoaded&&entry.acked===raw;
+        entry.revision=result.revision;entry.acked=raw;
+        if(force)entry.pending=null;
+        if(!same||force){const installed=await installCatalogCloud(result,{force,unchanged:()=>force||entry.edit===edit});if(!installed&&entry.edit!==edit&&!force){catalogCloud.conflict={key,result};refreshCatalogCloudStatus();return result;}}
+      }
+      entry.revision=result.revision;catalogCloud.error='';saveCatalogCloudEntry(entry);refreshCatalogCloudStatus();return result;
+    }catch(error){if(uid===hostAccount.uid&&epoch===catalogCloud.epoch){catalogCloud.error=error.message==='not-host'?'권한이 바뀌어 계정 선택을 불러올 수 없어요.':'계정 연결을 확인하지 못했어요. 이 기기에 보관 중이에요.';refreshCatalogCloudStatus();}return null;}
+    finally{if(uid===hostAccount.uid&&epoch===catalogCloud.epoch)entry.request=null;}
+  })();return entry.request;
+}
+async function flushCatalogCloud() {
+  if(!catalogCloudEnabled())return false;ensureCatalogCloud();
+  if(catalogCloud.running)return catalogCloud.running;
+  clearTimeout(catalogCloud.timer);catalogCloud.timer=0;
+  const uid=hostAccount.uid,epoch=catalogCloud.epoch;
+  catalogCloud.running=(async()=>{
+    try{
+      for(const entry of catalogCloud.entries.values()){
+        if(!entry.pending||catalogCloud.conflict?.key===entry.key)continue;
+        if(!entry.loaded)await pullCatalogCloud(entry.key);
+        if(!catalogCloudEnabled()||uid!==hostAccount.uid||epoch!==catalogCloud.epoch)return false;
+        if(!entry.loaded||!entry.pending||catalogCloud.conflict?.key===entry.key)continue;
+        const pending=entry.pending;
+        const result=await hostApi('/catalog-progress',{key:entry.key,revision:entry.revision,writer:catalogMemory.writer,mutation:pending.mutation,state:pending.state});
+        if(!catalogCloudEnabled()||uid!==hostAccount.uid||epoch!==catalogCloud.epoch)return false;
+        if(result.conflict){catalogCloud.conflict={key:entry.key,result};entry.remote=result;continue;}
+        entry.revision=result.revision;entry.acked=JSON.stringify(result.state);entry.remote=result;
+        if(entry.pending===pending)entry.pending=null;
+        catalogCloud.head=result.state?result:catalogCloud.head?.key===entry.key?null:catalogCloud.head;
+        saveCatalogCloudEntry(entry);catalogCloud.error='';
+      }
+      return !catalogCloud.error&&!catalogCloud.conflict;
+    }catch{if(uid===hostAccount.uid&&epoch===catalogCloud.epoch)catalogCloud.error='계정 저장을 완료하지 못했어요. 이 기기에 보관 중이에요.';return false;}
+    finally{
+      if(uid===hostAccount.uid&&epoch===catalogCloud.epoch){catalogCloud.running=null;refreshCatalogCloudStatus();if(!catalogCloud.error&&[...catalogCloud.entries.values()].some(e=>e.pending&&catalogCloud.conflict?.key!==e.key))catalogCloud.timer=setTimeout(()=>void flushCatalogCloud(),450);}
+    }
+  })();return catalogCloud.running;
+}
+async function loadCatalogCloudHead() {
+  if(!catalogCloudEnabled())return null;ensureCatalogCloud();if(catalogCloud.headRequest)return catalogCloud.headRequest;
+  const uid=hostAccount.uid,epoch=catalogCloud.epoch;
+  catalogCloud.headRequest=(async()=>{
+    try{
+      const result=await hostApi('/catalog-progress');
+      if(!catalogCloudEnabled()||uid!==hostAccount.uid||epoch!==catalogCloud.epoch)return null;
+      catalogCloud.head=result.state?result:null;
+      if(result.key)await pullCatalogCloud(result.key);
+      if(S.route==='home')rerender();return result;
+    }catch{if(uid===hostAccount.uid&&epoch===catalogCloud.epoch)catalogCloud.error='계정 선택을 확인하지 못했어요. 이 기기의 선택은 남아 있어요.';return null;}
+    finally{if(uid===hostAccount.uid&&epoch===catalogCloud.epoch)catalogCloud.headRequest=null;}
+  })();return catalogCloud.headRequest;
+}
+function catalogCloudStatus() {
+  if(!catalogCloudEnabled())return '';
+  const conflict=catalogCloud.conflict,entries=[...catalogCloud.entries.values()],pending=entries.some(e=>e.pending),busy=entries.some(e=>e.request)||catalogCloud.running;
+  const message=conflict?'다른 기기에서 바꾼 선택이 있어요':catalogCloud.error||busy||pending?(catalogCloud.error||'계정에 저장 중…'):'✓ 계정에 저장해요 · 다른 기기에서 이어서';
+  return `<aside id="catalogCloudStatus" class="catalog-cloud-status${conflict||catalogCloud.error?' needs-attention':''}" aria-label="가게 선택 계정 저장" role="status"><span>${esc(message)}</span>${conflict?'<div><button data-act="catalog-cloud-load">다른 기기 선택 불러오기</button><button data-act="catalog-cloud-keep">이 기기 선택으로 계속</button></div>':catalogCloud.error?'<button data-act="catalog-cloud-retry">다시 연결</button>':''}</aside>`;
+}
+function refreshCatalogCloudStatus() {const node=document.getElementById('catalogCloudStatus');if(node)node.outerHTML=catalogCloudStatus();}
+function catalogCloudHome() {
+  if(!catalogCloudEnabled())return '';
+  const head=catalogCloud.head,notice=catalogCloud.conflict||catalogCloud.error?catalogCloudStatus():'';
+  if(head?.state)return notice+`<section class="catalog-cloud-home"><div><small>다른 기기에서도 이어서</small><b>${esc(head.state.scope==='create'?head.state.draft.title||'만들던 모임':myRooms().find(r=>r.id===head.state.roomId)?.title||'고르던 가게')}</b></div><div><button class="btn gray" data-act="catalog-cloud-continue">이어서 고르기 →</button>${head.state.scope==='create'?'<button class="text-btn" data-act="catalog-cloud-discard">작성 취소</button>':''}</div></section>`;
+  const guest=load('mm-create-draft',null);
+  return notice+(guest&&(guest.title||guest.stores?.length||load(CATALOG_PROGRESS_KEY+'create',null))?'<section class="catalog-cloud-home"><b>로그인 전에 고르던 가게가 있어요</b><button class="btn gray" data-act="catalog-cloud-import">이 기기의 선택 가져오기</button></section>':'');
+}
+async function continueCatalogCloud() {
+  const uid=hostAccount.uid,result=await loadCatalogCloudHead();if(!uid||uid!==hostAccount.uid||!result?.state)return;
+  const state=result.state,historyView={...state.view,scope:state.scope,roomId:state.roomId,recovered:true};
+  if(state.scope==='create'){history.replaceState({dinnerCatalog:historyView},'','#new');await beginCreate();}
+  else {history.replaceState({dinnerCatalog:historyView},'',`#r=${state.roomId}&t=set`);await openRoom(state.roomId,undefined,'set');}
+}
+async function importGuestCatalog() {
+  if(!catalogCloudEnabled())return;const uid=hostAccount.uid;
+  const result=await pullCatalogCloud('create');if(!result||uid!==hostAccount.uid)return;
+  if(result.state){catalogCloud.head=result;toast('계정에 고르던 가게가 있어요. 이어서 고르기를 눌러 주세요.');rerender();return;}
+  const guest=load('mm-create-draft',null);if(!guest)return;
+  S.draft=clone(guest);catalogMemory.draftAccount=uid;catalogMemory.createTarget=null;
+  const id=load(CATALOG_CREATE_ID,'');if(/^[a-f0-9]{24}$/.test(id))save(catalogAccountKey(CATALOG_CREATE_ID),id);
+  save(createDraftKey(),S.draft);const context=catalogContext('create'),progress=load(CATALOG_PROGRESS_KEY+'create',null);
+  if(progress?.schema===1&&progress.identity===context.identity)save(context.key,{...progress,writer:catalogMemory.writer});
+  queueCatalogCreateForm();history.replaceState(null,'','#new');await beginCreate();await flushCatalogCloud();
+}
+async function discardCatalogCloudDraft() {
+  if(!catalogCloudEnabled()||catalogCloud.head?.key!=='create')return;
+  await pullCatalogCloud('create');if(catalogCloud.conflict){refreshCatalogCloudStatus();return;}
+  clearCatalogProgress('create');S.draft=EMPTY_DRAFT();save(createDraftKey(),null);await flushCatalogCloud();rerender();
+}
+async function resolveCatalogCloud(useRemote) {
+  const conflict=catalogCloud.conflict;if(!conflict||!catalogCloudEnabled())return;
+  const entry=catalogCloudEntry(conflict.key);catalogCloud.conflict=null;
+  if(useRemote){await pullCatalogCloud(conflict.key,{force:true});if(S.route==='create')rerender();}
+  else{entry.revision=conflict.result.revision;entry.acked=JSON.stringify(conflict.result.state);entry.loaded=true;saveCatalogCloudEntry(entry);await flushCatalogCloud();}
+  refreshCatalogCloudStatus();
 }
 
 // ---------- 상태 ----------
@@ -4342,7 +4561,7 @@ function setSentNames(id, names) { const all = load('mm-sent', {}); if (names.le
 const roomLocal = () => load('mm-room-' + S.roomId, {});
 const roomDraft = () => ({who: S.who, cart: S.cart, cartSnapshots:S.cartSnapshots, req: S.req, storeReqs: S.storeReqs, thanks:tidyThanks(S.thanks), sentAt: S.sentAt, answerBase: S.answerBase,...(S.resendComplete===true?{resendComplete:true}:{}),...(!S.who&&S.participantNameDraft?.roomId===S.roomId?{nameDraft:str(S.participantNameDraft.value,20)}:{})});
 function persistRoom() { save('mm-room-' + S.roomId, roomDraft()); queueCartState(); }
-function persistDraft() { if (S.draft) save('mm-create-draft', S.draft); }
+function persistDraft() { if (S.draft) {save(createDraftKey(),S.draft);if(S.route==='create')queueCatalogCreateForm();} }
 
 // Releases are fingerprinted by build.py. A newer release never reloads an open
 // order until the user accepts; this also works in installed standalone windows.
@@ -4387,7 +4606,7 @@ function preserveUpdateDrafts() {
   if(S.route==='catalog'&&!persistCatalogProgress())throw new Error('Catalogue selection could not be saved');
   const snapshots = [];
   if (S.roomId && S.room) { captureRequests(); snapshots.push(['mm-room-'+S.roomId,roomDraft()]); }
-  if (S.draft) snapshots.push(['mm-create-draft',S.draft]);
+  if (S.draft) snapshots.push([createDraftKey(),S.draft]);
   // Unlike routine best-effort saves, failed storage must prevent this reload.
   for (const [k,value] of snapshots) {
     const json = JSON.stringify(value); localStorage.setItem(k,json);
@@ -4624,7 +4843,7 @@ async function hostApi(path,body,authenticated=true) {
   if(installPreview()||EMU)throw Error('preview-only');
   const headers={'Content-Type':'application/json'};
   if(authenticated){await boot();headers.Authorization='Bearer '+await AUTH.currentUser.getIdToken();}
-  const response=await fetch(HOST_AUTH_API+path,{method:body===undefined?'GET':'POST',headers,...(body===undefined?{}:{body:JSON.stringify(body)}),signal:AbortSignal.timeout(20000)});
+  const response=await fetch(HOST_AUTH_API+path,{method:body===undefined?'GET':'POST',headers,...(body===undefined?{}:{body:JSON.stringify(body),...(path==='/catalog-progress'?{keepalive:true}:{})}),signal:AbortSignal.timeout(20000)});
   const result=await response.json();if(!response.ok)throw Error(result.error||'connection-failed');return result;
 }
 function hostAccountHtml(room=false) {
@@ -4644,11 +4863,11 @@ function hostGateHtml(warning=false) {
 }
 async function beginCreate() {
   const catalogView=history.state?.dinnerCatalog;
-  S.draft=S.draft||load('mm-create-draft',null)||EMPTY_DRAFT();
   if(!installPreview()&&!EMU) {try{await boot();}catch{}}
+  bindCatalogDraft();
   const continuingGuest=load('mm-guest-create-ack',false)===true&&!!readCatalogProgress(catalogContext('create',false));
   go({route:hostAccount.uid||guestCreateAllowed||continuingGuest?'create':'host-start'});
-  if(S.route==='create')void resumeActiveCatalog('create',catalogView);
+  if(S.route==='create')await resumeActiveCatalog('create',catalogView);
 }
 async function startKakao(intent='home',roomId='',migrationRooms,requestNickname=false) {
   if(hostAccount.busy)return;
@@ -4704,12 +4923,13 @@ async function logoutHostAccount() {
   if(menuOperator.busy){toast('메뉴 제보 처리를 마친 뒤 로그아웃해 주세요.');return;}
   if(S.sending||S.edit?.dirty){toast('바꾼 내용을 먼저 저장해 주세요');return;}
   const uid=hostAccount.uid;if(!uid)return;
+  await flushCatalogCloud();
   stopListening();resetRoomManagers();
   try{
     await FB.signOut(AUTH);
     save('mm-rooms',myRooms().filter(r=>r.accountUid!==uid));
     Object.assign(hostAccount,{uid:'',synced:new Set(),error:''});resetMenuOperator();
-    UID='';booting=null;S.sums={};guestCreateAllowed=false;
+    UID='';booting=null;S.sums={};guestCreateAllowed=false;resetCatalogCloud();S.draft=null;catalogMemory.draftAccount=null;catalogMemory.current=null;catalogMemory.createTarget=null;catalogMemory.createId='';
     Object.assign(S,{roomId:'',room:null,host:false,edit:null});location.hash='';go({route:'home'});
   }catch{hostAccount.error='로그아웃하지 못했어요. 다시 시도해 주세요.';rerender();}
 }
@@ -4741,9 +4961,9 @@ async function initHostAccount({deferView=false}={}) {
       if(pending.intent==='arrival'){route();return;}
       if(pending.intent==='new'){guestCreateAllowed=false;location.hash='new';await beginCreate();return;}
       if(pending.roomId){await openRoom(pending.roomId,undefined,'set');return;}
-      go({route:'home'});return;
+      go({route:'home'});void resumeCatalogLanding();return;
     }
-    await boot();if(hostAccount.uid){await syncAccountRooms();if(!deferView)await finishLegacyReceipt();}
+    await boot();if(hostAccount.uid){await syncAccountRooms();if(!deferView){await finishLegacyReceipt();if(!location.hash||S.route==='home')await loadCatalogCloudHead();}}
   }catch(error){hostAccount.error=error.message==='login-cancelled'?'카카오 로그인을 취소했어요. 다시 시작하거나 로그인 없이 이용할 수 있어요.':authError(error);}
   finally{hostAccount.ready=true;hostAccount.busy=false;}
   if(deferView)return;
@@ -5372,7 +5592,7 @@ function render(enter = false) {
   if(S.route==='catalog')persistCatalogProgress();
   closeSheet();
   const v = S.route==='operator'?viewMenuOperator:S.route==='legacy-move'?legacyMigrationHtml:S.route==='host-start'?()=>hostGateHtml(false):S.route==='guest-warning'?()=>hostGateHtml(true):S.route === 'create' ? viewCreate : S.route === 'catalog' ? viewCatalog : S.route === 'room' ? viewRoom : viewHome;
-  let content = v();if(S.route==='catalog'&&catalogMemory.failed)content=content.replace('</header>','</header>'+catalogMemoryStatus());const arrival=legacyArrivalHtml();if(arrival)content=content.includes('</header>')?content.replace('</header>','</header>'+arrival):arrival+content;
+  let content = v();if(S.route==='catalog'&&catalogMemory.failed)content=content.replace('</header>','</header>'+catalogMemoryStatus());if(S.route==='catalog'||S.route==='create'||S.route==='room'&&S.tab==='set'&&S.host)content=content.replace('</header>','</header>'+catalogCloudStatus());const arrival=legacyArrivalHtml();if(arrival)content=content.includes('</header>')?content.replace('</header>','</header>'+arrival):arrival+content;
   $app.innerHTML = content;
   $app.className = 'mm view-' + S.route + (S.route === 'room' ? ' tab-' + S.tab : '') + (content.includes('class="nav n') ? ' with-room-nav' : '') + (enter && !reduceMotion() ? ' enter' : '');
   document.title = S.route === 'room' && S.room ? `${S.room.title} · 다맛다` : '다맛다';
@@ -5489,7 +5709,7 @@ function viewHome() {
   return `<header class="home-brand"><a href="#" aria-label="다맛다 홈">${brand()}</a><nav class="home-nav"><a href="#how">어떻게 써요?</a><a href="#new" class="home-small-cta">같이 담기 ↗</a></nav></header>
   <section class="land"><div class="land-copy"><span class="land-kicker">우리끼리, 메뉴 모으는 곳</span><h1>오늘 뭐 먹어?<br><em>각자 담아봐.</em></h1><p>커피 한 잔부터 단체 점심까지.<br>각자 고른 메뉴를 한곳에 담아요.</p><button class="btn land-go" data-act="new">${BRAND_ICONS.cart}<b>같이 담기 시작</b><span aria-hidden="true">↗</span></button><span class="land-hint">초대받았다면 받은 링크로 들어오세요.</span>${installButtonHtml()}</div>
   <div class="home-brand-scene"><h1 class="mobile-home-title">다맛다</h1><div class="brand-art"><img src="${brandAsset()}" alt="다맛다" fetchpriority="high"></div><div class="brand-motto">얼른 담아! 우리끼리 먹는다?</div>${DamatdaPlay.homeHTML()}</div></section>
-  <div class="wrap home-content">${hostAccountHtml()}${operatorHomeButton()}${hostMigrationHtml()}<section class="my-rooms"><div class="seg wide" role="tablist" aria-label="같이 담는 모임"><button class="${tab==='made'?'on':''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab==='made'}">내가 연 모임 <small>${made.length}</small></button><button class="${tab==='joined'?'on':''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab==='joined'}">참여한 모임 <small>${joined.length}</small></button></div><div class="room-cards${list.length?'':' is-empty'}">${list.map(roomCard).join('')||homeEmptyTray(tab==='joined')}</div></section>
+  <div class="wrap home-content">${hostAccountHtml()}${catalogCloudHome()}${operatorHomeButton()}${hostMigrationHtml()}<section class="my-rooms"><div class="seg wide" role="tablist" aria-label="같이 담는 모임"><button class="${tab==='made'?'on':''}" data-act="home-tab" data-t="made" role="tab" aria-selected="${tab==='made'}">내가 연 모임 <small>${made.length}</small></button><button class="${tab==='joined'?'on':''}" data-act="home-tab" data-t="joined" role="tab" aria-selected="${tab==='joined'}">참여한 모임 <small>${joined.length}</small></button></div><div class="room-cards${list.length?'':' is-empty'}">${list.map(roomCard).join('')||homeEmptyTray(tab==='joined')}</div></section>
   <ol class="how brief-how" id="how"><li><i>01</i><b>가게 고르고</b></li><li><i>02</i><b>같이 담고</b></li><li><i>03</i><b>한 번에 모으기</b></li></ol></div><footer class="brand-footer"><span>다맛다 © 2026</span><div class="theme-options" role="group" aria-label="색상 테마"><button data-palette-choice="mint" aria-pressed="${document.documentElement.dataset.palette==='mint'}"><i></i>민트 · 귤</button><button data-palette-choice="sky" aria-pressed="${document.documentElement.dataset.palette==='sky'}"><i></i>블루 · 레몬</button></div><a class="screen-tour-link" href="screens.html">화면 둘러보기 ↗</a></footer>`;
 }
 
@@ -6523,7 +6743,7 @@ async function createRoom() {
       try{await hostApi('/attach',{roomId:id});await syncAccountRooms();}
       catch{hostAccount.error='방은 만들었지만 계정에 연결하지 못했어요. 관리 링크를 보관하고 방 설정에서 다시 연결해 주세요.';}
     }
-    clearCatalogProgress('create');finishCreateGuide();S.sending = false; S.draft = null; save('mm-create-draft', null); S.created = true;
+    clearCatalogProgress('create');finishCreateGuide();S.sending = false; S.draft = null; save(createDraftKey(),null);S.created = true;
     location.hash = `r=${id}`; // hashchange 가 방을 열어요
   } catch (e) {
     S.sending = false;
@@ -6692,6 +6912,12 @@ document.addEventListener('click', async e => {
       break;
     case 'guest-start': go({route:'guest-warning'}); break;
     case 'guest-confirm': guestCreateAllowed=true;save('mm-guest-create-ack',true);go({route:'create'});void resumeActiveCatalog('create',history.state?.dinnerCatalog);break;
+    case 'catalog-cloud-continue':await continueCatalogCloud();break;
+    case 'catalog-cloud-import':await importGuestCatalog();break;
+    case 'catalog-cloud-discard':if(confirmTwice(el,'한 번 더 누르면 작성 취소'))await discardCatalogCloudDraft();break;
+    case 'catalog-cloud-load':await resolveCatalogCloud(true);break;
+    case 'catalog-cloud-keep':await resolveCatalogCloud(false);break;
+    case 'catalog-cloud-retry':catalogCloud.error='';await loadCatalogCloudHead();await flushCatalogCloud();refreshCatalogCloudStatus();break;
     case 'participant-guide-close':if(resendDraft())S.resendGuideOpen=false;else finishParticipantGuide();rerender();break;
     case 'participant-guide-open':participantGuideOpenState();if(resendDraft())S.resendGuideOpen=true;else{S.participantGuideScope=`${S.roomId}/${S.who}`;S.participantGuideOpen=true;}rerender();break;
     case 'create-guide-close':finishCreateGuide();rerender();break;
@@ -6788,12 +7014,14 @@ document.addEventListener('click', async e => {
     case 'names-camp': S.draft.names = (CAMP.families || []).join('\n'); rerender(); break;
     case 'draft-del': S.draft.stores = S.draft.stores.filter(s => s.id !== id);forgetCatalogStore('create',id);rerender();break;
     case 'custom-open': case 'custom-add': case 'catalog': {
-      const label=el.textContent, scope=el.dataset.for==='c'?'create':el.dataset.for==='e'?'room':el.dataset.for, target=scope==='create'?S.draft:S.edit, route=S.route, tab=S.tab, roomId=S.roomId;
+      const label=el.textContent, scope=el.dataset.for==='c'?'create':el.dataset.for==='e'?'room':el.dataset.for, route=S.route, tab=S.tab, roomId=S.roomId;
+      let target=scope==='create'?S.draft:S.edit;
       if(!target) break;
       const stillHere=()=>S.route===route && S.tab===tab && S.roomId===roomId && target===(scope==='create'?S.draft:S.edit);
       try { el.disabled = true; el.textContent = '불러오는 중…'; await loadCatalog(); }
       catch { if(stillHere()){el.disabled = false; el.textContent = label; toast('맛집 목록을 못 불러왔어요. 인터넷 연결을 확인해 주세요');} return; }
       if(!stillHere()) break;
+      if(catalogCloudEnabled()){await pullCatalogCloud(catalogCloudKey(scope));if(S.route!==route||S.tab!==tab||S.roomId!==roomId)break;target=scope==='create'?S.draft:S.edit;if(!target)break;}
       S.catFor = scope;
       S.catStep='region';S.catMode='region';cancelNearbyRequest(true);S.catTown='all';S.catTownQuery='';S.catFilters=false;S.catShowMap=false;
       const have = target.stores.map(s => s.id);
@@ -7094,12 +7322,12 @@ function launchApp() {
 launchApp();
 checkAppUpdate();
 setInterval(checkAppUpdate,60000);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){persistCatalogProgress();nearbyWentAway('hidden');}else{nearbyCameBack();checkAppUpdate();resumeParticipantGuide();}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){persistCatalogProgress();void flushCatalogCloud();nearbyWentAway('hidden');}else{nearbyCameBack();void flushCatalogCloud();checkAppUpdate();resumeParticipantGuide();}});
 addEventListener('blur',()=>nearbyWentAway('blur'));
-addEventListener('pagehide',()=>{persistCatalogProgress();nearbyWentAway('pagehide');});
+addEventListener('pagehide',()=>{persistCatalogProgress();void flushCatalogCloud();nearbyWentAway('pagehide');});
 addEventListener('focus',()=>{nearbyCameBack();checkAppUpdate();resumeParticipantGuide();});
 addEventListener('pageshow',event=>{nearbyCameBack(!!event?.persisted);resumeParticipantGuide();});
-addEventListener('online',()=>{appUpdate.checkedAt=0;checkAppUpdate();});
+addEventListener('online',()=>{appUpdate.checkedAt=0;void flushCatalogCloud();checkAppUpdate();});
 setInterval(() => { if(S.route==='room'&&S.room?.deadline&&!document.getElementById('sheet')){const phase=S.room.closed?'closed':inLateWindow()?'late':isLate()?'ended':'open';if(S.clockPhase!==phase){S.clockPhase=phase;keepView();refreshDraftStatus();}} },1000);
 
 
