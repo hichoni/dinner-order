@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="e40d2ac4f190ec4e">
+<meta name="damatda-build" content="b5c127371596f1b0">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -4251,6 +4251,11 @@ function clearCatalogProgress(scope=S.catFor) {
   if(sameCatalogContext(context,catalogMemory.current))catalogMemory.current=null;
   catalogMemory.generation++;
 }
+function forgetCatalogStore(scope,id) {
+  const context=catalogContext(scope,false),data=readCatalogProgress(context);if(!data)return;
+  try{catalogStorageWrite(context.key,JSON.stringify({...data,picked:data.picked.filter(picked=>picked!==id),at:Date.now()}));}
+  catch{catalogMemory.failed=true;}
+}
 function applyCatalogProgress(context,data=readCatalogProgress(context)) {
   if(!context?.target||!data)return false;
   const base=new Set(catalogMappedIds(data.base)),picked=new Set(catalogMappedIds(data.picked)),current=catalogMappedIds(context.target.stores?.map(s=>s.id)||[]);
@@ -6780,7 +6785,7 @@ document.addEventListener('click', async e => {
     }
     case 'mode': S.draft.mode = el.dataset.m; rerender(); break;
     case 'names-camp': S.draft.names = (CAMP.families || []).join('\n'); rerender(); break;
-    case 'draft-del': S.draft.stores = S.draft.stores.filter(s => s.id !== id); rerender(); break;
+    case 'draft-del': S.draft.stores = S.draft.stores.filter(s => s.id !== id);forgetCatalogStore('create',id);rerender();break;
     case 'custom-open': case 'custom-add': case 'catalog': {
       const label=el.textContent, scope=el.dataset.for==='c'?'create':el.dataset.for==='e'?'room':el.dataset.for, target=scope==='create'?S.draft:S.edit, route=S.route, tab=S.tab, roomId=S.roomId;
       if(!target) break;
@@ -6945,7 +6950,7 @@ document.addEventListener('click', async e => {
       if (det) { det.open = true; det.querySelector('.edit-row:last-of-type input')?.select(); }
       break;
     }
-    case 'edit-store-del': { S.edit.stores = S.edit.stores.filter(s => s.id !== id); S.edit.dirty = true; rerender(); break; }
+    case 'edit-store-del': { S.edit.stores = S.edit.stores.filter(s => s.id !== id);forgetCatalogStore('room',id);S.edit.dirty = true;rerender();break; }
     case 'room-del': {
       if(!isPrimaryOwner()){toast('방 삭제는 최초·대표 방장만 할 수 있어요');break;}
       if (!confirmTwice(el, '정말요? 한 번 더 누르면 지워요')) break;
