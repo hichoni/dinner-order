@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="b42d255e69b1dc8c">
+<meta name="damatda-build" content="b98a55719c6abd80">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -25,6 +25,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
+.opening-badge{display:inline-flex;align-items:center;gap:5px;width:max-content;max-width:100%;margin:4px 0;font-size:11px;font-weight:700;line-height:1.5;padding:3px 7px;border-radius:7px;white-space:nowrap}.opening-badge i{width:6px;height:6px;flex:none;border-radius:50%;background:currentColor}.opening-badge.open{color:#087b56;background:#e5f7ec}.opening-badge.closed{color:#626d77;background:#edf0f2}.opening-badge.unknown{color:#71818a;background:#f1f5f5}.opening-badge.unknown i{background:transparent;border:1px solid currentColor}[data-opening-state=closed] .thumb{filter:grayscale(1);opacity:.65}[data-opening-state=closed] .prow-txt>b,[data-opening-state=closed] .nm>b{color:#697781}.opening-hours-help{color:var(--sub);font-size:11px;line-height:1.5}
+.board-upload-entry{font-size:12px;min-height:40px}.board-upload-sheet{max-height:calc(100dvh - 24px);overflow:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom));max-width:650px;width:100%}.board-upload-sheet small{display:block;line-height:1.6;color:var(--sub);margin:10px 0}.board-upload-sheet input[type=file]{position:absolute;width:1px;height:1px;opacity:0}.board-photo{display:block;width:100%;max-height:65dvh;object-fit:contain;background:#eef2f1;border-radius:12px;margin:12px 0}.board-review-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;align-items:start}.board-review-layout>div:first-child{position:sticky;top:20px}.board-review-row{padding:16px;border:1px solid var(--line);border-radius:14px;margin:12px 0;background:#fff}.board-review-row.uncertain{border-color:#e9bd72;background:#fffdf7}.board-review-row label{display:block;font-size:13px;margin:9px 0}.board-review-row small{color:var(--sub);display:block}.board-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.board-review-layout fieldset{border:0;padding:0;margin:0;min-width:0}@media(max-width:760px){.board-review-layout{grid-template-columns:1fr}.board-review-layout>div:first-child{position:static}.board-photo{max-height:42dvh}.board-pair{grid-template-columns:1fr 1fr}}
 /* 저녁에 뭐 먹을래? — 배달앱 같은 모바일 화면.
    흰 바탕 + 민트 한 가지 색, 사진이 주인공. 칸 사이는 그림자 대신 얇은 선과 회색 띠(8px)로 나눠요.
    제목 글꼴은 로고·딸깍에만 주아체, 나머지는 시스템 고딕. 아이콘은 선 아이콘. */
@@ -3061,6 +3063,7 @@ const REGION_MENU_SOURCES = new Set(["https://dmart.tistory.com/754?category=130
 const REGION_PHOTO_SOURCES = new Set(["https://dmart.tistory.com/754?category=1306190", "https://gjfood.or.kr/index.php?category_srl=215378%2C215383%2C215382&mid=board_oSHS24&shop_cate=%EC%A4%91%EC%8B%9D", "https://m.place.naver.com/restaurant/1088430583/menu/list", "https://m.place.naver.com/restaurant/1238716116/home", "https://m.place.naver.com/restaurant/1312839961/menu/list", "https://m.place.naver.com/restaurant/13148656/home", "https://m.place.naver.com/restaurant/1436690076/home", "https://m.place.naver.com/restaurant/1630645943/home", "https://m.place.naver.com/restaurant/1685995750/menu/list", "https://m.place.naver.com/restaurant/2000880463/menu/list", "https://m.place.naver.com/restaurant/2013747716/menu/list", "https://m.place.naver.com/restaurant/2018953603/menu/list", "https://m.place.naver.com/restaurant/2061610733/menu/list", "https://m.place.naver.com/restaurant/32135372/menu/list", "https://m.place.naver.com/restaurant/33700600/menu/list", "https://m.place.naver.com/restaurant/36721087/home", "https://m.place.naver.com/restaurant/741138461/home", "https://www.diningcode.com/profile.php?rid=J1l9lGojI4ft", "https://www.diningcode.com/profile.php?rid=f1eOWqjfBe06"]);
 function menuProvenance(s) {
   const source=s.menuSource || s.source || '';
+  if(s.menuBasis==='운영자 확인 메뉴판'&&boardSource(source))return {source,label:'운영자가 사진과 대조한 메뉴판'};
   if(s.menuBasis==='지점 메뉴판 사진' && REVIEWED_MENU_BOARD_DATES.has(source))
     return {source,label:'지점 메뉴판 사진 · '+REVIEWED_MENU_BOARD_DATES.get(source)+' 자료'};
   if(s.menuBasis==='착한가격업소 공개 메뉴' && source==='https://www.data.go.kr/data/3045247/fileData.do')
@@ -3183,6 +3186,168 @@ function tidyAnswer(id, d) {
   };
 }
 
+// Status is computed locally from verified weekly hours in Asia/Seoul.
+// Past crawl-time "open now" labels and one-day summaries are never reused.
+const openingSchedules=new Map();
+function openingStatus(store,now=Date.now()){
+  const schedule=openingSchedules.get(store.id)||store.openingSchedule;
+  const unknown={state:'unknown',label:'시간 미확인',detail:'영업시간 정보가 없어요. 매장에 확인해 주세요.'};
+  if(!schedule||schedule.schema!==1||!Array.isArray(schedule.days)||schedule.days.length!==7)return unknown;
+  const stamp=new Date(now+9*3600000),date=stamp.toISOString().slice(0,10),day=(stamp.getUTCDay()+6)%7,minute=stamp.getUTCHours()*60+stamp.getUTCMinutes();
+  const detail=`영업시간 기준 · ${schedule.checkedAt||'확인일 미상'} 확인 · 임시휴무는 매장 확인`;
+  if(schedule.operatingStatus==='permanentClosed')return {state:'closed',label:'영업 중단',detail};
+  if(schedule.operatingStatus==='temporaryClosed')return {state:'closed',label:'임시휴무',detail};
+  if(!/^20\d\d-\d\d-\d\d$/.test(schedule.checkedAt||'')||now-Date.parse(schedule.checkedAt+'T00:00:00+09:00')>90*86400000)return {...unknown,label:'시간 재확인',detail:'90일 넘은 시간표예요. 매장 확인이 필요해요.'};
+  // Unstructured temporary/conditional notices need a human check.
+  if(/임시|공휴일|명절|격주|매달|매월|단축|변경/.test(schedule.note||''))return {...unknown,label:'시간 확인 필요',detail:schedule.note};
+  const exception=(schedule.exceptions||[]).find(e=>e.date===date),today=exception||schedule.days[day],yesterday=schedule.days[(day+6)%7];
+  const valid=h=>h&&Number.isInteger(h.open)&&Number.isInteger(h.close)&&h.open>=0&&h.open<1440&&h.close>h.open&&h.close<=h.open+1440;
+  let hours=null,at=minute;
+  if(valid(yesterday)&&yesterday.close>1440&&minute<yesterday.close-1440&&!exception){hours=yesterday;at+=1440;}
+  else if(valid(today)&&minute>=today.open&&minute<today.close)hours=today;
+  if(hours){
+    if((hours.breaks||[]).some(b=>Array.isArray(b)&&at>=b[0]&&at<b[1]))return {state:'closed',label:'브레이크타임',detail};
+    const order=(hours.lastOrders||[]).filter(v=>Number.isInteger(v)&&v>=hours.open&&v<hours.close).sort((a,b)=>a-b);
+    // Multiple last orders can refer to lunch/dinner: compare against the current segment.
+    const start=Math.max(hours.open,...(hours.breaks||[]).filter(b=>b[1]<=at).map(b=>b[1]));
+    if(order.some(v=>v>=start&&at>=v))return {state:'closed',label:'주문 마감',detail};
+    const clock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
+    return {state:'open',label:'영업 중',detail:`${clock(hours.open)}–${clock(hours.close)} · ${detail}`};
+  }
+  if(today?.closed===true)return {state:'closed',label:'정기휴무',detail};
+  if(valid(today))return {state:'closed',label:minute<today.open?'영업 전':'영업 종료',detail};
+  return {...unknown,detail:'오늘 영업시간은 확인되지 않았어요. 매장에 확인해 주세요.'};
+}
+function openingBadge(store){const s=openingStatus(store);return `<span class="opening-badge ${s.state}" data-opening-badge="${esc(store.id)}" title="${esc(s.detail)}"><i aria-hidden="true"></i>${esc(s.label)}</span>`;}
+function openingAttributes(store){return `data-opening-store="${esc(store.id)}" data-opening-state="${openingStatus(store).state}"`;}
+function refreshOpeningStatus(){
+  for(const node of document.querySelectorAll('[data-opening-badge]')){const id=node.dataset.openingBadge,s=openingStatus({id});node.className='opening-badge '+s.state;node.title=s.detail;node.innerHTML=`<i aria-hidden="true"></i>${esc(s.label)}`;}
+  for(const node of document.querySelectorAll('[data-opening-store]'))node.dataset.openingState=openingStatus({id:node.dataset.openingStore}).state;
+}
+async function hydrateRoomHours(room){
+  try{await loadCatalog({ids:room.stores.map(s=>s.id)});if(S.room!==room)return;
+    for(const store of CATALOG.stores)if(store.openingSchedule)openingSchedules.set(store.id,store.openingSchedule);
+    refreshOpeningStatus();
+  }catch{/* Offline: keep an honest unknown state, without touching orders. */}
+}
+setInterval(()=>{if(document.visibilityState==='visible')refreshOpeningStatus();},30000);
+addEventListener('focus',refreshOpeningStatus);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshOpeningStatus();});
+
+const MENU_BOARD_API='https://asia-northeast3-ai-invent.cloudfunctions.net/dinnerMenuBoards';
+const boardState={sequence:0,busy:false,loading:false,rows:[],status:'pending',selected:null,error:'',cursor:'',more:false,photoURL:'',file:null,uploadId:'',store:null,consent:false,config:null,draft:null};
+const boardGroups=new Map(),boardGroupReads=new Map();
+const boardSource=value=>typeof value==='string'&&/^https:\/\/asia-northeast3-ai-invent\.cloudfunctions\.net\/dinnerMenuBoards\/(?:published\/[a-f0-9]{32}|groups\/group-[a-f0-9]{26})$/.test(value);
+function resetBoardPhotos(){boardState.sequence++;if(boardState.photoURL)URL.revokeObjectURL(boardState.photoURL);Object.assign(boardState,{busy:false,loading:false,rows:[],selected:null,photoURL:'',file:null,store:null,draft:null,error:'',uploadId:'',consent:false});document.getElementById('menuBoardSheet')?.remove();}
+async function boardApi(path,options={}){
+  await boot();const user=AUTH?.currentUser;if(!user)throw Error('login-required');const uid=user.uid,token=await user.getIdToken();
+  const response=await fetch(MENU_BOARD_API+path,{...options,headers:{Authorization:'Bearer '+token,...(options.body?{'Content-Type':'application/json'}:{})},cache:'no-store'});
+  if(AUTH.currentUser?.uid!==uid)throw Error('account-changed');
+  if(!response.ok){const data=await response.json().catch(()=>({}));throw Error(data.error||'service-unavailable');}return options.photo?response.blob():response.json();
+}
+function boardError(error){return ({'photo-quota':'오늘 또는 이번 달 사진 인식 한도에 도달했어요. 다음에 다시 제보해 주세요.','recognition-paused':'사진 자동 인식 준비 중이에요. 잠시 후 다시 확인해 주세요.','photo-too-large':'5MB 이하 사진을 골라 주세요.','invalid-photo':'사진을 읽지 못했어요. JPG·PNG로 다시 선택해 주세요.','operator-required':'운영 권한이 없거나 회수됐어요.','account-changed':'로그인 계정이 바뀌었어요. 다시 열어 주세요.','report-changed':'이미 검토되었거나 만료된 제보예요. 목록을 새로 열어 주세요.','menu-changed':'메뉴가 다른 화면에서 바뀌었어요. 제보를 다시 열고 대조해 주세요.','catalogue-changed':'가게 목록이 업데이트됐어요. 제보를 다시 열어 주세요.','price-conflict':'기존 가격과 달라요. 가격 변경 동의를 확인해 주세요.','inactive-menu':'판매 중단·승인 회수 메뉴가 포함돼 있어요. 메뉴 관리에서 확인해 주세요.','photo-expired':'사진 보관 기간이 지났어요. 사진을 다시 제보해 주세요.','invalid-menu':'메뉴명은 40자, 가격은 양의 정수여야 해요. 중복 이름도 확인해 주세요.'})[error.message]||'처리 결과를 확인하지 못했어요. 목록을 다시 확인해 주세요.';}
+function boardUploadButton(id){return `<button class="text-btn board-upload-entry" data-act="board-upload" data-id="${esc(id)}">📷 메뉴판 제보</button>`;}
+function boardUploadSheet(){
+  const b=boardState,store=b.store;if(!store)return '';
+  return `<div class="sheet-bg" id="menuBoardSheet"><section class="sheet board-upload-sheet" role="dialog" aria-modal="true" aria-labelledby="boardUploadTitle"><button class="x-btn" data-act="board-close" aria-label="닫기" ${b.busy?'disabled':''}>✕</button><h2 id="boardUploadTitle">메뉴판 사진 제보</h2><b>${esc(store.name)}</b><p class="hint">${esc(store.address||'지점명을 꼭 확인해 주세요.')}</p><p>메뉴·가격·원본 분류를 읽고, 운영자가 확인한 뒤 반영해요.</p>${b.photoURL?`<img class="board-photo" src="${esc(b.photoURL)}" alt="선택한 메뉴판">`:''}<label class="btn gray block">${b.file?'사진 다시 고르기':'메뉴판 사진 고르기'}<input id="boardPhotoFile" type="file" accept="image/*" ${b.busy?'disabled':''}></label><small>직접 찍었거나 제보할 권한이 있는 메뉴판을 올려 주세요. 얼굴·연락처·주문서 등 개인정보는 빼 주세요.</small><label class="operator-confirm"><input type="checkbox" id="boardPhotoConsent" ${b.consent?'checked':''} ${b.busy?'disabled':''}>사진을 Google AI로 인식하는 데 동의해요. 사진은 비공개로 30일, 접수·검토 기록은 90일 보관해요. 승인한 메뉴 정보만 공개돼요.</label>${b.error?`<p class="notice red" role="alert">${esc(b.error)}</p>`:''}<button class="btn block" id="boardUploadSend" data-act="board-submit" ${b.busy||!b.file||!b.consent?'disabled':''}>${b.busy?'메뉴판 읽는 중… 잠시 기다려 주세요':'사진 제보하고 자동 추출'}</button><small>AI가 잘못 읽을 수 있어 운영자 확인 전에는 반영하지 않아요.</small></section></div>`;
+}
+function showBoardUpload(){document.getElementById('menuBoardSheet')?.remove();document.body.insertAdjacentHTML('beforeend',boardUploadSheet());}
+async function openBoardUpload(id){
+  if(boardState.busy)return;
+  // Resolve initial auth/operator checks before the user chooses a photo: boot
+  // resets private operator state when the visitor is anonymous.
+  try{await boot();}catch{toast('사진 제보에 연결하지 못했어요. 잠시 후 다시 열어 주세요.');return;}
+  resetBoardPhotos();
+  let store=S.room?.stores.find(s=>s.id===id)||S.catDetail?.id===id&&S.catDetail||CATALOG.stores.find(s=>s.id===id);if(!store)return;
+  boardState.store={id:store.id,name:store.name,address:store.address};showBoardUpload();const sequence=boardState.sequence;
+  try{const data=await fetch(MENU_BOARD_API+'/config',{cache:'no-store'}).then(r=>r.json());if(sequence!==boardState.sequence)return;boardState.config=data;if(!data.enabled){boardState.error='사진 자동 인식을 준비 중이에요.';showBoardUpload();}}catch{/* Submit has an actionable error if connection is still unavailable. */}
+}
+async function prepareBoardPhoto(file){
+  if(!file||file.size>12*1024*1024)throw Error('photo-too-large');
+  const url=URL.createObjectURL(file);try{
+    const image=new Image();image.src=url;await image.decode();if(!image.naturalWidth||image.naturalWidth*image.naturalHeight>40000000)throw Error('invalid-photo');
+    const scale=Math.min(1,2600/Math.max(image.naturalWidth,image.naturalHeight)),canvas=document.createElement('canvas');canvas.width=Math.round(image.naturalWidth*scale);canvas.height=Math.round(image.naturalHeight*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.88));if(!blob)throw Error('invalid-photo');if(blob.size>5*1024*1024)throw Error('photo-too-large');return blob;
+  }finally{URL.revokeObjectURL(url);}
+}
+async function uploadBoardPhoto(){
+  const b=boardState;if(b.busy||!b.file||!b.consent)return;
+  b.busy=true;b.error='';showBoardUpload();const sequence=b.sequence;
+  try{
+    b.uploadId ||= (0xffffffffffff-Date.now()).toString(16).padStart(12,'0')+crypto.randomUUID().replace(/-/g,'').slice(0,20);
+    const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(',')[1]);reader.onerror=reject;reader.readAsDataURL(b.file);});
+    const result=await boardApi('/reports',{method:'POST',body:JSON.stringify({id:b.uploadId,storeId:b.store.id,data,consent:true})});if(sequence!==b.sequence)return;
+    resetBoardPhotos();toast(result.status==='pending'?`메뉴 ${result.extraction.rows.length}개 추출 · 운영자가 확인할게요.`:result.photoAvailable?'사진은 접수했지만 자동 인식에 실패했어요. 운영자에게 실패 상태로 전달했어요.':'사진을 보관하지 못했어요. 다시 제보해 주세요.');
+  }catch(e){if(sequence===b.sequence)b.error=boardError(e);}finally{if(sequence===b.sequence){b.busy=false;showBoardUpload();}}
+}
+async function loadBoardReports(more=false){
+  if(!menuOperator.allowed||boardState.busy||boardState.loading)return;
+  const b=boardState,sequence=++b.sequence,uid=hostAccount.uid;b.loading=true;b.error='';if(!more){b.rows=[];b.cursor='';b.selected=null;b.draft=null;if(b.photoURL)URL.revokeObjectURL(b.photoURL);b.photoURL='';}rerender();
+  try{const data=await boardApi('/reports?status='+b.status+(more?'&after='+b.cursor:''));if(sequence!==b.sequence||uid!==hostAccount.uid||!menuOperator.allowed)return;b.rows.push(...data.rows);b.more=data.more;b.cursor=data.cursor;}
+  catch(e){if(sequence===b.sequence)b.error=boardError(e);}finally{if(sequence===b.sequence){b.loading=false;rerender();}}
+}
+async function selectBoardReport(id){
+  if(boardState.busy)return;const b=boardState,sequence=++b.sequence,uid=hostAccount.uid;b.loading=true;b.error='';b.selected=null;b.draft=null;if(b.photoURL)URL.revokeObjectURL(b.photoURL);b.photoURL='';rerender();
+  try{
+    const report=await boardApi('/reports/'+id);if(sequence!==b.sequence||uid!==hostAccount.uid||!menuOperator.allowed)return;
+    b.selected=report;b.draft={checkedAt:new Date(Date.now()+9*3600000).toISOString().slice(0,10),confirmedBranch:false,confirmedRows:false,confirmedCategories:false,allowPriceUpdates:false,reason:'',rows:(report.extraction?.rows||[]).map(row=>{const same=report.currentMenus.find(m=>sharedMenuKey(m.name)===sharedMenuKey(row.name));return {...row,reviewed:false,targetId:same?.id||'',expectedRevision:same?.revision||0};})};
+    if(report.photoAvailable){const blob=await boardApi('/reports/'+id+'/photo',{photo:true});if(sequence!==b.sequence||uid!==hostAccount.uid||!menuOperator.allowed)return;b.photoURL=URL.createObjectURL(blob);}
+  }catch(e){if(sequence===b.sequence)b.error=boardError(e);}finally{if(sequence===b.sequence){b.loading=false;rerender();}}
+}
+function boardReviewValid(d){const rows=d?.rows?.filter(r=>r.reviewed)||[];return !!(d?.confirmedBranch&&d.confirmedRows&&d.confirmedCategories&&menuGroupSourceDate(d.checkedAt)&&rows.length&&rows.every(r=>r.name.trim().length>0&&r.name.trim().length<=40&&Number.isSafeInteger(r.price)&&r.price>0&&r.price<=10000000)&&new Set(rows.map(r=>sharedMenuKey(r.name))).size===rows.length);}
+async function decideBoardReport(approve){
+  const b=boardState,report=b.selected,d=b.draft;if(b.busy||!report||!d||approve&&!boardReviewValid(d))return;
+  b.busy=true;b.error='';rerender();const sequence=b.sequence;
+  try{await boardApi('/reports/'+report.id+'/decision',{method:'POST',body:JSON.stringify({decision:approve?'approve':'reject',revision:report.revision,baseVersion:report.baseVersion,...d,rows:d.rows.filter(r=>r.reviewed).map(({rowId,name,price,category,targetId,expectedRevision,reviewed})=>({rowId,name,price,category,targetId,expectedRevision,reviewed}))})});if(sequence!==b.sequence)return;approvedCheckedAt.delete(report.storeId);boardGroupReads.delete(report.storeId);toast(approve?'승인한 메뉴를 반영했어요. 보낸 주문은 유지돼요.':'반려했어요.');b.busy=false;await loadBoardReports();}
+  catch(e){if(sequence===b.sequence)b.error=boardError(e);}finally{if(sequence===b.sequence){b.busy=false;rerender();}}
+}
+function boardReportsHtml(){
+  const b=boardState,r=b.selected,d=b.draft,labels={pending:'검토 대기',failed:'인식 실패',approved:'반영 완료',rejected:'반려'};
+  if(r&&d)return `<button class="text-btn" data-act="board-list" ${b.busy?'disabled':''}>← 사진 제보함</button><h2>${esc(r.storeName)}</h2><p>${esc(r.address)} · ${labels[r.status]}</p>${b.loading?'<p role="status">원본 사진을 불러오는 중…</p>':''}<div class="board-review-layout"><div>${b.photoURL?`<a href="${esc(b.photoURL)}" target="_blank" rel="noopener"><img class="board-photo" src="${esc(b.photoURL)}" alt="검토할 원본 메뉴판 · 눌러서 확대"></a>`:'<p>사진 보관이 끝났거나 사진을 읽지 못했어요.</p>'}<small>사진을 누르면 크게 볼 수 있어요. 사진은 외부에 공개되지 않아요.</small></div><div>${r.extraction?.storeName?`<p>사진 속 지점명: ${esc(r.extraction.storeName)}</p>`:''}${(r.extraction?.warnings||[]).map(w=>`<p class="notice">${esc(w)}</p>`).join('')}${r.status==='pending'?`<p>원본과 대조한 항목만 체크해 주세요. 분류는 메뉴판에 적힌 이름 그대로 적어요.</p><fieldset ${b.busy?'disabled':''}>${d.rows.map(row=>`<section class="board-review-row ${row.uncertain?'uncertain':''}"><label><input type="checkbox" data-board-row="${row.rowId}" data-board-key="reviewed" ${row.reviewed?'checked':''}>이 항목 확인·반영${row.uncertain?' · 인식 주의':''}${row.kind!=='menu'?' · '+esc(row.kind==='option'?'추가 옵션':'안내문'):''}</label><small>원문 가격: ${esc(row.rawPrice||'읽지 못함')} ${esc(row.notes||'')}</small><label>메뉴명<input class="input" data-board-row="${row.rowId}" data-board-key="name" maxlength="40" value="${esc(row.name)}"></label><div class="board-pair"><label>가격(원)<input class="input" type="number" min="1" max="10000000" step="1" inputmode="numeric" data-board-row="${row.rowId}" data-board-key="price" value="${row.price??''}"></label><label>원본 분류<input class="input" data-board-row="${row.rowId}" data-board-key="category" maxlength="160" value="${esc(row.category)}" placeholder="없으면 비워두기"></label></div><label>기존 메뉴와 연결<select class="input" data-board-row="${row.rowId}" data-board-key="targetId"><option value="">새 메뉴 · 같은 이름은 자동 대조</option>${r.currentMenus.map(m=>`<option value="${esc(m.id)}" ${m.id===row.targetId?'selected':''}>${esc(m.name)} · ${won(m.price)}${m.state!=='active'?' · '+esc(m.state):''}</option>`).join('')}</select></label></section>`).join('')}<label class="field">확인일<input class="input" type="date" data-board-field="checkedAt" value="${esc(d.checkedAt)}"></label>${[['confirmedBranch','사진이 이 지점의 메뉴판임을 확인했어요.'],['confirmedRows','체크한 메뉴명과 가격을 원본과 대조했어요.'],['confirmedCategories','분류가 원본 제목과 일치해요. 없는 분류는 만들지 않았어요.'],['allowPriceUpdates','기존 메뉴와 다른 가격은 새 선택부터 변경해요. 보낸 주문은 유지해요.']].map(([key,label])=>`<label class="operator-confirm"><input type="checkbox" data-board-field="${key}" ${d[key]?'checked':''}>${label}</label>`).join('')}</fieldset><button class="btn block" id="boardApprove" data-act="board-approve" ${b.busy||b.loading||!b.photoURL||!boardReviewValid(d)?'disabled':''}>선택한 ${d.rows.filter(r=>r.reviewed).length}개 승인·반영</button>`:`<p>${r.status==='failed'?'자동 추출에 실패했어요. 사진 상태를 확인하고 새 사진을 제보해 주세요.':esc(r.reason||'검토를 마친 제보예요.')}</p>`}${['pending','failed'].includes(r.status)?`<details><summary>반려하기</summary><input class="input" data-board-field="reason" placeholder="반려 이유" maxlength="200" value="${esc(d.reason)}"><button class="btn gray" data-act="board-reject" ${b.busy?'disabled':''}>반려</button></details>`:''}</div></div>`;
+  return `<div class="operator-tabs">${Object.entries(labels).map(([key,label])=>`<button data-act="board-status" data-v="${key}" aria-pressed="${b.status===key}">${label}</button>`).join('')}</div>${b.loading?'<p role="status">사진 제보를 불러오는 중…</p>':''}<div class="operator-list">${b.rows.map(row=>`<button class="operator-card" data-act="board-select" data-id="${row.id}"><span><b>${esc(row.storeName)}</b><em>${esc(row.address)}</em></span><strong>${row.extraction?.rows?.length||0}개 ›</strong></button>`).join('')||(!b.loading?'<p>이 상태의 사진 제보가 없어요.</p>':'')}</div>${b.more?'<button class="btn gray block" data-act="board-more">25개 더 보기</button>':''}`;
+}
+function boardInput(node){
+  const key=node.dataset?.boardKey,field=node.dataset?.boardField,d=boardState.draft;if(!d||!key&&!field)return false;
+  if(key){const row=d.rows.find(r=>r.rowId===node.dataset.boardRow);if(!row)return true;row[key]=key==='reviewed'?node.checked:key==='price'?(node.value===''?null:Number(node.value)):node.value;if(key!=='reviewed'){row.reviewed=false;const check=document.querySelector(`[data-board-row="${row.rowId}"][data-board-key="reviewed"]`);if(check)check.checked=false;}if(key==='targetId')row.expectedRevision=boardState.selected.currentMenus.find(m=>m.id===row.targetId)?.revision||0;}
+  if(field)d[field]=node.type==='checkbox'?node.checked:node.value;
+  const button=document.getElementById('boardApprove');if(button){button.disabled=boardState.busy||!boardState.photoURL||!boardReviewValid(d);button.textContent=`선택한 ${d.rows.filter(r=>r.reviewed).length}개 승인·반영`;}return true;
+}
+function boardChange(node){
+  if(node.id==='boardPhotoFile'){
+    if(!node.files?.[0])return true;
+    const sequence=boardState.sequence;prepareBoardPhoto(node.files?.[0]).then(blob=>{if(sequence!==boardState.sequence)return;if(boardState.photoURL)URL.revokeObjectURL(boardState.photoURL);boardState.file=blob;boardState.photoURL=URL.createObjectURL(blob);boardState.uploadId='';boardState.error='';showBoardUpload();}).catch(e=>{if(sequence===boardState.sequence){boardState.error=boardError(e);showBoardUpload();}});return true;
+  }
+  if(node.id==='boardPhotoConsent'){boardState.consent=node.checked;const button=document.getElementById('boardUploadSend');if(button)button.disabled=boardState.busy||!boardState.file||!boardState.consent;return true;}
+  return boardInput(node);
+}
+async function boardClick(act,id,el){
+  if(!act.startsWith('board-')&&act!=='operator-photos')return false;
+  if(act==='board-upload')await openBoardUpload(id);
+  else if(act==='board-close'){if(!boardState.busy)resetBoardPhotos();}
+  else if(act==='board-submit')await uploadBoardPhoto();
+  else if(act==='operator-photos'){menuOperator.mode='photos';await loadBoardReports();}
+  else if(act==='board-status'){if(!boardState.busy){boardState.status=el.dataset.v;await loadBoardReports();}}
+  else if(act==='board-more')await loadBoardReports(true);
+  else if(act==='board-select')await selectBoardReport(id);
+  else if(act==='board-list')await loadBoardReports();
+  else if(act==='board-approve')await decideBoardReport(true);
+  else if(act==='board-reject')await decideBoardReport(false);
+  return true;
+}
+function withBoardGroups(store){
+  const groups=new Map((store.menuGroups||[]).map(g=>[g.id,{...g,menuIds:[...g.menuIds]}]));
+  for(const g of boardGroups.get(store.id)||[]){const before=groups.get(g.groupId);groups.set(g.groupId,{id:g.groupId,name:g.name,menuIds:[...new Set([...(before?.menuIds||[]),...g.menuIds])],source:g.source,basis:'운영자 확인 메뉴판',sourceDate:g.sourceDate});}
+  return {...store,menuGroups:[...groups.values()]};
+}
+function replaceBoardGroups(docs,ids){
+  if(ids)for(const id of ids)boardGroups.delete(id);else boardGroups.clear();
+  for(const doc of docs){const d=doc.data();if(!d||!boardSource(d.source)||!Array.isArray(d.menuIds)||typeof d.name!=='string'||!d.name.trim()||!/^([a-zA-Z0-9_-]){1,40}$/.test(d.groupId)||!menuGroupSourceDate(d.sourceDate))continue;if(!boardGroups.has(d.storeId))boardGroups.set(d.storeId,[]);boardGroups.get(d.storeId).push(d);}
+}
+async function loadBoardGroups(id){
+  if(!FB?.getDocsFromServer)return;
+  if(!boardGroupReads.has(id))boardGroupReads.set(id,FB.getDocsFromServer(FB.query(FB.collection(DB,'dinnerApprovedMenuGroups'),FB.where('storeId','==',id))).then(snap=>replaceBoardGroups(snap.docs,[id])).catch(()=>{boardGroupReads.delete(id);}));return boardGroupReads.get(id);
+}
+
 // The manifest contains identities/coordinates only. Names, menu search and
 // photos are loaded for requested regions; GPS never appears in a request.
 const regionalCatalog={manifest:null,requests:new Map(),loaded:new Set(),view:0,pending:false,error:''};
@@ -3245,7 +3410,7 @@ function loadCatalogRegion(region){
       if(!identity||incoming.has(store.id)||!Array.isArray(store.menu)||catalogCity(store)!==identity.city||(region.city==='도청신도시'?!inNewTown(store):catalogCity(store)!==region.city))throw Error('Wrong regional store');
       incoming.set(store.id,store);
     }
-    for(const store of incoming.values())catalogBaseStores.set(store.id,store);
+    for(const store of incoming.values()){catalogBaseStores.set(store.id,store);if(store.openingSchedule)openingSchedules.set(store.id,store.openingSchedule);}
     CATALOG.stores=CATALOG.stores.map(store=>incoming.get(store.id)||store);
     regionalCatalog.loaded.add(region.path);
   })().catch(error=>{regionalCatalog.requests.delete(region.path);throw error;}));
@@ -3483,6 +3648,7 @@ const safeMenuGroupSource=value=>typeof value==='string'&&(
   ||/^https:\/\/www\.bhc\.co\.kr\/menu\/(?:1|22|23|47|50)$/.test(value)
   ||/^https:\/\/www\.bonif\.co\.kr\/brand\/menu\?brdCd=BF(?:101|102|104)$/.test(value)
   ||/^https:\/\/baskinrobbins\.co\.kr\/menu\/(?:list\.php\?category=[ABEF]|view\.php\?seq=17)$/.test(value)
+  ||boardSource(value)
   ||ALTERNATE_MENU_GROUP_SOURCES.has(value))?value:'';
 function tidyMenuGroups(store){
   const ids=new Set((Array.isArray(store.menu)?store.menu:[]).map(m=>str(m?.id,40))),seen=new Set();
@@ -3491,7 +3657,7 @@ function tidyMenuGroups(store){
     const name=str(group.name,160).trim(),menuIds=[...new Set((Array.isArray(group.menuIds)?group.menuIds:[]).filter(id=>typeof id==='string'&&ids.has(id)))];
     if(!name||!menuIds.length)return [];seen.add(group.id);
     const sourceDate=menuGroupSourceDate(group.sourceDate);
-    return [{id:group.id,name,menuIds,source:group.source,basis:['매장 메뉴판','배달 메뉴판','공식 게시 사진','지점 게시 메뉴판','브랜드 공식 분류'].includes(group.basis)?group.basis:'',...(sourceDate?{sourceDate}:{})}];
+    return [{id:group.id,name,menuIds,source:group.source,basis:['매장 메뉴판','배달 메뉴판','공식 게시 사진','지점 게시 메뉴판','브랜드 공식 분류','운영자 확인 메뉴판'].includes(group.basis)?group.basis:'',...(sourceDate?{sourceDate}:{})}];
   });
 }
 function menuGroupFields(store){const groups=tidyMenuGroups(store);return groups.length?{menuGroups:groups}:{};}
@@ -3567,7 +3733,7 @@ const operatorCode=()=>hostAccount.uid?.slice(-16)||'';
 const approvedMenus=new Map(),approvedRequests=new Map(),approvedCheckedAt=new Map();
 let approvedRoomStop=null,approvedRoomKey='';
 function resetMenuOperator(){
-  resetOperatorQuality();
+  resetOperatorQuality();resetBoardPhotos();
   menuOperatorStop?.();menuOperatorStop=null;
   Object.assign(menuOperator,{uid:'',allowed:false,ready:false,error:'',rows:[],cursor:null,selected:'',store:null,draft:null,loading:false,mode:'reports',menuId:'',history:[]});menuOperator.sequence++;menuOperator.authSequence++;
 }
@@ -3585,9 +3751,9 @@ async function checkMenuOperator(){
       const allowed=snapshot.exists()&&snapshot.data().active===true;
       if(allowed===menuOperator.allowed)return;
       menuOperator.allowed=allowed;
-      if(!allowed){menuOperator.rows=[];menuOperator.selected='';menuOperator.store=null;menuOperator.draft=null;menuOperator.loading=false;menuOperator.sequence++;}
+      if(!allowed){resetBoardPhotos();menuOperator.rows=[];menuOperator.selected='';menuOperator.store=null;menuOperator.draft=null;menuOperator.loading=false;menuOperator.sequence++;}
       if(S.route==='operator'||S.route==='home')rerender();
-    },()=>{if(sequence!==menuOperator.authSequence)return;menuOperator.allowed=false;menuOperator.rows=[];menuOperator.selected='';menuOperator.draft=null;menuOperator.loading=false;menuOperator.sequence++;if(S.route==='operator')rerender();});
+    },()=>{if(sequence!==menuOperator.authSequence)return;menuOperator.allowed=false;resetBoardPhotos();menuOperator.rows=[];menuOperator.selected='';menuOperator.draft=null;menuOperator.loading=false;menuOperator.sequence++;if(S.route==='operator')rerender();});
   }catch{if(sequence===menuOperator.authSequence){menuOperator.ready=true;menuOperator.error='운영자 권한을 확인하지 못했어요. 연결 후 다시 확인해 주세요.';}}
   return menuOperator.allowed;
 }
@@ -3621,7 +3787,7 @@ async function selectMenuReport(id){
   if(row.status!=='pending'){rerender();return;}
   menuOperator.loading=true;rerender();
   try{
-    await loadCatalog();const entry=CATALOG.stores.find(s=>s.id===row.storeId);
+    await loadCatalog({ids:[row.storeId]});const entry=CATALOG.stores.find(s=>s.id===row.storeId);
     if(!entry||sharedMenuKey(str(entry.name,40))!==sharedMenuKey(row.storeName))throw Error('store-mismatch');
     const full=await loadCatalogStore(entry);
     if(menuOperator.selected===id)menuOperator.store=full;
@@ -3690,6 +3856,7 @@ function viewMenuOperator(){
   if(!hostAccount.uid)body=`<section class="operator-empty"><h2>운영자 계정으로 로그인</h2><p>제보 검토는 등록된 카카오 계정으로만 할 수 있어요.</p><button class="btn kakao-btn" data-act="operator-login" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'카카오로 연결하는 중…':'카카오로 로그인'}</button>${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}</section>`;
   else if(!m.ready)body='<p role="status">운영자 권한을 확인하고 있어요…</p>';
   else if(!m.allowed)body=`<section class="operator-empty"><h2>운영자 등록이 필요해요</h2><p>이 계정은 제보함을 열 수 없어요.</p><label class="field">운영자 연결 코드<input class="input code-box" readonly value="${esc(operatorCode())}" aria-label="운영자 연결 코드"></label><small>서비스 관리자에게 이 코드를 전달해 주세요.</small><button class="btn gray" data-act="operator-permission">권한 다시 확인</button></section>`;
+  else if(m.mode==='photos')body=(boardState.error?`<p class="notice red" role="alert">${esc(boardState.error)}</p>`:'')+boardReportsHtml();
   else if(m.mode==='quality')body=operatorQualityHtml();
   else if(m.mode==='menus')body=operatorMenuListHtml();
   else {
@@ -3699,21 +3866,23 @@ function viewMenuOperator(){
     const next=m.more?`<button class="btn gray block" data-act="operator-more" ${m.loading?'disabled':''}>25개 더 보기</button>`:'';
     body=tabs+(row?operatorReviewHtml(row):'<div class="operator-list">'+(cards||(!m.loading?empty:''))+'</div>'+next+(m.loading?'<p role="status">제보를 불러오는 중…</p>':''));
   }
-  const modes=m.allowed?`<div class="operator-tabs operator-modes" role="group" aria-label="운영 메뉴"><button data-act="operator-reports" aria-pressed="${m.mode==='reports'}" ${m.busy||m.loading?'disabled':''}>메뉴 제보</button><button data-act="operator-quality" aria-pressed="${m.mode==='quality'}" ${m.busy||m.loading?'disabled':''}>품질 점검</button><button data-act="operator-menus" aria-pressed="${m.mode==='menus'}" ${m.busy||m.loading?'disabled':''}>메뉴 관리</button></div>`:'';
+  const modes=m.allowed?`<div class="operator-tabs operator-modes" role="group" aria-label="운영 메뉴"><button data-act="operator-reports" aria-pressed="${m.mode==='reports'}" ${m.busy||m.loading?'disabled':''}>메뉴 제보</button><button data-act="operator-photos" aria-pressed="${m.mode==='photos'}" ${m.busy||boardState.busy?'disabled':''}>메뉴판 사진</button><button data-act="operator-quality" aria-pressed="${m.mode==='quality'}" ${m.busy||m.loading?'disabled':''}>품질 점검</button><button data-act="operator-menus" aria-pressed="${m.mode==='menus'}" ${m.busy||m.loading?'disabled':''}>메뉴 관리</button></div>`:'';
   return `${topBar('메뉴 관리','home',m.allowed?`<button class="small-btn" data-act="operator-refresh" ${m.busy||m.loading?'disabled':''}>새로고침</button>`:'')}<div class="wrap operator-page"><div class="operator-heading"><span>다맛다 운영자</span><p>확인한 메뉴를 모두의 목록에.</p></div>${modes}${m.error?`<p class="notice red" role="alert">${esc(m.error)}</p>`:''}${body}</div>`;
 }
 function operatorHomeButton(){return menuOperator.allowed&&menuOperator.uid===hostAccount.uid?'<a class="operator-home" href="#operator"><span>메뉴 제보 관리</span><b>운영자 ↗</b></a>':'';}
 function tidyApprovedMenu(id,d){
   if(!/^reviewed-[a-f0-9]{26}$/.test(id)||typeof d?.storeId!=='string'||!d.name||typeof d.name!=='string'||d.name.length>40||!Number.isSafeInteger(d.price)||d.price<=0||d.price>10000000||!checkedReviewSource(d.source)||!menuGroupSourceDate(d.checkedAt))return null;
-  return {id,storeId:d.storeId,name:d.name,price:d.price,kind:'menu',categoryId:str(d.categoryId,40),source:d.source,checkedAt:d.checkedAt};
+  return {id,storeId:d.storeId,name:d.name,price:d.price,kind:'menu',categoryId:str(d.categoryId,40),source:d.source,checkedAt:d.checkedAt,...(boardSource(d.source)?{priceBasis:'운영자 확인 메뉴판',priceSource:d.source,priceDataDate:d.checkedAt}:{})};
 }
 function withApprovedMenus(store,rows){
+  store=withBoardGroups(store);
   const ids=new Set(store.menu.map(m=>m.id)),names=new Set(store.menu.map(m=>sharedMenuKey(m.name))),menu=[...store.menu],menuGroups=(store.menuGroups||[]).map(g=>({...g,menuIds:[...g.menuIds]}));
   for(const row of rows||[]){if(row.storeId!==store.id||ids.has(row.id)||names.has(sharedMenuKey(row.name)))continue;const {storeId,categoryId,source,checkedAt,...m}=row;menu.push(m);ids.add(m.id);names.add(sharedMenuKey(m.name));const group=menuGroups.find(g=>g.id===categoryId);if(group)group.menuIds.push(m.id);}
   return {...store,menu,...(menuGroups.length?{menuGroups}:{})};
 }
 async function loadApprovedCatalog(store,applyChanges=true){
   if(!store.id||!FB?.getDocsFromServer)return store;
+  await loadBoardGroups(store.id);
   let rows=approvedMenus.get(store.id);
   if(!rows||Date.now()-(approvedCheckedAt.get(store.id)||0)>60000){
     if(!approvedRequests.has(store.id))approvedRequests.set(store.id,(async()=>{
@@ -3751,6 +3920,7 @@ function watchApprovedRoomMenus(room){
     if(approvedRoomKey!==key||!S.room||snapshot.metadata?.hasPendingWrites)return;
     replaceMenuChanges(snapshot.docs,ids);applyApprovedRoomMenus(S.room);
   },()=>{}));
+  stops.push(FB.onSnapshot(FB.query(FB.collection(DB,'dinnerApprovedMenuGroups'),FB.where('storeId','in',ids)),snapshot=>{if(approvedRoomKey!==key||!S.room||snapshot.metadata?.hasPendingWrites)return;replaceBoardGroups(snapshot.docs,ids);applyApprovedRoomMenus(S.room);},()=>{}));
   approvedRoomStop=()=>stops.forEach(stop=>stop());
 }
 document.addEventListener('input',event=>{const key=event.target.dataset?.operatorField;if(key&&menuOperator.draft)menuOperator.draft[key]=event.target.type==='checkbox'?event.target.checked:event.target.value;});
@@ -3777,7 +3947,7 @@ function withMenuChanges(store){
   const menu=store.menu.filter(m=>!revoked.has(m.id)).map(m=>{
     const change=changes.find(c=>c.menuId===m.id)||changes.find(c=>c.state!=='revoked'&&sharedMenuKey(c.originalName)===sharedMenuKey(m.name));
     if(!change||change.state==='reset'||change.state==='revoked')return {...m};
-    return {...m,name:change.name,price:change.price,unavailable:change.state==='stopped',menuRevision:change.revision,menuSource:change.source,menuCheckedAt:change.checkedAt};
+    return {...m,name:change.name,price:change.price,unavailable:change.state==='stopped',menuRevision:change.revision,menuSource:change.source,menuCheckedAt:change.checkedAt,...(boardSource(change.source)?{priceBasis:'운영자 확인 메뉴판',priceSource:change.source,priceDataDate:change.checkedAt}:{})};
   });
   // Keep provenance groups, replacing membership only when a verified group was selected.
   const menuGroups=(store.menuGroups||[]).map(g=>({...g,menuIds:[...g.menuIds]}));
@@ -3821,14 +3991,14 @@ async function refreshMenuCatalogIndex(){
 }
 function startMenuCatalogFeed(){
   if(menuFeedPromise||!FB?.onSnapshot||!FB?.collection)return menuFeedPromise||Promise.resolve();
-  menuFeedPromise=Promise.all(['dinnerApprovedMenus','dinnerMenuChanges'].map(collection=>new Promise(resolve=>{
+  menuFeedPromise=Promise.all(['dinnerApprovedMenus','dinnerMenuChanges','dinnerApprovedMenuGroups'].map(collection=>new Promise(resolve=>{
     FB.onSnapshot(FB.collection(DB,collection),snapshot=>{
       if(snapshot.metadata?.hasPendingWrites)return;
       if(collection==='dinnerApprovedMenus'){
         const oldIds=[...approvedMenus.keys()];approvedMenus.clear();
         for(const doc of snapshot.docs){const row=tidyApprovedMenu(doc.id,doc.data());if(!row)continue;if(!approvedMenus.has(row.storeId))approvedMenus.set(row.storeId,[]);approvedMenus.get(row.storeId).push(row);}
         for(const id of new Set([...oldIds,...approvedMenus.keys()])){if(!approvedMenus.has(id))approvedMenus.set(id,[]);approvedCheckedAt.set(id,Date.now());}
-      }else replaceMenuChanges(snapshot.docs);
+      }else if(collection==='dinnerMenuChanges')replaceMenuChanges(snapshot.docs);else replaceBoardGroups(snapshot.docs);
       refreshMenuCatalogIndex().then(resolve).catch(()=>resolve());
       if(S.room)applyApprovedRoomMenus(S.room);
     },()=>{menuFeedPromise=null;resolve();});
@@ -4819,6 +4989,7 @@ async function checkAppUpdate() {
 }
 function postponeAppUpdate() { appUpdate.dismissed=appUpdate.next; renderAppUpdate(); }
 function updateBlockReason() {
+  if(boardState.busy)return '메뉴판 사진 처리를 마친 뒤 업데이트해 주세요.';
   if(menuOperator.busy)return '메뉴 제보 처리를 마친 뒤 업데이트해 주세요.';
   if(roomManagers.busy)return '관리자 권한 변경을 마친 뒤 업데이트해 주세요.';
   if (S.sending || avatarPicker?.saving) return '메뉴를 보내거나 저장하는 중이에요. 완료되면 다시 눌러 주세요.';
@@ -5144,6 +5315,7 @@ function managementBackupHtml() {
   return `<section class="management-backup" aria-label="관리 링크 보관 안내"><h3>🔑 내 방의 관리 링크를 보관해 주세요</h3><p>이 방은 아직 계정에 연결되지 않았어요. 다른 기기에서도 관리하려면 <b>관리 링크를 복사해 나만 볼 수 있는 곳에 저장</b>해 주세요.</p><p class="hint">참여 링크로는 관리 권한을 복구할 수 없어요. 관리 링크로 새 기기에 연결하면 공동 방장이 돼요. 최초·대표 방장 권한은 카카오 계정에 연결해 이어가세요.</p><button class="btn block" data-act="copy-host" data-copy-box="backupHostBox">관리 링크 복사</button><div id="backupHostBox" hidden class="copy-box"><label>관리 링크<textarea class="input code-box" readonly rows="3"></textarea></label></div><button class="text-btn" data-act="backup-saved">안전한 곳에 따로 보관했어요</button><button class="text-btn" data-act="account-link">카카오 계정에 연결하기</button></section>`;
 }
 async function logoutHostAccount() {
+  if(boardState.busy){toast('메뉴판 사진 처리를 마친 뒤 로그아웃해 주세요.');return;}
   if(menuOperator.busy){toast('메뉴 제보 처리를 마친 뒤 로그아웃해 주세요.');return;}
   if(S.sending||S.edit?.dirty){toast('바꾼 내용을 먼저 저장해 주세요');return;}
   const uid=hostAccount.uid;if(!uid)return;
@@ -5284,7 +5456,7 @@ async function openRoom(id, key, want = '') {
       const initialView = first;
       first = false;
       reindex(); syncAnswerDraft();queueCartState(); syncAvatarPicker(); migrateMyAvatar(); keepView();
-      hydrateRoomMenus(S.room);hydrateRoomCategories(S.room);watchApprovedRoomMenus(S.room);watchLateAnswers();
+      hydrateRoomMenus(S.room);hydrateRoomCategories(S.room);hydrateRoomHours(S.room);watchApprovedRoomMenus(S.room);watchLateAnswers();
       if (initialView) {rememberView();if(S.host&&!roomManagers.ready)refreshRoomManagers();if(S.host&&want==='set')void resumeActiveCatalog('room',catalogView);}
     }, e => { S.loading = false; S.error = /permission/.test(String(e && e.code)) ? '방 기능이 아직 켜지지 않았어요(Firebase 규칙 게시 전이에요). 방을 관리하는 사람에게 알려 주세요.' : friendly(e); render(); }));
     let firstAnswers = true;
@@ -5410,7 +5582,7 @@ async function addSharedMenu(storeId,name,price) {
 }
 function missingMenuButton(storeId=S.store) {
   if(!S.who||locked()||!storeOf(storeId))return '';
-  return `<button class="missing-menu" data-act="shared-menu-open" data-id="${esc(storeId)}"><span>찾는 메뉴가 없나요?</span><b>메뉴 직접 담기 ＋</b></button>`;
+  return `${boardUploadButton(storeId)}<button class="missing-menu" data-act="shared-menu-open" data-id="${esc(storeId)}"><span>찾는 메뉴가 없나요?</span><b>메뉴 직접 담기 ＋</b></button>`;
 }
 function openSharedMenu(storeId) {
   const store=storeOf(storeId);if(!store||locked())return;
@@ -6034,7 +6206,7 @@ function treatForm(p, t) {
 }
 const parseNames = t => [...new Set(String(t).split(/[\n,]+/).map(x => x.trim().replace(/\s+/g, ' ').slice(0, 20)).filter(Boolean))].slice(0, 120);
 function storeRow(s, act) {
-  return `<div class="pick-row">${thumb(s, 'sm')}<div class="pr-txt"><b>${esc(s.name)}</b><span>메뉴 ${foodMenus(s).length}개${guidanceMenus(s).length ? ` · 배달·추가요금 안내 ${guidanceMenus(s).length}건` : ''}</span></div>${act}</div>`;
+  return `<div class="pick-row" ${openingAttributes(s)}>${thumb(s, 'sm')}<div class="pr-txt"><b>${esc(s.name)}</b>${openingBadge(s)}<span>메뉴 ${foodMenus(s).length}개${guidanceMenus(s).length ? ` · 배달·추가요금 안내 ${guidanceMenus(s).length}건` : ''}</span></div>${act}</div>`;
 }
 function viewCreate() {
   const d = S.draft, can = d.title.trim() && d.stores.length,guide=createGuideIsOpen(),step=createGuideStep();
@@ -6165,10 +6337,10 @@ function catalogList() {
     const words=searchWords(S.catQuery), matches=words.length && detail ? foodMenus(detail).filter(m=>words.every(w=>searchText(m.name).includes(w))) : [];
     const categories=detail?storeMenuCategories(detail):[],selectedCategory=categories.find(g=>g.id===S.catPreviewCategory),categoryIds=selectedCategory?new Set(selectedCategory.menuIds):null;
     const previewMenus=detail ? [...matches,...foodMenus(detail).filter(m=>!matches.includes(m))].filter(m=>!categoryIds||categoryIds.has(m.id)) : [];
-    return `<article class="prow${on ? ' on' : ''}"><label class="prow-main">${thumb(s, 'md')}
-      <div class="prow-txt"><b>${esc(s.name)}</b>${S.catCity===NEW_TOWN?`<span class="catalog-jurisdiction">주소지 · ${esc(catalogCity(s))}</span>`:''}<div class="meta">${storeMeta({...s,minutes:0})}</div>${S.catMode==='nearby'?`<span class="nearby-distance">약 ${nearbyDistanceLabel(nearbyStoreDistance(s))}</span>`:''}${menuPricePreview(s)}</div>
+    return `<article class="prow${on ? ' on' : ''}" ${openingAttributes(s)}><label class="prow-main">${thumb(s, 'md')}
+      <div class="prow-txt"><b>${esc(s.name)}</b>${openingBadge(s)}${S.catCity===NEW_TOWN?`<span class="catalog-jurisdiction">주소지 · ${esc(catalogCity(s))}</span>`:''}<div class="meta">${storeMeta({...s,minutes:0})}</div>${S.catMode==='nearby'?`<span class="nearby-distance">약 ${nearbyDistanceLabel(nearbyStoreDistance(s))}</span>`:''}${menuPricePreview(s)}</div>
       <span class="catalog-check"><input type="checkbox" data-act="cat-pick" data-id="${esc(s.id)}"${on ? ' checked' : ''} aria-label="${esc(s.name)} 넣기"><i aria-hidden="true"></i></span></label>
-      <div class="catalog-row-tools"><button class="text-btn" data-act="cat-preview" data-id="${esc(s.id)}" aria-expanded="${expanded}">${publicMenuBasis(s.menuBasis)?'공개 대표 메뉴':'메뉴'} ${s.menuCount ?? s.menu.length}개 ${expanded?'접기':'보기'}</button>${['플레이스 메뉴판','배달 메뉴판','메뉴별 가격 기준','공개 안내 가격'].includes(s.menuBasis)?`<span class="catalog-price-basis">${esc(PRICE_BASIS_LABEL[s.menuBasis]||s.menuBasis)}</span>`:''}${s.checkedAt ? `<span>${publicMenuBasis(s.menuBasis)?'공개자료 확인':s.menuBasis==='업주 등록 메뉴'?'등록정보 확인':s.menuBasis==='메뉴별 가격 기준'?'메뉴 자료 확인':'메뉴판 조회'} ${esc(s.checkedAt)}</span>`:''}</div>
+      <div class="catalog-row-tools">${boardUploadButton(s.id)}<button class="text-btn" data-act="cat-preview" data-id="${esc(s.id)}" aria-expanded="${expanded}">${publicMenuBasis(s.menuBasis)?'공개 대표 메뉴':'메뉴'} ${s.menuCount ?? s.menu.length}개 ${expanded?'접기':'보기'}</button>${['플레이스 메뉴판','배달 메뉴판','메뉴별 가격 기준','공개 안내 가격'].includes(s.menuBasis)?`<span class="catalog-price-basis">${esc(PRICE_BASIS_LABEL[s.menuBasis]||s.menuBasis)}</span>`:''}${s.checkedAt ? `<span>${publicMenuBasis(s.menuBasis)?'공개자료 확인':s.menuBasis==='업주 등록 메뉴'?'등록정보 확인':s.menuBasis==='메뉴별 가격 기준'?'메뉴 자료 확인':'메뉴판 조회'} ${esc(s.checkedAt)}</span>`:''}</div>
       ${expanded ? `<div class="catalog-menu-preview">${S.catMenuError ? '<p role="alert">메뉴를 불러오지 못했어요. 닫고 다시 열어 주세요.</p>' : detail ? `${detail.menuBasis ? `<p>${esc(detail.menuBasis)} 기준${detail.menuDataDate?' · '+esc(detail.menuDataDate)+' 자료':''}</p>`:''}${menuSourceHtml(detail)}${menuCategorySourceHtml(detail)}${categories.length?`<label class="catalog-menu-category">메뉴 분류<select class="input" id="catMenuCategory"><option value="all">전체 · ${foodMenus(detail).length}개</option>${categories.map(g=>`<option value="${esc(g.id)}"${g.id===selectedCategory?.id?' selected':''}>${esc(g.name)} · ${g.menuIds.length}개</option>`).join('')}</select></label>`:''}${matches.length ? '<p class="catalog-match-label">검색한 메뉴를 먼저 보여드려요.</p>':''}${storePhotosHtml(detail)}${previewMenus.map(m=>`<div>${m.img?`<span class="catalog-menu-photo">${photo(m.img)}${imgNote(m)}</span>`:''}<b>${esc(m.name)}${priceBasisHtml(m,detail)}</b><span>${price(m.price)}</span></div>`).join('')}${storeGuidance(detail)}<p>현재 가격·판매 여부는 가게에서 확인해 주세요.</p>` : '<p role="status">메뉴를 불러오는 중…</p>'}</div>`:''}</article>`;
   }).join('') + (list.length>visible.length ? `<button class="btn gray block" data-act="cat-more">12곳 더 보기 (${visible.length}/${list.length})</button>`:'') || catalogEmptyResults();
 }
@@ -6459,8 +6631,8 @@ function roomWho() {
 }
 function storeCard(s) {
   const n = s.menu.reduce((a, m) => a + (S.cart[m.id] || 0), 0);
-  return `<button class="store" data-act="store" data-id="${esc(s.id)}">${thumb(s)}
-    <div class="body"><div class="nm"><b>${esc(s.name)}</b></div>
+  return `<button class="store" ${openingAttributes(s)} data-act="store" data-id="${esc(s.id)}">${thumb(s)}
+    <div class="body"><div class="nm"><b>${esc(s.name)}</b></div>${openingBadge(s)}
       ${storeMeta(s) ? `<div class="meta">${storeMeta(s)}</div>` : ''}
       ${menuPricePreview(s)}
       <div class="from"><span>메뉴 ${foodMenus(s).length}개</span></div></div>
@@ -6601,7 +6773,7 @@ function menuStoreHeader(s,count) {
     canOpenLinks && s.naver ? `<a href="${esc(s.naver)}" target="_blank" rel="noopener">${ICON.ext}<span>네이버</span></a>` : '',
     canOpenLinks && menuProvenance(s) ? `<a href="${esc(s.menuSource)}" target="_blank" rel="noopener">${ICON.ext}<span>메뉴 출처</span></a>` : '',
   ].filter(Boolean);
-  return `<div class="shop-compact"><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2 id="store-heading-${encodeURIComponent(s.id)}" tabindex="-1">${esc(s.name)}</h2><span>메뉴 ${count}개${searchWords(S.menuQuery).length ? ' 검색됨' : ''}${s.menuBasis==='메뉴별 가격 기준'?' · 가격 기준은 메뉴별 표시':PRICE_BASIS_LABEL[s.menuBasis]?' · '+esc(PRICE_BASIS_LABEL[s.menuBasis]):''}${esc(menuCategoryDateLabel(s))}</span></div></div>
+  return `<div class="shop-compact" ${openingAttributes(s)}><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2 id="store-heading-${encodeURIComponent(s.id)}" tabindex="-1">${esc(s.name)}</h2>${openingBadge(s)}<span>메뉴 ${count}개${searchWords(S.menuQuery).length ? ' 검색됨' : ''}${s.menuBasis==='메뉴별 가격 기준'?' · 가격 기준은 메뉴별 표시':PRICE_BASIS_LABEL[s.menuBasis]?' · '+esc(PRICE_BASIS_LABEL[s.menuBasis]):''}${esc(menuCategoryDateLabel(s))}</span></div></div>
     ${acts.length || s.hours || s.note || s.checkedAt || s.menuGroups?.length ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>${publicMenuBasis(s.menuBasis)?'공개자료':s.menuBasis==='업주 등록 메뉴'?'등록정보':'기본 메뉴판'} 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}${s.menuDataDate?' · '+esc(s.menuDataDate)+' 자료':''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${s.menuBasis==='메뉴별 가격 기준'?menuSourceHtml(s):''}${menuCategorySourceHtml(s)}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}${storePhotosHtml(s)}
   </div>`;
 }
@@ -7073,6 +7245,8 @@ document.addEventListener('click', async e => {
   const el = e.target.closest('[data-act]');
   if (!el) return;
   const act = el.dataset.act, id = el.dataset.id;
+  if(boardState.busy&&act.startsWith('operator-'))return;
+  if((act.startsWith('board-')||act==='operator-photos')&&await boardClick(act,id,el))return;
   showRegionTap(el,e);
   if(S.route==='room'&&S.room&&locked()&&['plus','minus','item','sheet-add','shared-menu-open','edit-mine'].includes(act)){toast('메뉴 접수는 마감됐어요. 감사인사는 따로 보낼 수 있어요.');return;}
   switch (act) {
@@ -7111,7 +7285,7 @@ document.addEventListener('click', async e => {
     case 'install-copy': copyOrShow(installPageUrl(),'설치할 링크를 복사했어요. 브라우저 주소창에 붙여넣어 주세요.','installLinkCopy'); break;
     case 'operator-login': await startKakao('operator');break;
     case 'operator-permission': resetMenuOperator();await checkMenuOperator();if(menuOperator.allowed)await loadMenuReports();rerender();break;
-    case 'operator-refresh': if(menuOperator.mode==='quality'){operatorQuality.error='';await openOperatorQuality();}else if(menuOperator.mode==='menus'){if(menuOperator.menuId)await selectOperatorMenu(menuOperator.menuId);else if(menuOperator.store)await selectOperatorStore(menuOperator.store.id);else await openOperatorMenus();}else await loadMenuReports();break;
+    case 'operator-refresh': if(menuOperator.mode==='photos'){if(boardState.selected)await selectBoardReport(boardState.selected.id);else await loadBoardReports();}else if(menuOperator.mode==='quality'){operatorQuality.error='';await openOperatorQuality();}else if(menuOperator.mode==='menus'){if(menuOperator.menuId)await selectOperatorMenu(menuOperator.menuId);else if(menuOperator.store)await selectOperatorStore(menuOperator.store.id);else await openOperatorMenus();}else await loadMenuReports();break;
     case 'operator-more': await loadMenuReports(true);break;
     case 'operator-tab': if(!menuOperator.busy&&!menuOperator.loading&&Object.hasOwn(operatorLabels,el.dataset.v)){menuOperator.tab=el.dataset.v;await loadMenuReports();}break;
     case 'operator-select': await selectMenuReport(id);break;
@@ -7428,6 +7602,7 @@ document.addEventListener('click', async e => {
 });
 // 입력칸
 document.addEventListener('input', e => {
+  if(boardInput(e.target))return;
   if(qualityInput(e.target))return;
   if(e.target.id==='catTownSearch'){S.catTownQuery=e.target.value;const list=document.getElementById('neighborhoodChoices');if(list)list.innerHTML=neighborhoodChoices();persistCatalogProgress();return;}
   const t = e.target;
@@ -7487,7 +7662,7 @@ function markDirtySoft() {
   const nav = document.querySelector('.nav');
   (nav || $app).insertAdjacentHTML(nav ? 'beforebegin' : 'beforeend', `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">바꾼 내용 저장</button></div>`);
 }
-document.addEventListener('change', e => { if(qualityChange(e.target))return;if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
+document.addEventListener('change', e => { if(boardChange(e.target))return;if(qualityChange(e.target))return;if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
 document.addEventListener('focusin', e => { if(e.target.id==='whoName'||cartTextEntry(e.target))refreshParticipantGuide(); });
 document.addEventListener('focusout', e => { if(e.target.id==='whoName'||cartTextEntry(e.target)||e.target.closest?.('.name-in'))scheduleStoreHighlight(); });
 document.addEventListener('pointerdown', e => {
