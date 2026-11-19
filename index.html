@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="4662d577d0908c80">
+<meta name="damatda-build" content="ada8c8584cbfda80">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3235,6 +3235,7 @@ function openingStatus(store,now=Date.now()){
 const openingClock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
 function openingSourceUrl(value){
   if(typeof value!=='string')return '';
+  if(['https://www.bbq.co.kr/stores/map','https://momstouch.co.kr/store/main.php','https://web.dominos.co.kr/branch'].includes(value)||/^https:\/\/tour\.gb\.go\.kr\/restaurant\/(?:foodView|dessertView)\.do\?idx=\d+$/.test(value))return value;
   if(/^https:\/\/local\.lazyscheme\.com\/places\/ls[a-z0-9]+\/$/.test(value)||/^https:\/\/www\.nongsaro\.go\.kr\/portal\/ps\/psz\/psza\/contentSub\.ps\?cntntsNo=\d+&menuId=PS03968$/.test(value))return value;
   if(/^https:\/\/www\.welfarehello\.com\/community\/hometownNews\/(?:[A-Za-z0-9%가-힣._~-]+--)?[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(value))return value;
   if(/^https:\/\/www\.ok114\.co\.kr\/detail\/\d+$/.test(value)||/^https:\/\/siksamenu\.co\.kr\/food\/detail\.asp\?seq=\d+$/.test(value))return value;
