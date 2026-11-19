@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="8b76de429c21823b">
+<meta name="damatda-build" content="1c4f603d271d3cc7">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3208,6 +3208,7 @@ function openingStatus(store,now=Date.now()){
   const detail=`영업시간 기준 · ${schedule.checkedAt||'확인일 미상'} 확인 · 임시휴무는 매장 확인`;
   if(schedule.operatingStatus==='permanentClosed')return {state:'closed',label:'영업 중단',detail};
   if(schedule.operatingStatus==='temporaryClosed')return {state:'closed',label:'임시휴무',detail};
+  if(schedule.requiresConfirmation||schedule.sourceFreshness==='search-cache')return {...unknown,label:'시간 재확인',detail:schedule.confirmationReason||'현재 시간표를 매장에 확인해 주세요.'};
   const checked=Date.parse(schedule.checkedAt+'T00:00:00+09:00');
   if(!/^20\d\d-\d\d-\d\d$/.test(schedule.checkedAt||'')||!Number.isFinite(checked)||checked>now||now-checked>90*86400000)return {...unknown,label:'시간 재확인',detail:'최근 시간표 확인이 필요해요.'};
   const current=openingDay(schedule,stamp),prior=openingDay(schedule,new Date(stamp.getTime()-86400000)),today=current.hours,yesterday=prior.hours;
@@ -3231,6 +3232,10 @@ function openingStatus(store,now=Date.now()){
   return {...unknown,detail:'오늘 영업시간은 확인되지 않았어요. 매장에 확인해 주세요.'};
 }
 const openingClock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
+function openingSourceUrl(value){
+  if(typeof value!=='string')return '';
+  return /^https:\/\/m\.place\.naver\.com\/restaurant\/\d+\/(?:home|menu\/list)$/.test(value)||value==='https://myungcoffee.com/shopinfo/sub06.html'||value==='https://www.bhc.co.kr/store'||/^https:\/\/www\.kyochon\.com\/shop\/domestic_sch\.asp\?shop_id=\d+&sido1=\d+&sido2=\d+$/.test(value)||/^https:\/\/www\.diningcode\.com\/profile\.php\?rid=[A-Za-z0-9]+$/.test(value)||/^https:\/\/www\.tabling\.co\.kr\/(?:restaurant\/\d+|place\/[a-f0-9]{24})$/.test(value)||/^https:\/\/autoreserve\.com\/(?:en|ko)\/restaurants\/[A-Za-z0-9]+$/.test(value)?value:'';
+}
 function openingExceptionsHtml(schedule,now=Date.now()){
   const today=new Date(now+9*3600000).toISOString().slice(0,10),groups=[];
   for(const row of [...(schedule.exceptions||[])].sort((a,b)=>a.date.localeCompare(b.date))){
@@ -3247,8 +3252,10 @@ function openingHoursHtml(store,folded=false){
   const rows=schedule.days.map((d,i)=>{const value=d?.closed?'정기휴무':Number.isInteger(d?.open)&&Number.isInteger(d?.close)?openingClock(d.open)+'–'+openingClock(d.close):'미확인';
     const extra=[...(d?.breaks||[]).map(b=>'쉬는 시간 '+openingClock(b[0])+'–'+openingClock(b[1])),...(d?.lastOrders||[]).map(t=>'마지막 주문 '+openingClock(t))];
     return `<tr><th scope="row">${'월화수목금토일'[i]}</th><td>${esc(value)}${extra.length?`<small>${extra.map(esc).join(' · ')}</small>`:''}</td></tr>`;}).join('');
-  const source=/^https:\/\/m\.place\.naver\.com\/restaurant\/\d+\/(?:home|menu\/list)$/.test(schedule.source||'')||schedule.source==='https://myungcoffee.com/shopinfo/sub06.html'?schedule.source:'';
-  const body=`${schedule.scopeName?`<p class="opening-hours-help">${esc(schedule.scopeName)} 기준</p>`:''}${unscoped?`<p class="opening-hours-help">공식 안내 ${esc(openingClock(unscoped.open)+'–'+openingClock(unscoped.close))} · 요일·휴무 미확인</p>`:''}${weekly?`<table class="opening-week" aria-label="${esc(store.name)} 요일별 영업시간"><tbody>${rows}</tbody></table>`:'<p class="opening-hours-help">반복 영업시간 미확인 · 확인된 시간·휴무·날짜만 표시해요.</p>'}${schedule.regularClosedText?`<p class="opening-hours-help">${esc(schedule.regularClosedText)}</p>`:''}${exceptions}${schedule.note?`<p class="opening-hours-help">${esc(schedule.note)}</p>`:''}<p class="opening-hours-help">${esc(schedule.checkedAt)} 자료 확인 · 임시휴무는 매장 확인${source?` · <a href="${esc(source)}" target="_blank" rel="noopener">시간표 출처 ↗</a>`:''}</p>`;
+  const source=openingSourceUrl(schedule.source),reference=schedule.sourceFreshness==='search-cache';
+  const clues=[...(schedule.unscopedBreaks||[]).map(b=>'쉬는 시간 참고 '+openingClock(b[0])+'–'+openingClock(b[1])),...(schedule.unscopedLastOrders||[]).map(t=>'마지막 주문 참고 '+openingClock(t))];
+  const caution=`${schedule.requiresConfirmation?`<p class="opening-hours-help">${esc(schedule.confirmationReason||'현재 시간표는 매장 확인이 필요해요.')}</p>`:''}${clues.length?`<p class="opening-hours-help">${clues.map(esc).join(' · ')} · 적용 요일 미확인</p>`:''}${schedule.missingFields?.length?`<p class="opening-hours-help">${schedule.missingFields.map(esc).join('·')} 미확인</p>`:''}`;
+  const body=`${caution}${schedule.scopeName?`<p class="opening-hours-help">${esc(schedule.scopeName)} 기준</p>`:''}${unscoped?`<p class="opening-hours-help">공식 안내 ${esc(openingClock(unscoped.open)+'–'+openingClock(unscoped.close))} · 요일·휴무 미확인</p>`:''}${weekly?`<table class="opening-week" aria-label="${esc(store.name)} 요일별 영업시간"><tbody>${rows}</tbody></table>`:'<p class="opening-hours-help">반복 영업시간 미확인 · 확인된 시간·휴무·날짜만 표시해요.</p>'}${schedule.regularClosedText?`<p class="opening-hours-help">${esc(schedule.regularClosedText)}</p>`:''}${exceptions}${schedule.note?`<p class="opening-hours-help">${esc(schedule.note)}</p>`:''}<p class="opening-hours-help">${reference?'검색 자료 조회 '+esc(schedule.checkedAt)+' · 원문 최신 여부 미확인':esc(schedule.checkedAt)+' 자료 확인 · 임시휴무는 매장 확인'}${source?` · <a href="${esc(source)}" target="_blank" rel="noopener">시간표 출처 ↗</a>`:''}</p>`;
   return folded?`<details class="opening-details"><summary>영업시간·휴무</summary>${body}</details>`:`<section class="opening-details"><h3>영업시간·휴무</h3>${body}</section>`;
 }
 function openingInfo(store){return `<div data-opening-info="${esc(store.id)}" data-opening-name="${esc(store.name)}">${openingHoursHtml(store)||(store.hours?`<p>${esc(store.hours)}</p>`:'<p class="opening-hours-help">영업시간 자료 미확인</p>')}</div>`;}
