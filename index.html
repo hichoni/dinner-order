@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="f927a482ffaa58ad">
+<meta name="damatda-build" content="3816bcee2c37fae1">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3256,7 +3256,8 @@ function openingHoursHtml(store,folded=false){
     return `<tr><th scope="row">${'월화수목금토일'[i]}</th><td>${esc(value)}${extra.length?`<small>${extra.map(esc).join(' · ')}</small>`:''}</td></tr>`;}).join('');
   const source=openingSourceUrl(schedule.source),reference=schedule.sourceFreshness==='search-cache';
   const crossChecks=[...new Set((schedule.crossCheckSources||[]).map(openingSourceUrl).filter(url=>url&&url!==source))].slice(0,2);
-  const clues=[...(schedule.unscopedBreaks||[]).map(b=>'쉬는 시간 참고 '+openingClock(b[0])+'–'+openingClock(b[1])),...(schedule.unscopedLastOrders||[]).map(t=>'마지막 주문 참고 '+openingClock(t))];
+  const clueBreaks=[...new Map([...(schedule.unscopedBreaks||[]),...(unscoped?.breaks||[])].map(b=>[b.join(','),b])).values()],clueOrders=[...new Set([...(schedule.unscopedLastOrders||[]),...(unscoped?.lastOrders||[])])];
+  const clues=[...clueBreaks.map(b=>'쉬는 시간 참고 '+openingClock(b[0])+'–'+openingClock(b[1])),...clueOrders.map(t=>'마지막 주문 참고 '+openingClock(t))];
   const caution=`${schedule.requiresConfirmation?`<p class="opening-hours-help">${esc(schedule.confirmationReason||'현재 시간표는 매장 확인이 필요해요.')}</p>`:''}${clues.length?`<p class="opening-hours-help">${clues.map(esc).join(' · ')} · 적용 요일 미확인</p>`:''}${schedule.missingFields?.length?`<p class="opening-hours-help">${schedule.missingFields.map(esc).join('·')} 미확인</p>`:''}`;
   const body=`${caution}${schedule.scopeName?`<p class="opening-hours-help">${esc(schedule.scopeName)} 기준</p>`:''}${unscoped?`<p class="opening-hours-help">시간 안내 ${esc(openingClock(unscoped.open)+'–'+openingClock(unscoped.close))} · 요일·휴무 미확인</p>`:''}${weekly?`<table class="opening-week" aria-label="${esc(store.name)} 요일별 영업시간"><tbody>${rows}</tbody></table>`:'<p class="opening-hours-help">반복 영업시간 미확인 · 확인된 시간·휴무·날짜만 표시해요.</p>'}${schedule.regularClosedText?`<p class="opening-hours-help">${esc(schedule.regularClosedText)}</p>`:''}${exceptions}${schedule.note?`<p class="opening-hours-help">${esc(schedule.note)}</p>`:''}<p class="opening-hours-help">${reference?'검색 자료 조회 '+esc(schedule.checkedAt)+' · 원문 최신 여부 미확인':esc(schedule.checkedAt)+' 자료 확인 · 임시휴무는 매장 확인'}${source?` · <a href="${esc(source)}" target="_blank" rel="noopener">시간표 출처 ↗</a>`:''}${crossChecks.map((url,i)=>` · <a href="${esc(url)}" target="_blank" rel="noopener">대조 출처${crossChecks.length>1?' '+(i+1):''} ↗</a>`).join('')}</p>`;
   return folded?`<details class="opening-details"><summary>영업시간·휴무</summary>${body}</details>`:`<section class="opening-details"><h3>영업시간·휴무</h3>${body}</section>`;
