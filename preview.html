@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="b98a55719c6abd80"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="8b76de429c21823b"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -3329,34 +3329,71 @@ function tidyAnswer(id, d) {
 // Status is computed locally from verified weekly hours in Asia/Seoul.
 // Past crawl-time "open now" labels and one-day summaries are never reused.
 const openingSchedules=new Map();
+function openingDay(schedule,stamp){
+  const date=stamp.toISOString().slice(0,10),day=(stamp.getUTCDay()+6)%7,week=Math.floor((stamp.getUTCDate()-1)/7)+1;
+  const exception=(schedule.exceptions||[]).find(e=>e.date===date);
+  if(exception)return {hours:exception,exception:true,uncertain:false};
+  const caution=/임시|공휴일|명절|격주|매달|매월|단축|변경/.test(schedule.note||'');
+  const uncertain=(schedule.uncertainDays||[]).includes(day)||caution&&(!Array.isArray(schedule.noteScope)||schedule.noteScope.includes(day));
+  if(!uncertain&&(schedule.closedRules||[]).some(r=>r.weekday===day&&Array.isArray(r.weeks)&&(!r.weeks.length||r.weeks.includes(week))))return {hours:{closed:true},exception:false,uncertain:false};
+  return {hours:schedule.days[day],exception:false,uncertain};
+}
 function openingStatus(store,now=Date.now()){
   const schedule=openingSchedules.get(store.id)||store.openingSchedule;
   const unknown={state:'unknown',label:'시간 미확인',detail:'영업시간 정보가 없어요. 매장에 확인해 주세요.'};
   if(!schedule||schedule.schema!==1||!Array.isArray(schedule.days)||schedule.days.length!==7)return unknown;
-  const stamp=new Date(now+9*3600000),date=stamp.toISOString().slice(0,10),day=(stamp.getUTCDay()+6)%7,minute=stamp.getUTCHours()*60+stamp.getUTCMinutes();
+  const stamp=new Date(now+9*3600000),minute=stamp.getUTCHours()*60+stamp.getUTCMinutes();
   const detail=`영업시간 기준 · ${schedule.checkedAt||'확인일 미상'} 확인 · 임시휴무는 매장 확인`;
   if(schedule.operatingStatus==='permanentClosed')return {state:'closed',label:'영업 중단',detail};
   if(schedule.operatingStatus==='temporaryClosed')return {state:'closed',label:'임시휴무',detail};
-  if(!/^20\d\d-\d\d-\d\d$/.test(schedule.checkedAt||'')||now-Date.parse(schedule.checkedAt+'T00:00:00+09:00')>90*86400000)return {...unknown,label:'시간 재확인',detail:'90일 넘은 시간표예요. 매장 확인이 필요해요.'};
-  // Unstructured temporary/conditional notices need a human check.
-  if(/임시|공휴일|명절|격주|매달|매월|단축|변경/.test(schedule.note||''))return {...unknown,label:'시간 확인 필요',detail:schedule.note};
-  const exception=(schedule.exceptions||[]).find(e=>e.date===date),today=exception||schedule.days[day],yesterday=schedule.days[(day+6)%7];
+  const checked=Date.parse(schedule.checkedAt+'T00:00:00+09:00');
+  if(!/^20\d\d-\d\d-\d\d$/.test(schedule.checkedAt||'')||!Number.isFinite(checked)||checked>now||now-checked>90*86400000)return {...unknown,label:'시간 재확인',detail:'최근 시간표 확인이 필요해요.'};
+  const current=openingDay(schedule,stamp),prior=openingDay(schedule,new Date(stamp.getTime()-86400000)),today=current.hours,yesterday=prior.hours;
+  if(current.uncertain)return {...unknown,label:'시간 확인 필요',detail:schedule.regularClosedText||schedule.note||'오늘 영업시간은 매장 확인이 필요해요.'};
   const valid=h=>h&&Number.isInteger(h.open)&&Number.isInteger(h.close)&&h.open>=0&&h.open<1440&&h.close>h.open&&h.close<=h.open+1440;
   let hours=null,at=minute;
-  if(valid(yesterday)&&yesterday.close>1440&&minute<yesterday.close-1440&&!exception){hours=yesterday;at+=1440;}
-  else if(valid(today)&&minute>=today.open&&minute<today.close)hours=today;
+  if(!prior.uncertain&&valid(yesterday)&&yesterday.close>1440&&minute<yesterday.close-1440&&!current.exception){hours=yesterday;at+=1440;}
+  else if(!current.uncertain&&valid(today)&&minute>=today.open&&minute<today.close)hours=today;
   if(hours){
     if((hours.breaks||[]).some(b=>Array.isArray(b)&&at>=b[0]&&at<b[1]))return {state:'closed',label:'브레이크타임',detail};
     const order=(hours.lastOrders||[]).filter(v=>Number.isInteger(v)&&v>=hours.open&&v<hours.close).sort((a,b)=>a-b);
     // Multiple last orders can refer to lunch/dinner: compare against the current segment.
     const start=Math.max(hours.open,...(hours.breaks||[]).filter(b=>b[1]<=at).map(b=>b[1]));
-    if(order.some(v=>v>=start&&at>=v))return {state:'closed',label:'주문 마감',detail};
+    const end=Math.min(hours.close,...(hours.breaks||[]).filter(b=>b[0]>=at).map(b=>b[0])),last=order.filter(v=>v>=start&&v<=end).at(-1);
+    if(last!==undefined&&at>=last)return {state:'closed',label:'주문 마감',detail};
     const clock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
     return {state:'open',label:'영업 중',detail:`${clock(hours.open)}–${clock(hours.close)} · ${detail}`};
   }
-  if(today?.closed===true)return {state:'closed',label:'정기휴무',detail};
+  if(today?.closed===true)return {state:'closed',label:['임시휴무','휴무'].includes(today.label)?today.label:'정기휴무',detail};
   if(valid(today))return {state:'closed',label:minute<today.open?'영업 전':'영업 종료',detail};
   return {...unknown,detail:'오늘 영업시간은 확인되지 않았어요. 매장에 확인해 주세요.'};
+}
+const openingClock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
+function openingExceptionsHtml(schedule,now=Date.now()){
+  const today=new Date(now+9*3600000).toISOString().slice(0,10),groups=[];
+  for(const row of [...(schedule.exceptions||[])].sort((a,b)=>a.date.localeCompare(b.date))){
+    if(!/^20\d\d-\d\d-\d\d$/.test(row.date)||row.date<today)continue;
+    const prior=groups.at(-1);
+    if(row.closed&&prior?.closed&&row.label===prior.label&&Date.parse(row.date)-Date.parse(prior.end)===86400000)prior.end=row.date;
+    else groups.push({...row,end:row.date});
+  }
+  return groups.length?`<div class="opening-exceptions"><b>날짜별 안내</b>${groups.slice(0,8).map(row=>`<p>${esc(row.date)}${row.end!==row.date?'–'+esc(row.end):''} · ${row.closed?esc(row.label||'휴무'):Number.isInteger(row.open)&&Number.isInteger(row.close)?esc(openingClock(row.open)+'–'+openingClock(row.close)):'시간 확인 필요'}</p>`).join('')}</div>`:'';
+}
+function openingHoursHtml(store,folded=false){
+  const schedule=openingSchedules.get(store.id)||store.openingSchedule;if(!schedule?.days)return '';
+  const exceptions=openingExceptionsHtml(schedule),weekly=schedule.days.some(Boolean),unscoped=schedule.unscopedHours;if(!weekly&&!exceptions&&!schedule.closedRules?.length&&!unscoped)return '';
+  const rows=schedule.days.map((d,i)=>{const value=d?.closed?'정기휴무':Number.isInteger(d?.open)&&Number.isInteger(d?.close)?openingClock(d.open)+'–'+openingClock(d.close):'미확인';
+    const extra=[...(d?.breaks||[]).map(b=>'쉬는 시간 '+openingClock(b[0])+'–'+openingClock(b[1])),...(d?.lastOrders||[]).map(t=>'마지막 주문 '+openingClock(t))];
+    return `<tr><th scope="row">${'월화수목금토일'[i]}</th><td>${esc(value)}${extra.length?`<small>${extra.map(esc).join(' · ')}</small>`:''}</td></tr>`;}).join('');
+  const source=/^https:\/\/m\.place\.naver\.com\/restaurant\/\d+\/(?:home|menu\/list)$/.test(schedule.source||'')||schedule.source==='https://myungcoffee.com/shopinfo/sub06.html'?schedule.source:'';
+  const body=`${schedule.scopeName?`<p class="opening-hours-help">${esc(schedule.scopeName)} 기준</p>`:''}${unscoped?`<p class="opening-hours-help">공식 안내 ${esc(openingClock(unscoped.open)+'–'+openingClock(unscoped.close))} · 요일·휴무 미확인</p>`:''}${weekly?`<table class="opening-week" aria-label="${esc(store.name)} 요일별 영업시간"><tbody>${rows}</tbody></table>`:'<p class="opening-hours-help">반복 영업시간 미확인 · 확인된 시간·휴무·날짜만 표시해요.</p>'}${schedule.regularClosedText?`<p class="opening-hours-help">${esc(schedule.regularClosedText)}</p>`:''}${exceptions}${schedule.note?`<p class="opening-hours-help">${esc(schedule.note)}</p>`:''}<p class="opening-hours-help">${esc(schedule.checkedAt)} 자료 확인 · 임시휴무는 매장 확인${source?` · <a href="${esc(source)}" target="_blank" rel="noopener">시간표 출처 ↗</a>`:''}</p>`;
+  return folded?`<details class="opening-details"><summary>영업시간·휴무</summary>${body}</details>`:`<section class="opening-details"><h3>영업시간·휴무</h3>${body}</section>`;
+}
+function openingInfo(store){return `<div data-opening-info="${esc(store.id)}" data-opening-name="${esc(store.name)}">${openingHoursHtml(store)||(store.hours?`<p>${esc(store.hours)}</p>`:'<p class="opening-hours-help">영업시간 자료 미확인</p>')}</div>`;}
+function refreshOpeningInformation(){
+  for(const node of document.querySelectorAll('[data-opening-info]')){
+    const html=openingHoursHtml({id:node.dataset.openingInfo,name:node.dataset.openingName});if(html)node.innerHTML=html;
+  }
 }
 function openingBadge(store){const s=openingStatus(store);return `<span class="opening-badge ${s.state}" data-opening-badge="${esc(store.id)}" title="${esc(s.detail)}"><i aria-hidden="true"></i>${esc(s.label)}</span>`;}
 function openingAttributes(store){return `data-opening-store="${esc(store.id)}" data-opening-state="${openingStatus(store).state}"`;}
@@ -3367,7 +3404,7 @@ function refreshOpeningStatus(){
 async function hydrateRoomHours(room){
   try{await loadCatalog({ids:room.stores.map(s=>s.id)});if(S.room!==room)return;
     for(const store of CATALOG.stores)if(store.openingSchedule)openingSchedules.set(store.id,store.openingSchedule);
-    refreshOpeningStatus();
+    refreshOpeningStatus();refreshOpeningInformation();
   }catch{/* Offline: keep an honest unknown state, without touching orders. */}
 }
 setInterval(()=>{if(document.visibilityState==='visible')refreshOpeningStatus();},30000);
@@ -6481,7 +6518,7 @@ function catalogList() {
       <div class="prow-txt"><b>${esc(s.name)}</b>${openingBadge(s)}${S.catCity===NEW_TOWN?`<span class="catalog-jurisdiction">주소지 · ${esc(catalogCity(s))}</span>`:''}<div class="meta">${storeMeta({...s,minutes:0})}</div>${S.catMode==='nearby'?`<span class="nearby-distance">약 ${nearbyDistanceLabel(nearbyStoreDistance(s))}</span>`:''}${menuPricePreview(s)}</div>
       <span class="catalog-check"><input type="checkbox" data-act="cat-pick" data-id="${esc(s.id)}"${on ? ' checked' : ''} aria-label="${esc(s.name)} 넣기"><i aria-hidden="true"></i></span></label>
       <div class="catalog-row-tools">${boardUploadButton(s.id)}<button class="text-btn" data-act="cat-preview" data-id="${esc(s.id)}" aria-expanded="${expanded}">${publicMenuBasis(s.menuBasis)?'공개 대표 메뉴':'메뉴'} ${s.menuCount ?? s.menu.length}개 ${expanded?'접기':'보기'}</button>${['플레이스 메뉴판','배달 메뉴판','메뉴별 가격 기준','공개 안내 가격'].includes(s.menuBasis)?`<span class="catalog-price-basis">${esc(PRICE_BASIS_LABEL[s.menuBasis]||s.menuBasis)}</span>`:''}${s.checkedAt ? `<span>${publicMenuBasis(s.menuBasis)?'공개자료 확인':s.menuBasis==='업주 등록 메뉴'?'등록정보 확인':s.menuBasis==='메뉴별 가격 기준'?'메뉴 자료 확인':'메뉴판 조회'} ${esc(s.checkedAt)}</span>`:''}</div>
-      ${expanded ? `<div class="catalog-menu-preview">${S.catMenuError ? '<p role="alert">메뉴를 불러오지 못했어요. 닫고 다시 열어 주세요.</p>' : detail ? `${detail.menuBasis ? `<p>${esc(detail.menuBasis)} 기준${detail.menuDataDate?' · '+esc(detail.menuDataDate)+' 자료':''}</p>`:''}${menuSourceHtml(detail)}${menuCategorySourceHtml(detail)}${categories.length?`<label class="catalog-menu-category">메뉴 분류<select class="input" id="catMenuCategory"><option value="all">전체 · ${foodMenus(detail).length}개</option>${categories.map(g=>`<option value="${esc(g.id)}"${g.id===selectedCategory?.id?' selected':''}>${esc(g.name)} · ${g.menuIds.length}개</option>`).join('')}</select></label>`:''}${matches.length ? '<p class="catalog-match-label">검색한 메뉴를 먼저 보여드려요.</p>':''}${storePhotosHtml(detail)}${previewMenus.map(m=>`<div>${m.img?`<span class="catalog-menu-photo">${photo(m.img)}${imgNote(m)}</span>`:''}<b>${esc(m.name)}${priceBasisHtml(m,detail)}</b><span>${price(m.price)}</span></div>`).join('')}${storeGuidance(detail)}<p>현재 가격·판매 여부는 가게에서 확인해 주세요.</p>` : '<p role="status">메뉴를 불러오는 중…</p>'}</div>`:''}</article>`;
+      ${expanded ? `<div class="catalog-menu-preview">${S.catMenuError ? '<p role="alert">메뉴를 불러오지 못했어요. 닫고 다시 열어 주세요.</p>' : detail ? `${detail.menuBasis ? `<p>${esc(detail.menuBasis)} 기준${detail.menuDataDate?' · '+esc(detail.menuDataDate)+' 자료':''}</p>`:''}${menuSourceHtml(detail)}${menuCategorySourceHtml(detail)}${openingHoursHtml(detail,true)}${categories.length?`<label class="catalog-menu-category">메뉴 분류<select class="input" id="catMenuCategory"><option value="all">전체 · ${foodMenus(detail).length}개</option>${categories.map(g=>`<option value="${esc(g.id)}"${g.id===selectedCategory?.id?' selected':''}>${esc(g.name)} · ${g.menuIds.length}개</option>`).join('')}</select></label>`:''}${matches.length ? '<p class="catalog-match-label">검색한 메뉴를 먼저 보여드려요.</p>':''}${storePhotosHtml(detail)}${previewMenus.map(m=>`<div>${m.img?`<span class="catalog-menu-photo">${photo(m.img)}${imgNote(m)}</span>`:''}<b>${esc(m.name)}${priceBasisHtml(m,detail)}</b><span>${price(m.price)}</span></div>`).join('')}${storeGuidance(detail)}<p>현재 가격·판매 여부는 가게에서 확인해 주세요.</p>` : '<p role="status">메뉴를 불러오는 중…</p>'}</div>`:''}</article>`;
   }).join('') + (list.length>visible.length ? `<button class="btn gray block" data-act="cat-more">12곳 더 보기 (${visible.length}/${list.length})</button>`:'') || catalogEmptyResults();
 }
 function viewCatalog() {
@@ -6914,7 +6951,7 @@ function menuStoreHeader(s,count) {
     canOpenLinks && menuProvenance(s) ? `<a href="${esc(s.menuSource)}" target="_blank" rel="noopener">${ICON.ext}<span>메뉴 출처</span></a>` : '',
   ].filter(Boolean);
   return `<div class="shop-compact" ${openingAttributes(s)}><div class="shop-title">${thumb(s, 'sm')}<div class="shop-choice"><h2 id="store-heading-${encodeURIComponent(s.id)}" tabindex="-1">${esc(s.name)}</h2>${openingBadge(s)}<span>메뉴 ${count}개${searchWords(S.menuQuery).length ? ' 검색됨' : ''}${s.menuBasis==='메뉴별 가격 기준'?' · 가격 기준은 메뉴별 표시':PRICE_BASIS_LABEL[s.menuBasis]?' · '+esc(PRICE_BASIS_LABEL[s.menuBasis]):''}${esc(menuCategoryDateLabel(s))}</span></div></div>
-    ${acts.length || s.hours || s.note || s.checkedAt || s.menuGroups?.length ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>${publicMenuBasis(s.menuBasis)?'공개자료':s.menuBasis==='업주 등록 메뉴'?'등록정보':'기본 메뉴판'} 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}${s.menuDataDate?' · '+esc(s.menuDataDate)+' 자료':''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${s.hours ? `<p>${esc(s.hours)}</p>` : ''}${s.note ? `<p>${esc(s.note)}</p>` : ''}${s.menuBasis==='메뉴별 가격 기준'?menuSourceHtml(s):''}${menuCategorySourceHtml(s)}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}${storePhotosHtml(s)}
+    ${acts.length || s.hours || s.note || s.checkedAt || s.menuGroups?.length || /^(?:n\d+|g[a-f0-9]{16})$/.test(s.id) ? `<details class="shop-details"><summary aria-label="가게 정보 · 전화·위치">가게 정보</summary>${s.checkedAt ? `<p>${publicMenuBasis(s.menuBasis)?'공개자료':s.menuBasis==='업주 등록 메뉴'?'등록정보':'기본 메뉴판'} 확인 ${esc(s.checkedAt)}${s.menuBasis ? ` · ${esc(s.menuBasis)} 기준`:''}${s.menuDataDate?' · '+esc(s.menuDataDate)+' 자료':''}. 현재 가격과 판매 여부는 가게에서 확인해 주세요.</p>`:''}${openingInfo(s)}${s.note ? `<p>${esc(s.note)}</p>` : ''}${s.menuBasis==='메뉴별 가격 기준'?menuSourceHtml(s):''}${menuCategorySourceHtml(s)}${acts.length ? `<div class="shop-acts n${acts.length}">${acts.join('')}</div>` : ''}</details>` : ''}${storePhotosHtml(s)}
   </div>`;
 }
 function roomStore() {
