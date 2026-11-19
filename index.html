@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="e897a660cfa14e42">
+<meta name="damatda-build" content="b42d255e69b1dc8c">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -2143,6 +2143,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .catalog-cloud-status{max-width:760px;margin:8px auto;padding:8px 14px;border-radius:12px;background:#e7f4f1;color:#36776e;font-size:12px;line-height:1.5;display:flex;gap:10px;justify-content:space-between;align-items:center}.catalog-cloud-status.needs-attention{background:#fff5e7;color:#865b25}.catalog-cloud-status button{border:1px solid currentColor;border-radius:9px;background:transparent;color:inherit;padding:7px 9px;cursor:pointer;font:inherit;white-space:nowrap}.catalog-cloud-status>div{display:flex;gap:6px}.catalog-cloud-home{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0;padding:18px;border:1px solid #b9d8d2;border-radius:18px;background:#f2fbf8}.catalog-cloud-home small,.catalog-cloud-home b{display:block}.catalog-cloud-home small{color:#63867f;font-size:11px;margin-bottom:4px}.catalog-cloud-home .btn{white-space:nowrap}@media(max-width:600px){.catalog-cloud-status{margin:7px 16px;font-size:11px;flex-wrap:wrap}.catalog-cloud-status>div{width:100%;flex-wrap:wrap}.catalog-cloud-home{flex-wrap:wrap}}
 @media(max-width:600px){.nearby-entry{margin-bottom:14px}.nearby-start{min-height:67px;padding:13px 15px}.nearby-start b{font-size:17px}.quick-filter-scroll button{padding:9px 12px}.catalog-store-page .catalog-region-summary h2{font-size:22px}.catalog-store-page .catalog-region-summary .small-btn{font-size:12px;min-height:40px}.catalog-store-page .search{font-size:14px}}
 @media(max-width:600px){.catalog-region-head{display:block;margin:14px 0 10px}.catalog-region-page .catalog-region-head .region-view-switch{margin:12px 0 0 auto}}
+.operator-modes{flex-wrap:wrap}.operator-quality h2{font-size:1.3rem;margin-bottom:6px}.quality-filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.quality-filter{background:white;border:1px solid #d1e2e1;border-radius:14px;padding:11px 13px;font:inherit;font-weight:700;color:#52707b;cursor:pointer}.quality-filter[aria-pressed=true]{background:#087d79;color:white;border-color:#087d79}.quality-filter b{font-size:.85em;opacity:.85}.quality-controls{display:grid;grid-template-columns:1fr 2fr;gap:12px}.quality-controls label{display:grid;gap:6px;font-size:.9rem;font-weight:700}.quality-controls .input{min-width:0}.quality-result{font-weight:700;color:#52707b;margin:18px 0 10px}.quality-card{background:white;border:1px solid #dce8e8;border-radius:20px;padding:18px;margin-bottom:12px}.quality-card small{color:#617b83}.quality-card h3{margin:7px 0;font-size:1.13rem}.quality-address{font-size:.88rem;color:#617b83;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin:0 0 12px}.quality-badges{display:flex;gap:6px;flex-wrap:wrap}.quality-badge{background:#eef5f4;color:#4e6d70;border-radius:8px;padding:6px 8px;font-size:.78rem}.quality-badge.stale{background:#fff0df;color:#8a4b11}.quality-date{font-size:.8rem;color:#8a4b11}.quality-actions{display:flex;gap:10px;align-items:center;margin-top:14px}.quality-actions .btn{padding:12px 16px}.quality-actions a{text-decoration:none}@media(max-width:480px){.quality-controls{grid-template-columns:1fr}.quality-filter{padding:10px;font-size:.88rem}.quality-card{padding:16px}}
 </style>
 </head>
 <body>
@@ -2874,25 +2875,15 @@ const FB_CONFIG = {
 };
 // 테스트용: 127.0.0.1 에서 ?emu 를 붙이면 로컬 에뮬레이터에 붙어요.
 const EMU = location.hostname === '127.0.0.1' && new URLSearchParams(location.search).has('emu');
-// 맛집 목록: 페이지에는 캠프 정보와 가게 수만, 가게들은 처음 목록을 열 때 catalog.json 에서 받아요.
+// Regional lists are loaded after choosing a region; full menu snapshots stay immutable.
 const CATALOG = (() => { try { return {stores: [], ...JSON.parse(document.getElementById('dn-catalog').textContent)}; } catch { return {stores: [], count: 0}; } })();
 let catalogLoading = null;
-function loadCatalog() {
-  return catalogLoading ??= fetch('catalog-index.json').then(r => r.status === 404 ? fetch('catalog.json') : r)
-    .then(r => { if (!r.ok) throw new Error('Catalogue unavailable'); return r.json(); }).then(async d => {
-      if (!Array.isArray(d?.stores) || !d.stores.length || d.stores.some(s => !s?.id || !Array.isArray(s.menu))) throw new Error('Invalid catalogue');
-      CATALOG.stores = d.stores;
-      if(d.neighborhoods)CATALOG.neighborhoods=d.neighborhoods;
-      for(const store of d.stores)catalogBaseStores.set(store.id,store);
-      await startMenuCatalogFeed();
-    })
-    .catch(e => { catalogLoading = null; throw e; });
-}
 const catalogDetails = new Map();
 function loadCatalogStore(s) {
   return loadRawCatalogStore(s).then(loadApprovedCatalog);
 }
 function loadRawCatalogStore(s) {
+  if(s.catalogStub)return loadCatalog({ids:[s.id]}).then(()=>{const loaded=catalogBaseStores.get(s.id);if(!loaded)throw Error('Missing regional store');return loadRawCatalogStore(loaded);});
   if (!s.detailPath) return Promise.resolve(catalogBaseStores.get(s.id)||s); // Existing flat catalogues remain readable.
   if (!/^catalog\/[a-zA-Z0-9_-]+\.json$/.test(s.detailPath)) return Promise.reject(new Error('Invalid catalogue path'));
   if (!catalogDetails.has(s.detailPath)) catalogDetails.set(s.detailPath, fetch(s.detailPath).then(r => {
@@ -3192,6 +3183,188 @@ function tidyAnswer(id, d) {
   };
 }
 
+// The manifest contains identities/coordinates only. Names, menu search and
+// photos are loaded for requested regions; GPS never appears in a request.
+const regionalCatalog={manifest:null,requests:new Map(),loaded:new Set(),view:0,pending:false,error:''};
+function validRegionalAsset(path){return typeof path==='string'&&/^catalog-regions\/(?:region-[a-f0-9]{12}-[a-f0-9]{12}|quality-[a-f0-9]{12})\.json$/.test(path);}
+async function catalogRequest(path){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+  try{const response=await fetch(path,{signal:controller.signal});return {ok:response.ok,status:response.status,data:response.ok?await response.json():null};}
+  finally{clearTimeout(timer);}
+}
+async function catalogJson(path){const response=await catalogRequest(path);if(!response.ok)throw Error('Catalogue unavailable');return response.data;}
+function installFlatCatalog(data){
+  if(!Array.isArray(data?.stores)||!data.stores.length||data.stores.some(s=>!s?.id||!Array.isArray(s.menu)))throw Error('Invalid catalogue');
+  CATALOG.stores=data.stores;if(data.neighborhoods)CATALOG.neighborhoods=data.neighborhoods;
+  for(const store of data.stores)catalogBaseStores.set(store.id,store);
+}
+function installRegionalManifest(data){
+  if(data?.schema!==1||!Array.isArray(data.cities)||!Array.isArray(data.regions)||!Array.isArray(data.directory)||data.count!==data.directory.length||!data.neighborhoods||!validRegionalAsset(data.qualityPath))throw Error('Invalid regional manifest');
+  const known=new Set();
+  const stores=data.directory.map(row=>{
+    const [id,cityIndex,area,category,lat,lng,district='']=row;
+    if(typeof id!=='string'||known.has(id)||!data.cities[cityIndex]||typeof area!=='string'||typeof category!=='string')throw Error('Invalid catalogue identity');
+    known.add(id);return {id,city:data.cities[cityIndex],area,category,lat,lng,name:'',address:data.cities[cityIndex]+(district?' '+district:''),menu:[],catalogStub:true};
+  });
+  if(data.regions.some(r=>!r.city||!Number.isInteger(r.count)||!validRegionalAsset(r.path)))throw Error('Invalid regional source');
+  regionalCatalog.manifest=data;CATALOG.stores=stores;CATALOG.neighborhoods=data.neighborhoods;CATALOG.count=data.count;
+}
+function loadCatalog(options={}){
+  catalogLoading ??= (async()=>{
+    const response=await catalogRequest('catalog-manifest.json');
+    if(response.status===404){let legacy=await catalogRequest('catalog-index.json');if(legacy.status===404)legacy=await catalogRequest('catalog.json');if(!legacy.ok)throw Error('Catalogue unavailable');installFlatCatalog(legacy.data);await startMenuCatalogFeed();return;}
+    if(!response.ok)throw Error('Catalogue unavailable');
+    const data=response.data;
+    if(data.stores){installFlatCatalog(data);await startMenuCatalogFeed();return;}
+    installRegionalManifest(data);
+  })().catch(error=>{catalogLoading=null;throw error;});
+  return catalogLoading.then(async()=>{
+    const manifest=regionalCatalog.manifest;if(!manifest)return;
+    const cities=new Set();
+    if(options.all||options.city==='all'){for(const row of manifest.regions)if(row.city!=='도청신도시')cities.add(row.city);}
+    else if(options.city)cities.add(options.city);
+    if(options.ids){const wanted=new Set(options.ids);for(const s of CATALOG.stores)if(wanted.has(s.id)&&s.catalogStub)cities.add(s.city);}
+    if(options.point){for(const s of CATALOG.stores){if(nearbyStoreDistanceForPoint(s,options.point)<=Number(options.radius||5)*1000)cities.add(s.city);}}
+    const regions=[...cities].map(city=>manifest.regions.find(r=>r.city===city)).filter(Boolean);
+    // Limit concurrent downloads when a user explicitly chooses all regions.
+    let next=0;await Promise.all(Array.from({length:Math.min(3,regions.length)},async()=>{while(next<regions.length)await loadCatalogRegion(regions[next++]);}));
+    if(regions.length){await startMenuCatalogFeed();await refreshMenuCatalogIndex();}
+  });
+}
+function nearbyStoreDistanceForPoint(store,point){
+  if(!Number.isFinite(store.lat)||!Number.isFinite(store.lng)||store.lat<33||store.lat>39||store.lng<124||store.lng>132||(CATALOG.neighborhoods?.coordinateExclusions||[]).includes(store.id))return Infinity;
+  return distanceMetres(point,store);
+}
+function loadCatalogRegion(region){
+  if(regionalCatalog.loaded.has(region.path))return Promise.resolve();
+  if(!regionalCatalog.requests.has(region.path))regionalCatalog.requests.set(region.path,(async()=>{
+    const data=await catalogJson(region.path),known=new Map(CATALOG.stores.map(s=>[s.id,s]));
+    if(data.schema!==1||data.city!==region.city||!Array.isArray(data.stores)||data.stores.length!==region.count)throw Error('Wrong regional catalogue');
+    const incoming=new Map();
+    for(const store of data.stores){const identity=known.get(store.id);
+      if(!identity||incoming.has(store.id)||!Array.isArray(store.menu)||catalogCity(store)!==identity.city||(region.city==='도청신도시'?!inNewTown(store):catalogCity(store)!==region.city))throw Error('Wrong regional store');
+      incoming.set(store.id,store);
+    }
+    for(const store of incoming.values())catalogBaseStores.set(store.id,store);
+    CATALOG.stores=CATALOG.stores.map(store=>incoming.get(store.id)||store);
+    regionalCatalog.loaded.add(region.path);
+  })().catch(error=>{regionalCatalog.requests.delete(region.path);throw error;}));
+  return regionalCatalog.requests.get(region.path);
+}
+function catalogViewOptions(view){return view&&view.mode!=='nearby'&&['neighborhoods','stores'].includes(view.step)?{city:view.city||'all'}:{};}
+async function ensureCatalogView(){
+  if(!regionalCatalog.manifest)return true;
+  const stamp=++regionalCatalog.view,scope=S.catFor,target=scope==='room'?S.edit:S.draft,city=S.catCity,step=S.catStep;
+  const options=S.catMode==='nearby'?(catalogNearby.point?{point:catalogNearby.point,radius:S.catRadius}:{}):catalogViewOptions({city,step});
+  regionalCatalog.pending=true;regionalCatalog.error='';rerender();
+  const current=()=>stamp===regionalCatalog.view&&S.route==='catalog'&&S.catFor===scope&&target===(scope==='room'?S.edit:S.draft)&&city===S.catCity&&step===S.catStep;
+  try{await loadCatalog(options);return current();}
+  catch{if(current())regionalCatalog.error='가게 목록을 불러오지 못했어요. 담아둔 가게는 그대로 있어요.';return false;}
+  finally{if(stamp===regionalCatalog.view){regionalCatalog.pending=false;if(S.route==='catalog')rerender();}}
+}
+function cancelCatalogView(){regionalCatalog.view++;regionalCatalog.pending=false;regionalCatalog.error='';}
+function catalogRegionalNotice(){
+  if(!regionalCatalog.pending&&!regionalCatalog.error)return '';
+  return `${topBar('가게 고르기','cat-region')}<div class="wrap"><section class="operator-empty" role="${regionalCatalog.error?'alert':'status'}"><h2>${regionalCatalog.error?'목록을 다시 불러와 주세요':esc(S.catCity==='all'?'필요한 지역':S.catCity)+' 가게를 불러오는 중…'}</h2>${regionalCatalog.error?`<p>${esc(regionalCatalog.error)}</p><button class="btn" data-act="cat-regional-retry">다시 불러오기</button>`:''}</section></div>`;
+}
+
+// Operator review uses the price source date, never the crawl/check timestamp.
+const operatorQuality={rows:[],request:null,epoch:0,filter:'stale',city:'all',query:'',limit:20,overrides:new Map(),pending:new Map(),error:''};
+const qualityPriceCache=new WeakMap(),qualitySearchCache=new WeakMap();
+function resetOperatorQuality(){operatorQuality.epoch++;operatorQuality.rows=[];operatorQuality.request=null;operatorQuality.overrides.clear();operatorQuality.pending.clear();operatorQuality.error='';}
+function qualityDate(value){
+  if(typeof value!=='string'||!/^20\d{2}-\d{2}-\d{2}$/.test(value))return '';
+  const epoch=Date.parse(value+'T00:00:00Z');return Number.isFinite(epoch)&&new Date(epoch).toISOString().slice(0,10)===value?value:'';
+}
+function qualityPriceState(row,now=Date.now()){
+  const day=Math.floor((now+9*3600000)/86400000),cached=qualityPriceCache.get(row);if(cached?.day===day)return cached.result;
+  const today=day*86400000;
+  let stale=0,unknown=row.unknownDates||0,oldest='';
+  for(const [raw,count] of row.priceDates||[]){const date=qualityDate(raw),epoch=date?Date.parse(date+'T00:00:00Z'):NaN;
+    if(!date||epoch>today){unknown+=count;continue;}
+    if(today-epoch>=90*86400000){stale+=count;if(!oldest||date<oldest)oldest=date;}
+  }
+  const result={stale,unknown,oldest};qualityPriceCache.set(row,{day,result});return result;
+}
+function qualityFromStore(store,identity){
+  const menus=store.menu.filter(m=>menuKind(m)==='menu'&&!m.unavailable),dates=new Map(),grouped=new Set((store.menuGroups||[]).flatMap(g=>g.menuIds));let unknown=0;
+  for(const m of menus){const date=qualityDate(m.menuCheckedAt||m.checkedAt||m.priceDataDate||(store.menuBasis!=='메뉴별 가격 기준'?store.menuDataDate:''));if(date)dates.set(date,(dates.get(date)||0)+1);else unknown++;}
+  return {...identity,menus:menus.length,photo:!!store.photo,menuPhotos:menus.filter(m=>m.img).length,grouped:menus.filter(m=>grouped.has(m.id)).length,priceDates:[...dates].sort(),unknownDates:unknown};
+}
+function qualityRows(){return operatorQuality.rows.map(row=>operatorQuality.overrides.get(row.id)?.row||row);}
+function qualityIssues(row){const price=qualityPriceState(row);return {...price,photos:!row.photo||row.menuPhotos<row.menus,categories:row.grouped<row.menus};}
+function qualityMatches(row,words=searchWords(operatorQuality.query).map(searchText)){
+  const q=operatorQuality,issue=qualityIssues(row);
+  const city=q.city==='all'||q.city===NEW_TOWN? q.city==='all'||row.area===NEW_TOWN&&['안동시','예천군'].includes(row.city) : row.city===q.city;
+  const filter=q.filter==='all'?issue.stale||issue.unknown||issue.photos||issue.categories:q.filter==='stale'?issue.stale:q.filter==='unknown'?issue.unknown:q.filter==='photos'?issue.photos:issue.categories;
+  let text=qualitySearchCache.get(row);if(text===undefined){text=searchText(row.name+' '+row.address);qualitySearchCache.set(row,text);}
+  return city&&!!filter&&words.every(word=>text.includes(word));
+}
+function sortedQualityRows(){
+  const mode=operatorQuality.filter,words=searchWords(operatorQuality.query).map(searchText);
+  return qualityRows().filter(row=>qualityMatches(row,words)).sort((a,b)=>{
+    const x=qualityIssues(a),y=qualityIssues(b);
+    return (mode==='photos'?(Number(!b.photo)-Number(!a.photo))||((a.menuPhotos/Math.max(1,a.menus))-(b.menuPhotos/Math.max(1,b.menus))):mode==='categories'?(a.grouped/Math.max(1,a.menus))-(b.grouped/Math.max(1,b.menus)):mode==='unknown'?y.unknown-x.unknown:(Number(!!y.stale)-Number(!!x.stale))||(x.oldest||'9999').localeCompare(y.oldest||'9999')||y.unknown-x.unknown)||a.city.localeCompare(b.city,'ko')||a.name.localeCompare(b.name,'ko');
+  });
+}
+async function openOperatorQuality(){
+  const m=menuOperator;if(!m.allowed||!hostAccount.uid||m.uid!==hostAccount.uid||m.busy)return;
+  m.mode='quality';m.store=null;m.selected='';m.error='';m.loading=true;rerender();
+  const uid=hostAccount.uid,epoch=operatorQuality.epoch;
+  const current=()=>uid===hostAccount.uid&&epoch===operatorQuality.epoch&&m.allowed&&m.mode==='quality';
+  try{
+    await loadCatalog();if(!current())return;
+    if(!operatorQuality.request){const path=regionalCatalog.manifest?.qualityPath;if(!validRegionalAsset(path))throw Error('Quality catalogue unavailable');
+      operatorQuality.request=catalogJson(path).then(data=>{
+        if(data.schema!==1||!Array.isArray(data.stores)||data.stores.length!==CATALOG.stores.length||data.stores.some(row=>!row.id||!row.name||!Array.isArray(row.priceDates)||!Number.isInteger(row.menus)||row.menus<0))throw Error('Invalid quality catalogue');
+        if(epoch===operatorQuality.epoch)operatorQuality.rows=data.stores;
+      }).catch(error=>{if(epoch===operatorQuality.epoch)operatorQuality.request=null;throw error;});
+    }
+    await operatorQuality.request;if(!current())return;await startMenuCatalogFeed();void refreshQualityOverrides();
+  }catch{if(current())m.error='품질 점검 목록을 불러오지 못했어요. 새로고침해 주세요.';}
+  finally{if(current()){m.loading=false;rerender();}}
+}
+function qualityChangeSignature(id){return JSON.stringify([storeMenuChanges({id}).map(r=>[r.id,r.revision,r.state,r.checkedAt]),(approvedMenus.get(id)||[]).map(r=>[r.id,r.name,r.price,r.checkedAt])]);}
+async function refreshQualityOverrides(){
+  if(S.route!=='operator'||menuOperator.mode!=='quality'||!menuOperator.allowed||menuOperator.uid!==hostAccount.uid||!operatorQuality.rows.length)return;
+  const epoch=operatorQuality.epoch,affected=new Set([...approvedMenus.keys(),...[...menuChanges.values()].map(r=>r.storeId),...operatorQuality.overrides.keys()]);
+  const byId=new Map(operatorQuality.rows.map(row=>[row.id,row]));
+  await Promise.all([...affected].map(async id=>{
+    const row=byId.get(id),signature=qualityChangeSignature(id);if(!row||operatorQuality.overrides.get(id)?.signature===signature||operatorQuality.pending.has(id))return;
+    operatorQuality.pending.set(id,signature);
+    try{
+      const entry=CATALOG.stores.find(s=>s.id===id);if(!entry)return;
+      const raw=await loadRawCatalogStore(entry);
+      if(epoch!==operatorQuality.epoch||signature!==qualityChangeSignature(id))return;
+      const full=withMenuChanges(withApprovedMenus(raw,approvedMenus.get(id)||[]));
+      operatorQuality.overrides.set(id,{signature,row:qualityFromStore(full,row)});
+    }catch{if(epoch===operatorQuality.epoch)operatorQuality.error='일부 운영자 수정 내용을 확인하지 못했어요. 새로고침해 주세요.';}
+    finally{if(epoch===operatorQuality.epoch){operatorQuality.pending.delete(id);if(S.route==='operator'&&menuOperator.mode==='quality')keepView();if(signature!==qualityChangeSignature(id))void refreshQualityOverrides();}}
+  }));
+}
+function operatorQualityHtml(){
+  const q=operatorQuality,rows=qualityRows(),counts={stale:0,unknown:0,photos:0,categories:0};
+  for(const row of rows){const issue=qualityIssues(row);for(const key of Object.keys(counts))if(issue[key])counts[key]++;}
+  const labels={stale:'가격 오래됨',photos:'사진 없음',categories:'분류 없음',unknown:'가격 날짜 미확인',all:'전체 점검'};
+  const filters='<div class="quality-filters" role="group" aria-label="품질 점검 항목">'+Object.entries(labels).map(([key,label])=>`<button class="quality-filter" data-act="operator-quality-filter" data-v="${key}" aria-pressed="${q.filter===key}">${label}${counts[key]!==undefined?` <b>${counts[key]}</b>`:''}</button>`).join('')+'</div>';
+  const cities=[NEW_TOWN,...new Set(rows.map(row=>row.city))];
+  const controls=`<div class="quality-controls"><label>지역<select class="input" id="qualityCity"><option value="all">전체 지역</option>${cities.map(city=>`<option value="${esc(city)}"${q.city===city?' selected':''}>${esc(city)}</option>`).join('')}</select></label><label>가게 찾기<input class="input" id="qualityQuery" value="${esc(q.query)}" type="search" maxlength="80" placeholder="가게명 · 주소"></label></div>`;
+  const filtered=sortedQualityRows();
+  const cards=filtered.slice(0,q.limit).map(row=>{const issue=qualityIssues(row),source=checkedReviewSource(row.source),badges=[issue.stale?`<span class="quality-badge stale">가격 90일 경과 · ${issue.stale}개</span>`:'',issue.unknown?`<span class="quality-badge">가격 날짜 미확인 · ${issue.unknown}개</span>`:'',!row.photo?'<span class="quality-badge">가게 사진 없음</span>':'',row.menuPhotos<row.menus?`<span class="quality-badge">메뉴 사진 ${row.menus-row.menuPhotos}개 없음</span>`:'',issue.categories?`<span class="quality-badge">원본 분류 ${row.menus-row.grouped}개 미확인</span>`:''].join('');
+    return `<article class="quality-card"><small>${esc(row.city)} · 메뉴 ${row.menus}개</small><h3>${esc(row.name)}</h3><p class="quality-address">${esc(row.address)}</p><div class="quality-badges">${badges}</div>${issue.oldest?`<p class="quality-date">오래된 가격 자료 ${esc(issue.oldest)}</p>`:''}<div class="quality-actions"><button class="btn" data-act="operator-quality-store" data-id="${esc(row.id)}">메뉴·가격 점검</button>${source?`<a class="small-btn" href="${esc(source)}" target="_blank" rel="noopener">원본 자료 ↗</a>`:''}</div></article>`;
+  }).join('');
+  return `<section class="operator-quality"><h2>먼저 점검할 가게</h2><p class="hint">가격 자료일 90일 기준 · 조회한 날짜는 제외해요.</p>${filters}${controls}${q.error?`<p class="notice red" role="alert">${esc(q.error)}</p>`:''}<p class="quality-result" role="status">${filtered.length}곳${q.pending.size?' · 운영자 수정 반영 중':''}</p>${menuOperator.loading?'<p role="status">점검 목록을 불러오는 중…</p>':cards||'<p class="empty-line">해당하는 가게가 없어요.</p>'}${filtered.length>q.limit?'<button class="btn gray block" data-act="operator-quality-more">20곳 더 보기</button>':''}<p class="hint">분류는 원본 메뉴판 확인 후 보강해요. 원본 자료와 메뉴별 출처를 함께 대조해 주세요.</p></section>`;
+}
+async function selectQualityStore(id){
+  if(!menuOperator.allowed||menuOperator.uid!==hostAccount.uid||menuOperator.busy)return;
+  const uid=hostAccount.uid;menuOperator.mode='menus';menuOperator.loading=true;rerender();
+  try{await loadCatalog({ids:[id]});if(uid===hostAccount.uid&&menuOperator.allowed&&menuOperator.mode==='menus'&&S.route==='operator')await selectOperatorStore(id);}
+  catch{if(uid===hostAccount.uid&&menuOperator.allowed)menuOperator.error='가게 메뉴를 불러오지 못했어요. 품질 점검에서 다시 열어 주세요.';}
+  finally{if(uid===hostAccount.uid){menuOperator.loading=false;if(S.route==='operator')rerender();}}
+}
+function qualityInput(target){if(target.id!=='qualityQuery'||!menuOperator.allowed)return false;operatorQuality.query=target.value.slice(0,80);operatorQuality.limit=20;keepView();return true;}
+function qualityChange(target){if(target.id!=='qualityCity'||!menuOperator.allowed)return false;operatorQuality.city=target.value;operatorQuality.limit=20;keepView();return true;}
+
 // Included in room.js's scope by build.py and the test runtime.
 function deadlineMillis(room){
   if(!room?.deadline)return 0;
@@ -3394,6 +3567,7 @@ const operatorCode=()=>hostAccount.uid?.slice(-16)||'';
 const approvedMenus=new Map(),approvedRequests=new Map(),approvedCheckedAt=new Map();
 let approvedRoomStop=null,approvedRoomKey='';
 function resetMenuOperator(){
+  resetOperatorQuality();
   menuOperatorStop?.();menuOperatorStop=null;
   Object.assign(menuOperator,{uid:'',allowed:false,ready:false,error:'',rows:[],cursor:null,selected:'',store:null,draft:null,loading:false,mode:'reports',menuId:'',history:[]});menuOperator.sequence++;menuOperator.authSequence++;
 }
@@ -3516,6 +3690,7 @@ function viewMenuOperator(){
   if(!hostAccount.uid)body=`<section class="operator-empty"><h2>운영자 계정으로 로그인</h2><p>제보 검토는 등록된 카카오 계정으로만 할 수 있어요.</p><button class="btn kakao-btn" data-act="operator-login" ${hostAccount.busy?'disabled':''}>${hostAccount.busy?'카카오로 연결하는 중…':'카카오로 로그인'}</button>${hostAccount.error?`<p class="host-error" role="alert">${esc(hostAccount.error)}</p>`:''}</section>`;
   else if(!m.ready)body='<p role="status">운영자 권한을 확인하고 있어요…</p>';
   else if(!m.allowed)body=`<section class="operator-empty"><h2>운영자 등록이 필요해요</h2><p>이 계정은 제보함을 열 수 없어요.</p><label class="field">운영자 연결 코드<input class="input code-box" readonly value="${esc(operatorCode())}" aria-label="운영자 연결 코드"></label><small>서비스 관리자에게 이 코드를 전달해 주세요.</small><button class="btn gray" data-act="operator-permission">권한 다시 확인</button></section>`;
+  else if(m.mode==='quality')body=operatorQualityHtml();
   else if(m.mode==='menus')body=operatorMenuListHtml();
   else {
     const tabs='<div class="operator-tabs" role="group" aria-label="제보 상태">'+Object.entries(operatorLabels).map(([key,label])=>`<button data-act="operator-tab" data-v="${key}" aria-pressed="${m.tab===key}" ${m.busy?'disabled':''}>${label}</button>`).join('')+'</div>';
@@ -3524,7 +3699,7 @@ function viewMenuOperator(){
     const next=m.more?`<button class="btn gray block" data-act="operator-more" ${m.loading?'disabled':''}>25개 더 보기</button>`:'';
     body=tabs+(row?operatorReviewHtml(row):'<div class="operator-list">'+(cards||(!m.loading?empty:''))+'</div>'+next+(m.loading?'<p role="status">제보를 불러오는 중…</p>':''));
   }
-  const modes=m.allowed?`<div class="operator-tabs operator-modes" role="group" aria-label="운영 메뉴"><button data-act="operator-reports" aria-pressed="${m.mode==='reports'}" ${m.busy||m.loading?'disabled':''}>메뉴 제보</button><button data-act="operator-menus" aria-pressed="${m.mode==='menus'}" ${m.busy||m.loading?'disabled':''}>메뉴 관리</button></div>`:'';
+  const modes=m.allowed?`<div class="operator-tabs operator-modes" role="group" aria-label="운영 메뉴"><button data-act="operator-reports" aria-pressed="${m.mode==='reports'}" ${m.busy||m.loading?'disabled':''}>메뉴 제보</button><button data-act="operator-quality" aria-pressed="${m.mode==='quality'}" ${m.busy||m.loading?'disabled':''}>품질 점검</button><button data-act="operator-menus" aria-pressed="${m.mode==='menus'}" ${m.busy||m.loading?'disabled':''}>메뉴 관리</button></div>`:'';
   return `${topBar('메뉴 관리','home',m.allowed?`<button class="small-btn" data-act="operator-refresh" ${m.busy||m.loading?'disabled':''}>새로고침</button>`:'')}<div class="wrap operator-page"><div class="operator-heading"><span>다맛다 운영자</span><p>확인한 메뉴를 모두의 목록에.</p></div>${modes}${m.error?`<p class="notice red" role="alert">${esc(m.error)}</p>`:''}${body}</div>`;
 }
 function operatorHomeButton(){return menuOperator.allowed&&menuOperator.uid===hostAccount.uid?'<a class="operator-home" href="#operator"><span>메뉴 제보 관리</span><b>운영자 ↗</b></a>':'';}
@@ -3640,6 +3815,7 @@ async function refreshMenuCatalogIndex(){
   if(sequence!==menuFeedSequence)return;
   const byId=new Map(updated.filter(Boolean).map(s=>[s.id,s]));
   CATALOG.stores=CATALOG.stores.map(s=>byId.get(s.id)||catalogBaseStores.get(s.id)||s);
+  if(operatorQuality.rows.length)void refreshQualityOverrides();
   if(S.catDetail){const raw=await loadRawCatalogStore(catalogBaseStores.get(S.catDetail.id)||S.catDetail);if(sequence!==menuFeedSequence)return;S.catDetail=withMenuChanges(withApprovedMenus(raw,approvedMenus.get(raw.id)||[]));}
   if(S.route==='catalog'){if(S.catStep==='stores')scheduleSearchRefresh('catalog');else keepView();}
 }
@@ -3662,7 +3838,8 @@ function startMenuCatalogFeed(){
 
 function operatorMenuListHtml(){
   const m=menuOperator;
-  if(!m.store){const words=searchWords(m.query),stores=CATALOG.stores.filter(s=>words.every(w=>searchText(s.name+' '+s.address).includes(searchText(w)))).slice(0,15);
+  if(m.loading&&!m.store)return '<p role="status">가게 메뉴를 불러오는 중…</p>';
+  if(!m.store){const words=searchWords(m.query),stores=CATALOG.stores.filter(s=>!s.catalogStub&&words.every(w=>searchText(s.name+' '+s.address).includes(searchText(w)))).slice(0,15);
     return `<label class="field">가게 찾기<input class="input" data-operator-field="storeQuery" value="${esc(m.query)}" placeholder="가게명 · 지점 · 지역" maxlength="80"></label><div class="operator-list">${stores.map(s=>`<button class="operator-card" data-act="operator-store" data-id="${esc(s.id)}"><span><b>${esc(s.name)}</b><em>${esc(s.address)}</em></span><strong>메뉴 관리 ›</strong></button>`).join('')}</div><small>검색 결과는 15곳씩 보여요.</small>`;
   }
   if(m.menuId)return operatorMenuEditorHtml();
@@ -3671,7 +3848,7 @@ function operatorMenuListHtml(){
 }
 async function openOperatorMenus(){
   if(menuOperator.busy)return;menuOperator.mode='menus';menuOperator.selected='';menuOperator.menuId='';menuOperator.store=null;menuOperator.error='';menuOperator.loading=true;rerender();
-  try{await loadCatalog();await startMenuCatalogFeed();}catch{menuOperator.error='가게 목록을 불러오지 못했어요.';}finally{menuOperator.loading=false;rerender();}
+  try{await loadCatalog({all:true});await startMenuCatalogFeed();}catch{menuOperator.error='가게 목록을 불러오지 못했어요.';}finally{menuOperator.loading=false;rerender();}
 }
 async function selectOperatorStore(id){
   const uid=hostAccount.uid,sequence=++menuOperator.sequence;menuOperator.loading=true;menuOperator.error='';rerender();
@@ -3887,13 +4064,14 @@ function catalogRegionPicker() {
     <button class="text-btn catalog-all-regions" data-act="cat-city" data-city="all">전체 지역에서 가게 찾기</button>`}</div>
     <details class="region-map-credit"><summary>지도 출처</summary><p>본 데이터는 <a href="https://sgis.kostat.go.kr" target="_blank" rel="noopener">통계청 통계지리정보서비스(SGIS)</a>에서 공공누리 제1유형으로 개방한 행정동 경계를 가공한 것이며(가공: <a href="https://github.com/vuski/admdongkor" target="_blank" rel="noopener">vuski/admdongkor</a>), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>으로 배포됩니다. 다맛다에서 2026-10-01 경계를 시·군별로 합치고 단순화했습니다. 울릉도·독도는 위치와 크기를 조정한 별도 확대도입니다.</p></details>`;
 }
-function chooseCatalogCity(city) {
+async function chooseCatalogCity(city) {
   if(city!=='all'&&!(city===NEW_TOWN?CATALOG.stores.some(inNewTown):CATALOG.stores.some(s=>catalogCity(s)===city)))return;
   cancelNearbyRequest(true);S.catMode='region';
   if(!history.state?.dinnerCatalog)rememberCatalogStep();
   S.catCity=city;S.catTown='all';S.catTownQuery='';rememberCatalogStep();
   S.catStep=city==='all'?'stores':'neighborhoods';S.catArea='all';S.catCat='all';S.catQuery='';S.catFilters=false;S.catShowMap=false;S.catLimit=12;S.catPreview='';
   rememberCatalogStep('pushState');rerender();scrollTo(0,0);
+  if(regionalCatalog.manifest&&!(await ensureCatalogView()))return;
   requestAnimationFrame(()=>document.getElementById(city==='all'?'catalogRegionTitle':'catalogNeighborhoodTitle')?.focus({preventScroll:true}));
 }
 
@@ -3975,6 +4153,7 @@ function chooseCatalogTown(town) {
   requestAnimationFrame(()=>document.getElementById('catalogRegionTitle')?.focus({preventScroll:true}));
 }
 function catalogPreviousStep(target) {
+  cancelCatalogView();
   cancelNearbyRequest();
   const step=target==='region'||S.catCity==='all'?'region':'neighborhoods';
   if(history.state?.dinnerCatalog?.step===S.catStep&&!history.state.dinnerCatalog.recovered&&S.catStep!==step){history.back();return;}
@@ -4136,6 +4315,7 @@ function showNearbyResults(point,demo=false,keepFilters=false) {
   const refreshing=S.catMode==='nearby';
   S.catMode='nearby';S.catStep='stores';S.catCity='all';S.catTown=town;S.catArea=area;S.catRadius=NEARBY_RADII.includes(S.catRadius)?S.catRadius:5;S.catLimit=12;S.catPreview='';S.catShowMap=false;
   rememberCatalogStep(refreshing?'replaceState':'pushState');rerender();scrollTo(0,0);
+  if(regionalCatalog.manifest)void ensureCatalogView();
   requestAnimationFrame(()=>document.getElementById('catalogRegionTitle')?.focus({preventScroll:true}));
 }
 function requestNearbyStores(automatic=false,keepFilters=false) {
@@ -4344,7 +4524,7 @@ async function resumeActiveCatalog(scope,historyView=null) {
   if(scope==='create'?route!=='create':route!=='room'||tab!=='set'||!S.host)return false;
   catalogMemory.pending=context.key;
   try{
-    await loadCatalog();
+    await loadCatalog(catalogViewOptions(data.view));
     if(generation!==catalogMemory.generation||S.route!==route||S.tab!==tab||S.roomId!==roomId||(scope==='room'&&UID!==identity)||!sameCatalogContext(context,catalogContext(scope,false))||(scope==='create'&&S.draft!==target))return false;
     if(scope==='room'){if(!S.host||(S.edit&&S.edit!==target&&S.edit.dirty))return false;S.edit ||= freshRoomSettingsDraft();context.target=S.edit;}
     const latest=readCatalogProgress(context);if(!latest||(!catalogHistoryMatches(historyView,context)&&(!latest.active||(!catalogAddressMatches(context)&&!catalogPointerMatches(load(catalogAccountKey(CATALOG_ACTIVE_KEY),null),context))))||!applyCatalogProgress(context,latest))return false;
@@ -4446,6 +4626,7 @@ async function installCatalogCloud(result,{force=false,unchanged=()=>true}={}) {
     return true;
   }
   const uid=hostAccount.uid,epoch=catalogCloud.epoch,context=cloudCheckpointContext(state);
+  if(force&&S.route==='catalog'&&S.catFor===state.scope){await loadCatalog(catalogViewOptions(state.view));if(!catalogCloudEnabled()||uid!==hostAccount.uid||epoch!==catalogCloud.epoch||!unchanged())return false;}
   if(state.scope==='room'&&(!S.host||S.roomId!==state.roomId)){
     // The server already checked membership; the app will check it again before opening settings.
     save(context.key,{...state,writer:'account',at:result.updatedAt});return true;
@@ -5924,7 +6105,7 @@ async function mountCatalogMap() {
 }
 const CAT_ICON = {카페: '☕', 치킨: '🍗', 중식: '🥟', 한식: '🍚', 피자: '🍕', 분식: '🍢', 버거: '🍔', 찜닭: '🍲', 국밥: '🥣', 도시락: '🍱', 돈가스: '🍛', 족발: '🐷', 일식: '🍣', 양식: '🍝', 아시안: '🍜', 샐러드: '🥗', 마라탕: '🌶️'};
 const NEW_TOWN = '도청신도시';
-const catalogCity = s => /([가-힣]+[시군])(?:\s|$)/.exec(s.address || '')?.[1] || s.city || '';
+const catalogCity = s => s.catalogStub?s.city:/([가-힣]+[시군])(?:\s|$)/.exec(s.address || '')?.[1] || s.city || '';
 const inNewTown = s => s.area===NEW_TOWN && ['안동시','예천군'].includes(catalogCity(s));
 const inCityScope = (s, scope) => scope==='all' || (scope===NEW_TOWN ? inNewTown(s) : catalogCity(s)===scope);
 const inCity = s => inCityScope(s,S.catCity);
@@ -5959,6 +6140,7 @@ function searchableCatalogText(s){
   return text;
 }
 function catalogMatches(s) {
+  if(s.catalogStub)return false;
   if (!inArea(s) || !inCat(s) || !matchesCatalogTown(s) || !inNearbyRange(s)) return false;
   const words = searchWords(S.catQuery);if(!words.length)return true;
   const text = searchableCatalogText(s);
@@ -5991,6 +6173,7 @@ function catalogList() {
   }).join('') + (list.length>visible.length ? `<button class="btn gray block" data-act="cat-more">12곳 더 보기 (${visible.length}/${list.length})</button>`:'') || catalogEmptyResults();
 }
 function viewCatalog() {
+  const notice=catalogRegionalNotice();if(notice)return notice;
   const done=`<div class="bottom-bar"><button class="btn block" data-act="cat-done" id="catDone">${catalogSelectionCount()}곳 담기 완료</button></div>`;
   if(S.catStep==='neighborhoods')return viewNeighborhoods(done);
   if(S.catStep!=='stores')return `${topBar('주변 맛집 목록','cat-back')}<div class="wrap admin catalog-region-page">${catalogSteps()}${nearbyEntry()}<div class="catalog-region-head"><div class="catalog-region-intro"><h2 id="catalogRegionChoiceTitle" tabindex="-1">지금 어느 지역에 계신가요?</h2><p>${S.catRegionView==='list'?'지역을 골라 주세요.':'지도에서 지역을 눌러 주세요.'}</p></div>${catalogRegionViewSwitch()}</div>${catalogRegionPicker()}</div>${catalogSelectionCount()>0?done:''}`;
@@ -6928,13 +7111,17 @@ document.addEventListener('click', async e => {
     case 'install-copy': copyOrShow(installPageUrl(),'설치할 링크를 복사했어요. 브라우저 주소창에 붙여넣어 주세요.','installLinkCopy'); break;
     case 'operator-login': await startKakao('operator');break;
     case 'operator-permission': resetMenuOperator();await checkMenuOperator();if(menuOperator.allowed)await loadMenuReports();rerender();break;
-    case 'operator-refresh': if(menuOperator.mode==='menus'){if(menuOperator.menuId)await selectOperatorMenu(menuOperator.menuId);else if(menuOperator.store)await selectOperatorStore(menuOperator.store.id);else await openOperatorMenus();}else await loadMenuReports();break;
+    case 'operator-refresh': if(menuOperator.mode==='quality'){operatorQuality.error='';await openOperatorQuality();}else if(menuOperator.mode==='menus'){if(menuOperator.menuId)await selectOperatorMenu(menuOperator.menuId);else if(menuOperator.store)await selectOperatorStore(menuOperator.store.id);else await openOperatorMenus();}else await loadMenuReports();break;
     case 'operator-more': await loadMenuReports(true);break;
     case 'operator-tab': if(!menuOperator.busy&&!menuOperator.loading&&Object.hasOwn(operatorLabels,el.dataset.v)){menuOperator.tab=el.dataset.v;await loadMenuReports();}break;
     case 'operator-select': await selectMenuReport(id);break;
     case 'operator-close': if(!menuOperator.busy){menuOperator.selected='';menuOperator.draft=null;menuOperator.store=null;rerender();}break;
     case 'operator-reject': await reviewMenuReport(false);break;
     case 'operator-menus': await openOperatorMenus();break;
+    case 'operator-quality':await openOperatorQuality();break;
+    case 'operator-quality-store':await selectQualityStore(id);break;
+    case 'operator-quality-filter':if(menuOperator.allowed&&['all','stale','unknown','photos','categories'].includes(el.dataset.v)){operatorQuality.filter=el.dataset.v;operatorQuality.limit=20;rerender();}break;
+    case 'operator-quality-more':if(menuOperator.allowed){operatorQuality.limit+=20;keepView();}break;
     case 'operator-reports': if(!menuOperator.busy){menuOperator.mode='reports';menuOperator.store=null;await loadMenuReports();}break;
     case 'operator-store': if(!menuOperator.busy)await selectOperatorStore(id);break;
     case 'operator-stores': if(!menuOperator.busy){menuOperator.store=null;menuOperator.menuId='';rerender();}break;
@@ -7069,7 +7256,9 @@ document.addEventListener('click', async e => {
       S.catStep='region';S.catMode='region';cancelNearbyRequest(true);S.catTown='all';S.catTownQuery='';S.catFilters=false;S.catShowMap=false;
       const have = target.stores.map(s => s.id);
       S.catPicked = new Set(have.filter(x => CATALOG.stores.some(s => s.id === x)));
-      const context=catalogContext(scope),progress=readCatalogProgress(context);if(!applyCatalogProgress(context,progress))beginCatalogProgress(context);
+      const context=catalogContext(scope),progress=readCatalogProgress(context);cancelCatalogView();
+      if(progress){try{await loadCatalog(catalogViewOptions(progress.view));}catch{if(stillHere())toast('저장한 선택은 남아 있어요. 다시 열어 주세요.');break;}if(!stillHere())break;}
+      if(!applyCatalogProgress(context,progress))beginCatalogProgress(context);
       go({route: 'catalog'});rememberCatalogStep('pushState');if(progress)void refreshRestoredCatalogLocation(context,progress);break;
     }
     case 'cat-map': if(S.catMode==='nearby')break;S.catShowMap=!S.catShowMap;rerender();break;
@@ -7078,7 +7267,8 @@ document.addEventListener('click', async e => {
       S.catRegionView=el.dataset.view;rerender();
       document.querySelector(`[data-act="cat-region-view"][data-view="${S.catRegionView}"]`)?.focus();break;
     case 'cat-city':
-      chooseCatalogCity(el.dataset.city);break;
+      await chooseCatalogCity(el.dataset.city);break;
+    case 'cat-regional-retry':await ensureCatalogView();break;
     case 'cat-town':chooseCatalogTown(el.dataset.town);break;
     case 'cat-town-chip':selectCatalogQuickFilter('town',el.dataset.town);break;
     case 'cat-nearby':requestNearbyStores();break;
@@ -7087,7 +7277,7 @@ document.addEventListener('click', async e => {
     case 'cat-nearby-region':chooseRegionWithoutLocation();break;
     case 'cat-nearby-off':leaveNearbyResults();break;
     case 'cat-nearby-demo':if(NEARBY_PREVIEW_POINT){cancelNearbyRequest();showNearbyResults({...NEARBY_PREVIEW_POINT,at:Date.now()},true);}break;
-    case 'cat-radius':{const radius=Number(el.dataset.radius);if(S.catMode==='nearby'&&NEARBY_RADII.includes(radius)){S.catRadius=radius;S.catLimit=12;S.catPreview='';rememberCatalogStep();rerender();}break;}
+    case 'cat-radius':{const radius=Number(el.dataset.radius);if(S.catMode==='nearby'&&NEARBY_RADII.includes(radius)){S.catRadius=radius;S.catLimit=12;S.catPreview='';rememberCatalogStep();rerender();if(regionalCatalog.manifest)await ensureCatalogView();}break;}
     case 'cat-neighborhood':catalogPreviousStep('neighborhoods');break;
     case 'cat-region':
       catalogPreviousStep('region');break;
@@ -7238,6 +7428,7 @@ document.addEventListener('click', async e => {
 });
 // 입력칸
 document.addEventListener('input', e => {
+  if(qualityInput(e.target))return;
   if(e.target.id==='catTownSearch'){S.catTownQuery=e.target.value;const list=document.getElementById('neighborhoodChoices');if(list)list.innerHTML=neighborhoodChoices();persistCatalogProgress();return;}
   const t = e.target;
   if(t.id==='whoName'){S.participantNameDraft={roomId:S.roomId,value:t.value.slice(0,20)};if(S.route==='room'&&S.room)persistRoom();refreshParticipantGuide();return;}
@@ -7296,7 +7487,7 @@ function markDirtySoft() {
   const nav = document.querySelector('.nav');
   (nav || $app).insertAdjacentHTML(nav ? 'beforebegin' : 'beforeend', `<div class="bottom-bar save-bar"><button class="btn gray" data-act="edit-cancel">되돌리기</button><button class="btn" style="flex:1" data-act="edit-save">바꾼 내용 저장</button></div>`);
 }
-document.addEventListener('change', e => { if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
+document.addEventListener('change', e => { if(qualityChange(e.target))return;if (e.target.dataset.e === 'freeJoin' && S.edit) { S.edit.freeJoin = e.target.checked; markDirtySoft(); } });
 document.addEventListener('focusin', e => { if(e.target.id==='whoName'||cartTextEntry(e.target))refreshParticipantGuide(); });
 document.addEventListener('focusout', e => { if(e.target.id==='whoName'||cartTextEntry(e.target)||e.target.closest?.('.name-in'))scheduleStoreHighlight(); });
 document.addEventListener('pointerdown', e => {
