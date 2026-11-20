@@ -1625,7 +1625,7 @@ body:has(#app.mm){background:radial-gradient(ellipse at 2% 4%,#d4f2e9 0,transpar
 .mm .store-guidance{margin:16px 0;padding:14px 16px;border:1px solid #c4ded7;border-radius:16px;background:linear-gradient(130deg,#ffffffe6,#e9f5f3cc);box-shadow:inset 0 1px #fff;color:var(--ink)}.mm .store-guidance summary{font-size:14px;font-weight:650;cursor:pointer;line-height:1.6}.mm .store-guidance summary small{display:block;font-size:12px;font-weight:450;color:var(--sub)}.mm .store-guidance p{font-size:12px;line-height:1.6;color:var(--sub)}.mm .guidance-row{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:10px 0;border-top:1px solid #c9dfd7;font-size:13px;line-height:1.5}.mm .guidance-row>span{min-width:0;overflow-wrap:anywhere}.mm .guidance-row>b{flex-shrink:0;white-space:nowrap}
 .mm .menu-price-preview{display:grid;gap:5px;margin-top:8px;font-size:12px;line-height:1.5}.mm .menu-price-preview>span{display:flex;align-items:baseline;gap:10px;justify-content:space-between;min-width:0}.mm .menu-price-preview b{font-weight:500;overflow-wrap:anywhere}.mm .menu-price-preview>span>span{flex-shrink:0;white-space:nowrap;font-weight:650;color:var(--ink)}
 .mm .guidance-row>span>small{display:block;font-size:12px;line-height:1.6;color:var(--sub);margin-top:4px}
-</style><meta name="damatda-build" content="59ba6802fcf1c06b"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
+</style><meta name="damatda-build" content="ae0045515a3b0570"><link rel="icon" type="image/x-icon" href="favicon.ico?v=eb39f2bcdc79">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=eb39f2bcdc79">
 <link rel="icon" type="image/svg+xml" sizes="any" href="brand-mark.svg?v=eb39f2bcdc79">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=eb39f2bcdc79"><link rel="stylesheet" href="vendor/leaflet/leaflet.css"><style>/* Andong-wide catalogue: compact neighbourhood controls and readable menu preview. */
@@ -3373,6 +3373,8 @@ function openingStatus(store,now=Date.now()){
 const openingClock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
 function openingSourceUrl(value){
   if(typeof value!=='string')return '';
+  if(/^https:\/\/tour\.yanolja\.com\/content\/restaurants\/[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(value))return value;
+  if(/^https:\/\/www\.google\.com\/maps\/place\/[A-Za-z0-9%+._~-]+\/data=![A-Za-z0-9%+!._~:-]+\?hl=ko$/.test(value))return value;
   if(/^https:\/\/www\.cheongdo\.go\.kr\/food\/restaurant\/view\.do\?idx=\d+&mid=\d{10}$/.test(value))return value;
   if(value==='https://www.burgerking.co.kr/store/near'||/^http:\/\/ycfood\.org\/bbs\/board\.php\?bo_table=2_1&wr_id=\d+$/.test(value))return value;
   if(['https://www.bbq.co.kr/stores/map','https://momstouch.co.kr/store/main.php','https://web.dominos.co.kr/branch'].includes(value)||/^https:\/\/tour\.gb\.go\.kr\/restaurant\/(?:foodView|dessertView|chinaFoodView|westernFoodView|japanFoodView)\.do\?idx=\d+$/.test(value))return value;

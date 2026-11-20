@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="59ba6802fcf1c06b">
+<meta name="damatda-build" content="ae0045515a3b0570">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3235,6 +3235,8 @@ function openingStatus(store,now=Date.now()){
 const openingClock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
 function openingSourceUrl(value){
   if(typeof value!=='string')return '';
+  if(/^https:\/\/tour\.yanolja\.com\/content\/restaurants\/[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(value))return value;
+  if(/^https:\/\/www\.google\.com\/maps\/place\/[A-Za-z0-9%+._~-]+\/data=![A-Za-z0-9%+!._~:-]+\?hl=ko$/.test(value))return value;
   if(/^https:\/\/www\.cheongdo\.go\.kr\/food\/restaurant\/view\.do\?idx=\d+&mid=\d{10}$/.test(value))return value;
   if(value==='https://www.burgerking.co.kr/store/near'||/^http:\/\/ycfood\.org\/bbs\/board\.php\?bo_table=2_1&wr_id=\d+$/.test(value))return value;
   if(['https://www.bbq.co.kr/stores/map','https://momstouch.co.kr/store/main.php','https://web.dominos.co.kr/branch'].includes(value)||/^https:\/\/tour\.gb\.go\.kr\/restaurant\/(?:foodView|dessertView|chinaFoodView|westernFoodView|japanFoodView)\.do\?idx=\d+$/.test(value))return value;
