@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>다맛다</title>
-<meta name="damatda-build" content="a1497b35f013fb7f">
+<meta name="damatda-build" content="951c8c02fb7c586f">
 <meta name="description" content="“난 아무거나”는 메뉴에 없어요 😎 먹고 싶은 거 담아 보내!">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://damatda.kr/?v=damatda2">
@@ -3235,6 +3235,7 @@ function openingStatus(store,now=Date.now()){
 const openingClock=value=>(value>=1440?'다음날 ':'')+String(Math.floor(value%1440/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');
 function openingSourceUrl(value){
   if(typeof value!=='string')return '';
+  if(/^https:\/\/bisu91\.tistory\.com\/entry\/\d+$/.test(value))return value;
   if(/^https:\/\/beombeomy\.tistory\.com\/\d+$/.test(value)||/^https:\/\/foryoujn\.tistory\.com\/entry\/[A-Za-z0-9%가-힣._~-]+$/.test(value))return value;
   if(/^https:\/\/penhoo\.com\/\d+$/.test(value)||/^https:\/\/www\.ulcruise\.co\.kr\/www\/ulleungdo\/tourism\/food\?mode=view&idx=\d+$/.test(value))return value;
   if(/^https:\/\/wanderlog\.com\/place\/details\/\d+\/[A-Za-z0-9%가-힣._~-]+$/.test(value))return value;
